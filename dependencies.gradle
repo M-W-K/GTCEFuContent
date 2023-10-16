@@ -27,8 +27,12 @@ dependencies {
     implementation rfg.deobf("curse.maven:codechicken-lib-1-8-242818:2779848") // CCL 3.2.3.358
     // manually deobf the jar to prevent extra configuration for handling obf/deobf separation
     implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:4637703-deobf-sources")
-    // manually deobf the jar to prevent extra configuration for handling obf/deobf separation
+
     implementation rfg.deobf("curse.maven:gregicality-multiblocks-564858:4701685-deobf-sources")
+
+    implementation rfg.deobf("curse.maven:endercore-231868:4671384-api")
+    implementation rfg.deobf("curse.maven:enderio-base-297193:4674231")
+
 
 
     // Soft Dependencies
