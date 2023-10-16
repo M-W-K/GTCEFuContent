@@ -1,6 +1,7 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -14,6 +15,7 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
+import gregtech.common.metatileentities.MetaTileEntities;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -41,7 +43,7 @@ public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockControll
                 .where('R', states(getCasingState(5)))
                 .where('F', states(getCasingState(6)))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where('O', abilities(MultiblockAbility.EXPORT_ITEMS))
+                .where('O', metaTileEntities(MetaTileEntities.ITEM_EXPORT_BUS[GTValues.ULV]))
                 .where('I', states(getCasingState(0)).or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)))
                 .where('E', states(getCasingState(0)).or(abilities(MultiblockAbility.INPUT_ENERGY).setPreviewCount(2)))
                 .where('V', states(Blocks.BEDROCK.getDefaultState()))
