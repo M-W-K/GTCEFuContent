@@ -31,16 +31,16 @@ public class GTCEFuCSympatheticCombustorRecipes {
         // 1.69x efficiency, truncated
         buildAndRegister(builder, 6760);
 
-        //12000 tick production of HOG
+        //12000 tick production of rocket fuel
         builder = builder
-                .fluidInputs(Materials.HighOctaneGasoline.getFluid(75));
+                .fluidInputs(Materials.RocketFuel.getFluid(800));
 
         // 2.197x efficiency, truncated
         buildAndRegister(builder, 35152);
 
-        //48000 tick production of rocket fuel
+        //48000 tick production of HOG
         builder = builder
-                .fluidInputs(Materials.RocketFuel.getFluid(200));
+                .fluidInputs(Materials.HighOctaneGasoline.getFluid(300));
 
         // 2.8561x efficiency, truncated
         buildAndRegister(builder, 182790);
