@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "gtcefucontent",
+  "name": "GTCEFuContent",
+  "description": "Custom content mod for the GTCEFu modpack",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["M-W-K"],
+  "credits": "GregoriusT for making GregTech and textures, and the creators of GCYM for their mod.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
