@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 import crazypants.enderio.base.init.ModObject;
 import crazypants.enderio.base.material.material.Material;
 import gregtech.api.GTValues;
@@ -12,10 +13,10 @@ import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXT
 public class GTCEFuCInfinityExtractorRecipes {
     private GTCEFuCInfinityExtractorRecipes() {}
 
-    private static ItemStack dust = new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 20);
-    private static ItemStack block1 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 0);
-    private static ItemStack block2 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 1);
-    private static ItemStack block3 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 2);
+    private static final ItemStack dust = new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 20);
+    private static final ItemStack block1 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 0);
+    private static final ItemStack block2 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 1);
+    private static final ItemStack block3 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 2);
 
     public static void init() {
         INFINITY_EXTRACTOR_RECIPES.recipeBuilder()

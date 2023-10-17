@@ -38,6 +38,9 @@ public class CommonProxy {
     @SubscribeEvent()
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
         GTCEFuContent.log("Registering recipes...");
+
+        // Main recipe registration
+        // This is called AFTER GregTech registers recipes, so anything here is safe to call removals in
         GTCEFuCRecipeLoader.init();
     }
 }

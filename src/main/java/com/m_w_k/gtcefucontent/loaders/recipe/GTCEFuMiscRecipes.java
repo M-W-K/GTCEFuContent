@@ -6,14 +6,12 @@ import crazypants.enderio.base.material.material.Material;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.recipes.ingredients.GTRecipeInput;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
-import java.util.List;
 
 public class GTCEFuMiscRecipes {
     private GTCEFuMiscRecipes() {}
