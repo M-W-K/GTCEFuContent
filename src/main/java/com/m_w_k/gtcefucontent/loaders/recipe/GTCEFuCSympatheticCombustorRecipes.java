@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import crazypants.enderio.base.fluid.Fluids;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.RecipeBuilder;
@@ -14,49 +13,49 @@ import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.SYMPATHETIC_
 public class GTCEFuCSympatheticCombustorRecipes {
     private GTCEFuCSympatheticCombustorRecipes() {}
 
+    private static int i = 1;
     public static void init() {
         RecipeBuilder<FuelRecipeBuilder> builder = SYMPATHETIC_COMBUSTOR_RECIPES.recipeBuilder()
-                //100 tick production of steam
-                .fluidInputs(Materials.Steam.getFluid(7040))
-                .input(OrePrefix.turbineBlade, Materials.Invar)
-                .chancedOutput(OrePrefix.turbineBlade, Materials.Invar, 9900, -100)
+                //1000 tick production of coke (much more but idc)
+                .input(OrePrefix.gem, Materials.Coke)
+                .fluidInputs(Materials.Oxygen.getFluid(250))
                 .EUt( (int) GTValues.V[GTValues.LV]);
 
         // 1.3x efficiency
-        buildAndRegister(builder, 132);
+        buildAndRegister(builder, 1300);
 
-        //980 tick production of methane
+        //2996 tick production of methane; round up to 3000
         builder = builder
-                .fluidInputs(Materials.Methane.getFluid(175))
-                .input(OrePrefix.dustTiny, Materials.NeodymiumMagnetic);
+                .fluidInputs(Materials.Methane.getFluid(535));
 
         // 1.69x efficiency, truncated
-        buildAndRegister(builder, 1825);
+        buildAndRegister(builder, 6760);
 
-        //960 tick production of HOG
+        //12000 tick production of HOG
         builder = builder
-                .fluidInputs(Materials.HighOctaneGasoline.getFluid(6))
-                .input(OrePrefix.dust, Materials.ArsenicTrioxide);
+                .fluidInputs(Materials.HighOctaneGasoline.getFluid(75));
 
         // 2.197x efficiency, truncated
-        buildAndRegister(builder, 4481);
+        buildAndRegister(builder, 35152);
 
-        //960 tick production of rocket fuel
+        //48000 tick production of rocket fuel
         builder = builder
-                .fluidInputs(Materials.RocketFuel.getFluid(4))
-                .input(OrePrefix.plate, Materials.IndiumGalliumPhosphide)
-                .chancedOutput(OrePrefix.plate, Materials.IndiumGalliumPhosphide, 9900, -100);
+                .fluidInputs(Materials.RocketFuel.getFluid(200));
 
         // 2.8561x efficiency, truncated
-        buildAndRegister(builder, 8568);
+        buildAndRegister(builder, 182790);
     }
 
     private static void buildAndRegister(RecipeBuilder<FuelRecipeBuilder> builder, int duration) {
-        builder.copy().duration(duration).buildAndRegister();
-        builder.copy().duration(duration * 2)
-                .fluidInputs(new FluidStack(Fluids.FIRE_WATER.getFluid(), duration))
-                .input(OrePrefix.bolt, Materials.Naquadah)
-                .chancedOutput(OrePrefix.bolt, Materials.Naquadah, 9990, -10)
+        builder.copy()
+                .duration(duration)
+                .circuitMeta(i)
                 .buildAndRegister();
+        // 1mb fire water = 100 more tick of LV production
+        builder.copy().duration(duration * 2)
+                .fluidInputs(new FluidStack(Fluids.FIRE_WATER.getFluid(), duration / 100))
+                .circuitMeta(i + 10)
+                .buildAndRegister();
+        i++;
     }
 }

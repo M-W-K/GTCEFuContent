@@ -1,6 +1,7 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
 import gregtech.api.GTValues;
@@ -30,19 +31,20 @@ import java.util.Arrays;
 
 public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController {
     public MetaTileEntitySympatheticCombustor(ResourceLocation metaTileEntityId) {
-        super(metaTileEntityId, GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES, GTValues.HV);
+        // EV tier, but obtainable in late HV
+        super(metaTileEntityId, GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES, GTValues.EV);
     }
 
     @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
         return FactoryBlockPattern.start(RelativeDirection.FRONT, RelativeDirection.DOWN, RelativeDirection.RIGHT)
-                .aisle("FFFFF#", "FCCCF#", "FEEEF#", "FCCCF#", "FFFFF#")
+                .aisle("F###F#", "FCCCF#", "FEEEF#", "FCCCF#", "F###F#")
                 .aisle("######", "#GDG##", "#CNC##", "#GDG##", "######")
                 .aisle("######", "#GDG##", "#INE##", "#GDG##", "######").setRepeatable(1,
                         // reference the recipeMap in case it is ever changed
                         GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES.getMaxInputs())
-                .aisle("######", "#GDG##", "#ONC##", "#GDG##", "######")
+                .aisle("######", "#GDG##", "#ZNC##", "#GDG##", "######")
                 .aisle("#VVVPP", "VNNNVY", "VNNNVY", "VNNNVY", "#VVVPP")
                 .aisle("#CCC##", "CNNNC#", "XNNNM#", "CNNNC#", "#CCC##")
                 .aisle("#VVVPP", "VNNNVY", "VNNNVY", "VNNNVY", "#VVVPP")
@@ -51,8 +53,8 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
                         // reference the recipeMap in case it is ever changed
                         GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES.getMaxFluidInputs())
                 .aisle("######", "#GDG##", "#CNC##", "#GDG##", "######")
-                .aisle("FFFFF#", "FCCCF#", "FEEEF#", "FCCCF#", "FFFFF#")
-                .where('F', frames(Materials.HSSG))
+                .aisle("F###F#", "FCCCF#", "FEEEF#", "FCCCF#", "F###F#")
+                .where('F', frames(GCYMMaterials.HSLASteel))
                 .where('C', getCasingState(0))
                 .where('E', getCasingState(2))
                 .where('G', getCasingState(1))
@@ -63,8 +65,6 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
                 .where('I', metaTileEntities(Arrays.stream(MetaTileEntities.ITEM_IMPORT_BUS)
                         .filter(mte -> mte != null && mte.getTier() <= GTValues.HV)
                         .toArray(MetaTileEntity[]::new)))
-                .where('O', getCasingState(0).or(abilities(MultiblockAbility.EXPORT_ITEMS)
-                        .setMinGlobalLimited(0).setMaxGlobalLimited(1, 1)))
                 .where('Z', getCasingState(0).or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
                         .setMinGlobalLimited(0).setMaxGlobalLimited(1, 1)))
                 .where('H', metaTileEntities(MetaTileEntities.FLUID_IMPORT_HATCH)) // Do not allow multi hatches
@@ -79,12 +79,11 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
     @Nonnull
     protected static TraceabilityPredicate getCasingState(int id) {
         return states(switch (id) {
-            // TODO make sympathetic combustor HV obtainable
             default -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING);
             case 1 -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_GEARBOX);
             case 2 -> MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.ENGINE_INTAKE_CASING);
-            case 4 -> MetaBlocks.COMPUTER_CASING.getState(BlockComputerCasing.CasingType.HIGH_POWER_CASING);
-            case 5 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT);
+            case 4 -> MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE);
+            case 5 -> MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.TITANIUM_FIREBOX);
             case 6 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);
         });
 
@@ -92,7 +91,7 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         // Unfortunately, no interface for energy hatches is available to instanceof with
-        return iMultiblockPart instanceof MetaTileEntityEnergyHatch ? Textures.HIGH_POWER_CASING : Textures.STABLE_TITANIUM_CASING;
+        return iMultiblockPart instanceof MetaTileEntityEnergyHatch ? Textures.PLASCRETE : Textures.STABLE_TITANIUM_CASING;
     }
 
     @Override

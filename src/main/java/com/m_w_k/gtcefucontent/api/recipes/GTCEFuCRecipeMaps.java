@@ -17,12 +17,10 @@ public final class GTCEFuCRecipeMaps {
             .setSlotOverlay(true, false, true, GuiTextures.DUST_OVERLAY)
             .setSound(GTSoundEvents.FIRE);
 
-    public static final RecipeMap<FuelRecipeBuilder> SYMPATHETIC_COMBUSTOR_RECIPES = new RecipeMap<>("sympathetic_combustor", 6, 3,
+    public static final RecipeMap<FuelRecipeBuilder> SYMPATHETIC_COMBUSTOR_RECIPES = new RecipeMap<>("sympathetic_combustor", 3, 0,
             6, 0, new FuelRecipeBuilder(), false)
-            .setSlotOverlay(false, false, false, GuiTextures.SLOT)
-            .setSlotOverlay(false, false, true, GuiTextures.SLOT)
-            .setSlotOverlay(true, false, false, GuiTextures.SLOT)
-            .setSlotOverlay(true, false, true, GuiTextures.SLOT)
+            .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
+            .setSlotOverlay(false, false, true, GuiTextures.INT_CIRCUIT_OVERLAY)
             .setSlotOverlay(false, true, false, GuiTextures.FURNACE_OVERLAY_2)
             .setSlotOverlay(false, true, true, GuiTextures.FURNACE_OVERLAY_2)
             .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
