@@ -33,7 +33,9 @@ dependencies {
     implementation rfg.deobf("curse.maven:endercore-231868:4671384-api")
     implementation rfg.deobf("curse.maven:enderio-base-297193:4674231")
 
-
-
     // Soft Dependencies
+
+    //TODO remove CT dependency
+    implementation "curse.maven:crafttweaker-239197:4775347"
+
 }
