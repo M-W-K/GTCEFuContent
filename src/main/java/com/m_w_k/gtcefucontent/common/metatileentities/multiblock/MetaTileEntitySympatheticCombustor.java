@@ -65,8 +65,7 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
                 .where('I', metaTileEntities(Arrays.stream(MetaTileEntities.ITEM_IMPORT_BUS)
                         .filter(mte -> mte != null && mte.getTier() <= GTValues.HV)
                         .toArray(MetaTileEntity[]::new)))
-                .where('Z', getCasingState(0).or(abilities(MultiblockAbility.MAINTENANCE_HATCH)
-                        .setMinGlobalLimited(0).setMaxGlobalLimited(1, 1)))
+                .where('Z', getCasingState(0).or(autoAbilities(true, false)))
                 .where('H', metaTileEntities(MetaTileEntities.FLUID_IMPORT_HATCH)) // Do not allow multi hatches
                 .where('Y', getCasingState(4).or(abilities(MultiblockAbility.OUTPUT_ENERGY)
                         .setMinGlobalLimited(1).setMaxGlobalLimited(4, 2)))

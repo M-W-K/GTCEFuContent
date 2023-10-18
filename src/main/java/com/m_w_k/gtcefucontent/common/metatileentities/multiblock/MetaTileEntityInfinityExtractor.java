@@ -43,7 +43,7 @@ public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockControll
                 .where('B', frames(Materials.Steel))
                 .where('R', getCasingState(5))
                 .where('F', getCasingState(6))
-                .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
+                .where('M', autoAbilities(true, false))
                 .where('O', metaTileEntities(MetaTileEntities.ITEM_EXPORT_BUS[GTValues.ULV]))
                 .where('I', getCasingState(0).or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)))
                 .where('E', getCasingState(0).or(abilities(MultiblockAbility.INPUT_ENERGY).setPreviewCount(2)))
