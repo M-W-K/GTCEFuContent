@@ -3,3 +3,13 @@ recipemap.infinity_extractor.name=Infinity Extraction
 
 gtcefucontent.machine.sympathetic_combustor.name=Sympathetic Combustor
 recipemap.sympathetic_combustor.name=Sympathetic Combustion
+
+gtcefucontent.machine.forging_furnace.name=Linear Forging Furnace
+gtcefucontent.machine.forging_furnace.tooltip=Striking while the Iron is Hot
+recipemap.forging_furnace.name=Blast Forging
+gtcefucontent.machine.forging_furnace.description=Can process normal Blast Furnace recipes or perform Blast Forging.\n\nBlast forging includes inefficient inline cooling, and incurs an additional 5% duration penalty for forging.
+gtcefucontent.subtitle.tick.forging_furnace=Forge clangs
+
+gtcefucontent.machine.fusion_stack.tooltip=Binary Stars
+gtcefucontent.machine.fusion_array.tooltip=RED GIANT IN A BOX
+gtcefucontent.machine.fusion_complex.tooltip=SUPERNOVAE GO BRRRRRRR

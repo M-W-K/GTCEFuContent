@@ -5,6 +5,7 @@ import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCRecipeLoader;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = GTCEFuContent.MODID)
@@ -37,10 +38,18 @@ public class CommonProxy {
 
     @SubscribeEvent()
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-        GTCEFuContent.log("Registering recipes...");
-
+        GTCEFuContent.log("Beginning recipe registration stage 1");
         // Main recipe registration
         // This is called AFTER GregTech registers recipes, so anything here is safe to call removals in
         GTCEFuCRecipeLoader.init();
+        GTCEFuContent.log("Finished recipe registration stage 1");
+    }
+
+    // Register recipes that depend on other recipemaps to register
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void registerRecipesLow(RegistryEvent.Register<IRecipe> event) {
+        GTCEFuContent.log("Beginning recipe registration stage 2");
+        GTCEFuCRecipeLoader.initLate();
+        GTCEFuContent.log("Finished recipe registration stage 2");
     }
 }

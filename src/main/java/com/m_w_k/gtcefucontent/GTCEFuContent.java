@@ -1,13 +1,9 @@
 package com.m_w_k.gtcefucontent;
 
-import com.m_w_k.gtcefucontent.common.CommonProxy;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuMiscRecipes;
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCRecipeLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
@@ -31,30 +27,26 @@ public class GTCEFuContent
     public void preInit(FMLPreInitializationEvent event)
     {
         logger = event.getModLog();
-
+        log("Beginning PreInit");
         GTCEFuCMetaTileEntities.init();
 
+        GTCEFuContentSoundEvents.register();
 //        proxy.preLoad();
+        log("PreInit complete");
     }
 
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-        // Trigger the adjustment of Cutter recipes to also use cloud seed.
-        // As this requires all normal cutter recipes to be established, it is called during the postInit phase
-
-        // We can't change the behavior of the recipeMap setup itself without being overly invasive.
-        GTCEFuMiscRecipes.cutterUpdate();
-    }
-
-    public static void log(Object message, int type) {
-        switch (type) {
-            case 1 -> logger.info(message);
-            case 2 -> logger.warn(message);
-            case 3 -> logger.error(message);
+    public static void log(Object message, LogType logType) {
+        switch (logType) {
+            case INFO -> logger.info(message);
+            case WARN -> logger.warn(message);
+            case ERROR -> logger.error(message);
         }
     }
+    public enum LogType {
+        INFO, WARN, ERROR
+    }
+
     public static void log(Object message) {
-        logger.info(message);
+        log(message, LogType.INFO);
     }
 }

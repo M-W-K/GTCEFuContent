@@ -67,5 +67,6 @@ public class GTCEFuMiscRecipes {
                         .buildAndRegister();
             }
         });
+        GTCEFuContent.log("Finished updating cutter recipes.");
     }
 }

@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
+import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.unification.material.MarkerMaterials;
 import gregtech.api.unification.material.Materials;
@@ -25,6 +26,16 @@ public class GTCEFuCRecipeLoader {
         GTCEFuContent.log("Recipe construction complete.");
     }
 
+    public static void initLate() {
+        // Adjust/create recipeMaps that depend on iterating through other recipeMaps.
+
+        // We can't change the behavior of the cutter recipeMap setup itself without being overly invasive.
+        GTCEFuMiscRecipes.cutterUpdate();
+
+        // The forging furnace recipeMap is completely new, but dependent on the blast furnace recipeMap.
+        GTCEFuCForgingFurnaceRecipes.init();
+    }
+
     private static void controllerRecipes() {
         ModHandler.addShapedRecipe(true, "infinity_extractor", GTCEFuCMetaTileEntities.INFINITY_EXTRACTOR.getStackForm(),
                 "SRS", "CEC", "SRS",
@@ -41,5 +52,14 @@ public class GTCEFuCRecipeLoader {
                 'M', MetaTileEntities.LARGE_COMBUSTION_ENGINE.getStackForm(),
                 'N', new UnificationEntry(OrePrefix.pipeNonupleFluid, Materials.Titanium),
                 'I', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.EV));
+
+        ModHandler.addShapedRecipe(true, "forging_furnace", GTCEFuCMetaTileEntities.FORGING_FURNACE.getStackForm(),
+                "RGR", "FAC", "RIR",
+                'F', MetaTileEntities.FORGE_HAMMER[GTValues.IV].getStackForm(),
+                'A', MetaTileEntities.ELECTRIC_BLAST_FURNACE.getStackForm(),
+                'C', MetaTileEntities.VACUUM_FREEZER.getStackForm(),
+                'G', new UnificationEntry(OrePrefix.dust, Materials.Graphene),
+                'R', MetaItems.ROBOT_ARM_IV.getStackForm(),
+                'I', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.LuV));
     }
 }
