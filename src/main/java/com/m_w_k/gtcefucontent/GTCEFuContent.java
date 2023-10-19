@@ -1,10 +1,10 @@
 package com.m_w_k.gtcefucontent;
 
+import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCRecipeLoader;
+import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityFusionStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +28,9 @@ public class GTCEFuContent
     {
         logger = event.getModLog();
         log("Beginning PreInit");
+        MetaTileEntityFusionStack.init();
+        GTCEFuCRecipeMaps.init();
+
         GTCEFuCMetaTileEntities.init();
 
         GTCEFuContentSoundEvents.register();

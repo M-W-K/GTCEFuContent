@@ -10,5 +10,6 @@ public class GTCEFuContentSoundEvents {
 
     public static void register() {
         FORGING_FURNACE = soundManager.registerSound("tick.forging_furnace");
+        GTCEFuContent.log("Alternative prefix is on purpose, it's fine. Probably.");
     }
 }
