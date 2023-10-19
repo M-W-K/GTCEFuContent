@@ -2,12 +2,8 @@
   "tick.forging_furnace": {
     "subtitle": "gtcefucontent.subtitle.tick.forging_furnace",
     "category": "block",
-    "sounds": [
-      {
-        "name": "gregtech.forge_hammer",
-        "stream": false
-      }, {
-        "name": "gregtech.heating",
+    "sounds": [{
+        "name": "gregtech:forging_furnace",
         "stream": false
       }]
   }
