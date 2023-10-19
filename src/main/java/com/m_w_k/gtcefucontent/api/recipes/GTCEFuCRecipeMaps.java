@@ -6,8 +6,12 @@ import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.builders.BlastRecipeBuilder;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
+import gregtech.api.recipes.builders.FusionRecipeBuilder;
 import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.core.sound.GTSoundEvents;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class GTCEFuCRecipeMaps {
 
@@ -35,6 +39,22 @@ public final class GTCEFuCRecipeMaps {
             .setSlotOverlay(false, false, true, GuiTextures.INT_CIRCUIT_OVERLAY)
             .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRUDER, ProgressWidget.MoveType.HORIZONTAL)
             .setSound(GTCEFuContentSoundEvents.FORGING_FURNACE);
+
+    public static final List<RecipeMap<FusionRecipeBuilder>> FUSION_STACK_RECIPE_MAPS = new ArrayList<>(3) {};
+
+    // Trying to generate the list contents in-place throws a compiler error for some reason.
+    public static void init() {
+        FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("stack"));
+        FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("array"));
+        FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("complex"));
+    }
+
+    private static RecipeMap<FusionRecipeBuilder> fusionRecipeBuilderRecipeMap(String id) {
+        return new RecipeMap<>("fusion_stack." + id,
+                0, 0, 2, 1, new FusionRecipeBuilder(), false)
+                .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)
+                .setSound(GTSoundEvents.ARC);
+    }
 
 
     private GTCEFuCRecipeMaps() {}

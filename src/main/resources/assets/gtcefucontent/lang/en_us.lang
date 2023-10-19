@@ -10,6 +10,13 @@ recipemap.forging_furnace.name=Blast Forging
 gtcefucontent.machine.forging_furnace.description=Can process normal Blast Furnace recipes or perform Blast Forging.\n\nBlast forging includes inefficient inline cooling, and incurs an additional 5% duration penalty for forging.
 gtcefucontent.subtitle.tick.forging_furnace=Forge clangs
 
-gtcefucontent.machine.fusion_stack.tooltip=Binary Stars
-gtcefucontent.machine.fusion_array.tooltip=RED GIANT IN A BOX
-gtcefucontent.machine.fusion_complex.tooltip=SUPERNOVAE GO BRRRRRRR
+gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
+gtcefucontent.machine.fusion_stack.stack.name=Fusion Reactor Computer Type "Stack"
+gtcefucontent.machine.fusion_stack.stack.tooltip=Binary Stars
+recipemap.fusion_stack.stack.name=Bulk Fusion x4
+gtcefucontent.machine.fusion_stack.array.name=Fusion Reactor Computer Type "Array"
+gtcefucontent.machine.fusion_stack.array.tooltip=RED GIANT IN A BOX
+recipemap.fusion_stack.array.name=Bulk Fusion x16
+gtcefucontent.machine.fusion_stack.complex.name=Fusion Reactor Computer Type "Complex"
+gtcefucontent.machine.fusion_stack.complex.tooltip=SUPERNOVAE GO BRRRRRRR
+recipemap.fusion_stack.complex.name=Bulk Fusion x64

@@ -34,6 +34,9 @@ public class GTCEFuCRecipeLoader {
 
         // The forging furnace recipeMap is completely new, but dependent on the blast furnace recipeMap.
         GTCEFuCForgingFurnaceRecipes.init();
+
+        // The fusion stack recipeMaps are dependent on the normal fusion recipemap
+        GTCEFuFusionStackRecipes.init();
     }
 
     private static void controllerRecipes() {
