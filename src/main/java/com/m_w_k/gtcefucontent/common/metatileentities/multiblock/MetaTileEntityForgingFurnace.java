@@ -34,6 +34,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityItemB
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -182,6 +183,12 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
 
     private static @NotNull RecipeMap<?> @NotNull [] determineRecipeMaps() {
         return new RecipeMap<?>[] { RecipeMaps.BLAST_RECIPES, GTCEFuCRecipeMaps.FORGING_FURNACE_RECIPES};
+    }
+
+    // I don't know why this override isn't part of base greg or gcym. Maybe they forgot?
+    @Override
+    public SoundEvent getSound() {
+        return getCurrentRecipeMap().getSound();
     }
 
     @Override
