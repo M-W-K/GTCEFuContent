@@ -37,8 +37,7 @@ public final class GTCEFuCRecipeMaps {
             3, 3, 2, 1, new BlastRecipeBuilder(), false)
             .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
             .setSlotOverlay(false, false, true, GuiTextures.INT_CIRCUIT_OVERLAY)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRUDER, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTCEFuContentSoundEvents.FORGING_FURNACE);
+            .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRUDER, ProgressWidget.MoveType.HORIZONTAL);
 
     public static final List<RecipeMap<FusionRecipeBuilder>> FUSION_STACK_RECIPE_MAPS = new ArrayList<>(3) {};
 
@@ -47,6 +46,8 @@ public final class GTCEFuCRecipeMaps {
         FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("stack"));
         FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("array"));
         FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("complex"));
+        // for some unknown reason, running .setSound during map declaration doesn't actually work at all for my custom sound.
+        FORGING_FURNACE_RECIPES.setSound(GTCEFuContentSoundEvents.FORGING_FURNACE);
     }
 
     private static RecipeMap<FusionRecipeBuilder> fusionRecipeBuilderRecipeMap(String id) {

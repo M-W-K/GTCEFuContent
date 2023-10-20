@@ -3,7 +3,7 @@
     "subtitle": "gtcefucontent.subtitle.tick.forging_furnace",
     "category": "block",
     "sounds": [{
-        "name": "gregtech:forging_furnace",
+        "name": "gtcefucontent:forging_furnace",
         "stream": false
       }]
   }

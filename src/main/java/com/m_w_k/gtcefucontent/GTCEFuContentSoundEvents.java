@@ -9,7 +9,7 @@ public class GTCEFuContentSoundEvents {
     public static SoundEvent FORGING_FURNACE;
 
     public static void register() {
-        FORGING_FURNACE = soundManager.registerSound("tick.forging_furnace");
-        GTCEFuContent.log("Alternative prefix is on purpose, it's fine. Probably.");
+        // Get the greg sound manager to register the sound as ours. How imperious.
+        FORGING_FURNACE = soundManager.registerSound(GTCEFuContent.MODID, "tick.forging_furnace");
     }
 }

@@ -34,13 +34,14 @@ public class GTCEFuContent
     {
         logger = event.getModLog();
         log("Beginning PreInit");
+        GTCEFuContentSoundEvents.register();
+
         MetaTileEntityFusionStack.init();
         GTCEFuCRecipeMaps.init();
 
         GTCEFuCMetaBlocks.init();
         GTCEFuCMetaTileEntities.init();
 
-        GTCEFuContentSoundEvents.register();
         proxy.preLoad();
         log("PreInit complete");
     }
