@@ -13,6 +13,18 @@
         "textures": {
           "all": "gregtech:blocks/casings/hardened_casing/indestructible_casing"
         }
+      },
+      "indestructible_pipe_casing": {
+        "model": "minecraft:cube_all",
+        "textures": {
+          "all": "gregtech:blocks/casings/hardened_casing/indestructible_pipe_casing"
+        }
+      },
+      "plasma_pipe_casing": {
+        "model": "minecraft:cube_all",
+        "textures": {
+          "all": "gregtech:blocks/casings/hardened_casing/plasma_pipe_casing"
+        }
       }
     }
   }

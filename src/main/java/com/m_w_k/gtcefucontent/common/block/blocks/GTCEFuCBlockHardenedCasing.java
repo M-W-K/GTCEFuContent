@@ -14,11 +14,11 @@ public class GTCEFuCBlockHardenedCasing extends VariantBlock<GTCEFuCBlockHardene
     public GTCEFuCBlockHardenedCasing() {
         super(Material.IRON);
         setTranslationKey("hardened_casing");
-        // stats of obsidian
-        setHardness(50.0f);
-        setResistance(2000.0f);
+        // half stats of obsidian
+        setHardness(25.0f);
+        setResistance(1000.0f);
         setSoundType(SoundType.METAL);
-        setHarvestLevel("wrench", 5);
+        setHarvestLevel("wrench", 4);
         setDefaultState(getState(CasingType.INDESTRUCTIBLE_CASING));
     }
 
@@ -30,7 +30,9 @@ public class GTCEFuCBlockHardenedCasing extends VariantBlock<GTCEFuCBlockHardene
 
     public enum CasingType implements IStringSerializable {
 
-        INDESTRUCTIBLE_CASING("indestructible_casing");
+        INDESTRUCTIBLE_CASING("indestructible_casing"),
+        INDESTRUCTIBLE_PIPE_CASING("indestructible_pipe_casing"),
+        PLASMA_PIPE_CASING("plasma_pipe_casing");
 
         private final String name;
 

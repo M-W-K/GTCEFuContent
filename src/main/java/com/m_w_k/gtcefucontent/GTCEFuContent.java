@@ -36,11 +36,12 @@ public class GTCEFuContent
         log("Beginning PreInit");
         GTCEFuContentSoundEvents.register();
 
-        MetaTileEntityFusionStack.init();
         GTCEFuCRecipeMaps.init();
 
         GTCEFuCMetaBlocks.init();
         GTCEFuCMetaTileEntities.init();
+
+        MetaTileEntityFusionStack.init();
 
         proxy.preLoad();
         log("PreInit complete");

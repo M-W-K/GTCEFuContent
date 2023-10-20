@@ -46,6 +46,7 @@ public final class GTCEFuCRecipeMaps {
         FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("stack"));
         FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("array"));
         FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("complex"));
+
         // for some unknown reason, running .setSound during map declaration doesn't actually work at all for my custom sound.
         FORGING_FURNACE_RECIPES.setSound(GTCEFuContentSoundEvents.FORGING_FURNACE);
     }

@@ -22,4 +22,6 @@ gtcefucontent.machine.fusion_stack.complex.tooltip=SUPERNOVAE GO BRRRRRRR
 recipemap.fusion_stack.complex.name=Bulk Fusion x64
 
 tile.hardened_casing.indestructible_casing.name=Indestructible Casing
+tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing
+tile.hardened_casing.plasma_pipe_casing.name=Integrated Fusion Piping
 tile.advanced_casing.null_field_casing.name=Null-Field Casing

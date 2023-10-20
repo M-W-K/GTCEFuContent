@@ -1,5 +1,7 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
@@ -38,6 +40,7 @@ final class FusionStackPatterns {
                 .where('Z', stateIndex(11))
                 .where('N', frames(Materials.Neutronium))
                 .where('J', stateIndex(5).or(stateIndex(6)))
+                .where('W', stateIndex(15))
                 .where('C', stateIndex(20 + variant))
                 .where('I', getFluidHatchAlternate(variant).or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(2, 4)))
                 .where('O', getFluidHatchAlternate(variant).or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(4)))
@@ -104,7 +107,7 @@ final class FusionStackPatterns {
             case 9 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT);
             case 10 -> MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.FILTER_CASING);
             case 11 -> MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING);
-            case 13 -> MetaBlocks.COMPRESSED.get(Materials.Darmstadtium).getBlock(Materials.Darmstadtium);
+            case 15 -> GTCEFuCMetaBlocks.HARDENED_CASING.getState(GTCEFuCBlockHardenedCasing.CasingType.PLASMA_PIPE_CASING);
             case 21 -> MetaBlocks.COMPRESSED.get(Materials.SteelMagnetic).getBlock(Materials.SteelMagnetic);
             case 22 -> MetaBlocks.COMPRESSED.get(Materials.NeodymiumMagnetic).getBlock(Materials.NeodymiumMagnetic);
             case 23 -> MetaBlocks.COMPRESSED.get(Materials.SamariumMagnetic).getBlock(Materials.SamariumMagnetic);
@@ -147,15 +150,15 @@ final class FusionStackPatterns {
                     "#####SJJJS#####",
                     "####JJDDDJJ####",
                     "###YDDNNNDDY###",
-                    "S#YUPNNSNNPUY#S",
-                    "#JDPPRMSMRPPDJ#",
+                    "S#YUPNNWNNPUY#S",
+                    "#JDPPRMWMRPPDJ#",
                     "#JDNRZ#I#ZRNDJ#",
                     "JDNNM#####MNNDJ",
-                    "JDNSSI#C#ISSNDJ",
+                    "JDNWWO#C#OWWNDJ",
                     "JDNNM#####MNNDJ",
                     "#JDNRZ#I#ZRNDJ#",
-                    "#JDPPRMSMRPPDJ#",
-                    "S#YUPNNSNNPUY#S",
+                    "#JDPPRMWMRPPDJ#",
+                    "S#YUPNNWNNPUY#S",
                     "###YDDNNNDDY###",
                     "####JJDDDJJ####",
                     "#####SJJJS#####")
@@ -211,15 +214,15 @@ final class FusionStackPatterns {
                     "#####SJJJS#####",
                     "####JJDDDJJ####",
                     "###YDDNNNDDY###",
-                    "S#YUPNNSNNPUY#S",
-                    "#JDPPRMSMRPPDJ#",
-                    "#JDNRZ#O#ZRNDJ#",
+                    "S#YUPNNWNNPUY#S",
+                    "#JDPPRMWMRPPDJ#",
+                    "#JDNRZ#I#ZRNDJ#",
                     "JDNNM#####MNNDJ",
-                    "JDNSSO#C#OSSNDJ",
+                    "JDNWWO#C#OWWNDJ",
                     "JDNNM#####MNNDJ",
-                    "#JDNRZ#O#ZRNDJ#",
-                    "#JDPPRMSMRPPDJ#",
-                    "S#YUPNNSNNPUY#S",
+                    "#JDNRZ#I#ZRNDJ#",
+                    "#JDPPRMWMRPPDJ#",
+                    "S#YUPNNWNNPUY#S",
                     "###YDDNNNDDY###",
                     "####JJDDDJJ####",
                     "#####SJJJS#####")
