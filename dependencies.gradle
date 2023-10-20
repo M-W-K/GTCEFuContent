@@ -34,8 +34,8 @@ dependencies {
     implementation rfg.deobf("curse.maven:enderio-base-297193:4674231")
 
     // Soft Dependencies
-
-    //TODO remove CT dependency
     implementation "curse.maven:crafttweaker-239197:4775347"
+    // I hate this thing, fyi.
+    compileOnlyApi "curse.maven:groovyscript-687577:4749823-dev-sources"
 
 }

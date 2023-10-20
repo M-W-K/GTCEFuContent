@@ -42,10 +42,12 @@ public class GTCEFuMiscRecipes {
                         Materials.Krypton.getFluid(500),
                         Materials.Xenon.getFluid(500),
                         Materials.Radon.getFluid(1000))
-                .chancedOutput(Material.POWDER_PRECIENT.getStack(), 10, 0)
+                .chancedOutput(Material.POWDER_PRECIENT.getStack(), 100, 10)
                 .duration(800)
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
+
+
     }
 
     public static void cutterUpdate() {

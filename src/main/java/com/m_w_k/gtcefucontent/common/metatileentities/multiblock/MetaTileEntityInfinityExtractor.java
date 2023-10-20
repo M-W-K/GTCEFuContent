@@ -1,6 +1,8 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -36,14 +38,14 @@ public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockControll
                 .aisle("GG#", "IGG", "IXS", "FSS", "###")
                 .aisle("BB#", "RPR", "CNO", "FNG", "#V#").setRepeatable(1, 4)
                 .aisle("GG#", "EGG", "EMS", "FSS", "###")
-                .where('S', getCasingState(0).or(abilities(MultiblockAbility.MAINTENANCE_HATCH).setMinGlobalLimited(0).setMaxGlobalLimited(1,1)))
+                .where('S', getCasingState(0).or(autoAbilities(true, false)))
                 .where('G', getCasingState(1))
                 .where('P', getCasingState(2))
                 .where('C', heatingCoils())
                 .where('B', frames(Materials.Steel))
                 .where('R', getCasingState(5))
                 .where('F', getCasingState(6))
-                .where('M', autoAbilities(true, false))
+                .where('M', metaTileEntities(MetaTileEntities.MUFFLER_HATCH))
                 .where('O', metaTileEntities(MetaTileEntities.ITEM_EXPORT_BUS[GTValues.ULV]))
                 .where('I', getCasingState(0).or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(1)))
                 .where('E', getCasingState(0).or(abilities(MultiblockAbility.INPUT_ENERGY).setPreviewCount(2)))

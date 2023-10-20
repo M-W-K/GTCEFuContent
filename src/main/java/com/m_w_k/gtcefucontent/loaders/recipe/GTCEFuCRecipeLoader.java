@@ -19,10 +19,15 @@ public class GTCEFuCRecipeLoader {
 
     public static void init() {
         GTCEFuContent.log("Starting recipe construction...");
+
         GTCEFuCInfinityExtractorRecipes.init();
         GTCEFuCSympatheticCombustorRecipes.init();
+
+        GTCEFuCCasingLoader.init();
         GTCEFuMiscRecipes.init();
+
         controllerRecipes();
+
         GTCEFuContent.log("Recipe construction complete.");
     }
 
@@ -36,7 +41,7 @@ public class GTCEFuCRecipeLoader {
         GTCEFuCForgingFurnaceRecipes.init();
 
         // The fusion stack recipeMaps are dependent on the normal fusion recipemap
-        GTCEFuFusionStackRecipes.init();
+        GTCEFuCFusionStackRecipes.init();
     }
 
     private static void controllerRecipes() {

@@ -12,8 +12,8 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GTCEFuFusionStackRecipes {
-    private GTCEFuFusionStackRecipes() {}
+public class GTCEFuCFusionStackRecipes {
+    private GTCEFuCFusionStackRecipes() {}
 
     public static void init() {
         GTCEFuContent.log("Starting the construction of Fusion Stack custom recipes...");

@@ -1,24 +1,30 @@
 package com.m_w_k.gtcefucontent;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.common.CommonProxy;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityFusionStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = GTCEFuContent.MODID, name = GTCEFuContent.NAME, version = GTCEFuContent.VERSION)
+@Mod(modid = GTCEFuContent.MODID, name = GTCEFuContent.NAME, version = GTCEFuContent.VERSION, dependencies = GTCEFuContent.DEP_VERSION_STRING)
 public class GTCEFuContent
 {
     public static final String MODID = "gtcefucontent";
-    public static final String NAME = "GTCEFuContent";
+    public static final String NAME = "GregTechCEFuContent";
     public static final String VERSION = "1.0";
 
-//    @SidedProxy(modId = MODID,
-//            clientSide = "com.m_w_k.gtcefucontent.common.ClientProxy",
-//            serverSide = "com.m_w_k.gtcefucontent.common.CommonProxy")
-//    public static CommonProxy proxy;
+    public static final String DEP_VERSION_STRING =
+            "required-after:gregtech@[2.7.0-beta,);required-after:gcym@[1.2.5,);required-after:enderio@[5.3,);";
+
+    @SidedProxy(modId = MODID,
+            clientSide = "com.m_w_k.gtcefucontent.common.ClientProxy",
+            serverSide = "com.m_w_k.gtcefucontent.common.CommonProxy")
+    public static CommonProxy proxy;
 
 
     private static Logger logger;
@@ -31,10 +37,11 @@ public class GTCEFuContent
         MetaTileEntityFusionStack.init();
         GTCEFuCRecipeMaps.init();
 
+        GTCEFuCMetaBlocks.init();
         GTCEFuCMetaTileEntities.init();
 
         GTCEFuContentSoundEvents.register();
-//        proxy.preLoad();
+        proxy.preLoad();
         log("PreInit complete");
     }
 

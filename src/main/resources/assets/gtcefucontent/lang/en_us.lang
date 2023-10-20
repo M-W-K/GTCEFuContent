@@ -7,7 +7,7 @@ recipemap.sympathetic_combustor.name=Sympathetic Combustion
 gtcefucontent.machine.forging_furnace.name=Linear Forging Furnace
 gtcefucontent.machine.forging_furnace.tooltip=Striking while the Iron is Hot
 recipemap.forging_furnace.name=Blast Forging
-gtcefucontent.machine.forging_furnace.description=Can process normal Blast Furnace recipes or perform Blast Forging.\n\nBlast forging includes inefficient inline cooling, and incurs an additional 5% duration penalty for forging.
+gtcefucontent.multiblock.forging_furnace.description=Can process normal Blast Furnace recipes or perform Blast Forging.\n\nBlast forging includes inefficient inline cooling, and incurs an additional 5% duration penalty for forging.
 gtcefucontent.subtitle.tick.forging_furnace=Forge clangs
 
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
@@ -20,3 +20,6 @@ recipemap.fusion_stack.array.name=Bulk Fusion x16
 gtcefucontent.machine.fusion_stack.complex.name=Fusion Reactor Computer Type "Complex"
 gtcefucontent.machine.fusion_stack.complex.tooltip=SUPERNOVAE GO BRRRRRRR
 recipemap.fusion_stack.complex.name=Bulk Fusion x64
+
+tile.hardened_casing.indestructible_casing.name=Indestructible Casing
+tile.advanced_casing.null_field_casing.name=Null-Field Casing
