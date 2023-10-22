@@ -41,7 +41,7 @@ public final class GTCEFuCPneumaticInfuserRecipes {
                 .fluidInputs(new FluidStack(Fluids.LIQUID_SUNSHINE.getFluid(), 10000),
                         Materials.Blaze.getFluid(1296))
                 .fluidOutputs(new FluidStack(Fluids.FIRE_WATER.getFluid(), 10000))
-                .duration(500).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
+                .duration(250).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCInfinityExtractorRecipes.dust)

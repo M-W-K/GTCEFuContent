@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.GTValues;
@@ -27,6 +28,7 @@ import gregtech.client.utils.RenderUtil;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluidHatch;
+import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -41,6 +43,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -100,7 +103,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        if (sourcePart instanceof MetaTileEntityFluidHatch) return getFluidHatchTexture();
+        if (sourcePart instanceof MetaTileEntityFluidHatch
+                || sourcePart instanceof MetaTileEntityMultiFluidHatch) return getFluidHatchTexture();
         if (this.recipeMapWorkable.isActive()) {
             return Textures.ACTIVE_FUSION_TEXTURE;
         } else {
@@ -150,7 +154,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     }
 
     private long calculateEnergyStorageFactor(int energyInputAmount) {
-        return energyInputAmount * (long) Math.pow(2, 2 + overclock_rating) * 10000000L;
+        // each additional tier gets 2x as many inputs already
+        return energyInputAmount * 80000000L;
     }
 
     @Override
@@ -217,7 +222,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip, boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.fusion_reactor.capacity", calculateEnergyStorageFactor(16) / 1000000L));
+        tooltip.add(I18n.format("gregtech.machine.fusion_reactor.capacity", calculateEnergyStorageFactor((int) (Math.pow(2, 3 + overclock_rating))) / 1000000L));
         tooltip.add(I18n.format("gregtech.machine.fusion_reactor.overclocking"));
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gtcefucontent.machine.fusion_stack.perfect", overclock_rating));
     }
@@ -333,52 +338,102 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                 float g = (float) (color >> 8 & 255) / 255.0F;
                 float b = (float) (color & 255) / 255.0F;
                 Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-                if (entity != null) {
-                    buffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
+                if (entity != null && isActive()) {
+                    int xAxisAligned = getFrontFacing().getOpposite().getXOffset();
+                    int zAxisAligned = getFrontFacing().getOpposite().getZOffset();
                     if (overclock_rating == 1) {
-                        // two rings, one shifted up by 1, one shifted down by 1
-                        RenderBufferHelper.renderRing(buffer,
-                                x + getFrontFacing().getOpposite().getXOffset() * 7 + 0.5,
+                        double xOffset = xAxisAligned * 7 + 0.5;
+                        double zOffset = zAxisAligned * 7 + 0.5;
+                        renderFusionRing(buffer,
+                                x + xOffset,
                                 y + 2.5,
-                                z + getFrontFacing().getOpposite().getZOffset() * 7 + 0.5,
-                                6, 0.2, 10, 20,
-                                r, g, b, a, EnumFacing.Axis.Y);
-                        RenderBufferHelper.renderRing(buffer,
-                                x + getFrontFacing().getOpposite().getXOffset() * 7 + 0.5,
+                                z + zOffset,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset,
                                 y - 1.5,
-                                z + getFrontFacing().getOpposite().getZOffset() * 7 + 0.5,
-                                6, 0.2, 10, 20,
-                                r, g, b, a, EnumFacing.Axis.Y);
+                                z + zOffset,
+                                r, g, b, a);
                     } else if (overclock_rating == 2) {
-                        // shrug
+                        double xOffset = xAxisAligned * 4 + 0.5;
+                        double zOffset = zAxisAligned * 4 + 0.5;
+                        double xMod = zAxisAligned * 10;
+                        double zMod = xAxisAligned * 10;
+                        renderFusionRing(buffer,
+                                x + xOffset + xMod,
+                                y - 1.5,
+                                z + zOffset + zMod,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset + xMod,
+                                y - 5.5,
+                                z + zOffset + zMod,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset - xMod,
+                                y - 1.5,
+                                z + zOffset - zMod,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset - xMod,
+                                y - 5.5,
+                                z + zOffset - zMod,
+                                r, g, b, a);
                     } else {
-                        //shrug
+                        double xOffset = xAxisAligned * 7 + 0.5;
+                        double zOffset = zAxisAligned * 7 + 0.5;
+                        renderFusionRing(buffer,
+                                x + xOffset,
+                                y + 2.5,
+                                z + zOffset,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset,
+                                y - 1.5,
+                                z + zOffset,
+                                r, g, b, a);
                     }
-                    Tessellator.getInstance().draw();
                 }
             });
         }
     }
 
+    // very useful if you need to render a large number of rings with a single block
+    protected void renderFusionRing(BufferBuilder buffer, double x, double y, double z, float r, float g, float b, float a) {
+        buffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
+        RenderBufferHelper.renderRing(buffer,
+                x, y, z, 6, 0.2, 10, 20,
+                r, g, b, a, EnumFacing.Axis.Y);
+        Tessellator.getInstance().draw();
+    }
+
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        // pos 1 : offset by 1 backward, then offset by 6 right
-        // pos 2 : offset by 13 backward, then offset by 6 left
-        // overall effect: 12x12x1 bounding box
-        //return new AxisAlignedBB(this.getPos().offset(getFrontFacing().getOpposite()).offset(getFrontFacing().rotateY(), 6),
-        //        this.getPos().offset(getFrontFacing().getOpposite(), 13).offset(getFrontFacing().rotateY().getOpposite(), 6));
 
         if (overclock_rating == 1) {
-            // same as above, but pos 1 is shifted up by 2 and pos 2 is shifted down by 2
-            return new AxisAlignedBB(this.getPos().offset(getFrontFacing().getOpposite()).offset(getFrontFacing().rotateY(), 6).offset(EnumFacing.UP, 2),
-                    this.getPos().offset(getFrontFacing().getOpposite(), 13).offset(getFrontFacing().rotateY().getOpposite(), 6).offset(EnumFacing.DOWN, 2));
+            return new AxisAlignedBB(bbHelper(6, 2, -1),
+                    bbHelper(-6, -2, -13));
         } else if (overclock_rating == 2) {
-            // shrug
-            return null;
+            return new AxisAlignedBB(bbHelper(16, -2, 2),
+                    bbHelper(-16, -6, -10));
         } else {
-            // shrug
-            return null;
+            return new AxisAlignedBB(bbHelper(16, -2, 2),
+                    bbHelper(-16, -6, -10));
         }
+    }
+
+    /**
+     * Returns a BlockPos offset from the controller by the given values
+     * @param x Positive is controller left, Negative is controller right
+     * @param y Positive is controller up, Negative is controller down
+     * @param z Positive is controller front, Negative is controller back
+     * @return Offset BlockPos
+     */
+    protected BlockPos bbHelper(int x, int y, int z) {
+        return this.getPos()
+                .offset(getFrontFacing(), z)
+                .offset(getFrontFacing().getOpposite().rotateY(), x)
+                .offset(EnumFacing.UP, y);
     }
 
     @Override

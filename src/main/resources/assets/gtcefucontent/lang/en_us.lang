@@ -15,13 +15,13 @@ gtcefucontent.subtitle.tick.forging_furnace=Forge clangs
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
 gtcefucontent.machine.fusion_stack.stack.name=Fusion Reactor Computer Type "Stack"
 gtcefucontent.machine.fusion_stack.stack.tooltip=Binary Stars
-recipemap.fusion_stack.stack.name=Bulk Fusion x4
+recipemap.fusion_stack.stack.name=Bulk Fusion x8
 gtcefucontent.machine.fusion_stack.array.name=Fusion Reactor Computer Type "Array"
 gtcefucontent.machine.fusion_stack.array.tooltip=RED GIANT IN A BOX
-recipemap.fusion_stack.array.name=Bulk Fusion x16
+recipemap.fusion_stack.array.name=Bulk Fusion x64
 gtcefucontent.machine.fusion_stack.complex.name=Fusion Reactor Computer Type "Complex"
 gtcefucontent.machine.fusion_stack.complex.tooltip=SUPERNOVAE GO BRRRRRRR
-recipemap.fusion_stack.complex.name=Bulk Fusion x64
+recipemap.fusion_stack.complex.name=Bulk Fusion x256
 
 gtcefucontent.machine.antimatter_compressor.name=Antimatter Compressor
 gtcefucontent.machine.antimatter_compressor.tooltip=Creating the §4I§6n§ef§ai§b§3n§1i§9t§5e

@@ -28,14 +28,14 @@ public class GTCEFuCFusionStackRecipes {
             for (Recipe defaultRecipe : fusionRecipes) {
                 FusionRecipeBuilder recipe = recipeMap.recipeBuilder();
                 recipe.fluidInputs(defaultRecipe.getFluidInputs().stream()
-                        .map(input -> input.copyWithAmount(input.getInputFluidStack().amount * mod4))
+                        .map(input -> input.copyWithAmount(input.getInputFluidStack().amount * mod2 * mod4))
                         .collect(Collectors.toList()));
                 // only one fluid output
                 FluidStack fluidOut = defaultRecipe.getFluidOutputs().get(0);
-                recipe.fluidOutputs(new FluidStack(fluidOut, fluidOut.amount * mod4));
+                recipe.fluidOutputs(new FluidStack(fluidOut, fluidOut.amount * mod2 * mod4));
                 recipeMap.addRecipe(recipe
                         .EUt(defaultRecipe.getEUt() * mod2)
-                        .duration(defaultRecipe.getDuration() * mod2)
+                        .duration(defaultRecipe.getDuration() * mod4)
                         .EUToStart(defaultRecipe.getRecipePropertyStorage()
                         .getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L) * mod2)
                         .build());
