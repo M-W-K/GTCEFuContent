@@ -1,13 +1,15 @@
 gtcefucontent.machine.infinity_extractor.name=Infinity Extractor
+gtcefucontent.machine.infinity_extractor.tooltip=Exploiting the §4I§6n§ef§ai§b§3n§1i§9t§5e
 recipemap.infinity_extractor.name=Infinity Extraction
 
 gtcefucontent.machine.sympathetic_combustor.name=Sympathetic Combustor
+gtcefucontent.machine.sympathetic_combustor.tooltip=Extreme efficiency, at what cost?
 recipemap.sympathetic_combustor.name=Sympathetic Combustion
 
 gtcefucontent.machine.forging_furnace.name=Linear Forging Furnace
 gtcefucontent.machine.forging_furnace.tooltip=Striking while the Iron is Hot
 recipemap.forging_furnace.name=Blast Forging
-gtcefucontent.multiblock.forging_furnace.description=Can process normal Blast Furnace recipes or perform Blast Forging.\n\nBlast forging includes inefficient inline cooling, and incurs an additional 5% duration penalty for forging.
+gregtech.multiblock.forging_furnace.description=Can process normal Blast Furnace recipes or perform Blast Forging.\n\nBlast Forging includes inefficient inline cooling, and incurs a 1.05x duration penalty.
 gtcefucontent.subtitle.tick.forging_furnace=Forge clangs
 
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
@@ -20,6 +22,13 @@ recipemap.fusion_stack.array.name=Bulk Fusion x16
 gtcefucontent.machine.fusion_stack.complex.name=Fusion Reactor Computer Type "Complex"
 gtcefucontent.machine.fusion_stack.complex.tooltip=SUPERNOVAE GO BRRRRRRR
 recipemap.fusion_stack.complex.name=Bulk Fusion x64
+
+gtcefucontent.machine.antimatter_compressor.name=Antimatter Compressor
+gtcefucontent.machine.antimatter_compressor.tooltip=Creating the §4I§6n§ef§ai§b§3n§1i§9t§5e
+gtcefucontent.machine.antimatter_compressor.capacity=§7Maximum Energy Storage: §e%sG EU
+gtcefucontent.machine.antimatter_compressor.info=Upon recipe interruption, half of heat will be recovered as energy. Space in the reservoir will be reserved.
+recipemap.antimatter_compressor.name=Antimatter Compression
+gregtech.multiblock.antimatter_compressor.description=The Antimatter Compressor is a massive multiblock capable of flashing energy into antimatter to perform compression violating the laws of physics. For every Battery it has, its buffer increases by 10.24G EU, and has a maximum of 163.84G
 
 tile.hardened_casing.indestructible_casing.name=Indestructible Casing
 tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing

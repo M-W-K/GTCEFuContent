@@ -33,6 +33,9 @@ dependencies {
     implementation rfg.deobf("curse.maven:endercore-231868:4671384-api")
     implementation rfg.deobf("curse.maven:enderio-base-297193:4674231")
 
+    implementation rfg.deobf("curse.maven:projecte-226410:2702991")
+    implementation rfg.deobf("curse.maven:projectex-311378:3014173-sources")
+
     // Soft Dependencies
     implementation "curse.maven:crafttweaker-239197:4775347"
     // I hate this thing, fyi.

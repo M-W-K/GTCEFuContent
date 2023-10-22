@@ -10,9 +10,7 @@ import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.recipes.builders.SimpleRecipeBuilder;
 import gregtech.api.unification.material.MarkerMaterials;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
@@ -29,18 +27,18 @@ public class GTCEFuCCasingLoader {
         ModHandler.addShapedRecipe(true, "casing_indestructible", GTCEFuCMetaBlocks.HARDENED_CASING
                 .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_CASING, 2),
                 "PhP", "PFP", "PwP",
-                'P', new UnificationEntry(OrePrefix.plateDense, Materials.Neutronium),
+                'P', new UnificationEntry(OrePrefix.plateDouble, Materials.Neutronium),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.Neutronium));
 
         ModHandler.addShapedRecipe(true, "casing_pipe_indestructible", GTCEFuCMetaBlocks.HARDENED_CASING
                 .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_PIPE_CASING, 2),
                 "PEP", "EFE", "PEP",
-                'P', new UnificationEntry(OrePrefix.plateDouble, Materials.Neutronium),
+                'P', new UnificationEntry(OrePrefix.plateDense, Materials.Neutronium),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.Neutronium),
                 'E', new UnificationEntry(OrePrefix.pipeNormalFluid, Materials.Neutronium));
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .input(OrePrefix.plateDense, Materials.Neutronium, 6)
+                .input(OrePrefix.plateDouble, Materials.Neutronium, 6)
                 .input(OrePrefix.frameGt, Materials.Neutronium)
                 .circuitMeta(6)
                 .outputs(GTCEFuCMetaBlocks.HARDENED_CASING
@@ -49,10 +47,10 @@ public class GTCEFuCCasingLoader {
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .inputs(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getItemVariant(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING, 2),
-                        new ItemStack(ModObject.itemMaterial.getItemNN(), 32, 20),
+                        new ItemStack(ModObject.block_infinity.getItemNN(), 32),
                         new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 34))
                 .input(MetaItems.FIELD_GENERATOR_UV, 6)
-                .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV, 6)
+                .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV)
                 .fluidInputs(new FluidStack(Fluids.VAPOR_OF_LEVITY.getFluid(), 1500))
                 .outputs(GTCEFuCMetaBlocks.ADVANCED_CASING.getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
                 .circuitMeta(6)

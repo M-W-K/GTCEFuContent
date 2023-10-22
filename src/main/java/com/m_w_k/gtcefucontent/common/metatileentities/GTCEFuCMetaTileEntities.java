@@ -13,6 +13,7 @@ public class GTCEFuCMetaTileEntities {
     public static MetaTileEntityInfinityExtractor INFINITY_EXTRACTOR;
     public static MetaTileEntitySympatheticCombustor SYMPATHETIC_COMBUSTOR;
     public static MetaTileEntityForgingFurnace FORGING_FURNACE;
+    public static MetaTileEntityAntimatterCompressor ANTIMATTER_COMPRESSOR;
 
     public static final MetaTileEntityFusionStack[] FUSION_STACK = new MetaTileEntityFusionStack[3];
     private GTCEFuCMetaTileEntities() {}
@@ -24,6 +25,7 @@ public class GTCEFuCMetaTileEntities {
         FUSION_STACK[0] = registerMetaTileEntity(22503, new MetaTileEntityFusionStack(gtcefucId("fusion_stack.stack"), GTValues.UHV));
         FUSION_STACK[1] = registerMetaTileEntity(22504, new MetaTileEntityFusionStack(gtcefucId("fusion_stack.array"), GTValues.UEV));
         FUSION_STACK[2] = registerMetaTileEntity(22505, new MetaTileEntityFusionStack(gtcefucId("fusion_stack.complex"), GTValues.UIV));
+        ANTIMATTER_COMPRESSOR = registerMetaTileEntity(22506, new MetaTileEntityAntimatterCompressor(gtcefucId("antimatter_compressor")));
     }
 
     private static ResourceLocation gtcefucId(String name) {

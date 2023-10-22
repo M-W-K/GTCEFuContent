@@ -24,6 +24,7 @@ import gregtech.client.shader.postprocessing.BloomEffect;
 import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.RenderBufferHelper;
 import gregtech.client.utils.RenderUtil;
+import gregtech.client.utils.TooltipHelper;
 import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluidHatch;
 import net.minecraft.client.Minecraft;
@@ -90,8 +91,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     protected BlockPattern createStructurePattern() {
         return (switch (overclock_rating) {
             default -> FusionStackPatterns.FUSION_STACK;
-            // Don't do until we have patterns
-            // case 2 -> FusionStackPatterns.FUSION_ARRAY;
+            case 2 -> FusionStackPatterns.FUSION_ARRAY;
             // case 3 -> FusionStackPatterns.FUSION_COMPLEX;
         })
                 .where('X', selfPredicate())
@@ -139,7 +139,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         List<IEnergyContainer> energyInputs = getAbilities(MultiblockAbility.INPUT_ENERGY);
         this.inputEnergyContainers = new EnergyContainerList(energyInputs);
         long euCapacity = calculateEnergyStorageFactor(energyInputs.size());
-        this.energyContainer = new EnergyContainerHandler(this, euCapacity, GTValues.V[tier(overclock_rating)], 0, 0, 0) {
+        // Allow for adaptive max voltage
+        this.energyContainer = new EnergyContainerHandler(this, euCapacity, inputEnergyContainers.getInputVoltage(), 0, 0, 0) {
             @Nonnull
             @Override
             public String getName() {
@@ -218,7 +219,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gregtech.machine.fusion_reactor.capacity", calculateEnergyStorageFactor(16) / 1000000L));
         tooltip.add(I18n.format("gregtech.machine.fusion_reactor.overclocking"));
-        tooltip.add(I18n.format("gtcefucontent.machine.fusion_stack.perfect", overclock_rating));
+        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gtcefucontent.machine.fusion_stack.perfect", overclock_rating));
     }
 
     @Nonnull
@@ -267,7 +268,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
         @Override
         protected long getMaxVoltage() {
-            return Math.min(GTValues.V[GTValues.UV], super.getMaxVoltage());
+            return super.getMaxVoltage();
         }
 
         @Override
@@ -432,9 +433,9 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     }
 
     public static void init() {
-        FusionEUToStartProperty.registerFusionTier(GTValues.UHV, "(Stack)");
-        FusionEUToStartProperty.registerFusionTier(GTValues.UEV, "(Array)");
-        FusionEUToStartProperty.registerFusionTier(GTValues.UIV, "(Complex)");
+        FusionEUToStartProperty.registerFusionTier(9, "(Stack)");
+        FusionEUToStartProperty.registerFusionTier(10, "(Array)");
+        FusionEUToStartProperty.registerFusionTier(11, "(Complex)");
         FusionStackPatterns.init();
     }
 }

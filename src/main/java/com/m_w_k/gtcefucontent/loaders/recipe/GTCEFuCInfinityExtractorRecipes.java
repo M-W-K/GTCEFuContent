@@ -13,10 +13,10 @@ import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXT
 public class GTCEFuCInfinityExtractorRecipes {
     private GTCEFuCInfinityExtractorRecipes() {}
 
-    private static final ItemStack dust = new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 20);
-    private static final ItemStack block1 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 0);
+    static final ItemStack dust = new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 20);
+    static final ItemStack block1 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 0);
     private static final ItemStack block2 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 1);
-    private static final ItemStack block3 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 2);
+    static final ItemStack block3 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 2);
 
     public static void init() {
         INFINITY_EXTRACTOR_RECIPES.recipeBuilder()
@@ -26,6 +26,7 @@ public class GTCEFuCInfinityExtractorRecipes {
                 .duration(1200)
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
+
         INFINITY_EXTRACTOR_RECIPES.recipeBuilder()
                 .input(Items.FIRE_CHARGE, 4)
                 .circuitMeta(2)
