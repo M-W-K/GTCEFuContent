@@ -2,7 +2,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
-import com.m_w_k.gtcefucontent.api.util.Util;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
 import crazypants.enderio.base.material.material.Material;
@@ -10,11 +10,8 @@ import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.unification.material.MarkerMaterials;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
-import gregtech.common.blocks.BlockMachineCasing;
-import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.items.MetaItems;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -151,7 +148,7 @@ public class GTCEFuMiscRecipes {
                 .duration(200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
 
-        if (Util.stellarAlloyCheck()) {
+        if (GTCEFuCUtil.stellarAlloyCheck()) {
             RecipeMaps.BENDER_RECIPES.recipeBuilder()
                     .inputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyIngot.getItem()), 5, 3))
                     .outputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyBall.getItem()), 1, 3))
@@ -169,7 +166,7 @@ public class GTCEFuMiscRecipes {
 
     public static void initPost() {
         GTCEFuContent.log("Removing recipes, DON'T BE SCARED OF FML's WARNING ABOUT DANGEROUS ALTERNATIVE PREFIX");
-        if (Util.stellarAlloyCheck()) {
+        if (GTCEFuCUtil.stellarAlloyCheck()) {
             ModHandler.removeRecipeByName("enderio:auto_stellar_alloy_9_nuggets_to_1_ingot");
             ModHandler.removeRecipeByName("enderio:auto_stellar_alloy_1_ingot_to_9_nuggets");
             ModHandler.removeRecipeByName("enderio:auto_stellar_alloy_9_ingots_to_1_block");

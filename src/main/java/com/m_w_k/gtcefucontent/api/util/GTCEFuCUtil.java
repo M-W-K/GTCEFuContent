@@ -2,8 +2,9 @@ package com.m_w_k.gtcefucontent.api.util;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import crazypants.enderio.base.init.ModObject;
+import net.minecraft.util.ResourceLocation;
 
-public final class Util {
+public final class GTCEFuCUtil {
 
     private static Boolean stellarAlloyPresent = null;
     public static boolean stellarAlloyCheck() {
@@ -15,5 +16,9 @@ public final class Util {
                 GTCEFuContent.log("Stellar Alloy not found. This is a critical recipe problem.", GTCEFuContent.LogType.ERROR);
         }
         return stellarAlloyPresent;
+    }
+
+    public static ResourceLocation gtcefucId(String name) {
+        return new ResourceLocation(GTCEFuContent.MODID, name);
     }
 }

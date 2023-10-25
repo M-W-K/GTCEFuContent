@@ -1,12 +1,11 @@
 package com.m_w_k.gtcefucontent.common.metatileentities;
 
 
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
 import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.*;
 import gregtech.api.GTValues;
-import net.minecraft.util.ResourceLocation;
 
 public class GTCEFuCMetaTileEntities {
 
@@ -28,7 +27,4 @@ public class GTCEFuCMetaTileEntities {
         ANTIMATTER_COMPRESSOR = registerMetaTileEntity(22506, new MetaTileEntityAntimatterCompressor(gtcefucId("antimatter_compressor")));
     }
 
-    private static ResourceLocation gtcefucId(String name) {
-        return new ResourceLocation(GTCEFuContent.MODID, name);
-    }
 }

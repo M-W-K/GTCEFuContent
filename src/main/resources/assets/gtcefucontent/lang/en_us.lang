@@ -38,3 +38,9 @@ tile.hardened_casing.indestructible_casing.name=Indestructible Casing
 tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing
 tile.hardened_casing.plasma_pipe_casing.name=Integrated Fusion Piping
 tile.advanced_casing.null_field_casing.name=Null-Field Casing
+
+gtcefucontent.material.caesium_chlorine_mix=Caesium-Chlorine Mixture
+gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
+gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Naquadah Caesium-Potassium-Gallium Mixture
+
+gtcefucontent.fluid.hot=Hot %s

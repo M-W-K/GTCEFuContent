@@ -1,7 +1,7 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.api.util.Util;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
 import gregtech.api.GTValues;
@@ -41,7 +41,7 @@ public final class GTCEFuCAntimatterCompressorRecipes {
                 .EUToStart(120000000000L)
                 .buildAndRegister();
 
-        if (Util.stellarAlloyCheck()) {
+        if (GTCEFuCUtil.stellarAlloyCheck()) {
 
             GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
                     .fluidInputs(Materials.Nickel.getPlasma(64000), new FluidStack(Fluids.LIQUID_SUNSHINE.getFluid(), 1024000))
