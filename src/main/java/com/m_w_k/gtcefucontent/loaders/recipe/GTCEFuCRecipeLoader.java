@@ -88,6 +88,8 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.dust, Materials.Lutetium, 16)
                 .input(MetaItems.ULTRA_HIGH_POWER_INTEGRATED_CIRCUIT, 64)
                 .input(OrePrefix.wireGtSingle, Materials.RutheniumTriniumAmericiumNeutronate, 32)
+                .input(MetaItems.SENSOR_UV, 8)
+                .input(MetaItems.FIELD_GENERATOR_UV, 8)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12))
                 .fluidInputs(Materials.IndiumGalliumPhosphide.getFluid(GTValues.L * 8))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[0])
@@ -106,8 +108,10 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.dust, Materials.Europium, 32)
                 .input(MetaItems.ULTRA_HIGH_POWER_INTEGRATED_CIRCUIT, 64)
                 .input(OrePrefix.wireGtDouble, Materials.RutheniumTriniumAmericiumNeutronate, 32)
+                .input(MetaItems.ELECTRIC_PUMP_EV, 32)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12))
                 .fluidInputs(Materials.Osmiridium.getFluid(GTValues.L * 8))
+                .fluidInputs(Materials.Gallium.getFluid(100000))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[1])
                 .research(b -> b
                         .researchStack(GTCEFuCMetaTileEntities.FUSION_STACK[0].getStackForm())
@@ -116,7 +120,7 @@ public final class GTCEFuCRecipeLoader {
                 .duration(1200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
-                .inputs(MetaTileEntities.FUSION_REACTOR[2].getStackForm(2))
+                .inputs(GTCEFuCMetaTileEntities.FUSION_STACK[2].getStackForm(2))
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV, 12)
                 .input(OrePrefix.ingot, Materials.SamariumMagnetic, 48)
                 .input(OrePrefix.plateDense, Materials.Neutronium)
@@ -124,8 +128,10 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.dust, Materials.Darmstadtium, 64)
                 .input(MetaItems.ULTRA_HIGH_POWER_INTEGRATED_CIRCUIT, 64)
                 .input(OrePrefix.wireGtQuadruple, Materials.RutheniumTriniumAmericiumNeutronate, 32)
+                .input(MetaBlocks.OPTICAL_PIPES[0], 32)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12))
                 .fluidInputs(Materials.NaquadahAlloy.getFluid(GTValues.L * 8))
+                .fluidInputs(Materials.PCBCoolant.getFluid(30000))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[2])
                 .research(b -> b
                         .researchStack(GTCEFuCMetaTileEntities.FUSION_STACK[1].getStackForm())

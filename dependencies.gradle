@@ -36,9 +36,10 @@ dependencies {
     implementation rfg.deobf("curse.maven:projecte-226410:2702991")
     implementation rfg.deobf("curse.maven:projectex-311378:3014173-sources")
 
-    // Soft Dependencies
+    // Compile-time / design help dependencies
     implementation "curse.maven:crafttweaker-239197:4775347"
-    // I hate this thing, fyi.
     compileOnlyApi "curse.maven:groovyscript-687577:4749823-dev-sources"
+    compileOnlyApi "curse.maven:appeng-223794:2747063"
+    compileOnlyApi "curse.maven:ctm-267602:2915363"
 
 }

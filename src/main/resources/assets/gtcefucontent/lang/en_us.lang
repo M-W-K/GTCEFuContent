@@ -13,14 +13,18 @@ gregtech.multiblock.forging_furnace.description=Can process normal Blast Furnace
 gtcefucontent.subtitle.tick.forging_furnace=Forge clangs
 
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
+gtcefucontent.machine.fusion_stack.coolant=DOES NOT REQUIRE COOLANT
 gtcefucontent.machine.fusion_stack.stack.name=Fusion Reactor Computer Type "Stack"
+gregtech.multiblock.fusion_stack.stack.description=A next generation fusion reactor that combines two fusion reactors with a powerful magnet. Upon the first overclock, sterilized air is injected into the chamber, and a synergistic flow is created without interfering with the fusion reaction. This massively increases the effect of the magnet, and doubles the strength of the overclock. Only accepts UHV Hatches of any amperage. For every Hatch it has, its buffer increases by 80M EU, and has a maximum of 1280M.
 gtcefucontent.machine.fusion_stack.stack.tooltip=Binary Stars
 recipemap.fusion_stack.stack.name=Bulk Fusion x8
 gtcefucontent.machine.fusion_stack.array.name=Fusion Reactor Computer Type "Array"
 gtcefucontent.machine.fusion_stack.array.tooltip=RED GIANT IN A BOX
+gregtech.multiblock.fusion_stack.array.description=Combines two "Stack" reactors and a massive liquid gallium cooling loop. Upon the second overclock, the cooling system switches from passive to active. This allows the fusion reaction to run even hotter, doubling the strength of the overclock. Only accepts UHV Hatches of any amperage. For every Hatch it has, its buffer increases by 80M EU, and has a maximum of 2560M.
 recipemap.fusion_stack.array.name=Bulk Fusion x64
 gtcefucontent.machine.fusion_stack.complex.name=Fusion Reactor Computer Type "Complex"
 gtcefucontent.machine.fusion_stack.complex.tooltip=SUPERNOVAE GO BRRRRRRR
+gregtech.multiblock.fusion_stack.complex.description=Combines two "Array" reactors into a truly vast structure. Has a synchronized pair of onboard supercomputers. Upon the third overclock, the fusion reaction becomes intense enough for nano-second fluctuations in production. The paired supercomputers manage the component reactors to stabilize and exploit these fluctuations, causing sympathetic electromagnetic fields. The interactions between these fields, extremely powerful magnets, and the eight component reactors doubles the strength of the overclock. Only accepts UHV Hatches of any amperage. For every Hatch it has, its buffer increases by 80M EU, and has a maximum of 5120M.
 recipemap.fusion_stack.complex.name=Bulk Fusion x256
 
 gtcefucontent.machine.antimatter_compressor.name=Antimatter Compressor

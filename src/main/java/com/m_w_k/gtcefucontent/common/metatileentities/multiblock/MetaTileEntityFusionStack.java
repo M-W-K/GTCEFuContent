@@ -27,6 +27,7 @@ import gregtech.client.utils.RenderBufferHelper;
 import gregtech.client.utils.RenderUtil;
 import gregtech.client.utils.TooltipHelper;
 import gregtech.common.ConfigHolder;
+import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluidHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 import net.minecraft.client.Minecraft;
@@ -95,7 +96,12 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         return (switch (overclock_rating) {
             default -> FusionStackPatterns.FUSION_STACK;
             case 2 -> FusionStackPatterns.FUSION_ARRAY;
-            // case 3 -> FusionStackPatterns.FUSION_COMPLEX;
+            case 3 -> // since the complex has tile entities, they need to have a direction alignment specified based on the controller's alignment
+                    FusionStackPatterns.FUSION_COMPLEX
+                            .where('5', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(), MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
+                            .where('6', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(), MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT))
+                            .where('7', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY().getOpposite(), MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
+                            .where('8', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY().getOpposite(), MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT));
         })
                 .where('X', selfPredicate())
                 .build();
@@ -225,6 +231,9 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         tooltip.add(I18n.format("gregtech.machine.fusion_reactor.capacity", calculateEnergyStorageFactor((int) (Math.pow(2, 3 + overclock_rating))) / 1000000L));
         tooltip.add(I18n.format("gregtech.machine.fusion_reactor.overclocking"));
         tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gtcefucontent.machine.fusion_stack.perfect", overclock_rating));
+        if (overclock_rating == 3) {
+            tooltip.add(TooltipHelper.BLINKING_CYAN + I18n.format("gtcefucontent.machine.fusion_stack.coolant"));
+        }
     }
 
     @Nonnull
@@ -273,7 +282,9 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
         @Override
         protected long getMaxVoltage() {
-            return super.getMaxVoltage();
+            // Increase the tier-lock voltage twice as fast as normal fusion
+            // UEV, UXV, MAX
+            return Math.min(GTValues.V[tier(overclock_rating * 2)], super.getMaxVoltage());
         }
 
         @Override
@@ -283,7 +294,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             // Don't drain heat when there is not enough energy and there is still some recipe progress, as that makes it doubly hard to complete the recipe
             // (Will have to recover heat and recipe progress)
             if ((!(isActive || workingEnabled) || (hasNotEnoughEnergy && progressTime == 0)) && heat > 0) {
-                heat = heat <= 10000 ? 0 : (heat - 10000);
+                heat = heat <= 40000 ? 0 : (heat - 40000);
             }
         }
 
@@ -369,6 +380,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                                 y - 5.5,
                                 z + zOffset + zMod,
                                 r, g, b, a);
+
                         renderFusionRing(buffer,
                                 x + xOffset - xMod,
                                 y - 1.5,
@@ -380,17 +392,55 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                                 z + zOffset - zMod,
                                 r, g, b, a);
                     } else {
-                        double xOffset = xAxisAligned * 7 + 0.5;
-                        double zOffset = zAxisAligned * 7 + 0.5;
+                        double xOffset = xAxisAligned + 0.5;
+                        double zOffset = zAxisAligned + 0.5;
+                        double xMod = zAxisAligned * 10;
+                        double zMod = xAxisAligned * 10;
+                        double xShift = xAxisAligned * 10;
+                        double zShift = zAxisAligned * 10;
                         renderFusionRing(buffer,
-                                x + xOffset,
-                                y + 2.5,
-                                z + zOffset,
+                                x + xOffset + xMod + xShift,
+                                y - 4.5,
+                                z + zOffset + zMod + zShift,
                                 r, g, b, a);
                         renderFusionRing(buffer,
-                                x + xOffset,
-                                y - 1.5,
-                                z + zOffset,
+                                x + xOffset + xMod + xShift,
+                                y - 8.5,
+                                z + zOffset + zMod + zShift,
+                                r, g, b, a);
+
+                        renderFusionRing(buffer,
+                                x + xOffset - xMod + xShift,
+                                y - 4.5,
+                                z + zOffset - zMod + zShift,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset - xMod + xShift,
+                                y - 8.5,
+                                z + zOffset - zMod + zShift,
+                                r, g, b, a);
+
+
+                        renderFusionRing(buffer,
+                                x + xOffset + xMod - xShift,
+                                y - 4.5,
+                                z + zOffset + zMod - zShift,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset + xMod - xShift,
+                                y - 8.5,
+                                z + zOffset + zMod - zShift,
+                                r, g, b, a);
+
+                        renderFusionRing(buffer,
+                                x + xOffset - xMod - xShift,
+                                y - 4.5,
+                                z + zOffset - zMod - zShift,
+                                r, g, b, a);
+                        renderFusionRing(buffer,
+                                x + xOffset - xMod - xShift,
+                                y - 8.5,
+                                z + zOffset - zMod - zShift,
                                 r, g, b, a);
                     }
                 }
@@ -409,7 +459,6 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-
         if (overclock_rating == 1) {
             return new AxisAlignedBB(bbHelper(6, 2, -1),
                     bbHelper(-6, -2, -13));
@@ -417,8 +466,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             return new AxisAlignedBB(bbHelper(16, -2, 2),
                     bbHelper(-16, -6, -10));
         } else {
-            return new AxisAlignedBB(bbHelper(16, -2, 2),
-                    bbHelper(-16, -6, -10));
+            return new AxisAlignedBB(bbHelper(16, -4, 15),
+                    bbHelper(-16, -8, -17));
         }
     }
 
