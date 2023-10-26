@@ -9,7 +9,7 @@ import gregtech.api.recipes.builders.FusionRecipeBuilder;
 import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.*;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class GTCEFuCFusionStackRecipes {

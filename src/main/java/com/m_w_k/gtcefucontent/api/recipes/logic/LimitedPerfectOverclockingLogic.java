@@ -1,8 +1,6 @@
 package com.m_w_k.gtcefucontent.api.recipes.logic;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import gregtech.api.recipes.logic.OverclockingLogic;
-import scala.collection.concurrent.Debug;
 
 import javax.annotation.Nonnull;
 

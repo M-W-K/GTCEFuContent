@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent.common.block;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 import gregtech.common.blocks.MetaBlocks;

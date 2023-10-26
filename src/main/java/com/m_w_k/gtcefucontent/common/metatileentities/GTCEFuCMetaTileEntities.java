@@ -1,13 +1,13 @@
 package com.m_w_k.gtcefucontent.common.metatileentities;
 
 
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
-import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
-
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.*;
 import gregtech.api.GTValues;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
+import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
 
 public class GTCEFuCMetaTileEntities {
 

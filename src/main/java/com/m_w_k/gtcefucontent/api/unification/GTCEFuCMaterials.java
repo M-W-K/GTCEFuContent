@@ -1,9 +1,5 @@
 package com.m_w_k.gtcefucontent.api.unification;
 
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
-import static gregtech.api.unification.material.Materials.*;
-import static gregtech.api.unification.material.info.MaterialFlags.*;
-
 import com.m_w_k.gtcefucontent.api.fluids.fluidType.GTCEFuCFluidTypes;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHotFluidProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
@@ -16,6 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
+import static gregtech.api.unification.material.Materials.*;
+import static gregtech.api.unification.material.info.MaterialFlags.DECOMPOSITION_BY_CENTRIFUGING;
+import static gregtech.api.unification.material.info.MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING;
 
 public class GTCEFuCMaterials {
 

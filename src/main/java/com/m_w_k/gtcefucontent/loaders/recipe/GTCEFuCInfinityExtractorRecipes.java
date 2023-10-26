@@ -1,12 +1,9 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import crazypants.enderio.base.init.ModObject;
-import crazypants.enderio.base.material.material.Material;
 import gregtech.api.GTValues;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES;
 

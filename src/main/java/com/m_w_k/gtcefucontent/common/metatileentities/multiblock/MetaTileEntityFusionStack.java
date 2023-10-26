@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.GTValues;

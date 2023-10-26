@@ -2,7 +2,6 @@ package com.m_w_k.gtcefucontent;
 
 import net.minecraft.util.SoundEvent;
 
-// borrow the GT sound manager; I'm not coding one myself!
 import static gregtech.api.GregTechAPI.soundManager;
 
 public class GTCEFuContentSoundEvents {

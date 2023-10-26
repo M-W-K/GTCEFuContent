@@ -2,7 +2,6 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import crazypants.enderio.base.fluid.Fluids;
-import gregtech.api.GTValues;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.unification.material.Materials;
