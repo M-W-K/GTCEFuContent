@@ -37,12 +37,26 @@ public class GTCEFuCCasingLoader {
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.Neutronium),
                 'E', new UnificationEntry(OrePrefix.pipeNormalFluid, Materials.Neutronium));
 
+        ModHandler.addShapedRecipe(true, "high_pressure_casing", GTCEFuCMetaBlocks.HARDENED_CASING
+                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING, 2),
+                "PhP", "PFP", "PwP",
+                'P', new UnificationEntry(OrePrefix.plate, Materials.RhodiumPlatedPalladium),
+                'F', new UnificationEntry(OrePrefix.frameGt, Materials.HSSE));
+
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .input(OrePrefix.plateDouble, Materials.Neutronium, 6)
                 .input(OrePrefix.frameGt, Materials.Neutronium)
                 .circuitMeta(6)
                 .outputs(GTCEFuCMetaBlocks.HARDENED_CASING
                         .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_CASING, 2))
+                .duration(50).EUt(16).buildAndRegister();
+
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .input(OrePrefix.plate, Materials.RhodiumPlatedPalladium, 6)
+                .input(OrePrefix.frameGt, Materials.HSSE)
+                .circuitMeta(6)
+                .outputs(GTCEFuCMetaBlocks.HARDENED_CASING
+                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING, 2))
                 .duration(50).EUt(16).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()

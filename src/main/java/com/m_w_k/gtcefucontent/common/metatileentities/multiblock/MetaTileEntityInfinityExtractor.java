@@ -66,6 +66,7 @@ public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockControll
         });
 
     }
+
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return Textures.SOLID_STEEL_CASING;

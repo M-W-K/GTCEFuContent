@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
@@ -23,6 +24,13 @@ public class GTCEFuMiscRecipes {
     private GTCEFuMiscRecipes() {}
 
     public static void init() {
+        RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
+                .fluidInputs(GTCEFuCMaterials.ChargedEnder.getFluid(1))
+                .fluidOutputs(Materials.Beryllium.getFluid(1))
+                .duration(750)
+                .EUt((int) GTValues.V[GTValues.EV])
+                .buildAndRegister();
+
         RecipeMaps.LARGE_CHEMICAL_RECIPES.recipeBuilder()
                 .fluidInputs(Materials.LiquidAir.getFluid(60000), Materials.Water.getFluid(60000))
                 .input(OrePrefix.dust, Materials.Ash)
@@ -74,7 +82,7 @@ public class GTCEFuMiscRecipes {
                         Materials.Krypton.getFluid(500),
                         Materials.Xenon.getFluid(500),
                         Materials.Radon.getFluid(1000))
-                .chancedOutput(Material.POWDER_PRECIENT.getStack(), 100, 10)
+                .chancedOutput(Material.POWDER_PRECIENT.getStack(), 1000, 100)
                 .duration(800)
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
@@ -118,6 +126,12 @@ public class GTCEFuMiscRecipes {
                 .fluidOutputs(Materials.UUMatter.getFluid(144))
                 .outputs(Material.POWDER_VIBRANT.getStack())
                 .duration(300).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
+
+        RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
+                .inputs(Material.ENDER_CRYSTAL.getStack())
+                .fluidOutputs(GTCEFuCMaterials.ChargedEnder.getFluid(1000))
+                .duration(300).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
+
 
         // Yep. That's exactly how much neutronium I'm expecting them to make.
         RecipeMaps.ELECTROLYZER_RECIPES.recipeBuilder()

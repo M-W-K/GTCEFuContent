@@ -87,6 +87,7 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
         });
 
     }
+
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         // Unfortunately, no interface for energy hatches is available to instanceof with

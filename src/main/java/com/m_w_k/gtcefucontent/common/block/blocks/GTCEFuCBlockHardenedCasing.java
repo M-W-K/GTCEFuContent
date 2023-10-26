@@ -14,9 +14,8 @@ public class GTCEFuCBlockHardenedCasing extends VariantBlock<GTCEFuCBlockHardene
     public GTCEFuCBlockHardenedCasing() {
         super(Material.IRON);
         setTranslationKey("hardened_casing");
-        // half stats of obsidian
-        setHardness(25.0f);
-        setResistance(1000.0f);
+        setHardness(10.0f);
+        setResistance(500.0f);
         setSoundType(SoundType.METAL);
         setHarvestLevel("wrench", 4);
         setDefaultState(getState(CasingType.INDESTRUCTIBLE_CASING));
@@ -32,7 +31,8 @@ public class GTCEFuCBlockHardenedCasing extends VariantBlock<GTCEFuCBlockHardene
 
         INDESTRUCTIBLE_CASING("indestructible_casing"),
         INDESTRUCTIBLE_PIPE_CASING("indestructible_pipe_casing"),
-        PLASMA_PIPE_CASING("plasma_pipe_casing");
+        PLASMA_PIPE_CASING("plasma_pipe_casing"),
+        PRESSURE_CASING("high_pressure_casing");
 
         private final String name;
 

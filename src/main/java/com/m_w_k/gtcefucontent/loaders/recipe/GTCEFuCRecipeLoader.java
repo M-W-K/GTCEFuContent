@@ -6,6 +6,7 @@ import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
+import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMaps;
@@ -70,6 +71,14 @@ public final class GTCEFuCRecipeLoader {
                 'N', new UnificationEntry(OrePrefix.pipeNonupleFluid, Materials.Titanium),
                 'I', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.EV));
 
+        ModHandler.addShapedRecipe(true, "pneumatic_infuser", GTCEFuCMetaTileEntities.PNEUMATIC_INFUSER.getStackForm(),
+                "PRP", "IOI", "PCP",
+                'R', MetaItems.ROBOT_ARM_IV,
+                'P', MetaItems.ELECTRIC_PUMP_IV,
+                'I', MetaItems.ELECTRIC_PISTON_IV,
+                'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.IV),
+                'O', MetaTileEntities.COMPRESSOR[GTValues.IV].getStackForm());
+
         // Assembler recipes
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
@@ -80,7 +89,7 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.foil, Materials.Invar, 24)
                 .input(OrePrefix.dust, Materials.Graphene, 8)
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.LuV, 2)
-                .input(OrePrefix.frameGt, Materials.TungstenCarbide, 4)
+                .input(OrePrefix.frameGt, GCYMMaterials.TantalumCarbide, 4)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 4),
                         Materials.Lubricant.getFluid(2000),
                         GTCEFuCMaterials.EutecticCaesiumSodiumPotassium.getFluid(10000))

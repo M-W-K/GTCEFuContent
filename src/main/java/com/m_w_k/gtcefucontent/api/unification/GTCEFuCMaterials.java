@@ -15,6 +15,7 @@ import gregtech.api.unification.material.info.MaterialIconSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GTCEFuCMaterials {
 
@@ -22,8 +23,7 @@ public class GTCEFuCMaterials {
     public static Material EutecticCaesiumPotassiumGalliumNaquadahEnriched;
 
     public static Material CaesiumChlorineMix;
-
-    private static final AtomicBoolean INIT = new AtomicBoolean(false);
+    public static Material ChargedEnder;
 
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization
@@ -48,6 +48,13 @@ public class GTCEFuCMaterials {
      */
     public final static Map<Material, int[]> EutecticAlloys = new HashMap<>();
 
+    private static final AtomicBoolean INIT = new AtomicBoolean(false);
+
+    // IDs 22500 - 22529 reserved for multiblocks
+    // IDs 22530 - 22559 empty
+    // IDs 22560 - 22599 reserved for materials
+    private static final AtomicInteger ID = new AtomicInteger(22560);
+
     public static void register() {
         if (INIT.getAndSet(true)) {
             return;
@@ -55,21 +62,26 @@ public class GTCEFuCMaterials {
 
         GTCEFuCMaterialFlagAddition.init();
 
-        CaesiumChlorineMix = new Material.Builder(22560, gtcefucId("caesium_chlorine_mix"))
+        CaesiumChlorineMix = new Material.Builder(ID.getAndIncrement(), gtcefucId("caesium_chlorine_mix"))
                 .dust()
                 .colorAverage().iconSet(MaterialIconSet.FINE)
                 .flags(DECOMPOSITION_BY_CENTRIFUGING)
                 .components(Caesium, 16, Chlorine, 1)
                 .build();
 
-        EutecticCaesiumSodiumPotassium = new Material.Builder(22561, gtcefucId("eutectic_csnak_alloy")) // the csnak is a c kind of snake
+        ChargedEnder = new Material.Builder(ID.getAndIncrement(), gtcefucId("charged_ender"))
+                .fluid()
+                .color(0xa0cefa).iconSet(MaterialIconSet.FLUID)
+                .build();
+
+        EutecticCaesiumSodiumPotassium = new Material.Builder(ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy")) // the csnak is a c kind of snake
                 .fluid().fluidTemp(EutecticAlloysString.get("eutectic_csnak_alloy")[0])
                 .colorAverage().iconSet(MaterialIconSet.METALLIC)
                 .flags(DECOMPOSITION_BY_CENTRIFUGING)
                 .components(Caesium, 4, Sodium, 1, Potassium, 5)
                 .build();
 
-        EutecticCaesiumPotassiumGalliumNaquadahEnriched = new Material.Builder(22562, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"))
+        EutecticCaesiumPotassiumGalliumNaquadahEnriched = new Material.Builder(ID.getAndIncrement(), gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"))
                 .fluid().fluidTemp(EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy")[0])
                 .colorAverage().iconSet(MaterialIconSet.METALLIC)
                 .flags(DECOMPOSITION_BY_ELECTROLYZING)

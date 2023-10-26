@@ -1,10 +1,14 @@
 gtcefucontent.machine.infinity_extractor.name=Infinity Extractor
 gtcefucontent.machine.infinity_extractor.tooltip=Exploiting the §4I§6n§ef§ai§b§3n§1i§9t§5e
-recipemap.infinity_extractor.name=Infinity Extraction
+recipemap.infinity_extractor.name=Infinity Extractor
 
 gtcefucontent.machine.sympathetic_combustor.name=Sympathetic Combustor
 gtcefucontent.machine.sympathetic_combustor.tooltip=Extreme efficiency, at what cost?
-recipemap.sympathetic_combustor.name=Sympathetic Combustion
+recipemap.sympathetic_combustor.name=Sympathetic Combustor
+
+gtcefucontent.machine.pneumatic_infuser.name=Pneumatic Infuser
+gtcefucontent.machine.pneumatic_infuser.tooltip=Stuffing Things into other Things
+recipemap.pneumatic_infuser.name=Pneumatic Infuser
 
 gtcefucontent.machine.forging_furnace.name=Linear Forging Furnace
 gtcefucontent.machine.forging_furnace.tooltip=Striking while the Iron is Hot
@@ -31,15 +35,17 @@ gtcefucontent.machine.antimatter_compressor.name=Antimatter Compressor
 gtcefucontent.machine.antimatter_compressor.tooltip=Creating the §4I§6n§ef§ai§b§3n§1i§9t§5e
 gtcefucontent.machine.antimatter_compressor.capacity=§7Maximum Energy Storage: §e%sG EU
 gtcefucontent.machine.antimatter_compressor.info=Upon recipe interruption, half of heat will be recovered as energy. Space in the reservoir will be reserved.
-recipemap.antimatter_compressor.name=Antimatter Compression
+recipemap.antimatter_compressor.name=Antimatter Compressor
 gregtech.multiblock.antimatter_compressor.description=The Antimatter Compressor is a massive multiblock capable of flashing energy into antimatter to perform compression violating the laws of physics. For every Battery it has, its buffer increases by 10.24G EU, and has a maximum of 163.84G
 
 tile.hardened_casing.indestructible_casing.name=Indestructible Casing
 tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing
 tile.hardened_casing.plasma_pipe_casing.name=Integrated Fusion Piping
+tile.hardened_casing.high_pressure_casing.name=High Pressure Casing
 tile.advanced_casing.null_field_casing.name=Null-Field Casing
 
 gtcefucontent.material.caesium_chlorine_mix=Caesium-Chlorine Mixture
+gtcefucontent.material.charged_ender=Charged Ender
 gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
 gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Naquadah Caesium-Potassium-Gallium Mixture
 
