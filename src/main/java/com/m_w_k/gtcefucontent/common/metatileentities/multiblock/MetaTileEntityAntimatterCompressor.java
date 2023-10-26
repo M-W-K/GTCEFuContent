@@ -575,11 +575,6 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
         }
 
         @Override
-        protected double getOverclockingVoltageMultiplier() {
-            return OverclockingLogic.STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER;
-        }
-
-        @Override
         protected long getMaxVoltage() {
             return super.getMaxVoltage();
         }
