@@ -25,6 +25,7 @@ public final class GTCEFuContent
             "required-after:gregtech@[2.7.0-beta,);" +
                     "required-after:gcym@[1.2.5,);" +
                     "required-after:enderio@[5.3,);" +
+                    "required-after:projecte@[1.4.1,);" +
                     "required-after:projectex@[1.2.0,);";
 
     @SidedProxy(modId = MODID,

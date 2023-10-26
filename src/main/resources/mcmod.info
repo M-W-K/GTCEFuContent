@@ -5,12 +5,8 @@
   "description": "Custom content mod for the GTCEFu modpack",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
   "authorList": ["M-W-K"],
-  "credits": "GregoriusT for making GregTech and textures, and the creators of GCYM for their mod.",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+  "credits": "GregoriusT for making GregTech and textures, and the creators of GCYM for their mod. Vnator for creating the GTCEFu modpack.",
+  "dependencies": ["gregtech", "GregicalityMultiblocks", "EnderIO", "ProjectE", "ProjectEX"]
 }
 ]
