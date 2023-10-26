@@ -129,7 +129,7 @@ public class GTCEFuMiscRecipes {
 
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
                 .inputs(Material.ENDER_CRYSTAL.getStack())
-                .fluidOutputs(GTCEFuCMaterials.ChargedEnder.getFluid(1000))
+                .fluidOutputs(GTCEFuCMaterials.ChargedEnder.getFluid(500))
                 .duration(300).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
 
