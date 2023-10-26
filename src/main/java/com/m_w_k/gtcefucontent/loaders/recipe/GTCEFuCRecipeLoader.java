@@ -7,6 +7,7 @@ import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 import gregicality.multiblocks.api.unification.GCYMMaterials;
+import gregicality.multiblocks.common.metatileentities.GCYMMetaTileEntities;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMaps;
@@ -94,6 +95,9 @@ public final class GTCEFuCRecipeLoader {
                         Materials.Lubricant.getFluid(2000),
                         GTCEFuCMaterials.EutecticCaesiumSodiumPotassium.getFluid(10000))
                 .output(GTCEFuCMetaTileEntities.FORGING_FURNACE)
+                .research(b -> b
+                        .researchStack(GCYMMetaTileEntities.ALLOY_BLAST_SMELTER.getStackForm())
+                        .EUt(GTValues.VA[GTValues.EV]))
                 .duration(800).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
