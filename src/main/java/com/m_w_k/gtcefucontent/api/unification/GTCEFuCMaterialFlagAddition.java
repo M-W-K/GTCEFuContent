@@ -11,5 +11,7 @@ public class GTCEFuCMaterialFlagAddition {
         GCYMMaterials.TantalumCarbide.addFlags(MaterialFlags.GENERATE_FRAME);
 
         Materials.Invar.addFlags(MaterialFlags.GENERATE_FOIL);
+
+        Materials.Thorium.addFlags(MaterialFlags.GENERATE_DENSE);
     }
 }

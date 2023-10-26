@@ -78,7 +78,17 @@ public final class GTCEFuCRecipeLoader {
                 'P', MetaItems.ELECTRIC_PUMP_IV,
                 'I', MetaItems.ELECTRIC_PISTON_IV,
                 'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.IV),
-                'O', MetaTileEntities.COMPRESSOR[GTValues.IV].getStackForm());
+                'O', MetaTileEntities.CANNER[GTValues.IV].getStackForm());
+
+        ModHandler.addShapedRecipe(true, "electrode_blast_smelter", GTCEFuCMetaTileEntities.ELECTRODE_SMELTER.getStackForm(),
+                "CTC", "PHP", "DAD",
+                'A', GCYMMetaTileEntities.ALLOY_BLAST_SMELTER.getStackForm(),
+                'H', GCYMMetaTileEntities.MEGA_BLAST_FURNACE.getStackForm(),
+                'P', MetaItems.ELECTRIC_PUMP_UV,
+                'D', new UnificationEntry(OrePrefix.plateDouble, Materials.Duranium),
+                'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.UHV),
+                'T', new UnificationEntry(OrePrefix.plateDense, Materials.Thorium)
+                );
 
         // Assembler recipes
 

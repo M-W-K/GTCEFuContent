@@ -52,6 +52,7 @@ import static gregtech.api.recipes.logic.OverclockingLogic.heatingCoilOverclocki
 public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockController implements IHeatingCoil {
 
     private int blastFurnaceTemperature;
+
     public MetaTileEntityForgingFurnace(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, determineRecipeMaps());
         this.recipeMapWorkable = new ForgingFurnaceRecipeLogic(this);
@@ -124,6 +125,7 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
                 .where('#', any())
                 .build();
     }
+
     @Nonnull
     protected static TraceabilityPredicate getCasingState(int id) {
         return states(switch (id) {
@@ -137,6 +139,7 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
         });
 
     }
+
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         return iMultiblockPart instanceof MetaTileEntityItemBus itemBus
