@@ -1,6 +1,40 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import static com.m_w_k.gtcefucontent.api.recipes.logic.LimitedPerfectOverclockingLogic.limitedPerfectOverclockingLogic;
+
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
@@ -29,38 +63,9 @@ import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluidHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
-
-import static com.m_w_k.gtcefucontent.api.recipes.logic.LimitedPerfectOverclockingLogic.limitedPerfectOverclockingLogic;
 
 public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity {
+
     protected final int overclock_rating;
     protected EnergyContainerList inputEnergyContainers;
     protected long heat = 0;
@@ -76,6 +81,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         this.recipeMapWorkable = new FusionStackRecipeLogic(this);
         this.overclock_rating = overclock_rating(tier);
         this.energyContainer = new EnergyContainerHandler(this, Integer.MAX_VALUE, 0, 0, 0, 0) {
+
             @Nonnull
             @Override
             public String getName() {
@@ -95,12 +101,23 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         return (switch (overclock_rating) {
             default -> FusionStackPatterns.FUSION_STACK;
             case 2 -> FusionStackPatterns.FUSION_ARRAY;
-            case 3 -> // since the complex has tile entities, they need to have a direction alignment specified based on the controller's alignment
-                    FusionStackPatterns.FUSION_COMPLEX
-                            .where('5', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(), MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
-                            .where('6', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(), MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT))
-                            .where('7', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY().getOpposite(), MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
-                            .where('8', FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY().getOpposite(), MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT));
+            case 3 -> // since the complex has tile entities, they need to have a direction alignment specified based on
+                      // the controller's alignment
+                FusionStackPatterns.FUSION_COMPLEX
+                        .where('5',
+                                FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(),
+                                        MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
+                        .where('6',
+                                FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(),
+                                        MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT))
+                        .where('7',
+                                FusionStackPatterns.metaTileEntitiesModified(
+                                        this.getFrontFacing().rotateY().getOpposite(),
+                                        MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
+                        .where('8',
+                                FusionStackPatterns.metaTileEntitiesModified(
+                                        this.getFrontFacing().rotateY().getOpposite(),
+                                        MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT));
         })
                 .where('X', selfPredicate())
                 .build();
@@ -108,8 +125,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
-        if (sourcePart instanceof MetaTileEntityFluidHatch
-                || sourcePart instanceof MetaTileEntityMultiFluidHatch) return getFluidHatchTexture();
+        if (sourcePart instanceof MetaTileEntityFluidHatch || sourcePart instanceof MetaTileEntityMultiFluidHatch)
+            return getFluidHatchTexture();
         if (this.recipeMapWorkable.isActive()) {
             return Textures.ACTIVE_FUSION_TEXTURE;
         } else {
@@ -149,7 +166,9 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         this.inputEnergyContainers = new EnergyContainerList(energyInputs);
         long euCapacity = calculateEnergyStorageFactor(energyInputs.size());
         // Allow for adaptive max voltage
-        this.energyContainer = new EnergyContainerHandler(this, euCapacity, inputEnergyContainers.getInputVoltage(), 0, 0, 0) {
+        this.energyContainer = new EnergyContainerHandler(this, euCapacity, inputEnergyContainers.getInputVoltage(), 0,
+                0, 0) {
+
             @Nonnull
             @Override
             public String getName() {
@@ -171,8 +190,10 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         }
         super.updateFormedValid();
         if (recipeMapWorkable.isWorking() && color == null) {
-            if (recipeMapWorkable.getPreviousRecipe() != null && recipeMapWorkable.getPreviousRecipe().getFluidOutputs().size() > 0) {
-                int newColor = 0xFF000000 | recipeMapWorkable.getPreviousRecipe().getFluidOutputs().get(0).getFluid().getColor();
+            if (recipeMapWorkable.getPreviousRecipe() != null &&
+                    recipeMapWorkable.getPreviousRecipe().getFluidOutputs().size() > 0) {
+                int newColor = 0xFF000000 |
+                        recipeMapWorkable.getPreviousRecipe().getFluidOutputs().get(0).getFluid().getColor();
                 if (!Objects.equals(color, newColor)) {
                     color = newColor;
                     writeCustomData(GregtechDataCodes.UPDATE_COLOR, this::writeColor);
@@ -219,17 +240,21 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.energy", this.energyContainer.getEnergyStored(), this.energyContainer.getEnergyCapacity()));
+            textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.energy",
+                    this.energyContainer.getEnergyStored(), this.energyContainer.getEnergyCapacity()));
             textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.heat", heat));
         }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gregtech.machine.fusion_reactor.capacity", calculateEnergyStorageFactor((int) (Math.pow(2, 3 + overclock_rating))) / 1000000L));
+        tooltip.add(I18n.format("gregtech.machine.fusion_reactor.capacity",
+                calculateEnergyStorageFactor((int) (Math.pow(2, 3 + overclock_rating))) / 1000000L));
         tooltip.add(I18n.format("gregtech.machine.fusion_reactor.overclocking"));
-        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gtcefucontent.machine.fusion_stack.perfect", overclock_rating));
+        tooltip.add(TooltipHelper.RAINBOW_SLOW +
+                I18n.format("gtcefucontent.machine.fusion_stack.perfect", overclock_rating));
         if (overclock_rating == 3) {
             tooltip.add(TooltipHelper.BLINKING_CYAN + I18n.format("gtcefucontent.machine.fusion_stack.coolant"));
         }
@@ -267,7 +292,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         }
 
         @Nonnull
-        protected int[] runOverclockingLogic(@Nonnull IRecipePropertyStorage propertyStorage, int recipeEUt, long maxVoltage, int duration, int amountOC) {
+        protected int[] runOverclockingLogic(@Nonnull IRecipePropertyStorage propertyStorage, int recipeEUt,
+                                             long maxVoltage, int duration, int amountOC) {
             return limitedPerfectOverclockingLogic(
                     Math.abs(recipeEUt),
                     maxVoltage,
@@ -275,8 +301,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                     amountOC,
                     getOverclockingDurationDivisor(),
                     getOverclockingVoltageMultiplier(),
-                    overclock_rating
-            );
+                    overclock_rating);
         }
 
         @Override
@@ -289,8 +314,10 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         @Override
         public void updateWorkable() {
             super.updateWorkable();
-            // Drain heat when the reactor is not active, is paused via soft mallet, or does not have enough energy and has fully wiped recipe progress
-            // Don't drain heat when there is not enough energy and there is still some recipe progress, as that makes it doubly hard to complete the recipe
+            // Drain heat when the reactor is not active, is paused via soft mallet, or does not have enough energy and
+            // has fully wiped recipe progress
+            // Don't drain heat when there is not enough energy and there is still some recipe progress, as that makes
+            // it doubly hard to complete the recipe
             // (Will have to recover heat and recipe progress)
             if ((!(isActive || workingEnabled) || (hasNotEnoughEnergy && progressTime == 0)) && heat > 0) {
                 heat = heat <= 40000 ? 0 : (heat - 40000);
@@ -342,7 +369,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         if (color != null && MinecraftForgeClient.getRenderPass() == 0) {
             final int c = color;
             BloomEffectUtil.requestCustomBloom(RENDER_HANDLER, (buffer) -> {
-                int color = RenderUtil.colorInterpolator(c, -1).apply(Eases.EaseQuadIn.getInterpolation(Math.abs((Math.abs(getOffsetTimer() % 50) + partialTicks) - 25) / 25));
+                int color = RenderUtil.colorInterpolator(c, -1).apply(Eases.EaseQuadIn
+                        .getInterpolation(Math.abs((Math.abs(getOffsetTimer() % 50) + partialTicks) - 25) / 25));
                 float a = (float) (color >> 24 & 255) / 255.0F;
                 float r = (float) (color >> 16 & 255) / 255.0F;
                 float g = (float) (color >> 8 & 255) / 255.0F;
@@ -419,7 +447,6 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                                 z + zOffset - zMod + zShift,
                                 r, g, b, a);
 
-
                         renderFusionRing(buffer,
                                 x + xOffset + xMod - xShift,
                                 y - 4.5,
@@ -448,7 +475,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     }
 
     // very useful if you need to render a large number of rings with a single block
-    protected void renderFusionRing(BufferBuilder buffer, double x, double y, double z, float r, float g, float b, float a) {
+    protected void renderFusionRing(BufferBuilder buffer, double x, double y, double z, float r, float g, float b,
+                                    float a) {
         buffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
         RenderBufferHelper.renderRing(buffer,
                 x, y, z, 6, 0.2, 10, 20,
@@ -472,6 +500,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
     /**
      * Returns a BlockPos offset from the controller by the given values
+     * 
      * @param x Positive is controller left, Negative is controller right
      * @param y Positive is controller up, Negative is controller down
      * @param z Positive is controller front, Negative is controller back
@@ -495,9 +524,11 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     }
 
     static BloomEffectUtil.IBloomRenderFast RENDER_HANDLER = new BloomEffectUtil.IBloomRenderFast() {
+
         @Override
         public int customBloomStyle() {
-            return ConfigHolder.client.shader.fusionBloom.useShader ? ConfigHolder.client.shader.fusionBloom.bloomStyle : -1;
+            return ConfigHolder.client.shader.fusionBloom.useShader ?
+                    ConfigHolder.client.shader.fusionBloom.bloomStyle : -1;
         }
 
         float lastBrightnessX;

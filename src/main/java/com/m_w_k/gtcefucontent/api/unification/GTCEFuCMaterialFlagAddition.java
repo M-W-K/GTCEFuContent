@@ -5,6 +5,7 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlags;
 
 public class GTCEFuCMaterialFlagAddition {
+
     private GTCEFuCMaterialFlagAddition() {}
 
     public static void init() {

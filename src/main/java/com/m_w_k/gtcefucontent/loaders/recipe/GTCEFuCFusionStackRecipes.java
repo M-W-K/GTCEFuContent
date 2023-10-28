@@ -1,18 +1,21 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import net.minecraftforge.fluids.FluidStack;
+
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FusionRecipeBuilder;
 import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class GTCEFuCFusionStackRecipes {
+
     private GTCEFuCFusionStackRecipes() {}
 
     public static void init() {
@@ -37,7 +40,7 @@ public class GTCEFuCFusionStackRecipes {
                         .EUt(defaultRecipe.getEUt() * mod2)
                         .duration(defaultRecipe.getDuration() * mod4)
                         .EUToStart(defaultRecipe.getRecipePropertyStorage()
-                        .getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L) * mod2)
+                                .getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L) * mod2)
                         .build());
             }
 

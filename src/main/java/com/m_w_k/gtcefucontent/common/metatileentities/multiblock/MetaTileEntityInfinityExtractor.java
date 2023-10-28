@@ -1,6 +1,14 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -17,13 +25,9 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockController {
+
     public MetaTileEntityInfinityExtractor(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES);
     }
@@ -52,6 +56,7 @@ public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockControll
                 .where('#', any())
                 .build();
     }
+
     @Nonnull
     protected static TraceabilityPredicate getCasingState(int id) {
         return states(switch (id) {
@@ -61,7 +66,6 @@ public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockControll
             case 5 -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX);
             case 6 -> MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
         });
-
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
+
 import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.metatileentities.GCYMMetaTileEntities;
 import gregtech.api.GTValues;
@@ -22,6 +23,7 @@ import gregtech.common.items.MetaItems;
 import gregtech.common.metatileentities.MetaTileEntities;
 
 public final class GTCEFuCRecipeLoader {
+
     private GTCEFuCRecipeLoader() {}
 
     public static void init() {
@@ -55,14 +57,16 @@ public final class GTCEFuCRecipeLoader {
     }
 
     private static void controllerRecipes() {
-        ModHandler.addShapedRecipe(true, "infinity_extractor", GTCEFuCMetaTileEntities.INFINITY_EXTRACTOR.getStackForm(),
+        ModHandler.addShapedRecipe(true, "infinity_extractor",
+                GTCEFuCMetaTileEntities.INFINITY_EXTRACTOR.getStackForm(),
                 "SRS", "CEC", "SRS",
                 'S', MetaBlocks.METAL_CASING.getItemVariant(BlockMetalCasing.MetalCasingType.STEEL_SOLID),
                 'R', MetaItems.ROBOT_ARM_EV.getStackForm(),
                 'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.EV),
                 'E', MetaBlocks.MACHINE_CASING.getItemVariant(BlockMachineCasing.MachineCasingType.EV));
 
-        ModHandler.addShapedRecipe(true, "sympathetic_combustor", GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR.getStackForm(),
+        ModHandler.addShapedRecipe(true, "sympathetic_combustor",
+                GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR.getStackForm(),
                 "IGN", "CMP", "IGN",
                 'G', new UnificationEntry(OrePrefix.gear, Materials.Titanium),
                 'C', MetaItems.CONVEYOR_MODULE_EV.getStackForm(),
@@ -79,15 +83,15 @@ public final class GTCEFuCRecipeLoader {
                 'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.IV),
                 'O', MetaTileEntities.CANNER[GTValues.IV].getStackForm());
 
-        ModHandler.addShapedRecipe(true, "electrode_blast_smelter", GTCEFuCMetaTileEntities.ELECTRODE_SMELTER.getStackForm(),
+        ModHandler.addShapedRecipe(true, "electrode_blast_smelter",
+                GTCEFuCMetaTileEntities.ELECTRODE_SMELTER.getStackForm(),
                 "CTC", "PHP", "DAD",
                 'A', GCYMMetaTileEntities.ALLOY_BLAST_SMELTER.getStackForm(),
                 'H', GCYMMetaTileEntities.MEGA_BLAST_FURNACE.getStackForm(),
                 'P', MetaItems.ELECTRIC_PUMP_UV,
                 'D', new UnificationEntry(OrePrefix.plateDouble, Materials.Duranium),
                 'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.UHV),
-                'T', new UnificationEntry(OrePrefix.plateDense, Materials.Thorium)
-                );
+                'T', new UnificationEntry(OrePrefix.plateDense, Materials.Thorium));
 
         // Assembler recipes
 
@@ -169,7 +173,6 @@ public final class GTCEFuCRecipeLoader {
                         .EUt(GTValues.VA[GTValues.UEV]))
                 .duration(1200).EUt(GTValues.VA[GTValues.UEV]).buildAndRegister();
 
-
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
                 .input(MetaTileEntities.STEAM_COMPRESSOR_STEEL)
                 .input(ProjectEXItems.FINAL_STAR)
@@ -185,7 +188,8 @@ public final class GTCEFuCRecipeLoader {
                 .fluidInputs(Materials.RutheniumTriniumAmericiumNeutronate.getFluid(GTValues.L * 9 * 64))
                 .output(GTCEFuCMetaTileEntities.ANTIMATTER_COMPRESSOR)
                 .stationResearch(b -> b
-                        .researchStack(GTCEFuCMetaBlocks.ADVANCED_CASING.getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
+                        .researchStack(GTCEFuCMetaBlocks.ADVANCED_CASING
+                                .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
                         .CWUt(512)
                         .EUt(GTValues.VA[GTValues.UEV]))
                 .duration(1400).EUt(GTValues.VA[GTValues.UIV]).buildAndRegister();

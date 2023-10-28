@@ -1,6 +1,17 @@
 package com.m_w_k.gtcefucontent.api.recipes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.GTCEFuContent;
+
 import gregtech.api.GTValues;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.builders.BlastRecipeBuilder;
@@ -13,14 +24,6 @@ import gregtech.api.unification.material.properties.BlastProperty;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.loaders.recipe.CraftingComponent;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ForgingFurnaceRecipeProducer {
 
@@ -80,12 +83,12 @@ public class ForgingFurnaceRecipeProducer {
 
             // Pipes
             if (material.hasProperty(PropertyKey.ITEM_PIPE)) {
-                for (OrePrefix prefix : FORGEABLE_PIPES.subList(0,3)) {
+                for (OrePrefix prefix : FORGEABLE_PIPES.subList(0, 3)) {
                     i++;
                     buildRecipes(property, prefix, material, i, builder);
                 }
             } else if (material.hasProperty(PropertyKey.FLUID_PIPE)) {
-                for (OrePrefix prefix : FORGEABLE_PIPES.subList(4,8)) {
+                for (OrePrefix prefix : FORGEABLE_PIPES.subList(4, 8)) {
                     i++;
                     buildRecipes(property, prefix, material, i, builder);
                 }
@@ -115,7 +118,8 @@ public class ForgingFurnaceRecipeProducer {
         return builder.blastFurnaceTemp(property.getBlastTemperature() + 100);
     }
 
-    protected void buildRecipes(BlastProperty property, OrePrefix prefix, Material material, int circuitMeta, RecipeBuilder<BlastRecipeBuilder> builder) {
+    protected void buildRecipes(BlastProperty property, OrePrefix prefix, Material material, int circuitMeta,
+                                RecipeBuilder<BlastRecipeBuilder> builder) {
         // early copy in order to keep us separate.
         builder = builder.copy();
 
@@ -124,8 +128,8 @@ public class ForgingFurnaceRecipeProducer {
 
         // these should always return proper whole numbers
         // only weird ratios like 3/2 will break
-        int inputAmount = (int) Math.max(ratio/GTValues.M, 1);
-        int outputAmount = (int) Math.max(GTValues.M/ratio, 1);
+        int inputAmount = (int) Math.max(ratio / GTValues.M, 1);
+        int outputAmount = (int) Math.max(GTValues.M / ratio, 1);
 
         builder.input(OrePrefix.dust, material, inputAmount);
         builder.output(prefix, material, outputAmount);
@@ -134,10 +138,11 @@ public class ForgingFurnaceRecipeProducer {
 
         // calculate overclock level of inline cooling
         // log base x of y = log(y)/log(x)
-        int coolingOverclock = MathHelper.ceil(Math.log(builder.getEUt() / 128.0) / Math.log(OverclockingLogic.STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER));
+        int coolingOverclock = MathHelper.ceil(
+                Math.log(builder.getEUt() / 128.0) / Math.log(OverclockingLogic.STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER));
 
         int coolerDuration = (int) (inputAmount
-                // Freezer formula, I think. It's hard to find, ok? Unobfuscated greg might as well still be obfuscated.
+        // Freezer formula, I think. It's hard to find, ok? Unobfuscated greg might as well still be obfuscated.
                 * material.getMass() * 3
                 // inefficiency - square root of temp/1000
                 // aka, increasing temp by x4 increases cooling time by x2; perfect efficiency at 1000K
@@ -157,8 +162,11 @@ public class ForgingFurnaceRecipeProducer {
         }
 
         if (duration <= 0) {
-            GTCEFuContent.log("A Forging Furnace recipe with an invalid duration attempted to sneak through! It was cancelled for safety.", GTCEFuContent.LogType.WARN);
-            GTCEFuContent.log("Recipe was " + material + " being transformed into " + prefix, GTCEFuContent.LogType.WARN);
+            GTCEFuContent.log(
+                    "A Forging Furnace recipe with an invalid duration attempted to sneak through! It was cancelled for safety.",
+                    GTCEFuContent.LogType.WARN);
+            GTCEFuContent.log("Recipe was " + material + " being transformed into " + prefix,
+                    GTCEFuContent.LogType.WARN);
             return;
         }
 

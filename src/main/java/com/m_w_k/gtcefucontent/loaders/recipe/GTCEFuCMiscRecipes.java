@@ -1,9 +1,16 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import java.util.Collection;
+import java.util.Objects;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+
 import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
 import crazypants.enderio.base.material.material.Material;
@@ -14,13 +21,9 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.Collection;
-import java.util.Objects;
 
 public class GTCEFuCMiscRecipes {
+
     private GTCEFuCMiscRecipes() {}
 
     public static void init() {
@@ -40,13 +43,11 @@ public class GTCEFuCMiscRecipes {
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
 
-
         RecipeMaps.CHEMICAL_BATH_RECIPES.recipeBuilder()
                 .inputs(Material.ENDER_CRYSTAL.getStack())
                 .fluidInputs(Materials.Glowstone.getFluid(76000))
                 .outputs(Material.VIBRANT_CRYSTAL.getStack())
                 .duration(1100).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
-
 
         RecipeMaps.VACUUM_RECIPES.recipeBuilder()
                 .fluidInputs(new FluidStack(Fluids.CLOUD_SEED.getFluid(), 6000))
@@ -54,7 +55,6 @@ public class GTCEFuCMiscRecipes {
                 .duration(120)
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
-
 
         RecipeMaps.MIXER_RECIPES.recipeBuilder()
                 .fluidInputs(Materials.Lutetium.getFluid(144))
@@ -64,14 +64,12 @@ public class GTCEFuCMiscRecipes {
                 .duration(90)
                 .buildAndRegister();
 
-
         RecipeMaps.FORMING_PRESS_RECIPES.recipeBuilder()
                 .input(ModObject.blockDarkIronBars.getItemNN(), 20)
                 .input(OrePrefix.block, Materials.Obsidian, 3)
                 .inputs(GTCEFuCInfinityExtractorRecipes.block1)
                 .output(ModObject.blockReinforcedObsidian.getItemNN())
                 .duration(3000).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
-
 
         RecipeMaps.DISTILLATION_RECIPES.recipeBuilder()
                 .fluidInputs(new FluidStack(Fluids.ENDER_DISTILLATION.getFluid(), 8000))
@@ -87,14 +85,12 @@ public class GTCEFuCMiscRecipes {
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
 
-
         RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.recipeBuilder()
                 .inputs(Material.POWDER_PRECIENT.getStack())
                 .outputs(Material.POWDER_ENDER_CYSTAL.getStack())
                 .chancedOutput(Material.POWDER_PULSATING.getStack(), 500, 150)
                 .chancedOutput(Material.POWDER_PULSATING.getStack(), 1000, 212)
                 .duration(200).EUt(24).buildAndRegister();
-
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
                 .fluidInputs(new FluidStack(Fluids.ENDER_DISTILLATION.getFluid(), 1000))
@@ -120,7 +116,6 @@ public class GTCEFuCMiscRecipes {
                 .fluidOutputs(new FluidStack(Fluids.CLOUD_SEED.getFluid(), 1000))
                 .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
-
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
                 .inputs(Material.WEATHER_CRYSTAL.getStack())
                 .fluidOutputs(Materials.UUMatter.getFluid(144))
@@ -132,7 +127,6 @@ public class GTCEFuCMiscRecipes {
                 .fluidOutputs(GTCEFuCMaterials.ChargedEnder.getFluid(500))
                 .duration(300).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
-
         // Yep. That's exactly how much neutronium I'm expecting them to make.
         RecipeMaps.ELECTROLYZER_RECIPES.recipeBuilder()
                 .input(MetaItems.NAN_CERTIFICATE)
@@ -140,12 +134,10 @@ public class GTCEFuCMiscRecipes {
                 .fluidOutputs(new FluidStack(Fluids.XP_JUICE.getFluid(), 200))
                 .duration(8400).EUt(GTValues.VA[GTValues.UV]).buildAndRegister();
 
-
         RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()
                 .input(ProjectEXItems.FINAL_STAR)
                 .output(ProjectEXItems.FINAL_STAR_SHARD, 8)
                 .duration(100).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
-
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .inputs(Material.VIBRANT_CRYSTAL.getStack(6),
@@ -161,14 +153,12 @@ public class GTCEFuCMiscRecipes {
                 .outputs(new ItemStack(ProjectEXItems.RELAY, 1, 15))
                 .duration(200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
-
         if (GTCEFuCUtil.stellarAlloyCheck()) {
             RecipeMaps.BENDER_RECIPES.recipeBuilder()
                     .inputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyIngot.getItem()), 5, 3))
                     .outputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyBall.getItem()), 1, 3))
                     .duration(8000).EUt(GTValues.VA[GTValues.HV]).buildAndRegister();
 
-            
             // I know that this is incredibly annoying. That's the point.
             RecipeMaps.PACKER_RECIPES.recipeBuilder()
                     .inputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyNugget.getItem()), 9, 3))
@@ -192,7 +182,6 @@ public class GTCEFuCMiscRecipes {
         ModHandler.removeRecipeByName("projectex:final_star_shard");
         ModHandler.removeRecipeByName("projectex:relay/final");
         ModHandler.removeRecipeByName("projectex:collector/final");
-
     }
 
     public static void cutterUpdate() {

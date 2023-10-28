@@ -1,13 +1,15 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import crazypants.enderio.base.init.ModObject;
-import gregtech.api.GTValues;
+import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES;
+import crazypants.enderio.base.init.ModObject;
+import gregtech.api.GTValues;
 
 public class GTCEFuCInfinityExtractorRecipes {
+
     private GTCEFuCInfinityExtractorRecipes() {}
 
     static final ItemStack dust = new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 20);

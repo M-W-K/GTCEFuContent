@@ -1,16 +1,19 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+
 import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public final class GTCEFuCPneumaticInfuserRecipes {
+
     private GTCEFuCPneumaticInfuserRecipes() {}
 
     public static void init() {

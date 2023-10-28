@@ -1,6 +1,15 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import java.util.Arrays;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+
 import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
@@ -20,13 +29,9 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
-import java.util.Arrays;
 
 public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController {
+
     public MetaTileEntitySympatheticCombustor(ResourceLocation metaTileEntityId) {
         // EV tier, but obtainable in late HV
         super(metaTileEntityId, GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES, GTValues.EV);
@@ -72,23 +77,26 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
                 .where('#', any())
                 .build();
     }
+
     @Nonnull
     protected static TraceabilityPredicate getCasingState(int id) {
         return states(switch (id) {
             default -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_TURBINE_CASING);
             case 1 -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TITANIUM_GEARBOX);
-            case 2 -> MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.ENGINE_INTAKE_CASING);
+            case 2 -> MetaBlocks.MULTIBLOCK_CASING
+                    .getState(BlockMultiblockCasing.MultiblockCasingType.ENGINE_INTAKE_CASING);
             case 4 -> MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE);
             case 5 -> MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.TITANIUM_FIREBOX);
-            case 6 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);
+            case 6 -> GCYMMetaBlocks.UNIQUE_CASING
+                    .getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);
         });
-
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
         // Unfortunately, no interface for energy hatches is available to instanceof with
-        return iMultiblockPart instanceof MetaTileEntityEnergyHatch ? Textures.PLASCRETE : Textures.STABLE_TITANIUM_CASING;
+        return iMultiblockPart instanceof MetaTileEntityEnergyHatch ? Textures.PLASCRETE :
+                Textures.STABLE_TITANIUM_CASING;
     }
 
     @Override

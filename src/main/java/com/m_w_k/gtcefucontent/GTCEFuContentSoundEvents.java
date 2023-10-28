@@ -1,10 +1,11 @@
 package com.m_w_k.gtcefucontent;
 
-import net.minecraft.util.SoundEvent;
-
 import static gregtech.api.GregTechAPI.soundManager;
 
+import net.minecraft.util.SoundEvent;
+
 public class GTCEFuContentSoundEvents {
+
     public static SoundEvent FORGING_FURNACE;
 
     public static void register() {

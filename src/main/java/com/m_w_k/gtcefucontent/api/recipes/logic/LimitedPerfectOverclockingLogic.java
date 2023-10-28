@@ -1,8 +1,8 @@
 package com.m_w_k.gtcefucontent.api.recipes.logic;
 
-import gregtech.api.recipes.logic.OverclockingLogic;
-
 import javax.annotation.Nonnull;
+
+import gregtech.api.recipes.logic.OverclockingLogic;
 
 /**
  * Contains logic for performing a limited number of perfect overclocks
@@ -22,7 +22,9 @@ public class LimitedPerfectOverclockingLogic {
      * @return an int array of {OverclockedEUt, OverclockedDuration}
      */
     @Nonnull
-    public static int[] limitedPerfectOverclockingLogic(int recipeEUt, long maxVoltage, int recipeDuration, int numberOfOCs, double durationDivisor, double voltageMultiplier, int perfectOCs) {
+    public static int[] limitedPerfectOverclockingLogic(int recipeEUt, long maxVoltage, int recipeDuration,
+                                                        int numberOfOCs, double durationDivisor,
+                                                        double voltageMultiplier, int perfectOCs) {
         double resultDuration = recipeDuration;
         double resultVoltage = recipeEUt;
 
@@ -34,11 +36,13 @@ public class LimitedPerfectOverclockingLogic {
             // it is important to do voltage first,
             // so overclocking voltage does not go above the limit before changing duration
 
-            double potentialVoltage = resultVoltage * (perfectOC ? OverclockingLogic.STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER : voltageMultiplier);
+            double potentialVoltage = resultVoltage *
+                    (perfectOC ? OverclockingLogic.STANDARD_OVERCLOCK_VOLTAGE_MULTIPLIER : voltageMultiplier);
             // do not allow voltage to go above maximum
             if (potentialVoltage > maxVoltage) break;
 
-            double potentialDuration = resultDuration / (perfectOC ? OverclockingLogic.PERFECT_OVERCLOCK_DURATION_DIVISOR : durationDivisor);
+            double potentialDuration = resultDuration /
+                    (perfectOC ? OverclockingLogic.PERFECT_OVERCLOCK_DURATION_DIVISOR : durationDivisor);
             // do not allow duration to go below one tick
             if (potentialDuration < 1) break;
             // update the duration for the next iteration
@@ -49,6 +53,6 @@ public class LimitedPerfectOverclockingLogic {
             resultVoltage = potentialVoltage;
         }
 
-        return new int[]{(int) resultVoltage, (int) resultDuration};
+        return new int[] { (int) resultVoltage, (int) resultDuration };
     }
 }

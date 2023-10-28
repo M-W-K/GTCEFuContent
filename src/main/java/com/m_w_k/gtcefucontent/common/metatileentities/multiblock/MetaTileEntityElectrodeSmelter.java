@@ -1,5 +1,23 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import static gregtech.api.recipes.logic.OverclockingLogic.heatingCoilOverclockingLogic;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+
 import gregicality.multiblocks.api.capability.impl.GCYMMultiblockRecipeLogic;
 import gregicality.multiblocks.api.metatileentity.GCYMRecipeMapMultiblockController;
 import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
@@ -33,23 +51,9 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-
-import static gregtech.api.recipes.logic.OverclockingLogic.heatingCoilOverclockingLogic;
 
 public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockController implements IHeatingCoil {
+
     private int blastFurnaceTemperature;
 
     public MetaTileEntityElectrodeSmelter(ResourceLocation metaTileEntityId) {
@@ -89,7 +93,8 @@ public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockContr
         return PATTERN
                 .where('C', casing
                         .or(autoAbilities(false, true, true, true, true, true, false))
-                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1, 4).setMaxGlobalLimited(16)))
+                        .or(abilities(MultiblockAbility.INPUT_ENERGY).setMinGlobalLimited(1, 4)
+                                .setMaxGlobalLimited(16)))
                 .where('V', stateIndex(1))
                 .where('Q', frames(Materials.NaquadahAlloy))
                 .where('P', stateIndex(6))
@@ -107,24 +112,28 @@ public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockContr
                 .where('#', any())
                 .build();
     }
+
     @Nonnull
     protected static TraceabilityPredicate stateIndex(int id) {
         return states(switch (id) {
-            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.HIGH_TEMPERATURE_CASING);
+            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                    .getState(BlockLargeMultiblockCasing.CasingType.HIGH_TEMPERATURE_CASING);
             case 1 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT);
             case 2 -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TUNGSTENSTEEL_GEARBOX);
-            case 3 -> MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING);
+            case 3 -> MetaBlocks.MULTIBLOCK_CASING
+                    .getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING);
             case 4 -> MetaBlocks.FUSION_CASING.getState(BlockFusionCasing.CasingType.SUPERCONDUCTOR_COIL);
             case 5 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TUNGSTENSTEEL_ROBUST);
             case 6 -> MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TUNGSTENSTEEL_PIPE);
-            case 7 -> MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.TUNGSTENSTEEL_FIREBOX);
+            case 7 -> MetaBlocks.BOILER_FIREBOX_CASING
+                    .getState(BlockFireboxCasing.FireboxCasingType.TUNGSTENSTEEL_FIREBOX);
         });
-
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return iMultiblockPart instanceof IMufflerHatch ? Textures.ROBUST_TUNGSTENSTEEL_CASING : GCYMTextures.BLAST_CASING;
+        return iMultiblockPart instanceof IMufflerHatch ? Textures.ROBUST_TUNGSTENSTEEL_CASING :
+                GCYMTextures.BLAST_CASING;
     }
 
     @Override
@@ -152,7 +161,7 @@ public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockContr
         if (isStructureFormed()) {
             textList.add(new TextComponentTranslation("gregtech.multiblock.blast_furnace.max_temperature",
                     blastFurnaceTemperature)
-                    .setStyle(new Style().setColor(TextFormatting.RED)));
+                            .setStyle(new Style().setColor(TextFormatting.RED)));
         }
         super.addDisplayText(textList);
     }
@@ -166,7 +175,7 @@ public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockContr
     }
 
     private static @NotNull RecipeMap<?> @NotNull [] determineRecipeMaps() {
-        return new RecipeMap<?>[] { RecipeMaps.BLAST_RECIPES, GCYMRecipeMaps.ALLOY_BLAST_RECIPES};
+        return new RecipeMap<?>[] { RecipeMaps.BLAST_RECIPES, GCYMRecipeMaps.ALLOY_BLAST_RECIPES };
     }
 
     @Override
@@ -193,7 +202,8 @@ public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockContr
         }
     }
 
-    private static final FactoryBlockPattern PATTERN = FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
+    private static final FactoryBlockPattern PATTERN = FactoryBlockPattern
+            .start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
             .aisle(
                     "###CCCCCCCCCCC###",
                     "##CCCCCCCCCCCCC##",
@@ -590,5 +600,4 @@ public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockContr
                     "####TTTTTTTTT####",
                     "#################",
                     "#################");
-
 }

@@ -1,8 +1,5 @@
 package com.m_w_k.gtcefucontent.common.block;
 
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
-import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -11,7 +8,13 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
+
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+
+import gregtech.common.blocks.MetaBlocks;
 
 public final class GTCEFuCMetaBlocks {
 

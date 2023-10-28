@@ -1,7 +1,26 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.*;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
@@ -19,23 +38,9 @@ import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.ArrayUtils;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
-
-import static gregtech.api.metatileentity.multiblock.MultiblockControllerBase.*;
 
 final class FusionStackPatterns {
+
     static void init() {
         whereify(FUSION_STACK, 1);
         whereify(FUSION_ARRAY, 2);
@@ -68,16 +73,21 @@ final class FusionStackPatterns {
                 .where('2', stateIndex(32))
                 .where('3', stateIndex(33))
                 .where('4', stateIndex(34))
-                .where('I', getFluidHatchAlternate(variant).or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(2, 4)))
-                .where('O', getFluidHatchAlternate(variant).or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(4)))
-                .where('Y', stateIndex(5).or(getEnergyHatches(variant).setPreviewCount((int) (8 * Math.pow(2.0, variant)))))
+                .where('I',
+                        getFluidHatchAlternate(variant)
+                                .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setMinGlobalLimited(2, 4)))
+                .where('O',
+                        getFluidHatchAlternate(variant)
+                                .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(4)))
+                .where('Y',
+                        stateIndex(5).or(getEnergyHatches(variant).setPreviewCount((int) (8 * Math.pow(2.0, variant)))))
                 .where('D', air())
                 .where('#', any());
     }
 
-//    static MultiblockShapeInfo.Builder whereify(MultiblockShapeInfo.Builder pattern, int variant) {
-//        return pattern
-//    }
+    // static MultiblockShapeInfo.Builder whereify(MultiblockShapeInfo.Builder pattern, int variant) {
+    // return pattern
+    // }
 
     private static TraceabilityPredicate getEnergyHatches(int variant) {
         TraceabilityPredicate predicate = metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH_16A[4],
@@ -85,12 +95,12 @@ final class FusionStackPatterns {
                 MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.UHV]);
         // Originally I wanted to limit which hatches you could use based on amperage,
         // but then I realized that each higher tier requires twice as many hatches as the previous anyway.
-//        if (variant <= 2) {
-//            predicate = predicate.or(metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH_4A[5]));
-//            if (variant == 1) {
-//                predicate = predicate.or(metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.UHV]));
-//            }
-//        }
+        // if (variant <= 2) {
+        // predicate = predicate.or(metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH_4A[5]));
+        // if (variant == 1) {
+        // predicate = predicate.or(metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.UHV]));
+        // }
+        // }
         return predicate;
     }
 
@@ -98,27 +108,32 @@ final class FusionStackPatterns {
         return states(switch (variant) {
             default -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.HSSE_STURDY);
             case 2 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF);
-            case 3 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING);
+            case 3 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                    .getState(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING);
         });
     }
 
     private static TraceabilityPredicate stateIndex(int id) {
         return states(switch (id) {
-            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING);
+            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                    .getState(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING);
             case 1 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.HSSE_STURDY);
             case 3 -> MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G);
-            case 4 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);
+            case 4 -> GCYMMetaBlocks.UNIQUE_CASING
+                    .getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);
             case 5 -> MetaBlocks.FUSION_CASING.getState(BlockFusionCasing.CasingType.FUSION_CASING_MK3);
             case 6 -> MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.FUSION_GLASS);
             case 7 -> MetaBlocks.FUSION_CASING.getState(BlockFusionCasing.CasingType.FUSION_CASING_MK2);
             case 8 -> MetaBlocks.FUSION_CASING.getState(BlockFusionCasing.CasingType.FUSION_COIL);
             case 9 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT);
             case 10 -> MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.FILTER_CASING);
-            case 11 -> MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING);
+            case 11 -> MetaBlocks.MULTIBLOCK_CASING
+                    .getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING);
             case 12 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF);
             case 13 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.STAINLESS_CLEAN);
             case 14 -> MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TUNGSTENSTEEL_PIPE);
-            case 15 -> GTCEFuCMetaBlocks.HARDENED_CASING.getState(GTCEFuCBlockHardenedCasing.CasingType.PLASMA_PIPE_CASING);
+            case 15 -> GTCEFuCMetaBlocks.HARDENED_CASING
+                    .getState(GTCEFuCBlockHardenedCasing.CasingType.PLASMA_PIPE_CASING);
             case 16 -> MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE);
             case 21 -> MetaBlocks.COMPRESSED.get(Materials.SteelMagnetic).getBlock(Materials.SteelMagnetic);
             case 22 -> MetaBlocks.COMPRESSED.get(Materials.NeodymiumMagnetic).getBlock(Materials.NeodymiumMagnetic);
@@ -131,9 +146,12 @@ final class FusionStackPatterns {
     }
 
     // modified to allow for facing control
-    public static TraceabilityPredicate metaTileEntitiesModified(EnumFacing facing, MetaTileEntity... metaTileEntities) {
-        ResourceLocation[] ids = Arrays.stream(metaTileEntities).filter(Objects::nonNull).map(tile -> tile.metaTileEntityId).toArray(ResourceLocation[]::new);
-        return tilePredicate((state, tile) -> ArrayUtils.contains(ids, tile.metaTileEntityId), getCandidates(metaTileEntities), facing);
+    public static TraceabilityPredicate metaTileEntitiesModified(EnumFacing facing,
+                                                                 MetaTileEntity... metaTileEntities) {
+        ResourceLocation[] ids = Arrays.stream(metaTileEntities).filter(Objects::nonNull)
+                .map(tile -> tile.metaTileEntityId).toArray(ResourceLocation[]::new);
+        return tilePredicate((state, tile) -> ArrayUtils.contains(ids, tile.metaTileEntityId),
+                getCandidates(metaTileEntities), facing);
     }
 
     // I had to add 2 more compile-time dependencies to get this to work. Regret.
@@ -149,7 +167,8 @@ final class FusionStackPatterns {
         }).toArray(BlockInfo[]::new);
     }
 
-    public static TraceabilityPredicate tilePredicate(@Nonnull BiFunction<BlockWorldState, MetaTileEntity, Boolean> predicate, @Nullable Supplier<BlockInfo[]> candidates, EnumFacing facing) {
+    public static TraceabilityPredicate tilePredicate(@Nonnull BiFunction<BlockWorldState, MetaTileEntity, Boolean> predicate,
+                                                      @Nullable Supplier<BlockInfo[]> candidates, EnumFacing facing) {
         return new TraceabilityPredicate(blockWorldState -> {
             TileEntity tileEntity = blockWorldState.getTileEntity();
             if (!(tileEntity instanceof IGregTechTileEntity))
@@ -159,7 +178,8 @@ final class FusionStackPatterns {
                 if (metaTileEntity.getFrontFacing() != facing) return false;
 
                 if (metaTileEntity instanceof IMultiblockPart) {
-                    Set<IMultiblockPart> partsFound = blockWorldState.getMatchContext().getOrCreate("MultiblockParts", HashSet::new);
+                    Set<IMultiblockPart> partsFound = blockWorldState.getMatchContext().getOrCreate("MultiblockParts",
+                            HashSet::new);
                     partsFound.add((IMultiblockPart) metaTileEntity);
                 }
                 return true;
@@ -168,7 +188,8 @@ final class FusionStackPatterns {
         }, candidates);
     }
 
-    static final FactoryBlockPattern FUSION_STACK = FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
+    static final FactoryBlockPattern FUSION_STACK = FactoryBlockPattern
+            .start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
             .aisle(
                     "####ESEEESE####",
                     "#####E###E#####",
@@ -314,7 +335,8 @@ final class FusionStackPatterns {
                     "#####E###E#####",
                     "####ESEEESE####");
 
-    static final FactoryBlockPattern FUSION_ARRAY = FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
+    static final FactoryBlockPattern FUSION_ARRAY = FactoryBlockPattern
+            .start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
             .aisle(
                     "###################################",
                     "###################################",
@@ -653,7 +675,8 @@ final class FusionStackPatterns {
                     "###################################");
 
     // this thing truly is massive, isn't it
-    static final FactoryBlockPattern FUSION_COMPLEX = FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
+    static final FactoryBlockPattern FUSION_COMPLEX = FactoryBlockPattern
+            .start(RelativeDirection.RIGHT, RelativeDirection.BACK, RelativeDirection.UP)
             .aisle(
                     "####ESEEESE#############ESEEESE####",
                     "###################################",

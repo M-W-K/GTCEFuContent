@@ -1,7 +1,14 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import java.util.Objects;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+
 import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
 import gregtech.api.GTValues;
@@ -10,17 +17,13 @@ import gregtech.api.recipes.ingredients.nbtmatch.NBTMatcher;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import java.util.Objects;
 
 public final class GTCEFuCAntimatterCompressorRecipes {
+
     private GTCEFuCAntimatterCompressorRecipes() {}
 
     public static void init() {
-        //while this may look worse, it is actually significantly better due to perfect overclocking
+        // while this may look worse, it is actually significantly better due to perfect overclocking
         GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
                 .fluidInputs(Materials.Nickel.getPlasma(24000))
                 .input(OrePrefix.block, Materials.Neutronium, 64)
@@ -44,7 +47,8 @@ public final class GTCEFuCAntimatterCompressorRecipes {
         if (GTCEFuCUtil.stellarAlloyCheck()) {
 
             GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
-                    .fluidInputs(Materials.Nickel.getPlasma(64000), new FluidStack(Fluids.LIQUID_SUNSHINE.getFluid(), 1024000))
+                    .fluidInputs(Materials.Nickel.getPlasma(64000),
+                            new FluidStack(Fluids.LIQUID_SUNSHINE.getFluid(), 1024000))
                     .input(OrePrefix.dustSmall, Materials.Neutronium)
                     .inputs(new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 19))
                     .inputs(new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 14))
@@ -65,6 +69,5 @@ public final class GTCEFuCAntimatterCompressorRecipes {
                     .EUToStart(160000000000L).buildAndRegister();
 
         }
-
     }
 }

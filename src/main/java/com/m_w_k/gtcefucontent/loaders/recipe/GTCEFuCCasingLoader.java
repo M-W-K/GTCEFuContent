@@ -1,8 +1,12 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
+
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+
 import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
 import gregicality.multiblocks.api.unification.GCYMMaterials;
@@ -16,8 +20,6 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public class GTCEFuCCasingLoader {
 
@@ -38,7 +40,7 @@ public class GTCEFuCCasingLoader {
                 'E', new UnificationEntry(OrePrefix.pipeNormalFluid, Materials.Neutronium));
 
         ModHandler.addShapedRecipe(true, "high_pressure_casing", GTCEFuCMetaBlocks.HARDENED_CASING
-                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING, 2),
+                .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING, 2),
                 "PhP", "PFP", "PwP",
                 'P', new UnificationEntry(OrePrefix.plate, Materials.RhodiumPlatedPalladium),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.HSSE));
@@ -60,13 +62,15 @@ public class GTCEFuCCasingLoader {
                 .duration(50).EUt(16).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .inputs(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getItemVariant(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING, 2),
+                .inputs(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                        .getItemVariant(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING, 2),
                         new ItemStack(ModObject.block_infinity.getItemNN(), 32),
                         new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 34))
                 .input(MetaItems.FIELD_GENERATOR_UV, 6)
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV)
                 .fluidInputs(new FluidStack(Fluids.VAPOR_OF_LEVITY.getFluid(), 1500))
-                .outputs(GTCEFuCMetaBlocks.ADVANCED_CASING.getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
+                .outputs(GTCEFuCMetaBlocks.ADVANCED_CASING
+                        .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
                 .circuitMeta(6)
                 .duration(100).EUt(GTValues.VA[GTValues.UV]).buildAndRegister();
 
@@ -76,9 +80,9 @@ public class GTCEFuCCasingLoader {
                 .input(MetaItems.NEUTRON_REFLECTOR, 4)
                 .input(MetaItems.FLUID_REGULATOR_UV)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(72))
-                .outputs(GTCEFuCMetaBlocks.HARDENED_CASING.getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.PLASMA_PIPE_CASING, 16))
+                .outputs(GTCEFuCMetaBlocks.HARDENED_CASING
+                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.PLASMA_PIPE_CASING, 16))
                 .circuitMeta(2)
                 .duration(600).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
-
     }
 }

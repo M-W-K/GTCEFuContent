@@ -1,20 +1,23 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
-import com.m_w_k.gtcefucontent.api.recipes.ForgingFurnaceRecipeProducer;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Material;
-import gregtech.api.unification.stack.MaterialStack;
-import net.minecraft.item.ItemStack;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import net.minecraft.item.ItemStack;
+
+import com.m_w_k.gtcefucontent.GTCEFuContent;
+import com.m_w_k.gtcefucontent.api.recipes.ForgingFurnaceRecipeProducer;
+
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.Material;
+import gregtech.api.unification.stack.MaterialStack;
+
 public class GTCEFuCForgingFurnaceRecipes {
+
     private GTCEFuCForgingFurnaceRecipes() {}
 
     // Apparently Jabel can't translate .toList() into Java 8 bytecode.

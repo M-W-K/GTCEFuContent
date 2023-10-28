@@ -1,6 +1,26 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import static gregtech.api.recipes.logic.OverclockingLogic.heatingCoilOverclockingLogic;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+
 import gregicality.multiblocks.api.capability.impl.GCYMMultiblockRecipeLogic;
 import gregicality.multiblocks.api.metatileentity.GCYMRecipeMapMultiblockController;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
@@ -30,22 +50,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityItemBus;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-
-import static gregtech.api.recipes.logic.OverclockingLogic.heatingCoilOverclockingLogic;
 
 public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockController implements IHeatingCoil {
 
@@ -129,20 +133,21 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
         return states(switch (id) {
             default -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF);
             case 1 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.TUNGSTENSTEEL_ROBUST);
-            case 2 -> MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING);
+            case 2 -> MetaBlocks.MULTIBLOCK_CASING
+                    .getState(BlockMultiblockCasing.MultiblockCasingType.EXTREME_ENGINE_INTAKE_CASING);
             case 3 -> MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TUNGSTENSTEEL_PIPE);
-            case 4 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.HIGH_TEMPERATURE_CASING);
+            case 4 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                    .getState(BlockLargeMultiblockCasing.CasingType.HIGH_TEMPERATURE_CASING);
             case 5 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT);
             case 6 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF);
         });
-
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return iMultiblockPart instanceof MetaTileEntityItemBus itemBus
-                && itemBus.getAbility().equals(MultiblockAbility.IMPORT_ITEMS)
-                ? Textures.ROBUST_TUNGSTENSTEEL_CASING : Textures.HEAT_PROOF_CASING;
+        return iMultiblockPart instanceof MetaTileEntityItemBus itemBus &&
+                itemBus.getAbility().equals(MultiblockAbility.IMPORT_ITEMS) ? Textures.ROBUST_TUNGSTENSTEEL_CASING :
+                        Textures.HEAT_PROOF_CASING;
     }
 
     @Override
@@ -170,7 +175,7 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
         if (isStructureFormed()) {
             textList.add(new TextComponentTranslation("gregtech.multiblock.blast_furnace.max_temperature",
                     blastFurnaceTemperature)
-                    .setStyle(new Style().setColor(TextFormatting.RED)));
+                            .setStyle(new Style().setColor(TextFormatting.RED)));
         }
         super.addDisplayText(textList);
     }
@@ -184,7 +189,7 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
     }
 
     private static @NotNull RecipeMap<?> @NotNull [] determineRecipeMaps() {
-        return new RecipeMap<?>[] { RecipeMaps.BLAST_RECIPES, GTCEFuCRecipeMaps.FORGING_FURNACE_RECIPES};
+        return new RecipeMap<?>[] { RecipeMaps.BLAST_RECIPES, GTCEFuCRecipeMaps.FORGING_FURNACE_RECIPES };
     }
 
     // I don't know why this override isn't part of base greg or gcym. Maybe they forgot?

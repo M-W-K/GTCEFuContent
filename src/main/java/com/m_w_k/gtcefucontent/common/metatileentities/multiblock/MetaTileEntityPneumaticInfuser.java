@@ -1,8 +1,15 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
@@ -21,15 +28,13 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.BlockBoilerCasing;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.MetaBlocks;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
 
 public class MetaTileEntityPneumaticInfuser extends RecipeMapMultiblockController {
+
     public MetaTileEntityPneumaticInfuser(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES);
     }
+
     @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
@@ -55,12 +60,12 @@ public class MetaTileEntityPneumaticInfuser extends RecipeMapMultiblockControlle
     @Nonnull
     protected static TraceabilityPredicate getCasingState(int id) {
         return states(switch (id) {
-            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING);
+            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                    .getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING);
             case 1 -> GTCEFuCMetaBlocks.HARDENED_CASING.getState(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING);
             case 2 -> MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TUNGSTENSTEEL_PIPE);
             case 3 -> MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.LAMINATED_GLASS);
         });
-
     }
 
     @Override

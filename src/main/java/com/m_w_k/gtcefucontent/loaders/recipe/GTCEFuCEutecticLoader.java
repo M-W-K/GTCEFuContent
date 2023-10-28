@@ -1,14 +1,16 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.*;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+
 import gregtech.api.GTValues;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 
-import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.*;
-
 public class GTCEFuCEutecticLoader {
+
     private GTCEFuCEutecticLoader() {}
 
     public static void init() {
