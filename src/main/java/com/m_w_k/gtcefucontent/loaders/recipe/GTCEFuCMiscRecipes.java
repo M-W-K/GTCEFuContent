@@ -20,8 +20,8 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.Collection;
 import java.util.Objects;
 
-public class GTCEFuMiscRecipes {
-    private GTCEFuMiscRecipes() {}
+public class GTCEFuCMiscRecipes {
+    private GTCEFuCMiscRecipes() {}
 
     public static void init() {
         RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()

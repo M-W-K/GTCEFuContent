@@ -6,7 +6,7 @@ import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityAntimatterCompressor;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityFusionStack;
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuMiscRecipes;
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCMiscRecipes;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -19,10 +19,10 @@ public final class GTCEFuContent
 {
     public static final String MODID = "gtcefucontent";
     public static final String NAME = "GregTechCEFuContent";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.0.1";
 
     public static final String DEP_VERSION_STRING =
-            "required-after:gregtech@[2.7.0-beta,);" +
+            "required-after:gregtech@[2.7.4-beta,);" +
                     "required-after:gcym@[1.2.5,);" +
                     "required-after:enderio@[5.3,);" +
                     "required-after:projecte@[1.4.1,);" +
@@ -57,7 +57,7 @@ public final class GTCEFuContent
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         log("Beginning PostInit");
-        GTCEFuMiscRecipes.initPost();
+        GTCEFuCMiscRecipes.initPost();
         log("PostInit complete");
     }
 

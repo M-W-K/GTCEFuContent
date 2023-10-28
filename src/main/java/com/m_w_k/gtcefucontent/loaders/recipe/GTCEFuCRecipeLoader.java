@@ -33,7 +33,7 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCAntimatterCompressorRecipes.init();
 
         GTCEFuCCasingLoader.init();
-        GTCEFuMiscRecipes.init();
+        GTCEFuCMiscRecipes.init();
         GTCEFuCEutecticLoader.init();
 
         controllerRecipes();
@@ -45,7 +45,7 @@ public final class GTCEFuCRecipeLoader {
         // Adjust/create recipeMaps that depend on iterating through other recipeMaps.
 
         // We can't change the behavior of the cutter recipeMap setup itself without being overly invasive.
-        GTCEFuMiscRecipes.cutterUpdate();
+        GTCEFuCMiscRecipes.cutterUpdate();
 
         // The forging furnace recipeMap is completely new, but dependent on the blast furnace recipeMap.
         GTCEFuCForgingFurnaceRecipes.init();
@@ -104,7 +104,7 @@ public final class GTCEFuCRecipeLoader {
                         Materials.Lubricant.getFluid(2000),
                         GTCEFuCMaterials.EutecticCaesiumSodiumPotassium.getFluid(10000))
                 .output(GTCEFuCMetaTileEntities.FORGING_FURNACE)
-                .research(b -> b
+                .scannerResearch(b -> b
                         .researchStack(GCYMMetaTileEntities.ALLOY_BLAST_SMELTER.getStackForm())
                         .EUt(GTValues.VA[GTValues.EV]))
                 .duration(800).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
@@ -123,7 +123,7 @@ public final class GTCEFuCRecipeLoader {
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12))
                 .fluidInputs(Materials.IndiumGalliumPhosphide.getFluid(GTValues.L * 8))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[0])
-                .research(b -> b
+                .stationResearch(b -> b
                         .researchStack(MetaTileEntities.FUSION_REACTOR[2].getStackForm())
                         .CWUt(192)
                         .EUt(GTValues.VA[GTValues.UV]))
@@ -143,14 +143,14 @@ public final class GTCEFuCRecipeLoader {
                         Materials.Osmiridium.getFluid(GTValues.L * 8),
                         GTCEFuCMaterials.EutecticCaesiumPotassiumGalliumNaquadahEnriched.getFluid(50000))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[1])
-                .research(b -> b
+                .stationResearch(b -> b
                         .researchStack(GTCEFuCMetaTileEntities.FUSION_STACK[0].getStackForm())
                         .CWUt(288)
                         .EUt(GTValues.VA[GTValues.UHV]))
                 .duration(1200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
-                .inputs(GTCEFuCMetaTileEntities.FUSION_STACK[2].getStackForm(2))
+                .inputs(GTCEFuCMetaTileEntities.FUSION_STACK[1].getStackForm(2))
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV, 12)
                 .input(OrePrefix.ingot, Materials.SamariumMagnetic, 48)
                 .input(OrePrefix.plateDense, Materials.Neutronium)
@@ -163,7 +163,7 @@ public final class GTCEFuCRecipeLoader {
                 .fluidInputs(Materials.NaquadahAlloy.getFluid(GTValues.L * 8))
                 .fluidInputs(Materials.PCBCoolant.getFluid(30000))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[2])
-                .research(b -> b
+                .stationResearch(b -> b
                         .researchStack(GTCEFuCMetaTileEntities.FUSION_STACK[1].getStackForm())
                         .CWUt(384)
                         .EUt(GTValues.VA[GTValues.UEV]))
@@ -184,7 +184,7 @@ public final class GTCEFuCRecipeLoader {
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 16))
                 .fluidInputs(Materials.RutheniumTriniumAmericiumNeutronate.getFluid(GTValues.L * 9 * 64))
                 .output(GTCEFuCMetaTileEntities.ANTIMATTER_COMPRESSOR)
-                .research(b -> b
+                .stationResearch(b -> b
                         .researchStack(GTCEFuCMetaBlocks.ADVANCED_CASING.getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
                         .CWUt(512)
                         .EUt(GTValues.VA[GTValues.UEV]))
