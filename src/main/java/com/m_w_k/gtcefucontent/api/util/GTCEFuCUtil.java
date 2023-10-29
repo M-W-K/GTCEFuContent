@@ -1,10 +1,13 @@
 package com.m_w_k.gtcefucontent.api.util;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 
 import crazypants.enderio.base.init.ModObject;
+import gregtech.api.metatileentity.MetaTileEntity;
 
 public final class GTCEFuCUtil {
 
@@ -24,5 +27,21 @@ public final class GTCEFuCUtil {
 
     public static ResourceLocation gtcefucId(String name) {
         return new ResourceLocation(GTCEFuContent.MODID, name);
+    }
+
+    /**
+     * Returns a BlockPos offset from the controller by the given values
+     *
+     * @param controller the controller whose position we should reference
+     * @param x          Positive is controller left, Negative is controller right
+     * @param y          Positive is controller up, Negative is controller down
+     * @param z          Positive is controller front, Negative is controller back
+     * @return Offset BlockPos
+     */
+    public static BlockPos bbHelper(MetaTileEntity controller, int x, int y, int z) {
+        return controller.getPos()
+                .offset(controller.getFrontFacing(), z)
+                .offset(controller.getFrontFacing().getOpposite().rotateY(), x)
+                .offset(EnumFacing.UP, y);
     }
 }

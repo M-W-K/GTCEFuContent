@@ -32,6 +32,7 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCInfinityExtractorRecipes.init();
         GTCEFuCPneumaticInfuserRecipes.init();
         GTCEFuCSympatheticCombustorRecipes.init();
+        GTCEFuCStarSiphonRecipes.init();
         GTCEFuCAntimatterCompressorRecipes.init();
 
         GTCEFuCCasingLoader.init();
@@ -124,8 +125,8 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.wireGtSingle, Materials.RutheniumTriniumAmericiumNeutronate, 32)
                 .input(MetaItems.SENSOR_UV, 8)
                 .input(MetaItems.FIELD_GENERATOR_UV, 8)
-                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12))
-                .fluidInputs(Materials.IndiumGalliumPhosphide.getFluid(GTValues.L * 8))
+                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12),
+                        Materials.IndiumGalliumPhosphide.getFluid(GTValues.L * 8))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[0])
                 .stationResearch(b -> b
                         .researchStack(MetaTileEntities.FUSION_REACTOR[2].getStackForm())
@@ -163,15 +164,36 @@ public final class GTCEFuCRecipeLoader {
                 .input(MetaItems.ULTRA_HIGH_POWER_INTEGRATED_CIRCUIT, 64)
                 .input(OrePrefix.wireGtQuadruple, Materials.RutheniumTriniumAmericiumNeutronate, 32)
                 .input(MetaBlocks.OPTICAL_PIPES[0], 32)
-                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12))
-                .fluidInputs(Materials.NaquadahAlloy.getFluid(GTValues.L * 8))
-                .fluidInputs(Materials.PCBCoolant.getFluid(30000))
+                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12),
+                        Materials.NaquadahAlloy.getFluid(GTValues.L * 8),
+                        Materials.PCBCoolant.getFluid(30000))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[2])
                 .stationResearch(b -> b
                         .researchStack(GTCEFuCMetaTileEntities.FUSION_STACK[1].getStackForm())
                         .CWUt(384)
                         .EUt(GTValues.VA[GTValues.UEV]))
                 .duration(1200).EUt(GTValues.VA[GTValues.UEV]).buildAndRegister();
+
+        RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
+                .input(MetaTileEntities.STEAM_EXTRACTOR_STEEL)
+                .inputs(GTCEFuCMetaBlocks.ADVANCED_CASING
+                        .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING),
+                        MetaTileEntities.FUSION_REACTOR[1].getStackForm(2),
+                        MetaTileEntities.FUSION_REACTOR[2].getStackForm())
+                .input(OrePrefix.circuit, MarkerMaterials.Tier.ULV, 64)
+                .input(OrePrefix.circuit, MarkerMaterials.Tier.ULV, 64)
+                .input(OrePrefix.plateDouble, Materials.MagnesiumDiboride)
+                .input(OrePrefix.plateDense, Materials.ManganesePhosphide)
+                .input(OrePrefix.cableGtOctal, Materials.RutheniumTriniumAmericiumNeutronate, 16)
+                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 16),
+                        Materials.NickelZincFerrite.getFluid(GTValues.L * 8))
+                .output(GTCEFuCMetaTileEntities.STAR_SIPHON)
+                .stationResearch(b -> b
+                        .researchStack(GTCEFuCMetaBlocks.ADVANCED_CASING
+                                .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
+                        .CWUt(480)
+                        .EUt(GTValues.VA[GTValues.UEV]))
+                .duration(1400).EUt(GTValues.VA[GTValues.UEV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
                 .input(MetaTileEntities.STEAM_COMPRESSOR_STEEL)
@@ -184,14 +206,13 @@ public final class GTCEFuCRecipeLoader {
                 .input(MetaItems.CONVEYOR_MODULE_UV, 2)
                 .input(OrePrefix.wireGtHex, Materials.RutheniumTriniumAmericiumNeutronate, 32)
                 .input(MetaTileEntities.POWER_SUBSTATION)
-                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 16))
-                .fluidInputs(Materials.RutheniumTriniumAmericiumNeutronate.getFluid(GTValues.L * 9 * 64))
+                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 16),
+                        Materials.RutheniumTriniumAmericiumNeutronate.getFluid(GTValues.L * 9 * 64))
                 .output(GTCEFuCMetaTileEntities.ANTIMATTER_COMPRESSOR)
                 .stationResearch(b -> b
-                        .researchStack(GTCEFuCMetaBlocks.ADVANCED_CASING
-                                .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
-                        .CWUt(512)
+                        .researchStack(GTCEFuCMetaTileEntities.STAR_SIPHON.getStackForm())
+                        .CWUt(576)
                         .EUt(GTValues.VA[GTValues.UEV]))
-                .duration(1400).EUt(GTValues.VA[GTValues.UIV]).buildAndRegister();
+                .duration(1600).EUt(GTValues.VA[GTValues.UIV]).buildAndRegister();
     }
 }

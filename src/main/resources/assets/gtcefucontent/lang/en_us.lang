@@ -32,8 +32,12 @@ gregtech.multiblock.fusion_stack.array.description=Combines two "Stack" reactors
 recipemap.fusion_stack.array.name=Bulk Fusion x64
 gtcefucontent.machine.fusion_stack.complex.name=Fusion Reactor Computer Type "Complex"
 gtcefucontent.machine.fusion_stack.complex.tooltip=SUPERNOVAE GO BRRRRRRR
-gregtech.multiblock.fusion_stack.complex.description=Combines two "Array" reactors into a truly vast structure. Has a synchronized pair of onboard supercomputers. Upon the third overclock, the fusion reaction becomes intense enough for nano-second fluctuations in production. The paired supercomputers manage the component reactors to stabilize and exploit these fluctuations, causing sympathetic electromagnetic fields. The interactions between these fields, extremely powerful magnets, and the eight component reactors doubles the strength of the overclock. Only accepts UHV Hatches of any amperage. For every Hatch it has, its buffer increases by 80M EU, and has a maximum of 5120M.
+gregtech.multiblock.fusion_stack.complex.description=Combines two "Array" reactors into a truly vast structure. Has a synchronized pair of onboard supercomputers. Upon the third overclock, the fusion reaction becomes intense enough for nanosecond fluctuations in production. The paired supercomputers manage the component reactors to stabilize and exploit these fluctuations, causing sympathetic electromagnetic fields. The interactions between these fields, extremely powerful magnets, and the eight component reactors doubles the strength of the overclock. Only accepts UHV Hatches of any amperage. For every Hatch it has, its buffer increases by 80M EU, and has a maximum of 5120M.
 recipemap.fusion_stack.complex.name=Bulk Fusion x256
+
+gtcefucontent.machine.star_siphon.name=Star Siphon
+gtcefucontent.machine.star_siphon.tooltip=Star Matter from Miniature Stars
+gtegtech.multiblock.star_siphon.description=Extracts plasma directly from EMC storage stars. Larger stars are more power and time efficient, but less EMC efficient. Only accepts UHV and UV Hatches. For every Hatch it has, its buffer increases by 5G EU, and has a maximum of 80G.
 
 gtcefucontent.machine.antimatter_compressor.name=Antimatter Compressor
 gtcefucontent.machine.antimatter_compressor.tooltip=Creating the §4I§6n§ef§ai§b§3n§1i§9t§5e

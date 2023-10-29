@@ -44,6 +44,13 @@ public final class GTCEFuCRecipeMaps {
                     .setSlotOverlay(false, false, true, GuiTextures.INT_CIRCUIT_OVERLAY)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_EXTRUDER, ProgressWidget.MoveType.HORIZONTAL);
 
+    public static final RecipeMap<FusionRecipeBuilder> STAR_SIPHON_RECIPES = new RecipeMap<>("star_siphon",
+            1, 1, 1, 1, new FusionRecipeBuilder(), false)
+                    .setSlotOverlay(false, false, GuiTextures.EXTRACTOR_OVERLAY)
+                    .setSlotOverlay(true, true, GuiTextures.LIGHTNING_OVERLAY_2)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.ARC);
+
     public static final RecipeMap<FusionRecipeBuilder> ANTIMATTER_COMPRESSOR_RECIPES = new RecipeMap<>(
             "antimatter_compressor",
             3, 3, 2, 0, new FusionRecipeBuilder(), false)
@@ -58,16 +65,16 @@ public final class GTCEFuCRecipeMaps {
 
     // Trying to generate the list contents in-place throws a compiler error for some reason.
     public static void init() {
-        FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("stack"));
-        FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("array"));
-        FUSION_STACK_RECIPE_MAPS.add(fusionRecipeBuilderRecipeMap("complex"));
+        FUSION_STACK_RECIPE_MAPS.add(fusionStackRecipeMap("stack"));
+        FUSION_STACK_RECIPE_MAPS.add(fusionStackRecipeMap("array"));
+        FUSION_STACK_RECIPE_MAPS.add(fusionStackRecipeMap("complex"));
 
         // for some unknown reason, running .setSound during map declaration doesn't actually work at all for my custom
         // sound.
         FORGING_FURNACE_RECIPES.setSound(GTCEFuContentSoundEvents.FORGING_FURNACE);
     }
 
-    private static RecipeMap<FusionRecipeBuilder> fusionRecipeBuilderRecipeMap(String id) {
+    private static RecipeMap<FusionRecipeBuilder> fusionStackRecipeMap(String id) {
         return new RecipeMap<>("fusion_stack." + id,
                 0, 0, 2, 1, new FusionRecipeBuilder(), false)
                         .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)

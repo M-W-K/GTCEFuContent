@@ -22,7 +22,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -34,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.GTValues;
@@ -271,6 +271,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         return false;
     }
 
+    @SuppressWarnings("unused")
     public long getHeat() {
         return heat;
     }
@@ -319,8 +320,10 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             // Don't drain heat when there is not enough energy and there is still some recipe progress, as that makes
             // it doubly hard to complete the recipe
             // (Will have to recover heat and recipe progress)
-            if ((!(isActive || workingEnabled) || (hasNotEnoughEnergy && progressTime == 0)) && heat > 0) {
-                heat = heat <= 40000 ? 0 : (heat - 40000);
+            if ((!isActive || (hasNotEnoughEnergy && progressTime == 0)) && heat > 0) {
+                // heat numbers are so large that exponential decay is wise
+                long lossyHeat = (long) (heat * 0.9);
+                heat = lossyHeat <= 10000 ? 0 : lossyHeat - 10000;
             }
         }
 
@@ -487,30 +490,15 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         if (overclock_rating == 1) {
-            return new AxisAlignedBB(bbHelper(6, 2, -1),
-                    bbHelper(-6, -2, -13));
+            return new AxisAlignedBB(GTCEFuCUtil.bbHelper(this, 6, 2, -1),
+                    GTCEFuCUtil.bbHelper(this, -6, -2, -13));
         } else if (overclock_rating == 2) {
-            return new AxisAlignedBB(bbHelper(16, -2, 2),
-                    bbHelper(-16, -6, -10));
+            return new AxisAlignedBB(GTCEFuCUtil.bbHelper(this, 16, -2, 2),
+                    GTCEFuCUtil.bbHelper(this, -16, -6, -10));
         } else {
-            return new AxisAlignedBB(bbHelper(16, -4, 15),
-                    bbHelper(-16, -8, -17));
+            return new AxisAlignedBB(GTCEFuCUtil.bbHelper(this, 16, -4, 15),
+                    GTCEFuCUtil.bbHelper(this, -16, -8, -17));
         }
-    }
-
-    /**
-     * Returns a BlockPos offset from the controller by the given values
-     * 
-     * @param x Positive is controller left, Negative is controller right
-     * @param y Positive is controller up, Negative is controller down
-     * @param z Positive is controller front, Negative is controller back
-     * @return Offset BlockPos
-     */
-    protected BlockPos bbHelper(int x, int y, int z) {
-        return this.getPos()
-                .offset(getFrontFacing(), z)
-                .offset(getFrontFacing().getOpposite().rotateY(), x)
-                .offset(EnumFacing.UP, y);
     }
 
     @Override

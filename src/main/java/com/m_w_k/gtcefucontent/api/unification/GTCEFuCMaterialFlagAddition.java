@@ -14,5 +14,8 @@ public class GTCEFuCMaterialFlagAddition {
         Materials.Invar.addFlags(MaterialFlags.GENERATE_FOIL);
 
         Materials.Thorium.addFlags(MaterialFlags.GENERATE_DENSE);
+
+        Materials.MagnesiumDiboride.addFlags(MaterialFlags.GENERATE_DOUBLE_PLATE);
+        Materials.ManganesePhosphide.addFlags(MaterialFlags.GENERATE_DENSE);
     }
 }
