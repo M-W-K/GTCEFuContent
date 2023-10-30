@@ -11,4 +11,6 @@ public class GTCEFuCFluidTypes {
 
     @ZenProperty
     public static final FluidType HOT = new FluidTypeHot("hot", null, "hot", "gtcefucontent.fluid.hot");
+    @ZenProperty
+    public static final FluidType COLD = new FluidTypeCold("cold", null, "cold", "gtcefucontent.fluid.cold");
 }

@@ -38,6 +38,7 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCCasingLoader.init();
         GTCEFuCMiscRecipes.init();
         GTCEFuCEutecticLoader.init();
+        GTCEFuCHeatExchangerLoader.init();
 
         controllerRecipes();
 

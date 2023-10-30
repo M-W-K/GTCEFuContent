@@ -10,9 +10,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.minecraft.util.ResourceLocation;
+
 import com.m_w_k.gtcefucontent.api.fluids.fluidType.GTCEFuCFluidTypes;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHotFluidProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
+import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidProperty;
 
 import gregicality.multiblocks.api.fluids.GCYMMetaFluids;
 import gregtech.api.fluids.MetaFluids;
@@ -29,45 +31,43 @@ public class GTCEFuCMaterials {
 
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization
-     * <p>
+     * <br>
      * String - The name of this eutectic alloy
-     * </p>
-     * <p>
+     * <br>
      * int[0] - The temperature of the cold alloy
-     * </p>
-     * <p>
+     * <br>
+     * int[1] - The temperature of the normal alloy
+     * <br>
      * int[1] - The temperature of the hot alloy
-     * </p>
-     * <p>
-     * int[2] - The heat capacity, in units of 1/100 waters. E.g. 1/4 the heat capacity of water would be 25.
-     * These units are used because, if we ever get the energy back out of the eutectic alloy, it'll be heating up
-     * water.
-     * </p>
+     * <br>
+     * int[2] - The heat capacity, in units of J/L.
+     * This means that 418600 units would increase the temperature of 1L water by 1°K,
+     * as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
+     * A negative specific heat capacity violates the laws of thermodynamics.
      */
     public final static Map<String, int[]> EutecticAlloysString = new HashMap<>() {
 
         {
-            this.put("eutectic_csnak_alloy", new int[] { 195, 1237, 23 });
-            this.put("eutectic_enriched_naquadah_gallium_csk_alloy", new int[] { 270, 9419, 80 });
+            this.put("eutectic_csnak_alloy", new int[] { 195, 293, 1237, 200000 });
+            this.put("eutectic_enriched_naquadah_gallium_csk_alloy", new int[] { 270, 293, 9419, 500000 });
         }
     };
 
     /**
      * Contains a map of eutectic alloys and their temperatures after initialization
-     * <p>
+     * <br>
      * Material - The Material of this eutectic alloy
-     * </p>
-     * <p>
+     * <br>
      * int[0] - The temperature of the cold alloy
-     * </p>
-     * <p>
-     * int[1] - The temperature of the hot alloy
-     * </p>
-     * <p>
-     * int[2] - The heat capacity, in units of 1/100 waters. E.g. 1/4 the heat capacity of water would be 25.
-     * These units are used because, if we ever get the energy back out of the eutectic alloy, it'll be heating up
-     * water.
-     * </p>
+     * <br>
+     * int[1] - The temperature of the normal alloy
+     * <br>
+     * int[2] - The temperature of the hot alloy
+     * <br>
+     * int[2] - The specific heat capacity, in units of J/L.
+     * This means that 418600 units would increase the temperature of 1L water by 1°K,
+     * as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
+     * A negative specific heat capacity violates the laws of thermodynamics.
      */
     public final static Map<Material, int[]> EutecticAlloys = new HashMap<>();
 
@@ -97,15 +97,9 @@ public class GTCEFuCMaterials {
                 .color(0xa0cefa).iconSet(MaterialIconSet.FLUID)
                 .build();
 
-        EutecticCaesiumSodiumPotassium = new Material.Builder(ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy")) // the
-                                                                                                                       // csnak
-                                                                                                                       // is
-                                                                                                                       // a
-                                                                                                                       // c
-                                                                                                                       // kind
-                                                                                                                       // of
-                                                                                                                       // snake
-                .fluid().fluidTemp(EutecticAlloysString.get("eutectic_csnak_alloy")[0])
+        // the csnak is a c kind of snake
+        EutecticCaesiumSodiumPotassium = new Material.Builder(ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy"))
+                .fluid().fluidTemp(EutecticAlloysString.get("eutectic_csnak_alloy")[1])
                 .colorAverage().iconSet(MaterialIconSet.METALLIC)
                 .flags(DECOMPOSITION_BY_CENTRIFUGING)
                 .components(Caesium, 4, Sodium, 1, Potassium, 5)
@@ -113,7 +107,7 @@ public class GTCEFuCMaterials {
 
         EutecticCaesiumPotassiumGalliumNaquadahEnriched = new Material.Builder(ID.getAndIncrement(),
                 gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"))
-                        .fluid().fluidTemp(EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy")[0])
+                        .fluid().fluidTemp(EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy")[1])
                         .colorAverage().iconSet(MaterialIconSet.METALLIC)
                         .flags(DECOMPOSITION_BY_ELECTROLYZING)
                         .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
@@ -121,14 +115,24 @@ public class GTCEFuCMaterials {
 
         populateEutecticMap();
 
-        // generate the hot versions of the eutectic alloys
+        // generate the hot and cold versions of the eutectic alloys
         for (Material eutecticAlloy : EutecticAlloys.keySet()) {
-            eutecticAlloy.setProperty(GTCEFuCPropertyKey.HOT_FLUID,
-                    new GTCEFuCHotFluidProperty(EutecticAlloys.get(eutecticAlloy)[1]));
+            eutecticAlloy.setProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID, new GTCEFuCThreeTempFluidProperty(
+                    EutecticAlloys.get(eutecticAlloy)[0],
+                    EutecticAlloys.get(eutecticAlloy)[2],
+                    EutecticAlloys.get(eutecticAlloy)[3]));
+
             MetaFluids.setMaterialFluidTexture(eutecticAlloy, GTCEFuCFluidTypes.HOT,
                     GCYMMetaFluids.AUTO_GENERATED_MOLTEN_TEXTURE);
-            eutecticAlloy.getProperty(GTCEFuCPropertyKey.HOT_FLUID).setFluid(
-                    MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.HOT, EutecticAlloys.get(eutecticAlloy)[1],
+            MetaFluids.setMaterialFluidTexture(eutecticAlloy, GTCEFuCFluidTypes.COLD,
+                    new ResourceLocation("gregtech", "blocks/material_sets/fluid/fluid"));
+
+            eutecticAlloy.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID).setFluidCold(
+                    MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.COLD,
+                            EutecticAlloys.get(eutecticAlloy)[0],
+                            false));
+            eutecticAlloy.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID).setFluidHot(
+                    MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.HOT, EutecticAlloys.get(eutecticAlloy)[2],
                             false));
         }
     }

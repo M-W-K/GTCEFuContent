@@ -4,6 +4,7 @@ import gregtech.api.unification.material.properties.PropertyKey;
 
 public class GTCEFuCPropertyKey {
 
-    public static final PropertyKey<GTCEFuCHotFluidProperty> HOT_FLUID = new PropertyKey<>("hot_fluid",
-            GTCEFuCHotFluidProperty.class);
+    public static final PropertyKey<GTCEFuCThreeTempFluidProperty> THREE_TEMP_FLUID = new PropertyKey<>(
+            "three_temp_fluid",
+            GTCEFuCThreeTempFluidProperty.class);
 }

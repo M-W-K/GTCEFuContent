@@ -58,3 +58,4 @@ gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Al
 gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Naquadah Caesium-Potassium-Gallium Mixture
 
 gtcefucontent.fluid.hot=Hot %s
+gtcefucontent.fluid.cold=Cold %s
