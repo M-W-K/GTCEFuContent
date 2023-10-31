@@ -46,6 +46,22 @@ gtcefucontent.machine.antimatter_compressor.info=Upon recipe interruption, half 
 recipemap.antimatter_compressor.name=Antimatter Compressor
 gregtech.multiblock.antimatter_compressor.description=The Antimatter Compressor is a massive multiblock capable of flashing energy into antimatter to perform compression violating the laws of physics. For every Battery it has, its buffer increases by 10.24G EU, and has a maximum of 163.84G
 
+gtcefucontent.machine.heat_exchanger.small.name=Small Heat Exchanger
+gtcefucontent.machine.heat_exchanger.medium.name=Medium Heat Exchanger
+gtcefucontent.machine.heat_exchanger.large.name=Large Heat Exchanger
+gtcefucontent.machine.heat_exchanger.info=Holds %s Heat Exchanger Units.
+gregtech.multiblock.heat_exchanger.small.description=All contained HEUs must be identical. The maximum temperature fluid a HEU can handle is equivalent to the maximum temperature of its piping. The processing speed of an exchange is proportional to the square root of the piping flow rate. The piping length required for a recipe is equivalent to the geometric average of the component fluid temperature differences.
+gtcefucontent.machine.heu_endpoint.standard.name=Standard HEU Endpoint
+gtcefucontent.machine.heu_endpoint.standard.tooltip=No special effects. All HEU piping & pipe holders must be the same. Requires a stack of tiny pipe.
+gtcefucontent.machine.heu_endpoint.returning.name=Returning HEU Endpoint
+gtcefucontent.machine.heu_endpoint.returning.tooltip=Increases HEU effective pipe length by an additive §f+1x§7 per, but reduces processing speed by the same factor. Requires a stack of tiny pipe.
+gtcefucontent.machine.heu_pipe_holder.standard.name=Standard HEU Pipe Holder
+gtcefucontent.machine.heu_pipe_holder.standard.tooltip=Provides §f2m§7 of HEU piping. Requires a stack of tiny pipe.
+gtcefucontent.machine.heu_pipe_holder.conductive.name=Conductive HEU Pipe Holder
+gtcefucontent.machine.heu_pipe_holder.conductive.tooltip=Provides §f2m§7 of HEU piping. Requires two stacks of tiny pipe. Increases processing speed by §p+1.5x
+gtcefucontent.machine.heu_pipe_holder.expanded.name=Expanded HEU Pipe Holder
+gtcefucontent.machine.heu_pipe_holder.expanded.tooltip=Provides §f3m§7 of HEU piping. Requires two stacks of tiny pipe.
+
 tile.hardened_casing.indestructible_casing.name=Indestructible Casing
 tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing
 tile.hardened_casing.plasma_pipe_casing.name=Integrated Fusion Piping

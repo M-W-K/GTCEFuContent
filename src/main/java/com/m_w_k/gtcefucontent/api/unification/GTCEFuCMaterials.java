@@ -74,7 +74,7 @@ public class GTCEFuCMaterials {
     private static final AtomicBoolean INIT = new AtomicBoolean(false);
 
     // IDs 22500 - 22529 reserved for multiblocks
-    // IDs 22530 - 22559 empty
+    // IDs 22530 - 22559 reserved for normal metaTileEntities
     // IDs 22560 - 22599 reserved for materials
     private static final AtomicInteger ID = new AtomicInteger(22560);
 
