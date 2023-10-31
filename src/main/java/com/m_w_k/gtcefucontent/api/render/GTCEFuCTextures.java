@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.api.render;
 
+import com.m_w_k.gtcefucontent.client.renderer.texture.cube.AxisAlignedCubeRenderer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -17,9 +18,9 @@ public final class GTCEFuCTextures {
     public static SimpleOverlayRenderer PLASMA_PIPE_CASING;
     public static SimpleOverlayRenderer PRESSURE_CASING;
 
-    public static final List<SimpleOverlayRenderer> HEU_COMPONENT_EMPTY_OVERLAYS = new ArrayList<>(5);
-    public static final List<SimpleOverlayRenderer> HEU_COMPONENT_FULL_OVERLAYS = new ArrayList<>(5);
-    public static final List<SimpleOverlayRenderer> HEU_COMPONENT_ACTIVE_OVERLAYS = new ArrayList<>(5);
+    public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_EMPTY_OVERLAYS = new ArrayList<>(5);
+    public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_FULL_OVERLAYS = new ArrayList<>(5);
+    public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_ACTIVE_OVERLAYS = new ArrayList<>(5);
 
     private GTCEFuCTextures() {}
 
@@ -33,9 +34,9 @@ public final class GTCEFuCTextures {
                 "pipe_holder_standard", "pipe_holder_conductive", "pipe_holder_expanded"};
 
         for (String heuComponentName : heuComponentNames) {
-            HEU_COMPONENT_EMPTY_OVERLAYS.add(new SimpleOverlayRenderer("overlay/machine/heu/empty_" + heuComponentName));
-            HEU_COMPONENT_FULL_OVERLAYS.add(new SimpleOverlayRenderer("overlay/machine/heu/full_" + heuComponentName));
-            HEU_COMPONENT_ACTIVE_OVERLAYS.add(new SimpleOverlayRenderer("overlay/machine/heu/active_" + heuComponentName));
+            HEU_COMPONENT_EMPTY_OVERLAYS.add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/empty"));
+            HEU_COMPONENT_FULL_OVERLAYS.add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/full"));
+            HEU_COMPONENT_ACTIVE_OVERLAYS.add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/active"));
         }
     }
 }
