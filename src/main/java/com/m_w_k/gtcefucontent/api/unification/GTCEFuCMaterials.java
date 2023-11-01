@@ -49,7 +49,7 @@ public class GTCEFuCMaterials {
 
         {
             this.put("eutectic_csnak_alloy", new int[] { 195, 293, 1237, 200000 });
-            this.put("eutectic_enriched_naquadah_gallium_csk_alloy", new int[] { 270, 293, 9419, 500000 });
+            this.put("eutectic_enriched_naquadah_gallium_csk_alloy", new int[] { 270, 293, 7419, 500000 });
         }
     };
 
@@ -140,7 +140,7 @@ public class GTCEFuCMaterials {
     private static void populateEutecticMap() {
         // 194K to 1238K (boiling point is made up, but this is a real eutectic mixture)
         EutecticAlloys.put(EutecticCaesiumSodiumPotassium, EutecticAlloysString.get("eutectic_csnak_alloy"));
-        // 269K to 9420K
+        // 269K to 7420K
         EutecticAlloys.put(EutecticCaesiumPotassiumGalliumNaquadahEnriched,
                 EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"));
     }

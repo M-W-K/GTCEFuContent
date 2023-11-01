@@ -50,7 +50,7 @@ gtcefucontent.machine.heat_exchanger.small.name=Small Heat Exchanger
 gtcefucontent.machine.heat_exchanger.medium.name=Medium Heat Exchanger
 gtcefucontent.machine.heat_exchanger.large.name=Large Heat Exchanger
 gtcefucontent.machine.heat_exchanger.info=Holds %s Heat Exchanger Units.
-gregtech.multiblock.heat_exchanger.small.description=All contained HEUs must be identical. The maximum temperature fluid a HEU can handle is equivalent to the maximum temperature of its piping. The processing speed of an exchange is proportional to the square root of the piping flow rate. The piping length required for a recipe is equivalent to the geometric average of the component fluid temperature differences.
+gregtech.multiblock.heat_exchanger.small.description=All exchanges must involve at least one eutectic mixture. All contained HEUs must be identical. The maximum temperature fluid a HEU can handle is equivalent to the maximum temperature of its piping. The processing speed of an exchange is proportional to the square root of the piping flow rate. The piping length required for a recipe is equivalent to the geometric average of the component fluid temperature differences.
 gtcefucontent.machine.heu_endpoint.standard.name=Standard HEU Endpoint
 gtcefucontent.machine.heu_endpoint.standard.tooltip=No special effects. All HEU piping & pipe holders must be the same. Requires a stack of tiny pipe.
 gtcefucontent.machine.heu_endpoint.returning.name=Returning HEU Endpoint
@@ -71,7 +71,7 @@ tile.advanced_casing.null_field_casing.name=Null-Field Casing
 gtcefucontent.material.caesium_chlorine_mix=Caesium-Chlorine Mixture
 gtcefucontent.material.charged_ender=Charged Ender
 gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
-gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Naquadah Caesium-Potassium-Gallium Mixture
+gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Caesium-Potassium Mixture
 
 gtcefucontent.fluid.hot=Hot %s
 gtcefucontent.fluid.cold=Cold %s
