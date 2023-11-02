@@ -4,7 +4,7 @@ import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlags;
 
-public class GTCEFuCMaterialFlagAddition {
+public final class GTCEFuCMaterialFlagAddition {
 
     private GTCEFuCMaterialFlagAddition() {}
 

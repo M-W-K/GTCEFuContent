@@ -12,7 +12,7 @@ import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 
-public class GTCEFuCSympatheticCombustorRecipes {
+public final class GTCEFuCSympatheticCombustorRecipes {
 
     private GTCEFuCSympatheticCombustorRecipes() {}
 

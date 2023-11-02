@@ -25,7 +25,7 @@ import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.loaders.recipe.CraftingComponent;
 
-public class ForgingFurnaceRecipeProducer {
+public final class ForgingFurnaceRecipeProducer {
 
     public static final ForgingFurnaceRecipeProducer DEFAULT_PRODUCER = new ForgingFurnaceRecipeProducer();
 

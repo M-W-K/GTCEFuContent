@@ -16,7 +16,7 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.stack.MaterialStack;
 
-public class GTCEFuCForgingFurnaceRecipes {
+public final class GTCEFuCForgingFurnaceRecipes {
 
     private GTCEFuCForgingFurnaceRecipes() {}
 

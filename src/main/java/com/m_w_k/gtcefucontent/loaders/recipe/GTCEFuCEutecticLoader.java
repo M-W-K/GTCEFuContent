@@ -13,7 +13,7 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 
-public class GTCEFuCEutecticLoader {
+public final class GTCEFuCEutecticLoader {
 
     private GTCEFuCEutecticLoader() {}
 

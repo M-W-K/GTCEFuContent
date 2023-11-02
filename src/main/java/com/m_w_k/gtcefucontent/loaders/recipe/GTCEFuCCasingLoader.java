@@ -21,7 +21,7 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
 
-public class GTCEFuCCasingLoader {
+public final class GTCEFuCCasingLoader {
 
     public static void init() {
         ModHandler.addShapedRecipe(true, "casing_indestructible", GTCEFuCMetaBlocks.HARDENED_CASING

@@ -13,7 +13,7 @@ import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidP
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 
-public class GTCEFuCHeatExchangerLoader {
+public final class GTCEFuCHeatExchangerLoader {
 
     private GTCEFuCHeatExchangerLoader() {}
 

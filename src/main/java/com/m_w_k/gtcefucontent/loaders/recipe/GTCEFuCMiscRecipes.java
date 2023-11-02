@@ -22,7 +22,7 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
 
-public class GTCEFuCMiscRecipes {
+public final class GTCEFuCMiscRecipes {
 
     private GTCEFuCMiscRecipes() {}
 

@@ -7,7 +7,7 @@ import stanhebben.zenscript.annotations.ZenProperty;
 
 @ZenClass("mods.gtcefucontent.material.FluidTypes")
 @ZenRegister
-public class GTCEFuCFluidTypes {
+public final class GTCEFuCFluidTypes {
 
     @ZenProperty
     public static final FluidType HOT = new FluidTypeHot("hot", null, "hot", "gtcefucontent.fluid.hot");

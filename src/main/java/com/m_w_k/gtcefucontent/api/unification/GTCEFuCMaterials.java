@@ -24,7 +24,7 @@ import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 
-public class GTCEFuCMaterials {
+public final class GTCEFuCMaterials {
 
     public static Material EutecticCaesiumSodiumPotassium;
     public static Material EutecticCaesiumPotassiumGalliumNaquadahEnriched;

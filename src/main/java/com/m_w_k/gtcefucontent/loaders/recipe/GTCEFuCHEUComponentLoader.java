@@ -14,7 +14,7 @@ import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
 import gregtech.common.metatileentities.MetaTileEntities;
 
-public class GTCEFuCHEUComponentLoader {
+public final class GTCEFuCHEUComponentLoader {
 
     private GTCEFuCHEUComponentLoader() {}
 

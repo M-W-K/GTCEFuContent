@@ -10,7 +10,7 @@ import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import gregtech.api.unification.material.event.MaterialEvent;
 
 @Mod.EventBusSubscriber(modid = GTCEFuContent.MODID)
-public class GTCEFuCEventHandlers {
+public final class GTCEFuCEventHandlers {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void registerMaterials(MaterialEvent event) {

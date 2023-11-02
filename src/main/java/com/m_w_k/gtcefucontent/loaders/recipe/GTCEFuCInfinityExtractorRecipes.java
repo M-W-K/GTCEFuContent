@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import crazypants.enderio.base.init.ModObject;
 import gregtech.api.GTValues;
 
-public class GTCEFuCInfinityExtractorRecipes {
+public final class GTCEFuCInfinityExtractorRecipes {
 
     private GTCEFuCInfinityExtractorRecipes() {}
 

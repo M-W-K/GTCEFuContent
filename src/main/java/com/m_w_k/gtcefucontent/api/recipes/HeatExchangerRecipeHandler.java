@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 
-public class HeatExchangerRecipeHandler {
+public final class HeatExchangerRecipeHandler {
 
     /**
      * Approximate conversion of heat units to EU, assuming that the fluid heater is perfectly efficient.

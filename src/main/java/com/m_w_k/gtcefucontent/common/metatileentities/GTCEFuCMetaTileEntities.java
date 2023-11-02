@@ -13,7 +13,7 @@ import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart
 
 import gregtech.api.GTValues;
 
-public class GTCEFuCMetaTileEntities {
+public final class GTCEFuCMetaTileEntities {
 
     public static MetaTileEntityInfinityExtractor INFINITY_EXTRACTOR;
     public static MetaTileEntityPneumaticInfuser PNEUMATIC_INFUSER;

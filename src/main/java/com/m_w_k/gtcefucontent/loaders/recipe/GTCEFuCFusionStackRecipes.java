@@ -14,7 +14,7 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.recipes.builders.FusionRecipeBuilder;
 import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
 
-public class GTCEFuCFusionStackRecipes {
+public final class GTCEFuCFusionStackRecipes {
 
     private GTCEFuCFusionStackRecipes() {}
 

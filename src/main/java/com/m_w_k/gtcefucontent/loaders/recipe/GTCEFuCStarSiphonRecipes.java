@@ -15,7 +15,7 @@ import gregtech.api.recipes.ingredients.nbtmatch.NBTMatcher;
 import gregtech.api.unification.material.Materials;
 import moze_intel.projecte.gameObjs.items.ItemPE;
 
-public class GTCEFuCStarSiphonRecipes {
+public final class GTCEFuCStarSiphonRecipes {
 
     private GTCEFuCStarSiphonRecipes() {}
 
