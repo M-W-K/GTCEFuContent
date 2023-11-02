@@ -3,14 +3,11 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpar
 import java.io.IOException;
 import java.util.List;
 
-import gregtech.api.capability.GregtechDataCodes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
@@ -27,6 +24,7 @@ import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntity
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
+import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.SlotWidget;
@@ -265,7 +263,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
             if (getWorld() != null && !getWorld().isRemote) {
                 writeCustomData(GregtechDataCodes.UPDATE_ITEM_COUNT, this::syncWrite);
             } else {
-            this.scheduleRenderUpdate();
+                this.scheduleRenderUpdate();
             }
             this.validPiping = validity;
         }

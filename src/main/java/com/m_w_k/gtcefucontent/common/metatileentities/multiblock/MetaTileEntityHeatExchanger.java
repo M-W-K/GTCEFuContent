@@ -153,7 +153,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             case 8 -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
                     .aisle("#IIXII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#")
                     .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
-                    .aisle("CCCCCCC", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "CCCCCCC").setRepeatable(4, 16)
+                    .aisle("CCCCCCC", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "CCCCCCC")
+                    .setRepeatable(4, 16)
                     .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
                     .aisle("#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#")
                     .where('I', stateIndex(0).setMinGlobalLimited(12).or(autoAbilities(true, false))
@@ -345,11 +346,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         private int recipeProgress;
         private FluidStack fluidAInitial;
         private FluidStack fluidAFinal;
-        private int fluidADisplayMult;
         private long fluidAThermalEnergy;
         private FluidStack fluidBInitial;
         private FluidStack fluidBFinal;
-        private int fluidBDisplayMult;
         private long fluidBThermalEnergy;
         private int requiredPipeLength;
 
@@ -478,11 +477,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             this.validRecipe = false;
             this.fluidAInitial = null;
             this.fluidAFinal = null;
-            this.fluidADisplayMult = 0;
             this.fluidAThermalEnergy = 0;
             this.fluidBInitial = null;
             this.fluidBFinal = null;
-            this.fluidBDisplayMult = 0;
             this.fluidBThermalEnergy = 0;
             this.requiredPipeLength = 0;
             this.invalidReason = "";
@@ -542,7 +539,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 if (!(hasFluidAmount(this.fluidAInitial.getFluid(),
                         this.fluidAInitial.amount * this.pipeVolModifier * this.controller.hEUCount) &&
                         hasFluidAmount(this.fluidBInitial.getFluid(),
-                                this.fluidBInitial.amount * this.pipeVolModifier *  this.controller.hEUCount))) {
+                                this.fluidBInitial.amount * this.pipeVolModifier * this.controller.hEUCount))) {
                     // kill the recipe if we don't have enough stuff
                     this.resetRecipe();
                 }
@@ -563,16 +560,12 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                         exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable.getKey(), heatable.getKey());
                         if (exchangeData != null) {
                             // we found a recipe!
-                            int amountA = exchangeData.getFirst()[0];
-                            int amountB = exchangeData.getFirst()[1];
                             Tuple<FluidStack, long[]> A = cooling_map.get(coolable.getKey());
                             Tuple<FluidStack, long[]> B = heating_map.get(heatable.getKey());
                             fluidAInitial = new FluidStack(coolable.getKey(), (int) A.getSecond()[0]);
                             fluidBInitial = new FluidStack(heatable.getKey(), (int) B.getSecond()[0]);
                             fluidAFinal = A.getFirst();
                             fluidBFinal = B.getFirst();
-                            fluidADisplayMult = amountA / (int) A.getSecond()[0];
-                            fluidBDisplayMult = amountB / (int) B.getSecond()[0];
                             fluidAThermalEnergy = A.getSecond()[1];
                             fluidBThermalEnergy = B.getSecond()[1];
                             this.requiredPipeLength = (int) Math.sqrt(GTCEFuCUtil.geometricMean(

@@ -216,7 +216,7 @@ public class HeatExchangerRecipeHandler {
     /**
      * Register a fluid as a variant of a eutectic alloy.
      * 
-     * @param fluids The fluids to register.
+     * @param fluidNames The fluids to register.
      */
     @SuppressWarnings("SimplifyStreamApiCallChains")
     public static void addEutectic(String... fluidNames) {

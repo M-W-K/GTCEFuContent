@@ -15,7 +15,6 @@ import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.unification.material.MarkerMaterial;
 import gregtech.api.unification.material.MarkerMaterials;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
@@ -104,7 +103,7 @@ public final class GTCEFuCRecipeLoader {
         MetaItem<?>.MetaValueItem[] pumps = { MetaItems.ELECTRIC_PUMP_LuV, MetaItems.ELECTRIC_PUMP_ZPM,
                 MetaItems.ELECTRIC_PUMP_UV };
         Material[] pipeMaterials = { Materials.NiobiumTitanium, Materials.Europium, Materials.Duranium };
-        Material[] tiers = {MarkerMaterials.Tier.LuV, MarkerMaterials.Tier.ZPM, MarkerMaterials.Tier.UV};
+        Material[] tiers = { MarkerMaterials.Tier.LuV, MarkerMaterials.Tier.ZPM, MarkerMaterials.Tier.UV };
         for (int i = 0; i < 3; i++) {
             ItemStack controller = GTCEFuCMetaTileEntities.HEAT_EXCHANGER[i].getStackForm();
             ModHandler.addShapedRecipe(true, controller.getTranslationKey(), controller,

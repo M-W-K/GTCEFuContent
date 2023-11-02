@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import gregtech.api.fluids.fluidType.FluidTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
@@ -21,6 +20,7 @@ import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidP
 
 import gregicality.multiblocks.api.fluids.GCYMMetaFluids;
 import gregtech.api.fluids.MetaFluids;
+import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
 
