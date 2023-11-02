@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
-import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbilities;
+import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbility;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.client.renderer.texture.cube.AxisAlignedCubeRenderer;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityHeatExchanger;
@@ -119,7 +119,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
 
     @Override
     public MultiblockAbility<IHEUComponent> getAbility() {
-        return GTCEFuCMultiBlockAbilities.HEU_COMPONENT;
+        return GTCEFuCMultiBlockAbility.HEU_COMPONENT;
     }
 
     public void registerAbilities(List<IHEUComponent> abilityList) {

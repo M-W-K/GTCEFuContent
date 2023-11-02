@@ -1,8 +1,9 @@
 package com.m_w_k.gtcefucontent.api.recipes;
 
+import java.awt.List;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -22,6 +23,7 @@ public class HeatExchangerRecipeHandler {
 
     private static final Map<Fluid, Tuple<FluidStack, long[]>> HEATING_MAP = new HashMap<>();
     private static final Map<Fluid, Tuple<FluidStack, long[]>> COOLING_MAP = new HashMap<>();
+    private static final Set<Fluid> EUTECTICS = new HashSet<>();
 
     /**
      * Registers a two-way heat exchange. Use this overload for simple fluid heating and cooling.
@@ -209,5 +211,23 @@ public class HeatExchangerRecipeHandler {
     public static Map<Fluid, Tuple<FluidStack, long[]>> getHeatingMapCopy() {
         // We don't want people to be able to modify the map directly
         return new HashMap<>(HEATING_MAP);
+    }
+
+    /**
+     * Register a fluid as an instance of a eutectic alloy.
+     * @param fluids The fluids to register.
+     */
+    @SuppressWarnings("SimplifyStreamApiCallChains")
+    public static void addEutectic(Fluid... fluids) {
+        EUTECTICS.addAll(Arrays.stream(fluids).collect(Collectors.toList()));
+    }
+
+    /**
+     * Check if a given fluid is a eutectic alloy.
+     * @param fluid The fluid to check.
+     * @return Whether the fluid is a eutectic alloy.
+     */
+    public static boolean isEutectic(Fluid fluid) {
+        return EUTECTICS.contains(fluid);
     }
 }

@@ -62,7 +62,7 @@ gtcefucontent.machine.heu_pipe_holder.conductive.tooltip=Provides §f2m§7 of HE
 gtcefucontent.machine.heu_pipe_holder.expanded.name=Expanded HEU Pipe Holder
 gtcefucontent.machine.heu_pipe_holder.expanded.tooltip=Provides §f3m§7 of HEU piping. Requires two stacks of tiny pipe.
 
-gtcefucontent.multiblock.heat_exchanger.display.info=Stats: %sm piping, %sK temperature limit, %sx processing amount factor, %sx recipe time factor.
+gtcefucontent.multiblock.heat_exchanger.display.info=Stats: %sm of piping, processing amount factor of %sx, recipe time factor of %sx.
 gtcefucontent.multiblock.heat_exchanger.display.info.energy=%s kJ of thermal energy cached.
 gtcefucontent.multiblock.heat_exchanger.display.info.recipe=Current exchanger recipe information:
 gtcefucontent.multiblock.heat_exchanger.display.info.pipe=Requires %sm of piping.
@@ -76,8 +76,10 @@ gtcefucontent.multiblock.heat_exchanger.display.error.material=A HEU component h
 gtcefucontent.multiblock.heat_exchanger.display.error.conflict=A pipe holder has a conflicting pipe material. All pipes in all HEU components must be of the same material.
 gtcefucontent.multiblock.heat_exchanger.display.error.endpoints=Invalid endpoint placement. Ensure all HEUs have an identical endpoint layout, including direction.
 gtcefucontent.multiblock.heat_exchanger.display.error.recipe=The current recipe is either undefined or invalid.
-gtcefucontent.multiblock.heat_exchanger.display.error.temp=The temperature of a recipe input is too hot for the piping.
+gtcefucontent.multiblock.heat_exchanger.display.error.fluid=The internal piping cannot handle one of the recipe fluids.
 gtcefucontent.multiblock.heat_exchanger.display.error.len=Recipe requires longer piping.
+gtcefucontent.multiblock.heat_exchanger.display.error.eutectic=All heat exchanges must involve at least one eutectic mixture.
+
 
 tile.hardened_casing.indestructible_casing.name=Indestructible Casing
 tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing

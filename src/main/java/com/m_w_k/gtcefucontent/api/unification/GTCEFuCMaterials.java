@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import net.minecraft.util.ResourceLocation;
 
 import com.m_w_k.gtcefucontent.api.fluids.fluidType.GTCEFuCFluidTypes;
@@ -20,6 +21,7 @@ import gregicality.multiblocks.api.fluids.GCYMMetaFluids;
 import gregtech.api.fluids.MetaFluids;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconSet;
+import net.minecraftforge.fluids.Fluid;
 
 public class GTCEFuCMaterials {
 
@@ -127,13 +129,18 @@ public class GTCEFuCMaterials {
             MetaFluids.setMaterialFluidTexture(eutecticAlloy, GTCEFuCFluidTypes.COLD,
                     new ResourceLocation("gregtech", "blocks/material_sets/fluid/fluid"));
 
+            Fluid cold = MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.COLD,
+                    EutecticAlloys.get(eutecticAlloy)[0],
+                    false);
+            Fluid hot = MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.HOT,
+                    EutecticAlloys.get(eutecticAlloy)[2],
+                    false);
             eutecticAlloy.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID).setFluidCold(
-                    MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.COLD,
-                            EutecticAlloys.get(eutecticAlloy)[0],
-                            false));
+                    cold);
             eutecticAlloy.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID).setFluidHot(
-                    MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.HOT, EutecticAlloys.get(eutecticAlloy)[2],
-                            false));
+                    hot);
+
+            HeatExchangerRecipeHandler.addEutectic(cold, eutecticAlloy.getFluid(), hot);
         }
     }
 

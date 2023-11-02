@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import gregtech.api.capability.*;
+import gregtech.api.fluids.MaterialFluid;
+import gregtech.api.fluids.fluidType.FluidTypes;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -29,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
-import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbilities;
+import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbility;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
@@ -38,10 +41,6 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregicality.multiblocks.api.render.GCYMTextures;
-import gregtech.api.capability.GregtechDataCodes;
-import gregtech.api.capability.GregtechTileCapabilities;
-import gregtech.api.capability.IControllable;
-import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -100,7 +99,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         super.formStructure(context);
         this.inputFluidInventory = new FluidTankList(false, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
         this.outputFluidInventory = new FluidTankList(true, getAbilities(MultiblockAbility.EXPORT_FLUIDS));
-        this.heuHandler.onStructureForm(getAbilities(GTCEFuCMultiBlockAbilities.HEU_COMPONENT));
+        this.heuHandler.onStructureForm(getAbilities(GTCEFuCMultiBlockAbility.HEU_COMPONENT));
     }
 
     @Override
@@ -318,8 +317,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         private IHEUComponent.HEUComponentType pipeHolderVariant;
         private int reflectionCount;
         private int pipeLength;
-        private Material pipeMaterial;
-        private int pipeMaxTemperature;
+        private FluidPipeProperties pipeProperty;
         private int pipeVolModifier;
         private double durationModifier;
         private long thermalEnergy;
@@ -366,18 +364,20 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 // check for internal piping
                 if (!component.hasValidPiping()) {
                     invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.fill");
-                } else if (this.pipeMaterial == null) {
+                } else {
                     Material material = component.getPipeMaterial();
                     if (material != null) {
                         FluidPipeProperties properties = material.getProperty(PropertyKey.FLUID_PIPE);
                         if (properties != null) {
-                            this.pipeMaxTemperature = properties.getMaxFluidTemperature();
-                            this.pipeVolModifier = (int) Math.sqrt(properties.getThroughput());
-                        } else invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.material");
-                    } else invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.material");
-                } else {
-                    if (component.getPipeMaterial() != pipeMaterial)
-                        invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.conflict");
+                            if (this.pipeProperty == null) {
+                                this.pipeProperty = properties;
+                                this.pipeVolModifier = (int) Math.sqrt(properties.getThroughput());
+                            } else if (properties != pipeProperty)
+                                invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.conflict");
+                        } else
+                            invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.material");
+                    } else
+                        invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.material");
                 }
                 // If our grid has become invalid, stop building it
                 if (!this.validGrid) break;
@@ -457,8 +457,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             this.pipeHolderVariant = null;
             this.reflectionCount = 0;
             this.pipeLength = 0;
-            this.pipeMaterial = null;
-            this.pipeMaxTemperature = 0;
+            this.pipeProperty = null;
             this.pipeVolModifier = 0;
             this.durationModifier = 0;
             this.thermalEnergy = 0;
@@ -579,18 +578,44 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         }
 
         private void finalRecipeCheck() {
-            if (fluidAInitial.getFluid().getTemperature() > this.pipeMaxTemperature ||
-                    fluidBInitial.getFluid().getTemperature() > this.pipeMaxTemperature) {
-                invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.temp");
+            if (canFlowCheck(this.fluidAInitial) || canFlowCheck(this.fluidAFinal)
+                    || canFlowCheck(this.fluidBInitial) || canFlowCheck(this.fluidBFinal)) {
+                invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.fluid");
                 return;
             }
             if (this.requiredPipeLength > this.pipeLength * (this.reflectionCount + 1)) {
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.len");
                 return;
             }
-            // TODO Eutectic check
+            if (!(HeatExchangerRecipeHandler.isEutectic(fluidAInitial.getFluid())
+                    && HeatExchangerRecipeHandler.isEutectic(fluidBInitial.getFluid()))) {
+                invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.eutectic");
+                return;
+            }
             // do another validity check to ensure we have sufficient input amounts in our tanks
             this.validRecipe = checkRecipeValidity();
+        }
+
+        // modified code from TileEntityFluidPipeTickable
+        private boolean canFlowCheck(FluidStack stack) {
+            Fluid fluid = stack.getFluid();
+
+            boolean burning = this.pipeProperty.getMaxFluidTemperature() < fluid.getTemperature(stack);
+            boolean leaking = !this.pipeProperty.isGasProof() && fluid.isGaseous(stack);
+            boolean shattering = !this.pipeProperty.isCryoProof() && fluid.getTemperature() < IPropertyFluidFilter.CRYOGENIC_TEMPERATURE_THRESHOLD;
+            boolean corroding = false;
+            boolean melting = false;
+
+            if (fluid instanceof MaterialFluid materialFluid) {
+                corroding = !this.pipeProperty.isAcidProof() && materialFluid.getFluidType().equals(FluidTypes.ACID);
+                melting = !this.pipeProperty.isPlasmaProof() && materialFluid.getFluidType().equals(FluidTypes.PLASMA);
+
+                // carrying plasmas which are too hot when plasma proof does not burn pipes
+                if (burning && this.pipeProperty.isPlasmaProof() && materialFluid.getFluidType().equals(FluidTypes.PLASMA))
+                    burning = false;
+            }
+
+            return !burning && !leaking && !corroding && !shattering && !melting;
         }
 
         private boolean hasFluidAmount(Fluid fluid, int amount) {
@@ -635,7 +660,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         public void addInfo(List<ITextComponent> textList) {
             if (validGrid) {
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info",
-                        this.pipeLength, this.pipeMaxTemperature, this.pipeVolModifier,
+                        this.pipeLength, this.pipeVolModifier,
                         Math.floor(this.durationModifier * 100) / 100));
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.energy",
                         this.thermalEnergy / 1000));
