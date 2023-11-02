@@ -134,7 +134,7 @@ public class HeatExchangerRecipeHandler {
      * @param fluidA The first fluid
      * @param fluidB The second fluid
      * @return A tuple of arrays, where the first array is the required amount of fluidA and fluidB respectively,
-     *         and the second array is the output FluidStacks. If the conversion cannot be done, returns null.
+     *         and the second array is the output FluidStacks in order. If the conversion cannot be done, returns null.
      */
     @Nullable
     public static Tuple<int[], FluidStack[]> getHeatExchange(Fluid fluidA, Fluid fluidB) {
@@ -160,12 +160,12 @@ public class HeatExchangerRecipeHandler {
 
         if (heatA) {
             // We can't heat A to more than B's starting temp, and we can't cool B to less than A's starting temp
-            if (A.getFirst().getFluid().getTemperature() >= fluidB.getTemperature()
-                    || B.getFirst().getFluid().getTemperature() <= fluidA.getTemperature()) return null;
+            if (A.getFirst().getFluid().getTemperature() > fluidB.getTemperature()
+                    || B.getFirst().getFluid().getTemperature() < fluidA.getTemperature()) return null;
         } else {
             // We can't cool A to less than B's starting temp, and we can't heat B to more than A's starting temp
-            if (A.getFirst().getFluid().getTemperature() <= fluidB.getTemperature()
-                    || B.getFirst().getFluid().getTemperature() >= fluidA.getTemperature()) return null;
+            if (A.getFirst().getFluid().getTemperature() < fluidB.getTemperature()
+                    || B.getFirst().getFluid().getTemperature() > fluidA.getTemperature()) return null;
         }
 
         long factorA = A.getSecond()[1];
@@ -182,11 +182,23 @@ public class HeatExchangerRecipeHandler {
         return new Tuple<>(new int[] { amountA, amountB }, new FluidStack[] { outA, outB });
     }
 
+    /**
+     * Gets a copy of the cooling map. The key is the fluid the exchange takes in,
+     * the FluidStack is the fluid the exchange puts out,
+     * and the long[] encodes the amount of input fluid and the thermal energy of the exchange.
+     * @return Copy of the cooling map.
+     */
     public static Map<Fluid, Tuple<FluidStack, long[]>> getCoolingMapCopy() {
         // We don't want people to be able to modify the map directly
         return new HashMap<>(COOLING_MAP);
     }
 
+    /**
+     * Gets a copy of the heating map. The key is the fluid the exchange takes in,
+     * the FluidStack is the fluid the exchange puts out,
+     * and the long[] encodes the amount of input fluid and the thermal energy of the exchange.
+     * @return Copy of the heating map.
+     */
     public static Map<Fluid, Tuple<FluidStack, long[]>> getHeatingMapCopy() {
         // We don't want people to be able to modify the map directly
         return new HashMap<>(HEATING_MAP);

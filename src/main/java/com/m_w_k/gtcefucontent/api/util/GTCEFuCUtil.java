@@ -9,6 +9,9 @@ import com.m_w_k.gtcefucontent.GTCEFuContent;
 import crazypants.enderio.base.init.ModObject;
 import gregtech.api.metatileentity.MetaTileEntity;
 
+import java.util.Arrays;
+import java.util.OptionalDouble;
+
 public final class GTCEFuCUtil {
 
     private static Boolean stellarAlloyPresent = null;
@@ -43,5 +46,13 @@ public final class GTCEFuCUtil {
                 .offset(controller.getFrontFacing(), z)
                 .offset(controller.getFrontFacing().getOpposite().rotateY(), x)
                 .offset(EnumFacing.UP, y);
+    }
+
+    public static double geometricMean(double... numbers) {
+        OptionalDouble total = Arrays.stream(numbers).reduce((a, b) -> a * b);
+        if (total.isPresent()) {
+            return Math.pow(total.getAsDouble(), 1D / numbers.length);
+        }
+        else return 0;
     }
 }

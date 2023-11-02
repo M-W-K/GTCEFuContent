@@ -1,6 +1,7 @@
 package com.m_w_k.gtcefucontent.api.capability;
 
 import gregtech.api.unification.material.Material;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -8,6 +9,11 @@ import javax.annotation.Nullable;
 
 public interface IHEUComponent extends IItemHandlerModifiable {
     boolean hasValidPiping();
+
+    /**
+     * Internal use only
+     */
+    BlockPos getPos();
     @Nullable
     Material getPipeMaterial();
     HEUComponentType getComponentType();
