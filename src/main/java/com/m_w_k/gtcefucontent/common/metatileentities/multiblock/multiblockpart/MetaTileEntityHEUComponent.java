@@ -1,17 +1,31 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
+import java.io.IOException;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
 import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbilities;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.client.renderer.texture.cube.AxisAlignedCubeRenderer;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityHeatExchanger;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.SlotWidget;
-import gregtech.api.items.materialitem.MetaPrefixItem;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockAbilityPart;
@@ -21,21 +35,9 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.MaterialStack;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.util.List;
-
-public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart implements IMultiblockAbilityPart<IHEUComponent>, IHEUComponent {
+public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
+                                        implements IMultiblockAbilityPart<IHEUComponent>, IHEUComponent {
 
     private final HEUComponentType type;
     private boolean validPiping = false;
@@ -109,7 +111,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart imp
             // WE are the item handler
             builder.widget(new SlotWidget(this, x,
                     gridStartX + x * 18, 18, true, true)
-                    .setBackgroundTexture(GuiTextures.SLOT, GuiTextures.PIPE_OVERLAY_1));
+                            .setBackgroundTexture(GuiTextures.SLOT, GuiTextures.PIPE_OVERLAY_1));
         }
 
         return builder.bindPlayerInventory(player.inventory, GuiTextures.SLOT, inventoryStartX, inventoryStartY);

@@ -6,18 +6,18 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 
 public class HeatExchangerRecipeHandler {
 
     /**
      * Approximate conversion of heat units to EU, assuming that the fluid heater is perfectly efficient.
-      */
+     */
     public static final long HEU = GTCEFuCHeatExchangerLoader.waterVaporizationEnergy / 150;
 
     private static final Map<Fluid, Tuple<FluidStack, long[]>> HEATING_MAP = new HashMap<>();
@@ -109,8 +109,9 @@ public class HeatExchangerRecipeHandler {
 
     /**
      * Removes the heat exchange associated with a given fluid.
+     * 
      * @param fluid The fluid to remove the heat exchange for.
-     * @param type Which types of exchange to remove
+     * @param type  Which types of exchange to remove
      */
     public static void removeHeatExchange(Fluid fluid, ExchangeType type) {
         switch (type) {
@@ -124,7 +125,9 @@ public class HeatExchangerRecipeHandler {
     }
 
     public enum ExchangeType {
-        HEATING, COOLING, BOTH
+        HEATING,
+        COOLING,
+        BOTH
     }
 
     /**
@@ -160,12 +163,14 @@ public class HeatExchangerRecipeHandler {
 
         if (heatA) {
             // We can't heat A to more than B's starting temp, and we can't cool B to less than A's starting temp
-            if (A.getFirst().getFluid().getTemperature() > fluidB.getTemperature()
-                    || B.getFirst().getFluid().getTemperature() < fluidA.getTemperature()) return null;
+            if (A.getFirst().getFluid().getTemperature() > fluidB.getTemperature() ||
+                    B.getFirst().getFluid().getTemperature() < fluidA.getTemperature())
+                return null;
         } else {
             // We can't cool A to less than B's starting temp, and we can't heat B to more than A's starting temp
-            if (A.getFirst().getFluid().getTemperature() < fluidB.getTemperature()
-                    || B.getFirst().getFluid().getTemperature() > fluidA.getTemperature()) return null;
+            if (A.getFirst().getFluid().getTemperature() < fluidB.getTemperature() ||
+                    B.getFirst().getFluid().getTemperature() > fluidA.getTemperature())
+                return null;
         }
 
         long factorA = A.getSecond()[1];
@@ -186,6 +191,7 @@ public class HeatExchangerRecipeHandler {
      * Gets a copy of the cooling map. The key is the fluid the exchange takes in,
      * the FluidStack is the fluid the exchange puts out,
      * and the long[] encodes the amount of input fluid and the thermal energy of the exchange.
+     * 
      * @return Copy of the cooling map.
      */
     public static Map<Fluid, Tuple<FluidStack, long[]>> getCoolingMapCopy() {
@@ -197,6 +203,7 @@ public class HeatExchangerRecipeHandler {
      * Gets a copy of the heating map. The key is the fluid the exchange takes in,
      * the FluidStack is the fluid the exchange puts out,
      * and the long[] encodes the amount of input fluid and the thermal energy of the exchange.
+     * 
      * @return Copy of the heating map.
      */
     public static Map<Fluid, Tuple<FluidStack, long[]>> getHeatingMapCopy() {

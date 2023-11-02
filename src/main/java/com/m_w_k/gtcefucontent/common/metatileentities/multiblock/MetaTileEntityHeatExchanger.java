@@ -1,35 +1,11 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
-import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
-import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbilities;
-import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
-import gregicality.multiblocks.api.render.GCYMTextures;
-import gregtech.api.capability.*;
-import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.metatileentity.IDataInfoProvider;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.*;
-import gregtech.api.pattern.BlockPattern;
-import gregtech.api.pattern.FactoryBlockPattern;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.properties.FluidPipeProperties;
-import gregtech.api.unification.material.properties.PropertyKey;
-import gregtech.api.util.RelativeDirection;
-import gregtech.api.util.TextFormattingUtil;
-import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.ConfigHolder;
-import gregtech.common.blocks.*;
-import gregtech.core.sound.GTSoundEvents;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -49,12 +25,48 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
+import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbilities;
+import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
+import gregicality.multiblocks.api.render.GCYMTextures;
+import gregtech.api.capability.GregtechDataCodes;
+import gregtech.api.capability.GregtechTileCapabilities;
+import gregtech.api.capability.IControllable;
+import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.metatileentity.IDataInfoProvider;
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.MultiblockAbility;
+import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
+import gregtech.api.pattern.BlockPattern;
+import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
+import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.properties.FluidPipeProperties;
+import gregtech.api.unification.material.properties.PropertyKey;
+import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextFormattingUtil;
+import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.texture.Textures;
+import gregtech.common.ConfigHolder;
+import gregtech.common.blocks.BlockCleanroomCasing;
+import gregtech.common.blocks.BlockGlassCasing;
+import gregtech.common.blocks.BlockMetalCasing;
+import gregtech.common.blocks.MetaBlocks;
+import gregtech.core.sound.GTSoundEvents;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase implements IDataInfoProvider, IControllable {
 
@@ -123,10 +135,11 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                     .where('P', metaTileEntities(GTCEFuCMetaTileEntities.HEU_HOLDERS))
                     .where('X', selfPredicate())
                     .where('#', any());
-            case 7 -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.DOWN, RelativeDirection.FRONT)
+            case 7 -> FactoryBlockPattern
+                    .start(RelativeDirection.RIGHT, RelativeDirection.DOWN, RelativeDirection.FRONT)
                     .aisle("#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#")
                     .aisle("CCCCCC", "GEEEEG", "GEEEEG", "GEEEEG", "GEEEEG", "CCCCCC")
-                    .aisle("CCCCCC", "GPPPPG", "GPPPPG", "GPPPPG", "GPPPPG", "CCCCCC")//.setRepeatable(1, 16)
+                    .aisle("CCCCCC", "GPPPPG", "GPPPPG", "GPPPPG", "GPPPPG", "CCCCCC")// .setRepeatable(1, 16)
                     .aisle("CCCCCC", "GEEEEG", "GEEEEG", "GEEEEG", "GEEEEG", "CCCCCC")
                     .aisle("#IXII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#")
                     .where('I', stateIndex(0).setMinGlobalLimited(12).or(autoAbilities(true, false))
@@ -138,10 +151,12 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                     .where('P', metaTileEntities(GTCEFuCMetaTileEntities.HEU_HOLDERS))
                     .where('X', selfPredicate())
                     .where('#', any());
-            case 8 -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.DOWN, RelativeDirection.FRONT)
+            case 8 -> FactoryBlockPattern
+                    .start(RelativeDirection.RIGHT, RelativeDirection.DOWN, RelativeDirection.FRONT)
                     .aisle("#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#")
                     .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
-                    .aisle("CCCCCCC", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "CCCCCCC")//.setRepeatable(1, 16)
+                    .aisle("CCCCCCC", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "CCCCCCC")// .setRepeatable(1,
+                                                                                                       // 16)
                     .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
                     .aisle("#IIXII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#")
                     .where('I', stateIndex(0).setMinGlobalLimited(12).or(autoAbilities(true, false))
@@ -179,11 +194,13 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
     @Override
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
-        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(), this.isActive(), this.isWorkingEnabled());
+        this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
+                this.isActive(), this.isWorkingEnabled());
     }
 
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gtcefucontent.machine.heat_exchanger.info",
                 this.hEUCount));
@@ -200,8 +217,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         List<ITextComponent> list = new ArrayList<>();
         if (ConfigHolder.machines.enableMaintenance && hasMaintenanceMechanics()) {
             list.add(new TextComponentTranslation("behavior.tricorder.multiblock_maintenance",
-                    new TextComponentTranslation(TextFormattingUtil.formatNumbers(getNumMaintenanceProblems())).setStyle(new Style().setColor(TextFormatting.RED))
-            ));
+                    new TextComponentTranslation(TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))
+                            .setStyle(new Style().setColor(TextFormatting.RED))));
         }
         return list;
     }
@@ -294,7 +311,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
 
         private final MetaTileEntityHeatExchanger controller;
 
-        private final Set<IHEUComponent> components = new ObjectOpenHashSet<>();
+        // private final Set<IHEUComponent> components = new ObjectOpenHashSet<>();
         private final Set<IHEUComponent> reflectingEndpoints = new ObjectOpenHashSet<>();
         private boolean[] validAxi = new boolean[3];
 
@@ -333,12 +350,13 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             resetRecipe();
             this.validGrid = true;
             for (IHEUComponent component : components) {
-                this.components.add(component);
+                // this.components.add(component);
                 if (component.getComponentType().isEndpoint()) {
                     if (component.getComponentType() == IHEUComponent.HEUComponentType.E_RETURNING)
                         this.reflectingEndpoints.add(component);
                 } else {
-                    this.pipeLength += component.getComponentType() == IHEUComponent.HEUComponentType.H_EXPANDED ? 3 : 2;
+                    this.pipeLength += component.getComponentType() == IHEUComponent.HEUComponentType.H_EXPANDED ? 3 :
+                            2;
                     if (this.pipeHolderVariant == null) {
                         this.pipeHolderVariant = component.getComponentType();
                     } else
@@ -373,7 +391,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 // fix pipe length
                 this.pipeLength /= this.controller.hEUCount;
                 // 2/3 processing time if the exchanger uses conductive piping
-                this.durationModifier = (this.pipeHolderVariant == IHEUComponent.HEUComponentType.H_CONDUCTIVE ? 2 : 3) / 3D;
+                this.durationModifier = (this.pipeHolderVariant == IHEUComponent.HEUComponentType.H_CONDUCTIVE ? 2 :
+                        3) / 3D;
                 // increase recipe time based on pipe length
                 this.durationModifier *= (this.reflectionCount + 1) * Math.sqrt(this.pipeLength);
                 this.recipeTime *= durationModifier;
@@ -396,7 +415,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             Iterator<IHEUComponent> iterator = reflectingEndpoints.iterator();
             BlockPos pos = iterator.next().getPos();
             // reset valid axi
-            validAxi = new boolean[]{true, true, true};
+            validAxi = new boolean[] { true, true, true };
 
             // iterate through reflective endpoints. If we find one out of the axis then the exchanger is invalid.
             while (iterator.hasNext()) {
@@ -433,7 +452,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         }
 
         private void resetStructure() {
-            this.components.clear();
+            // this.components.clear();
             this.validGrid = false;
             this.pipeHolderVariant = null;
             this.reflectionCount = 0;
@@ -467,8 +486,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 if (this.recipeProgress >= this.recipeTime) {
                     this.recipeProgress = 0;
                     // try to process fluid A
-                    FluidStack fluidAInitialAdj = new FluidStack(this.fluidAInitial, this.fluidAInitial.amount * this.pipeVolModifier * this.controller.hEUCount);
-                    FluidStack fluidAFinalAdj = new FluidStack(this.fluidAFinal, this.fluidAFinal.amount * this.pipeVolModifier * this.controller.hEUCount);
+                    FluidStack fluidAInitialAdj = new FluidStack(this.fluidAInitial,
+                            this.fluidAInitial.amount * this.pipeVolModifier * this.controller.hEUCount);
+                    FluidStack fluidAFinalAdj = new FluidStack(this.fluidAFinal,
+                            this.fluidAFinal.amount * this.pipeVolModifier * this.controller.hEUCount);
 
                     FluidStack fill = this.controller.inputFluidInventory.drain(fluidAInitialAdj, false);
                     if (fill != null && fill.amount == fluidAInitialAdj.amount) {
@@ -483,8 +504,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 int i = (int) (this.thermalEnergy / (3 * this.fluidBThermalEnergy)) + 1;
                 if (this.thermalEnergy >= this.fluidBThermalEnergy) {
                     this.thermalEnergy -= this.fluidBThermalEnergy;
-                    FluidStack fluidBInitialAdj = new FluidStack(this.fluidBInitial, this.fluidBInitial.amount * i * this.controller.hEUCount);
-                    FluidStack fluidBFinalAdj = new FluidStack(this.fluidBFinal, this.fluidBFinal.amount * i * this.controller.hEUCount);
+                    FluidStack fluidBInitialAdj = new FluidStack(this.fluidBInitial,
+                            this.fluidBInitial.amount * i * this.controller.hEUCount);
+                    FluidStack fluidBFinalAdj = new FluidStack(this.fluidBFinal,
+                            this.fluidBFinal.amount * i * this.controller.hEUCount);
                     FluidStack fill = this.controller.inputFluidInventory.drain(fluidBInitialAdj, false);
                     if (fill != null && fill.amount == fluidBInitialAdj.amount) {
                         this.controller.inputFluidInventory.drain(fluidBInitialAdj, true);
@@ -503,8 +526,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             Map<Fluid, Integer> tankFluids = getTankFluids();
             if (this.validRecipe) {
                 // check to make sure we have enough fluid to do another iteration
-                if (!(hasFluidAmount(this.fluidAInitial.getFluid(), this.fluidAInitial.amount * pipeVolModifier * this.controller.hEUCount)
-                        && hasFluidAmount(this.fluidBInitial.getFluid(), this.fluidBInitial.amount * this.controller.hEUCount))) {
+                if (!(hasFluidAmount(this.fluidAInitial.getFluid(),
+                        this.fluidAInitial.amount * pipeVolModifier * this.controller.hEUCount) &&
+                        hasFluidAmount(this.fluidBInitial.getFluid(),
+                                this.fluidBInitial.amount * this.controller.hEUCount))) {
                     // kill the recipe if we don't have enough stuff
                     this.resetRecipe();
                 }
@@ -538,10 +563,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                             fluidAThermalEnergy = A.getSecond()[1];
                             fluidBThermalEnergy = B.getSecond()[1];
                             this.requiredPipeLength = (int) Math.sqrt(GTCEFuCUtil.geometricMean(
-                                    fluidAInitial.getFluid().getTemperature()
-                                            - fluidAFinal.getFluid().getTemperature(),
-                                    fluidBFinal.getFluid().getTemperature()
-                                            - fluidBInitial.getFluid().getTemperature()));
+                                    fluidAInitial.getFluid().getTemperature() - fluidAFinal.getFluid().getTemperature(),
+                                    fluidBFinal.getFluid().getTemperature() -
+                                            fluidBInitial.getFluid().getTemperature()));
                             this.validRecipe = true;
                             cacheValues();
                             finalRecipeCheck();
@@ -555,8 +579,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         }
 
         private void finalRecipeCheck() {
-            if (fluidAInitial.getFluid().getTemperature() > this.pipeMaxTemperature
-                    || fluidBInitial.getFluid().getTemperature() > this.pipeMaxTemperature) {
+            if (fluidAInitial.getFluid().getTemperature() > this.pipeMaxTemperature ||
+                    fluidBInitial.getFluid().getTemperature() > this.pipeMaxTemperature) {
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.temp");
                 return;
             }
@@ -613,48 +637,51 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info",
                         this.pipeLength, this.pipeMaxTemperature, this.pipeVolModifier,
                         Math.floor(this.durationModifier * 100) / 100));
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.energy", this.thermalEnergy / 1000));
+                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.energy",
+                        this.thermalEnergy / 1000));
                 if (validCache) {
                     // too much information for the GUI screen, deprecated
-//                    FluidStack fluidAInitial = (FluidStack) this.cache.get(0);
-//                    FluidStack fluidBInitial = (FluidStack) this.cache.get(1);
-//                    FluidStack fluidAFinal = (FluidStack) this.cache.get(2);
-//                    FluidStack fluidBFinal = (FluidStack) this.cache.get(3);
-//                    int fluidADisplayMult = (int) this.cache.get(4);
-//                    int fluidBDisplayMult = (int) this.cache.get(5);
-//                    long fluidAThermalEnergy = (long) this.cache.get(6);
-//                    long fluidBThermalEnergy = (long) this.cache.get(7);
+                    // FluidStack fluidAInitial = (FluidStack) this.cache.get(0);
+                    // FluidStack fluidBInitial = (FluidStack) this.cache.get(1);
+                    // FluidStack fluidAFinal = (FluidStack) this.cache.get(2);
+                    // FluidStack fluidBFinal = (FluidStack) this.cache.get(3);
+                    // int fluidADisplayMult = (int) this.cache.get(4);
+                    // int fluidBDisplayMult = (int) this.cache.get(5);
+                    // long fluidAThermalEnergy = (long) this.cache.get(6);
+                    // long fluidBThermalEnergy = (long) this.cache.get(7);
                     int requiredPipeLength = (int) this.cache.get(8);
-//                    textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.recipe"));
-                    textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.pipe", requiredPipeLength));
-//                    textList.add(new TextComponentTranslation(
-//                            "gtcefucontent.multiblock.heat_exchanger.display.info.fluid+",
-//                            fluidAInitial.amount * this.pipeVolModifier * this.controller.hEUCount,
-//                            fluidAInitial.getFluid().getLocalizedName(fluidAInitial),
-//                            fluidAFinal.amount * this.pipeVolModifier * this.controller.hEUCount,
-//                            fluidAFinal.getFluid().getLocalizedName(fluidAFinal),
-//                            fluidAThermalEnergy * this.pipeVolModifier * this.controller.hEUCount,
-//                            this.recipeTime
-//                    ));
-//                    textList.add(new TextComponentTranslation(
-//                            "gtcefucontent.multiblock.heat_exchanger.display.info.fluid-",
-//                            fluidBInitial.amount * this.controller.hEUCount,
-//                            fluidBInitial.getFluid().getLocalizedName(fluidBInitial),
-//                            fluidBFinal.amount * this.controller.hEUCount,
-//                            fluidBFinal.getFluid().getLocalizedName(fluidBFinal),
-//                            fluidBThermalEnergy
-//                    ));
-//                    textList.add(new TextComponentTranslation(
-//                            "gtcefucontent.multiblock.heat_exchanger.display.info.fluid",
-//                            fluidAInitial.amount * fluidADisplayMult,
-//                            fluidAInitial.getFluid().getLocalizedName(fluidAInitial),
-//                            fluidBInitial.amount * fluidBDisplayMult,
-//                            fluidBInitial.getFluid().getLocalizedName(fluidBInitial),
-//                            fluidAFinal.getFluid().getLocalizedName(fluidAFinal),
-//                            fluidAThermalEnergy * fluidADisplayMult,
-//                            fluidBFinal.getFluid().getLocalizedName(fluidBFinal),
-//                            fluidBThermalEnergy * fluidBDisplayMult
-//                    ));
+                    // textList.add(new
+                    // TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.recipe"));
+                    textList.add(new TextComponentTranslation(
+                            "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", requiredPipeLength));
+                    // textList.add(new TextComponentTranslation(
+                    // "gtcefucontent.multiblock.heat_exchanger.display.info.fluid+",
+                    // fluidAInitial.amount * this.pipeVolModifier * this.controller.hEUCount,
+                    // fluidAInitial.getFluid().getLocalizedName(fluidAInitial),
+                    // fluidAFinal.amount * this.pipeVolModifier * this.controller.hEUCount,
+                    // fluidAFinal.getFluid().getLocalizedName(fluidAFinal),
+                    // fluidAThermalEnergy * this.pipeVolModifier * this.controller.hEUCount,
+                    // this.recipeTime
+                    // ));
+                    // textList.add(new TextComponentTranslation(
+                    // "gtcefucontent.multiblock.heat_exchanger.display.info.fluid-",
+                    // fluidBInitial.amount * this.controller.hEUCount,
+                    // fluidBInitial.getFluid().getLocalizedName(fluidBInitial),
+                    // fluidBFinal.amount * this.controller.hEUCount,
+                    // fluidBFinal.getFluid().getLocalizedName(fluidBFinal),
+                    // fluidBThermalEnergy
+                    // ));
+                    // textList.add(new TextComponentTranslation(
+                    // "gtcefucontent.multiblock.heat_exchanger.display.info.fluid",
+                    // fluidAInitial.amount * fluidADisplayMult,
+                    // fluidAInitial.getFluid().getLocalizedName(fluidAInitial),
+                    // fluidBInitial.amount * fluidBDisplayMult,
+                    // fluidBInitial.getFluid().getLocalizedName(fluidBInitial),
+                    // fluidAFinal.getFluid().getLocalizedName(fluidAFinal),
+                    // fluidAThermalEnergy * fluidADisplayMult,
+                    // fluidBFinal.getFluid().getLocalizedName(fluidBFinal),
+                    // fluidBThermalEnergy * fluidBDisplayMult
+                    // ));
                 }
             }
         }
@@ -662,7 +689,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         public void addWarnings(List<ITextComponent> textList) {
             if (!validRecipe) {
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error"));
-                if (invalidReason.equals("")) invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.recipe";
+                if (invalidReason.equals(""))
+                    invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.recipe";
                 textList.add(new TextComponentTranslation(invalidReason));
             }
         }

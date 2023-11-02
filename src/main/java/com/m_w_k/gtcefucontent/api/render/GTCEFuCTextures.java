@@ -1,14 +1,15 @@
 package com.m_w_k.gtcefucontent.api.render;
 
-import com.m_w_k.gtcefucontent.client.renderer.texture.cube.AxisAlignedCubeRenderer;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 
+import com.m_w_k.gtcefucontent.client.renderer.texture.cube.AxisAlignedCubeRenderer;
+
 import gregicality.multiblocks.GregicalityMultiblocks;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = GregicalityMultiblocks.MODID, value = Side.CLIENT)
 public final class GTCEFuCTextures {
@@ -24,19 +25,22 @@ public final class GTCEFuCTextures {
 
     private GTCEFuCTextures() {}
 
-    public static void preInit(){
+    public static void preInit() {
         INDESTRUCTIBLE_CASING = new SimpleOverlayRenderer("casings/hardened_casing/indestructible_casing");
         INDESTRUCTIBLE_PIPE_CASING = new SimpleOverlayRenderer("casings/hardened_casing/indestructible_pipe_casing");
         PLASMA_PIPE_CASING = new SimpleOverlayRenderer("casings/hardened_casing/plasma_pipe_casing");
         PRESSURE_CASING = new SimpleOverlayRenderer("casings/hardened_casing/high_pressure_casing");
 
-        String[] heuComponentNames = new String[]{"endpoint_standard", "endpoint_returning",
-                "pipe_holder_standard", "pipe_holder_conductive", "pipe_holder_expanded"};
+        String[] heuComponentNames = new String[] { "endpoint_standard", "endpoint_returning",
+                "pipe_holder_standard", "pipe_holder_conductive", "pipe_holder_expanded" };
 
         for (String heuComponentName : heuComponentNames) {
-            HEU_COMPONENT_EMPTY_OVERLAYS.add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/empty"));
-            HEU_COMPONENT_FULL_OVERLAYS.add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/full"));
-            HEU_COMPONENT_ACTIVE_OVERLAYS.add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/active"));
+            HEU_COMPONENT_EMPTY_OVERLAYS
+                    .add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/empty"));
+            HEU_COMPONENT_FULL_OVERLAYS
+                    .add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/full"));
+            HEU_COMPONENT_ACTIVE_OVERLAYS
+                    .add(new AxisAlignedCubeRenderer("overlay/machine/heu/" + heuComponentName + "/active"));
         }
     }
 }

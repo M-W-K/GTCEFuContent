@@ -1,5 +1,8 @@
 package com.m_w_k.gtcefucontent.api.util;
 
+import java.util.Arrays;
+import java.util.OptionalDouble;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -8,9 +11,6 @@ import com.m_w_k.gtcefucontent.GTCEFuContent;
 
 import crazypants.enderio.base.init.ModObject;
 import gregtech.api.metatileentity.MetaTileEntity;
-
-import java.util.Arrays;
-import java.util.OptionalDouble;
 
 public final class GTCEFuCUtil {
 
@@ -52,7 +52,6 @@ public final class GTCEFuCUtil {
         OptionalDouble total = Arrays.stream(numbers).reduce((a, b) -> a * b);
         if (total.isPresent()) {
             return Math.pow(total.getAsDouble(), 1D / numbers.length);
-        }
-        else return 0;
+        } else return 0;
     }
 }

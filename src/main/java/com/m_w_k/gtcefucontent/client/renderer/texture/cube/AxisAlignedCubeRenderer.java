@@ -1,5 +1,18 @@
 package com.m_w_k.gtcefucontent.client.renderer.texture.cube;
 
+import java.util.EnumMap;
+import java.util.Map;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Cuboid6;
@@ -13,24 +26,15 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.client.utils.BloomEffectUtil;
 import gregtech.client.utils.RenderUtil;
 import gregtech.common.ConfigHolder;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.EnumMap;
-import java.util.Map;
 
 public class AxisAlignedCubeRenderer implements ICubeRenderer {
 
     private static final Rotation DEF_ROT = new Rotation(0, 0, 0, 0);
 
     public enum RenderSide {
-        AXIS, SIDE;
+
+        AXIS,
+        SIDE;
 
         public static final RenderSide[] VALUES = values();
 
@@ -69,7 +73,8 @@ public class AxisAlignedCubeRenderer implements ICubeRenderer {
         this.spritesEmissive = new EnumMap<>(RenderSide.class);
         for (RenderSide overlayFace : RenderSide.VALUES) {
             String faceName = overlayFace.name().toLowerCase();
-            ResourceLocation resourceLocation = new ResourceLocation(modID, String.format("blocks/%s/%s", basePath, faceName));
+            ResourceLocation resourceLocation = new ResourceLocation(modID,
+                    String.format("blocks/%s/%s", basePath, faceName));
             sprites.put(overlayFace, textureMap.registerSprite(resourceLocation));
 
             String emissive = String.format("blocks/%s/%s_emissive", basePath, faceName);
@@ -93,7 +98,9 @@ public class AxisAlignedCubeRenderer implements ICubeRenderer {
     // borrows heavily from OrientedOverlayRenderer
     @Override
     @SideOnly(Side.CLIENT)
-    public void renderOrientedState(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline, Cuboid6 bounds, EnumFacing frontFacing, boolean isActive, boolean isWorkingEnabled) {
+    public void renderOrientedState(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline,
+                                    Cuboid6 bounds, EnumFacing frontFacing, boolean isActive,
+                                    boolean isWorkingEnabled) {
         for (EnumFacing renderSide : EnumFacing.VALUES) {
             RenderSide overlayFace = RenderSide.byAxis(frontFacing.getAxis(), renderSide);
             TextureAtlasSprite renderSprite = sprites.get(overlayFace);
@@ -106,15 +113,19 @@ public class AxisAlignedCubeRenderer implements ICubeRenderer {
             renderTranslation = RenderUtil.adjustTrans(renderTranslation, renderSide, 1);
             renderTranslation.apply(rotation);
 
-            Textures.renderFace(renderState, renderTranslation, ArrayUtils.addAll(pipeline, rotation), renderSide, bounds, renderSprite, BlockRenderLayer.CUTOUT_MIPPED);
+            Textures.renderFace(renderState, renderTranslation, ArrayUtils.addAll(pipeline, rotation), renderSide,
+                    bounds, renderSprite, BlockRenderLayer.CUTOUT_MIPPED);
 
             TextureAtlasSprite emissiveSprite = spritesEmissive.get(overlayFace);
             if (emissiveSprite != null) {
                 if (ConfigHolder.client.machinesEmissiveTextures) {
-                    IVertexOperation[] lightPipeline = ArrayUtils.addAll(pipeline, new LightMapOperation(240, 240), rotation);
-                    Textures.renderFace(renderState, renderTranslation, lightPipeline, renderSide, bounds, emissiveSprite, BloomEffectUtil.getRealBloomLayer());
+                    IVertexOperation[] lightPipeline = ArrayUtils.addAll(pipeline, new LightMapOperation(240, 240),
+                            rotation);
+                    Textures.renderFace(renderState, renderTranslation, lightPipeline, renderSide, bounds,
+                            emissiveSprite, BloomEffectUtil.getRealBloomLayer());
                 } else {
-                    Textures.renderFace(renderState, renderTranslation, ArrayUtils.addAll(pipeline, rotation), renderSide, bounds, emissiveSprite, BlockRenderLayer.CUTOUT_MIPPED);
+                    Textures.renderFace(renderState, renderTranslation, ArrayUtils.addAll(pipeline, rotation),
+                            renderSide, bounds, emissiveSprite, BlockRenderLayer.CUTOUT_MIPPED);
                 }
             }
         }
@@ -163,7 +174,7 @@ public class AxisAlignedCubeRenderer implements ICubeRenderer {
                     transformation.translate(0, 1, 0);
                     return new Rotation(Math.PI / 2, 1, 0, 0);
                 }
-           }
+            }
             case WEST -> {
                 if (frontFacing == EnumFacing.DOWN) {
                     transformation.translate(0, 1, 1);

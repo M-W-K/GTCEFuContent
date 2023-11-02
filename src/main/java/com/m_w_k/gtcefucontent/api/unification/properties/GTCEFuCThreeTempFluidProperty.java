@@ -1,15 +1,13 @@
 package com.m_w_k.gtcefucontent.api.unification.properties;
 
-import javax.annotation.Nonnull;
-
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.google.common.base.Preconditions;
 
 import gregtech.api.unification.material.properties.IMaterialProperty;
 import gregtech.api.unification.material.properties.MaterialProperties;
 import gregtech.api.unification.material.properties.PropertyKey;
-import net.minecraftforge.fluids.FluidStack;
 
 public class GTCEFuCThreeTempFluidProperty implements IMaterialProperty {
 

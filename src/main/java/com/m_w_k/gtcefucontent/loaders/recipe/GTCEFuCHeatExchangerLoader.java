@@ -1,5 +1,8 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
@@ -9,9 +12,6 @@ import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidP
 
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class GTCEFuCHeatExchangerLoader {
 
