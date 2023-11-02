@@ -48,6 +48,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
         initializeInventory();
     }
 
+    @SuppressWarnings("unused")
     public HEUComponentType getType() {
         return type;
     }

@@ -80,7 +80,7 @@ final class FusionStackPatterns {
                         getFluidHatchAlternate(variant)
                                 .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(4)))
                 .where('Y',
-                        stateIndex(5).or(getEnergyHatches(variant).setPreviewCount((int) (8 * Math.pow(2.0, variant)))))
+                        stateIndex(5).or(getEnergyHatches().setPreviewCount((int) (8 * Math.pow(2.0, variant)))))
                 .where('D', air())
                 .where('#', any());
     }
@@ -89,19 +89,10 @@ final class FusionStackPatterns {
     // return pattern
     // }
 
-    private static TraceabilityPredicate getEnergyHatches(int variant) {
-        TraceabilityPredicate predicate = metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH_16A[4],
+    private static TraceabilityPredicate getEnergyHatches() {
+        return metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH_16A[4],
                 MetaTileEntities.ENERGY_INPUT_HATCH_4A[5],
                 MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.UHV]);
-        // Originally I wanted to limit which hatches you could use based on amperage,
-        // but then I realized that each higher tier requires twice as many hatches as the previous anyway.
-        // if (variant <= 2) {
-        // predicate = predicate.or(metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH_4A[5]));
-        // if (variant == 1) {
-        // predicate = predicate.or(metaTileEntities(MetaTileEntities.ENERGY_INPUT_HATCH[GTValues.UHV]));
-        // }
-        // }
-        return predicate;
     }
 
     private static TraceabilityPredicate getFluidHatchAlternate(int variant) {

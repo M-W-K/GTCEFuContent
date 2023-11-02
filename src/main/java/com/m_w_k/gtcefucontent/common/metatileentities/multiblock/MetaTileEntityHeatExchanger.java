@@ -6,9 +6,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import gregtech.api.capability.*;
-import gregtech.api.fluids.MaterialFluid;
-import gregtech.api.fluids.fluidType.FluidTypes;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -41,7 +38,10 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
 import gregicality.multiblocks.api.render.GCYMTextures;
+import gregtech.api.capability.*;
 import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.fluids.MaterialFluid;
+import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -578,8 +578,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         }
 
         private void finalRecipeCheck() {
-            if (canFlowCheck(this.fluidAInitial) || canFlowCheck(this.fluidAFinal)
-                    || canFlowCheck(this.fluidBInitial) || canFlowCheck(this.fluidBFinal)) {
+            if (canFlowCheck(this.fluidAInitial) || canFlowCheck(this.fluidAFinal) ||
+                    canFlowCheck(this.fluidBInitial) || canFlowCheck(this.fluidBFinal)) {
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.fluid");
                 return;
             }
@@ -587,8 +587,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.len");
                 return;
             }
-            if (!(HeatExchangerRecipeHandler.isEutectic(fluidAInitial.getFluid())
-                    && HeatExchangerRecipeHandler.isEutectic(fluidBInitial.getFluid()))) {
+            if (!(HeatExchangerRecipeHandler.isEutectic(fluidAInitial.getFluid()) &&
+                    HeatExchangerRecipeHandler.isEutectic(fluidBInitial.getFluid()))) {
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.eutectic");
                 return;
             }
@@ -602,7 +602,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
 
             boolean burning = this.pipeProperty.getMaxFluidTemperature() < fluid.getTemperature(stack);
             boolean leaking = !this.pipeProperty.isGasProof() && fluid.isGaseous(stack);
-            boolean shattering = !this.pipeProperty.isCryoProof() && fluid.getTemperature() < IPropertyFluidFilter.CRYOGENIC_TEMPERATURE_THRESHOLD;
+            boolean shattering = !this.pipeProperty.isCryoProof() &&
+                    fluid.getTemperature() < IPropertyFluidFilter.CRYOGENIC_TEMPERATURE_THRESHOLD;
             boolean corroding = false;
             boolean melting = false;
 
@@ -611,7 +612,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 melting = !this.pipeProperty.isPlasmaProof() && materialFluid.getFluidType().equals(FluidTypes.PLASMA);
 
                 // carrying plasmas which are too hot when plasma proof does not burn pipes
-                if (burning && this.pipeProperty.isPlasmaProof() && materialFluid.getFluidType().equals(FluidTypes.PLASMA))
+                if (burning && this.pipeProperty.isPlasmaProof() &&
+                        materialFluid.getFluidType().equals(FluidTypes.PLASMA))
                     burning = false;
             }
 

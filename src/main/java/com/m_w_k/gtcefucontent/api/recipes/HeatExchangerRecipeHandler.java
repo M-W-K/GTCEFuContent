@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent.api.recipes;
 
-import java.awt.List;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -115,6 +114,7 @@ public class HeatExchangerRecipeHandler {
      * @param fluid The fluid to remove the heat exchange for.
      * @param type  Which types of exchange to remove
      */
+    @SuppressWarnings("unused")
     public static void removeHeatExchange(Fluid fluid, ExchangeType type) {
         switch (type) {
             case BOTH -> {
@@ -215,6 +215,7 @@ public class HeatExchangerRecipeHandler {
 
     /**
      * Register a fluid as an instance of a eutectic alloy.
+     * 
      * @param fluids The fluids to register.
      */
     @SuppressWarnings("SimplifyStreamApiCallChains")
@@ -224,6 +225,7 @@ public class HeatExchangerRecipeHandler {
 
     /**
      * Check if a given fluid is a eutectic alloy.
+     * 
      * @param fluid The fluid to check.
      * @return Whether the fluid is a eutectic alloy.
      */

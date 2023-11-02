@@ -11,6 +11,7 @@ import com.m_w_k.gtcefucontent.client.renderer.texture.cube.AxisAlignedCubeRende
 import gregicality.multiblocks.GregicalityMultiblocks;
 import gregtech.client.renderer.texture.cube.SimpleOverlayRenderer;
 
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = GregicalityMultiblocks.MODID, value = Side.CLIENT)
 public final class GTCEFuCTextures {
 

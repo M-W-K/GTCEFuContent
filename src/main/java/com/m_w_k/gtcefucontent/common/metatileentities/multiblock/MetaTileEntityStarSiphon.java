@@ -515,11 +515,6 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController impl
         }
 
         @Override
-        protected long getMaxVoltage() {
-            return super.getMaxVoltage();
-        }
-
-        @Override
         public void updateWorkable() {
             super.updateWorkable();
             // Drain heat when the reactor is not active, is paused via soft mallet, or does not have enough energy and
@@ -615,7 +610,7 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController impl
                 GTCEFuCUtil.bbHelper(this, -6, -6, -13));
     }
 
-    static BloomEffectUtil.IBloomRenderFast RENDER_HANDLER = new BloomEffectUtil.IBloomRenderFast() {
+    static final BloomEffectUtil.IBloomRenderFast RENDER_HANDLER = new BloomEffectUtil.IBloomRenderFast() {
 
         @Override
         public int customBloomStyle() {

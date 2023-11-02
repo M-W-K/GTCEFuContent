@@ -23,8 +23,6 @@ import gregtech.common.items.MetaItems;
 
 public class GTCEFuCCasingLoader {
 
-    GTCEFuCCasingLoader() {};
-
     public static void init() {
         ModHandler.addShapedRecipe(true, "casing_indestructible", GTCEFuCMetaBlocks.HARDENED_CASING
                 .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_CASING, 2),

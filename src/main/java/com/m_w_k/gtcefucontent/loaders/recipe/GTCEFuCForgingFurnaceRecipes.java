@@ -20,9 +20,6 @@ public class GTCEFuCForgingFurnaceRecipes {
 
     private GTCEFuCForgingFurnaceRecipes() {}
 
-    // Apparently Jabel can't translate .toList() into Java 8 bytecode.
-    // This suppression is to stop my IDE from yelling at me to use it.
-    @SuppressWarnings("All")
     public static void init() {
         GTCEFuContent.log("Starting the construction of Forging Furnace custom recipes...");
         // maybe use GregTechAPI.materialManager.getRegisteredMaterials() instead?

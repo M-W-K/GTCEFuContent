@@ -511,7 +511,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         return true;
     }
 
-    static BloomEffectUtil.IBloomRenderFast RENDER_HANDLER = new BloomEffectUtil.IBloomRenderFast() {
+    static final BloomEffectUtil.IBloomRenderFast RENDER_HANDLER = new BloomEffectUtil.IBloomRenderFast() {
 
         @Override
         public int customBloomStyle() {

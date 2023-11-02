@@ -570,7 +570,7 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
                     if (battery.getTier() == GTValues.UV) {
                         String key = PMC_BATTERY_HEADER + battery.getBatteryName();
                         BatteryMatchWrapper wrapper = blockWorldState.getMatchContext().get(key);
-                        if (wrapper == null) wrapper = new BatteryMatchWrapper(battery);
+                        if (wrapper == null) wrapper = new BatteryMatchWrapper();
                         blockWorldState.getMatchContext().set(key, wrapper.increment());
                         return true;
                     }
@@ -591,11 +591,6 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
         @Override
         protected double getOverclockingDurationDivisor() {
             return OverclockingLogic.PERFECT_OVERCLOCK_DURATION_DIVISOR;
-        }
-
-        @Override
-        protected long getMaxVoltage() {
-            return super.getMaxVoltage();
         }
 
         @Override
@@ -654,12 +649,9 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
     // copied from substation code, it was private and I don't like reflection.
     private static class BatteryMatchWrapper {
 
-        private final IBatteryData partType;
         private int amount;
 
-        public BatteryMatchWrapper(IBatteryData partType) {
-            this.partType = partType;
-        }
+        public BatteryMatchWrapper() {}
 
         public MetaTileEntityAntimatterCompressor.BatteryMatchWrapper increment() {
             amount++;

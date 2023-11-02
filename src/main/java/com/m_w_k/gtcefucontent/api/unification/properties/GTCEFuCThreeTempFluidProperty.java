@@ -53,11 +53,13 @@ public class GTCEFuCThreeTempFluidProperty implements IMaterialProperty {
         this.fluidHot = materialFluid;
     }
 
+    @SuppressWarnings("unused")
     public void setTemperatureCold(int fluidTemperature) {
         Preconditions.checkArgument(fluidTemperature > 0, "Invalid temperature");
         this.temperatureCold = fluidTemperature;
     }
 
+    @SuppressWarnings("unused")
     public void setTemperatureHot(int fluidTemperature) {
         Preconditions.checkArgument(fluidTemperature > 0, "Invalid temperature");
         this.temperatureHot = fluidTemperature;

@@ -39,7 +39,7 @@ public final class GTCEFuCMetaBlocks {
     @SideOnly(Side.CLIENT)
     private static void registerItemModel(@NotNull Block block) {
         for (IBlockState state : block.getBlockState().getValidStates()) {
-            // noinspection ConstantConditions
+            // noinspection DataFlowIssue
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block),
                     block.getMetaFromState(state),
                     new ModelResourceLocation(block.getRegistryName(),
@@ -47,7 +47,7 @@ public final class GTCEFuCMetaBlocks {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unused", "unchecked" })
     private static <T extends Comparable<T>> @NotNull String getPropertyName(@NotNull IProperty<T> property,
                                                                              Comparable<?> value) {
         return property.getName((T) value);

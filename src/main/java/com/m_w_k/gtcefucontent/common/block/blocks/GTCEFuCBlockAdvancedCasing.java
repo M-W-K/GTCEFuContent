@@ -36,6 +36,7 @@ public class GTCEFuCBlockAdvancedCasing extends VariantActiveBlock<GTCEFuCBlockA
         return value == AdvancedCasingType.NULL_FIELD_CASING;
     }
 
+    @SuppressWarnings("SameParameterValue")
     public enum AdvancedCasingType implements IStringSerializable {
 
         NULL_FIELD_CASING("null_field_casing");
