@@ -12,6 +12,8 @@ public class GTCEFuCMaterialFlagAddition {
         GCYMMaterials.TantalumCarbide.addFlags(MaterialFlags.GENERATE_FRAME);
 
         Materials.Invar.addFlags(MaterialFlags.GENERATE_FOIL);
+        Materials.Invar.addFlags(MaterialFlags.GENERATE_LONG_ROD);
+        Materials.HSSE.addFlags(MaterialFlags.GENERATE_BOLT_SCREW);
 
         Materials.Thorium.addFlags(MaterialFlags.GENERATE_DENSE);
 

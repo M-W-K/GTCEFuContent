@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import gregtech.api.fluids.fluidType.FluidTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
@@ -139,8 +140,10 @@ public class GTCEFuCMaterials {
                     cold);
             eutecticAlloy.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID).setFluidHot(
                     hot);
-
-            HeatExchangerRecipeHandler.addEutectic(cold, eutecticAlloy.getFluid(), hot);
+            HeatExchangerRecipeHandler.addEutectic(
+                    GTCEFuCFluidTypes.COLD.getNameForMaterial(eutecticAlloy),
+                    FluidTypes.LIQUID.getNameForMaterial(eutecticAlloy),
+                    GTCEFuCFluidTypes.HOT.getNameForMaterial(eutecticAlloy));
         }
     }
 

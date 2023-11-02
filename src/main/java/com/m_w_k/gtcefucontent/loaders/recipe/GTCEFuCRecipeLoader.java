@@ -1,5 +1,7 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import net.minecraft.item.ItemStack;
+
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
@@ -10,9 +12,12 @@ import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.metatileentities.GCYMMetaTileEntities;
 import gregtech.api.GTValues;
+import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.unification.material.MarkerMaterial;
 import gregtech.api.unification.material.MarkerMaterials;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
@@ -36,6 +41,7 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCAntimatterCompressorRecipes.init();
 
         GTCEFuCCasingLoader.init();
+        GTCEFuCHEUComponentLoader.init();
         GTCEFuCMiscRecipes.init();
         GTCEFuCEutecticLoader.init();
         GTCEFuCHeatExchangerLoader.init();
@@ -94,6 +100,20 @@ public final class GTCEFuCRecipeLoader {
                 'D', new UnificationEntry(OrePrefix.plateDouble, Materials.Duranium),
                 'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.UHV),
                 'T', new UnificationEntry(OrePrefix.plateDense, Materials.Thorium));
+
+        MetaItem<?>.MetaValueItem[] pumps = { MetaItems.ELECTRIC_PUMP_LuV, MetaItems.ELECTRIC_PUMP_ZPM,
+                MetaItems.ELECTRIC_PUMP_UV };
+        Material[] pipeMaterials = { Materials.NiobiumTitanium, Materials.Europium, Materials.Duranium };
+        Material[] tiers = {MarkerMaterials.Tier.LuV, MarkerMaterials.Tier.ZPM, MarkerMaterials.Tier.UV};
+        for (int i = 0; i < 3; i++) {
+            ItemStack controller = GTCEFuCMetaTileEntities.HEAT_EXCHANGER[i].getStackForm();
+            ModHandler.addShapedRecipe(true, controller.getTranslationKey(), controller,
+                    "MCM", "PHP", "MCM",
+                    'H', MetaTileEntities.FLUID_HEATER[GTValues.LuV + i].getStackForm(),
+                    'M', new UnificationEntry(OrePrefix.pipeQuadrupleFluid, pipeMaterials[i]),
+                    'P', pumps[i],
+                    'C', new UnificationEntry(OrePrefix.circuit, tiers[i]));
+        }
 
         // Assembler recipes
 
