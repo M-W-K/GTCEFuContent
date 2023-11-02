@@ -1,4 +1,4 @@
-package com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart.heu;
+package com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -7,6 +7,7 @@ import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
 import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbilities;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.client.renderer.texture.cube.AxisAlignedCubeRenderer;
+import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityHeatExchanger;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
 import gregtech.api.gui.widgets.SlotWidget;
@@ -22,12 +23,12 @@ import gregtech.api.unification.stack.MaterialStack;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiblockPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -66,7 +67,14 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart imp
                 renderer = getOverlay();
             }
             if (renderer != null) {
-                renderer.renderOriented(renderState, translation, pipeline, getFrontFacing());
+                EnumFacing facing = getFrontFacing();
+                // rotate ourselves if we're being controlled by a heat exchanger
+                if (controller instanceof MetaTileEntityHeatExchanger) {
+                    facing = controller.getFrontFacing();
+                }
+                // unfortunately our renderOriented overrides the passed, so we need to generate a new one
+                facing = EnumFacing.getFacingFromAxis(facing.getAxisDirection(), facing.getAxis());
+                renderer.renderOriented(renderState, translation, pipeline, facing);
             }
         }
     }
@@ -208,8 +216,9 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart imp
     public Material getPipeMaterial() {
         if (!this.hasValidPiping()) return null;
         ItemStack stack = this.getStackInSlot(0);
-        if (stack.getItem() instanceof MetaPrefixItem prefixItem) {
-            return prefixItem.getMaterial(stack);
+        MaterialStack materialStack = OreDictUnifier.getMaterial(stack);
+        if (materialStack != null) {
+            return materialStack.material;
         }
         return null;
     }
@@ -225,8 +234,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart imp
 
     private boolean validPipingUpdateCheck(boolean validity) {
         if (validity != this.validPiping) {
-            // Don't schedule an update if we are remote
-            if (!getWorld().isRemote) this.scheduleRenderUpdate();
+            this.scheduleRenderUpdate();
             this.validPiping = validity;
         }
         return validity;
