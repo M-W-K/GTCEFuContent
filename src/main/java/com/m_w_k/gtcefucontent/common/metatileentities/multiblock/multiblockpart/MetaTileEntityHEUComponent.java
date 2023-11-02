@@ -3,11 +3,15 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpar
 import java.io.IOException;
 import java.util.List;
 
+import gregtech.api.capability.GregtechDataCodes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -130,14 +134,30 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        for (int i = 0; i < getInventorySize(); i++) {
-            buf.writeItemStack(this.getStackInSlot(i));
-        }
+        syncWrite(buf);
     }
 
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
+        syncRead(buf);
+    }
+
+    @Override
+    public void receiveCustomData(int dataId, PacketBuffer buf) {
+        super.receiveCustomData(dataId, buf);
+        if (dataId == GregtechDataCodes.UPDATE_ITEM_COUNT) {
+            syncRead(buf);
+        }
+    }
+
+    private void syncWrite(PacketBuffer buf) {
+        for (int i = 0; i < this.getInventorySize(); i++) {
+            buf.writeItemStack(this.getStackInSlot(i));
+        }
+    }
+
+    private void syncRead(PacketBuffer buf) {
         for (int i = 0; i < getInventorySize(); i++) {
             try {
                 this.setStackInSlot(i, buf.readItemStack());
@@ -145,6 +165,11 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public IItemHandler getItemInventory() {
+        return this;
     }
 
     @Override
@@ -237,7 +262,11 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
 
     private boolean validPipingUpdateCheck(boolean validity) {
         if (validity != this.validPiping) {
+            if (getWorld() != null && !getWorld().isRemote) {
+                writeCustomData(GregtechDataCodes.UPDATE_ITEM_COUNT, this::syncWrite);
+            } else {
             this.scheduleRenderUpdate();
+            }
             this.validPiping = validity;
         }
         return validity;
