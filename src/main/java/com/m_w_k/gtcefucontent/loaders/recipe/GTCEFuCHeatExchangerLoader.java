@@ -47,11 +47,11 @@ public final class GTCEFuCHeatExchangerLoader {
         for (Material material : GTCEFuCMaterials.EutecticAlloys.keySet()) {
             property = material.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID);
             HeatExchangerRecipeHandler.registerHeatExchange(
-                    new FluidStack(material.getFluid(), 1),
+                    material.getFluid(1),
                     new FluidStack(property.getFluidHot(), 1),
                     property.getThermalCapacity());
             HeatExchangerRecipeHandler.registerHeatExchange(
-                    new FluidStack(material.getFluid(), 1),
+                    material.getFluid(1),
                     new FluidStack(property.getFluidCold(), 1),
                     property.getThermalCapacity());
         }
