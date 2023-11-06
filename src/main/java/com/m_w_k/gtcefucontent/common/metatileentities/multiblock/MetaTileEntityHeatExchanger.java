@@ -521,7 +521,6 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 }
             } else {
                 this.controller.setActive(false);
-                clearCache();
                 // clear our stored thermal energy when stopped
                 thermalEnergy = 0;
             }
