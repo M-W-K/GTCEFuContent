@@ -51,7 +51,7 @@ public final class GTCEFuCMaterials {
     public final static Map<String, int[]> EutecticAlloysString = new HashMap<>() {
 
         {
-            this.put("eutectic_csnak_alloy", new int[] { 195, 293, 1237, 200000 });
+            this.put("eutectic_csnak_alloy", new int[] { 195, 293, 1237, 800000 });
             this.put("eutectic_enriched_naquadah_gallium_csk_alloy", new int[] { 270, 293, 7419, 10000000 });
         }
     };
