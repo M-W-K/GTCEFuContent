@@ -29,11 +29,11 @@ public final class GTCEFuCHeatExchangerLoader {
 
         // plasmas
         Map<Material, Integer> plasmaMap = new HashMap<>();
-        plasmaMap.put(Materials.Helium, 40 * 2048);
-        plasmaMap.put(Materials.Oxygen, 48 * 2048);
-        plasmaMap.put(Materials.Nitrogen, 64 * 2048);
-        plasmaMap.put(Materials.Iron, 96 * 2048);
-        plasmaMap.put(Materials.Nickel, 192 * 2048);
+        plasmaMap.put(Materials.Helium, -40 * 2048);
+        plasmaMap.put(Materials.Oxygen, -48 * 2048);
+        plasmaMap.put(Materials.Nitrogen, -64 * 2048);
+        plasmaMap.put(Materials.Iron, -96 * 2048);
+        plasmaMap.put(Materials.Nickel, -192 * 2048);
         for (Map.Entry<Material, Integer> entry : plasmaMap.entrySet()) {
             Material material = entry.getKey();
             HeatExchangerRecipeHandler.registerHeatExchange(material.getPlasma(1),
