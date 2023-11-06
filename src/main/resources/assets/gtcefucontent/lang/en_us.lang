@@ -51,6 +51,7 @@ gtcefucontent.machine.heat_exchanger.small.name=Small Heat Exchanger
 gtcefucontent.machine.heat_exchanger.medium.name=Medium Heat Exchanger
 gtcefucontent.machine.heat_exchanger.large.name=Large Heat Exchanger
 gtcefucontent.machine.heat_exchanger.info=Holds %s Heat Exchanger Units.
+recipemap.heat_exchanger.name=Heat Exchanger
 gregtech.multiblock.heat_exchanger.small.description=All exchanges must involve at least one eutectic mixture. All contained HEUs must be identical. The maximum temperature fluid a HEU can handle is equivalent to the maximum temperature of its piping. The processing speed of an exchange is proportional to the square root of the piping flow rate. The piping length required for a recipe is equivalent to the square root of the geometric average of the recipe fluid temperature changes.
 gregtech.multiblock.heat_exchanger.medium.description=All exchanges must involve at least one eutectic mixture. All contained HEUs must be identical. The maximum temperature fluid a HEU can handle is equivalent to the maximum temperature of its piping. The processing speed of an exchange is proportional to the square root of the piping flow rate. The piping length required for a recipe is equivalent to the square root of the geometric average of the recipe fluid temperature changes.
 gregtech.multiblock.heat_exchanger.large.description=All exchanges must involve at least one eutectic mixture. All contained HEUs must be identical. The maximum temperature fluid a HEU can handle is equivalent to the maximum temperature of its piping. The processing speed of an exchange is proportional to the square root of the piping flow rate. The piping length required for a recipe is equivalent to the square root of the geometric average of the recipe fluid temperature changes.
@@ -97,3 +98,5 @@ gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enr
 
 gtcefucontent.fluid.hot=Hot %s
 gtcefucontent.fluid.cold=Cold %s
+
+gtcefucontent.recipe.heattoconvert=Heat to convert: %sJ

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.m_w_k.gtcefucontent.GTCEFuContentSoundEvents;
 
+import com.m_w_k.gtcefucontent.api.recipes.builders.ExchangerRecipeBuilder;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
@@ -63,7 +64,13 @@ public final class GTCEFuCRecipeMaps {
 
     public static final List<RecipeMap<FusionRecipeBuilder>> FUSION_STACK_RECIPE_MAPS = new ArrayList<>(3) {};
 
-    // Trying to generate the list contents in-place throws a compiler error for some reason.
+    /**
+     * For internal usage only! Use HeatExchangerRecipeHandler instead!
+     */
+    public static final RecipeMap<ExchangerRecipeBuilder> EXCHANGER_PLACEHOLDER_MAP = new RecipeMap<>("heat_exchanger",
+            1, 0, 1, 1, new ExchangerRecipeBuilder(), false)
+            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, ProgressWidget.MoveType.HORIZONTAL);
+
     public static void init() {
         FUSION_STACK_RECIPE_MAPS.add(fusionStackRecipeMap("stack"));
         FUSION_STACK_RECIPE_MAPS.add(fusionStackRecipeMap("array"));

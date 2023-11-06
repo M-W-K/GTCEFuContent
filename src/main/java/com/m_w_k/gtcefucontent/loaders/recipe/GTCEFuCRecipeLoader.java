@@ -61,6 +61,9 @@ public final class GTCEFuCRecipeLoader {
 
         // The fusion stack recipeMaps are dependent on the normal fusion recipemap
         GTCEFuCFusionStackRecipes.init();
+
+        // Building the faux recipemap should wait until after all heat exchanger recipes are done.
+        GTCEFuCHeatExchangerLoader.postInit();
     }
 
     private static void controllerRecipes() {

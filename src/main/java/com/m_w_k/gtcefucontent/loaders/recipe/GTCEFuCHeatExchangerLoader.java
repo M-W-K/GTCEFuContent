@@ -3,6 +3,9 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import net.minecraft.util.Tuple;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
@@ -54,6 +57,24 @@ public final class GTCEFuCHeatExchangerLoader {
                     material.getFluid(1),
                     new FluidStack(property.getFluidCold(), 1),
                     property.getThermalCapacity());
+        }
+    }
+
+    public static void postInit() {
+        handleExchangeMap(HeatExchangerRecipeHandler.getHeatingMapCopy(), 1);
+        handleExchangeMap(HeatExchangerRecipeHandler.getCoolingMapCopy(), -1);
+    }
+
+    private static void handleExchangeMap(Map<Fluid, Tuple<FluidStack, long[]>> map, int heating) {
+        for (Map.Entry<Fluid, Tuple<FluidStack, long[]>> entry : map.entrySet()) {
+            Tuple<FluidStack, long[]> tuple = entry.getValue();
+            GTCEFuCRecipeMaps.EXCHANGER_PLACEHOLDER_MAP.recipeBuilder()
+                    .circuitMeta(heating + 2)
+                    .fluidInputs(new FluidStack(entry.getKey(), (int) tuple.getSecond()[0]))
+                    .fluidOutputs(tuple.getFirst())
+                    .heatToConvert(tuple.getSecond()[1] * heating)
+                    // the recipemap doesn't actually do anything, it's just there for JEI visualization
+                    .EUt(1).duration(1).buildAndRegister();
         }
     }
 }
