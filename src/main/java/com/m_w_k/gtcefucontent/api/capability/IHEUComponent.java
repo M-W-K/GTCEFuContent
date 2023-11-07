@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.api.capability;
 
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityHeatExchanger;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -36,5 +37,9 @@ public interface IHEUComponent extends IItemHandlerModifiable {
         public boolean isLargeInventory() {
             return this == H_CONDUCTIVE || this == H_EXPANDED;
         }
+    }
+
+    default void notifyController(MetaTileEntityHeatExchanger controller) {
+        controller.addNotifiedHeuComponent(this);
     }
 }

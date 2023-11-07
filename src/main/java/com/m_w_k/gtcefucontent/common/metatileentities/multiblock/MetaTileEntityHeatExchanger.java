@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.util.GTTransferUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +29,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
@@ -70,11 +74,16 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase implements IDataInfoProvider, IControllable {
 
+
+    protected IItemHandlerModifiable inputInventory;
+    protected IItemHandlerModifiable outputInventory;
     protected IMultipleTankHandler inputFluidInventory;
     protected IMultipleTankHandler outputFluidInventory;
-    private final int tier;
-    private final int hEUCount;
-    private final HEUGridHandler heuHandler;
+
+    protected final int tier;
+    protected final int hEUCount;
+    protected List<IHEUComponent> notifiedHEUComponentList = new ArrayList<>();
+    protected final HEUGridHandler heuHandler;
 
     private boolean isWorkingEnabled = true;
 
@@ -98,8 +107,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        this.inputFluidInventory = new FluidTankList(false, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
-        this.outputFluidInventory = new FluidTankList(true, getAbilities(MultiblockAbility.EXPORT_FLUIDS));
+        this.initializeAbilities();
         this.heuHandler.onStructureForm(getAbilities(GTCEFuCMultiBlockAbility.HEU_COMPONENT));
     }
 
@@ -108,7 +116,22 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         // super sets this to false but doesn't send a sync packet
         this.setActive(false);
         super.invalidateStructure();
+        this.resetTileAbilities();
         this.heuHandler.onStructureInvalidate();
+    }
+
+    protected void initializeAbilities() {
+        this.inputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
+        this.inputFluidInventory = new FluidTankList(true, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
+        this.outputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.EXPORT_ITEMS));
+        this.outputFluidInventory = new FluidTankList(true, getAbilities(MultiblockAbility.EXPORT_FLUIDS));
+    }
+
+    private void resetTileAbilities() {
+        this.inputInventory = new ItemStackHandler(0);
+        this.inputFluidInventory = new FluidTankList(true);
+        this.outputInventory = new ItemStackHandler(0);
+        this.outputFluidInventory = new FluidTankList(true);
     }
 
     @Override
@@ -119,54 +142,42 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
     @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
-        return (switch (tier) {
+        return wherify(switch (this.tier) {
             default -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
                     .aisle("CIXIC", "#III#", "#III#", "#III#", "CIIIC")
                     .aisle("CCCCC", "GEEEG", "GEEEG", "GEEEG", "CCCCC")
                     .aisle("CCCCC", "GPPPG", "GPPPG", "GPPPG", "CCCCC").setRepeatable(4, 16)
                     .aisle("CCCCC", "GEEEG", "GEEEG", "GEEEG", "CCCCC")
-                    .aisle("CIIIC", "#III#", "#III#", "#III#", "CIIIC")
-                    .where('I', stateIndex(0).setMinGlobalLimited(12).or(autoAbilities(true, false))
-                            .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(2))
-                            .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(2)))
-                    .where('C', stateIndex(1))
-                    .where('G', stateIndex(2))
-                    .where('E', metaTileEntities(GTCEFuCMetaTileEntities.HEU_ENDPOINTS))
-                    .where('P', metaTileEntities(GTCEFuCMetaTileEntities.HEU_HOLDERS))
-                    .where('X', selfPredicate())
-                    .where('#', any());
+                    .aisle("CIIIC", "#III#", "#III#", "#III#", "CIIIC");
             case 7 -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
                     .aisle("#IIXI#", "#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#")
                     .aisle("CCCCCC", "GEEEEG", "GEEEEG", "GEEEEG", "GEEEEG", "CCCCCC")
                     .aisle("CCCCCC", "GPPPPG", "GPPPPG", "GPPPPG", "GPPPPG", "CCCCCC").setRepeatable(4, 16)
                     .aisle("CCCCCC", "GEEEEG", "GEEEEG", "GEEEEG", "GEEEEG", "CCCCCC")
-                    .aisle("#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#")
-                    .where('I', stateIndex(0).setMinGlobalLimited(12).or(autoAbilities(true, false))
-                            .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(2))
-                            .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(2)))
-                    .where('C', stateIndex(1))
-                    .where('G', stateIndex(2))
-                    .where('E', metaTileEntities(GTCEFuCMetaTileEntities.HEU_ENDPOINTS))
-                    .where('P', metaTileEntities(GTCEFuCMetaTileEntities.HEU_HOLDERS))
-                    .where('X', selfPredicate())
-                    .where('#', any());
+                    .aisle("#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#");
             case 8 -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
                     .aisle("#IIXII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#")
                     .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
                     .aisle("CCCCCCC", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "CCCCCCC")
                     .setRepeatable(4, 16)
                     .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
-                    .aisle("#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#")
-                    .where('I', stateIndex(0).setMinGlobalLimited(12).or(autoAbilities(true, false))
-                            .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(2))
-                            .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(2)))
-                    .where('C', stateIndex(1))
-                    .where('G', stateIndex(2))
-                    .where('E', metaTileEntities(GTCEFuCMetaTileEntities.HEU_ENDPOINTS))
-                    .where('P', metaTileEntities(GTCEFuCMetaTileEntities.HEU_HOLDERS))
-                    .where('X', selfPredicate())
-                    .where('#', any());
-        }).build();
+                    .aisle("#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#");
+        }, this.tier).build();
+    }
+
+    protected FactoryBlockPattern wherify(FactoryBlockPattern pattern, int tier) {
+        return pattern
+                .where('I', stateIndex(0).setMinGlobalLimited(2 * tier).or(autoAbilities(true, false))
+                        .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(2))
+                        .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(2))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(2))
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(2)))
+                .where('C', stateIndex(1))
+                .where('G', stateIndex(2))
+                .where('E', metaTileEntities(GTCEFuCMetaTileEntities.HEU_ENDPOINTS))
+                .where('P', metaTileEntities(GTCEFuCMetaTileEntities.HEU_HOLDERS))
+                .where('X', selfPredicate())
+                .where('#', any());
     }
 
     @Nonnull
@@ -322,11 +333,23 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         }
     }
 
+    public void addNotifiedHeuComponent(IHEUComponent component) {
+        if (!notifiedHEUComponentList.contains(component)) {
+            this.notifiedHEUComponentList.add(component);
+        }
+    }
+
+    public List<IHEUComponent> getNotifiedHEUComponentList() {
+        return notifiedHEUComponentList;
+    }
+
     public static class HEUGridHandler {
 
         private final MetaTileEntityHeatExchanger controller;
 
-        // private final Set<IHEUComponent> components = new ObjectOpenHashSet<>();
+        private IItemHandlerModifiable componentsInv = new ItemStackHandler(0);
+        private boolean badPiping = false;
+        private final Map<IHEUComponent, Boolean> componentsPiped = new HashMap<>();
         private final Set<IHEUComponent> reflectingEndpoints = new ObjectOpenHashSet<>();
         private boolean[] validAxi = new boolean[3];
 
@@ -361,7 +384,6 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             resetRecipe();
             this.validGrid = true;
             for (IHEUComponent component : components) {
-                // this.components.add(component);
                 if (component.getComponentType().isEndpoint()) {
                     if (component.getComponentType() == IHEUComponent.HEUComponentType.E_RETURNING)
                         this.reflectingEndpoints.add(component);
@@ -372,12 +394,15 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                         this.pipeHolderVariant = component.getComponentType();
                     } else
                         if (this.pipeHolderVariant != component.getComponentType())
-                            invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.type");
+                            invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.type");
                 }
                 // check for internal piping
                 if (!component.hasValidPiping()) {
-                    invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.fill");
+                    this.componentsPiped.put(component, false);
+                    this.badPiping = true;
+                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.fill");
                 } else {
+                    this.componentsPiped.put(component, true);
                     Material material = component.getPipeMaterial();
                     if (material != null) {
                         FluidPipeProperties properties = material.getProperty(PropertyKey.FLUID_PIPE);
@@ -386,13 +411,14 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                                 this.pipeProperty = properties;
                                 this.pipeVolModifier = (int) Math.sqrt(properties.getThroughput());
                             } else if (properties != pipeProperty)
-                                invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.conflict");
+                                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.conflict");
                         } else
-                            invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.material");
+                            invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.material");
                     } else
-                        invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.material");
+                        invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.material");
                 }
             }
+            componentsInv = new ItemHandlerList(new ArrayList<>(components));
             if (this.validGrid) {
                 // run endpoint check
                 advancedEndpointValidityCheck();
@@ -415,7 +441,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             this.reflectionCount = (int) reflectraw;
             if (reflectionCount != reflectraw) {
                 // bad reflective endpoint count, no need for complex examination
-                invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints");
+                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints");
                 return;
             }
             if (reflectionCount == 2) return;
@@ -429,7 +455,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             while (iterator.hasNext()) {
                 IHEUComponent endpoint = iterator.next();
                 if (!checkPosAndNarrowAxis(pos, endpoint.getPos()))
-                    invalidateStructure("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints");
+                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints");
             }
         }
 
@@ -441,9 +467,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             return validAxi[0] || validAxi[1] || validAxi[2];
         }
 
-        private void invalidateStructure(String reason) {
+        private void invalidateGrid(String reason) {
             this.validGrid = false;
-            resetStructure();
             this.invalidReason = reason;
         }
 
@@ -460,7 +485,6 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         }
 
         private void resetStructure() {
-            // this.components.clear();
             this.validGrid = false;
             this.pipeHolderVariant = null;
             this.reflectionCount = 0;
@@ -471,6 +495,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             this.thermalEnergy = 0;
             this.recipeTime = 0;
             this.invalidReason = "";
+            this.badPiping = false;
+            this.componentsInv = new ItemStackHandler(0);
+            this.componentsPiped.clear();
         }
 
         private void resetRecipe() {
@@ -486,6 +513,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         }
 
         public void tick() {
+            // recipe processing
             if (checkRecipeValidity()) {
                 this.controller.setActive(true);
                 if (this.recipeProgress >= this.recipeTime) {
@@ -523,6 +551,50 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 this.controller.setActive(false);
                 // clear our stored thermal energy when stopped
                 thermalEnergy = 0;
+            }
+
+            // piping I/O
+            if (this.componentsInv.getSlots() != 0) {
+                // piping fill processing
+                if (this.controller.inputInventory.getSlots() != 0) {
+                    GTTransferUtils.moveInventoryItems(this.controller.inputInventory, this.componentsInv);
+                }
+
+                // piping empty processing
+                if (this.controller.outputInventory.getSlots() != 0) {
+                    GTTransferUtils.moveInventoryItems(this.componentsInv, this.controller.outputInventory);
+                }
+
+                // recheck piping validity
+                List<IHEUComponent> notifiedComponentList = this.controller.getNotifiedHEUComponentList();
+                if (!notifiedComponentList.isEmpty()) {
+                    updateComponentPipingStatus(notifiedComponentList);
+                    this.controller.notifiedHEUComponentList.clear();
+                }
+            }
+        }
+
+        private void updateComponentPipingStatus(List<IHEUComponent> components) {
+            // update our knowledge of component validity
+            for (IHEUComponent component : components) {
+                boolean prevValidity = this.componentsPiped.get(component);
+                if (prevValidity != component.hasValidPiping()) {
+                    this.componentsPiped.put(component, !prevValidity);
+                }
+            }
+            // update grid validity
+            Optional<Boolean> validPipingO = componentsPiped.keySet().stream()
+                    .map(IHEUComponent::hasValidPiping)
+                    .reduce((a, b) -> a && b);
+            boolean validPiping = validPipingO.isPresent() && validPipingO.get();
+            if (validGrid) {
+                if (!validPiping) {
+                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.fill");
+                    badPiping = true;
+                }
+            } else if (badPiping) {
+                validGrid = validPiping;
+                badPiping = !validPiping;
             }
         }
 

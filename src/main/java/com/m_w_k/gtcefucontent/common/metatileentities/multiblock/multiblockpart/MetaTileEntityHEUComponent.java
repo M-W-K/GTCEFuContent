@@ -280,6 +280,8 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
     private boolean validPipingUpdateCheck(boolean validity) {
         if (validity != this.validPiping) {
             if (getWorld() != null && !getWorld().isRemote) {
+                if (this.getController() instanceof MetaTileEntityHeatExchanger mte)
+                    notifyController(mte);
                 writeCustomData(GregtechDataCodes.UPDATE_ITEM_COUNT, this::syncWrite);
             } else {
                 this.scheduleRenderUpdate();
