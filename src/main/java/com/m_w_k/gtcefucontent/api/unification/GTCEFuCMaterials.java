@@ -100,7 +100,7 @@ public final class GTCEFuCMaterials {
                 .color(0xa0cefa).iconSet(MaterialIconSet.FLUID)
                 .build();
 
-        // the csnak is a c kind of snake
+        // sea snake
         EutecticCaesiumSodiumPotassium = new Material.Builder(ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy"))
                 .fluid().fluidTemp(EutecticAlloysString.get("eutectic_csnak_alloy")[1])
                 .colorAverage().iconSet(MaterialIconSet.METALLIC)
