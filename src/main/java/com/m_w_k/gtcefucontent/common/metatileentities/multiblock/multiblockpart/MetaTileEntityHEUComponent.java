@@ -1,9 +1,12 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -41,8 +44,10 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
                                         implements IMultiblockAbilityPart<IHEUComponent>, IHEUComponent {
 
+    private static final Map<Item, Boolean> validItemCache = new HashMap<>();
     private final HEUComponentType type;
     private boolean validPiping = false;
+    private boolean stackIsDirty = true;
 
     public MetaTileEntityHEUComponent(ResourceLocation metaTileEntityId, HEUComponentType type) {
         super(metaTileEntityId, 7);
@@ -192,8 +197,10 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
     public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
         if (!this.isItemValid(slot, stack)) return stack;
         ItemStack staack = this.importItems.insertItem(slot, stack, simulate);
-        // We have to perform the operation before checking for new validity
-        if (!simulate) this.hasValidPiping();
+        if (!simulate) {
+            this.setStackDirty();
+            this.hasValidPiping();
+        }
         return staack;
     }
 
@@ -201,8 +208,10 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         ItemStack stack = this.importItems.extractItem(slot, amount, simulate);
-        // We have to perform the operation before checking for new validity
-        if (!simulate) this.hasValidPiping();
+        if (!simulate) {
+            this.setStackDirty();
+            this.hasValidPiping();
+        }
         return stack;
     }
 
@@ -213,23 +222,27 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
 
     @Override
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return this.importItems.isItemValid(slot, stack) && this.isValidPipe(stack);
+        return this.importItems.isItemValid(slot, stack) && isValidPipe(stack);
     }
 
     @Override
     public void setStackInSlot(int slot, @NotNull ItemStack stack) {
         this.importItems.setStackInSlot(slot, stack);
+        this.setStackDirty();
         this.hasValidPiping();
     }
 
     @Override
     public boolean hasValidPiping() {
-        ItemStack stack;
-        for (int i = 0; i < this.getInventorySize(); i++) {
-            stack = this.getStackInSlot(i);
-            if (!(this.isValidPipe(stack) && stack.getCount() == 64)) return validPipingUpdateCheck(false);
-        }
-        return validPipingUpdateCheck(true);
+        if (stackIsDirty) {
+            stackIsDirty = false;
+            ItemStack stack;
+            for (int i = 0; i < this.getInventorySize(); i++) {
+                stack = this.getStackInSlot(i);
+                if (!(isValidPipe(stack) && stack.getCount() == 64)) return validPipingUpdateCheck(false);
+            }
+            return validPipingUpdateCheck(true);
+        } else return this.validPiping;
     }
 
     @Override
@@ -249,13 +262,19 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
         return null;
     }
 
-    private boolean isValidPipe(ItemStack stack) {
+    public static boolean isValidPipe(ItemStack stack) {
+        // check against the cache
+        Boolean cacheResult = validItemCache.get(stack.getItem());
+        if (cacheResult != null) return cacheResult;
+
+        // do fresh validity calculations
         OrePrefix prefix = OreDictUnifier.getPrefix(stack);
+        MaterialStack material = null;
         if (prefix != null && prefix == OrePrefix.pipeTinyFluid) {
-            MaterialStack material = OreDictUnifier.getMaterial(stack);
-            return material != null;
+            material = OreDictUnifier.getMaterial(stack);
         }
-        return false;
+        validItemCache.put(stack.getItem(), material != null);
+        return material != null;
     }
 
     private boolean validPipingUpdateCheck(boolean validity) {
@@ -272,5 +291,9 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
 
     private int getInventorySize() {
         return this.type.isLargeInventory() ? 2 : 1;
+    }
+
+    private void setStackDirty() {
+        this.stackIsDirty = true;
     }
 }
