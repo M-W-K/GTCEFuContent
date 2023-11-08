@@ -67,7 +67,7 @@ gtcefucontent.machine.heu_pipe_holder.expanded.name=Expanded HEU Pipe Holder
 gtcefucontent.machine.heu_pipe_holder.expanded.tooltip=Provides §f3m§7 of HEU piping. Requires two stacks of tiny pipe.
 
 gtcefucontent.multiblock.heat_exchanger.display.info=Stats: %sm of piping, processing amount factor of %sx, recipe time factor of %sx.
-gtcefucontent.multiblock.heat_exchanger.display.info.energy=%s kJ of thermal energy cached.
+gtcefucontent.multiblock.heat_exchanger.display.info.energy=%sJ of thermal energy cached.
 gtcefucontent.multiblock.heat_exchanger.display.info.recipe=Current exchanger recipe information:
 gtcefucontent.multiblock.heat_exchanger.display.info.pipe=Requires %sm of piping.
 gtcefucontent.multiblock.heat_exchanger.display.info.fluid+=Converting %sL of %s into %sL of %s and extracting %s Joules of thermal energy every %s ticks.
@@ -82,6 +82,7 @@ gtcefucontent.multiblock.heat_exchanger.display.error.endpoints=Invalid endpoint
 gtcefucontent.multiblock.heat_exchanger.display.error.recipe=The current recipe is either undefined or invalid.
 gtcefucontent.multiblock.heat_exchanger.display.error.fluid=The internal piping cannot handle one of the recipe fluids.
 gtcefucontent.multiblock.heat_exchanger.display.error.len=Recipe requires longer piping.
+gtcefucontent.multiblock.heat_exchanger.display.error.amount=Either supply more fluid, or remove fluid from the output buffer.
 gtcefucontent.multiblock.heat_exchanger.display.error.eutectic=All heat exchanges must involve at least one eutectic mixture.
 
 

@@ -349,6 +349,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
 
         private IItemHandlerModifiable componentsInv = new ItemStackHandler(0);
         private boolean badPiping = false;
+        private boolean needsNotification = false;
         private final Map<IHEUComponent, Boolean> componentsPiped = new HashMap<>();
         private final Set<IHEUComponent> reflectingEndpoints = new ObjectOpenHashSet<>();
         private boolean[] validAxi = new boolean[3];
@@ -368,6 +369,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         private int recipeTime;
         private int recipeProgress;
         private FluidStack fluidAInitial;
+        private final int[] targetInterpolationAmount = new int[2];
+        private int[] interpolationAmount = new int[3];
+        private long thermalInterpolation;
         private FluidStack fluidAFinal;
         private long fluidAThermalEnergy;
         private FluidStack fluidBInitial;
@@ -399,8 +403,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 // check for internal piping
                 if (!component.hasValidPiping()) {
                     this.componentsPiped.put(component, false);
-                    this.badPiping = true;
                     invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.fill");
+                    this.badPiping = true;
                 } else {
                     this.componentsPiped.put(component, true);
                     Material material = component.getPipeMaterial();
@@ -419,18 +423,21 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 }
             }
             componentsInv = new ItemHandlerList(new ArrayList<>(components));
-            if (this.validGrid) {
-                // run endpoint check
-                advancedEndpointValidityCheck();
-                if (!this.validGrid) return;
-                // fix pipe length
-                this.pipeLength /= this.controller.hEUCount;
-                // 2/3 processing time if the exchanger uses conductive piping
-                this.durationModifier = (this.pipeHolderVariant == IHEUComponent.HEUComponentType.H_CONDUCTIVE ? 2 :
-                        3) / 3D;
-                // increase recipe time based on actual pipe length and reflection count
-                this.durationModifier *= (this.reflectionCount + 1) * Math.sqrt(this.pipeLength);
-            }
+
+            if (this.validGrid) finalStructureCheck();
+        }
+
+        private void finalStructureCheck() {
+            // run endpoint check
+            advancedEndpointValidityCheck();
+            if (!this.validGrid) return;
+            // fix pipe length
+            this.pipeLength /= this.controller.hEUCount;
+            // 2/3 processing time if the exchanger uses conductive piping
+            this.durationModifier = (this.pipeHolderVariant == IHEUComponent.HEUComponentType.H_CONDUCTIVE ? 4 :
+                    6) / 3D;
+            // increase recipe time based on actual pipe length and reflection count
+            this.durationModifier *= (this.reflectionCount + 1) * Math.sqrt(this.pipeLength);
         }
 
         private void advancedEndpointValidityCheck() {
@@ -469,6 +476,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
 
         private void invalidateGrid(String reason) {
             this.validGrid = false;
+            this.badPiping = false;
             this.invalidReason = reason;
         }
 
@@ -510,6 +518,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             this.fluidBThermalEnergy = 0;
             this.requiredPipeLength = 0;
             this.invalidReason = "";
+            this.recipeProgress = 0;
         }
 
         public void tick() {
@@ -517,40 +526,40 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             if (checkRecipeValidity()) {
                 this.controller.setActive(true);
                 if (this.recipeProgress >= this.recipeTime) {
+                    // recipe completion
+                    this.runInterpolationLogic(1D);
                     this.recipeProgress = 0;
-                    // try to process fluid A
-                    FluidStack fluidAInitialAdj = new FluidStack(this.fluidAInitial,
-                            this.fluidAInitial.amount * this.pipeVolModifier * this.controller.hEUCount);
-                    FluidStack fluidAFinalAdj = new FluidStack(this.fluidAFinal,
-                            this.fluidAFinal.amount * this.pipeVolModifier * this.controller.hEUCount);
 
-                    FluidStack fill = this.controller.inputFluidInventory.drain(fluidAInitialAdj, false);
-                    if (fill != null && fill.amount == fluidAInitialAdj.amount) {
-                        this.controller.inputFluidInventory.drain(fluidAInitialAdj, true);
-                        this.controller.outputFluidInventory.fill(fluidAFinalAdj, true);
-                        this.thermalEnergy += fluidAThermalEnergy;
-                    } else this.resetRecipe();
+                } else if (this.recipeProgress == 1) {
+                    // recipe init
+                    this.interpolationAmount = new int[2];
+                    this.thermalInterpolation = 0;
+                    this.targetInterpolationAmount[0] = fluidAdjusted(fluidAInitial).amount;
+                    this.targetInterpolationAmount[1] = fluidAdjusted(fluidAFinal).amount;
                 }
-                this.recipeProgress++;
-
-                // try to process fluid B
-                int i = (int) (this.thermalEnergy / (3 * this.fluidBThermalEnergy)) + 1;
-                if (this.thermalEnergy >= this.fluidBThermalEnergy) {
-                    this.thermalEnergy -= this.fluidBThermalEnergy;
-                    FluidStack fluidBInitialAdj = new FluidStack(this.fluidBInitial,
-                            this.fluidBInitial.amount * i * this.pipeVolModifier * this.controller.hEUCount);
-                    FluidStack fluidBFinalAdj = new FluidStack(this.fluidBFinal,
-                            this.fluidBFinal.amount * i * this.pipeVolModifier * this.controller.hEUCount);
-                    FluidStack fill = this.controller.inputFluidInventory.drain(fluidBInitialAdj, false);
-                    if (fill != null && fill.amount == fluidBInitialAdj.amount) {
-                        this.controller.inputFluidInventory.drain(fluidBInitialAdj, true);
-                        this.controller.outputFluidInventory.fill(fluidBFinalAdj, true);
-                    } else this.resetRecipe();
+                if (runInterpolationLogic((double) this.recipeProgress / this.recipeTime)) {
+                    // try to process fluid B
+                    int mult = (int) (this.thermalEnergy / this.fluidBThermalEnergy);
+                    while (mult > 0) {
+                        FluidStack fluidBInitialAdj = fluidAdjusted(fluidBInitial, mult);
+                        FluidStack fluidBFinalAdj = fluidAdjusted(fluidBFinal, mult);
+                        FluidStack fill = this.controller.inputFluidInventory.drain(fluidBInitialAdj, false);
+                        int drain = this.controller.outputFluidInventory.fill(fluidBFinalAdj, false);
+                        if (fill != null && fill.amount == fluidBInitialAdj.amount && drain == fluidBFinalAdj.amount) {
+                            this.thermalEnergy -= this.fluidBThermalEnergy * mult;
+                            this.controller.inputFluidInventory.drain(fluidBInitialAdj, true);
+                            this.controller.outputFluidInventory.fill(fluidBFinalAdj, true);
+                            break;
+                        } else mult--;
+                        // If we have no mult left, we either have no fluid B or no space for fluid B
+                        if (mult == 0) this.resetRecipe();
+                    }
+                    if (this.validRecipe) this.recipeProgress++;
                 }
             } else {
                 this.controller.setActive(false);
-                // clear our stored thermal energy when stopped
-                thermalEnergy = 0;
+                this.thermalEnergy = 0;
+                this.recipeProgress = 0;
             }
 
             // piping I/O
@@ -571,6 +580,46 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                     updateComponentPipingStatus(notifiedComponentList);
                     this.controller.notifiedHEUComponentList.clear();
                 }
+            }
+        }
+
+        private boolean runInterpolationLogic(double interpolation) {
+            // TODO prevent fluid loss on recipe interruption
+            if (this.recipeTime != 0 && this.recipeProgress != 0) {
+                int targetAmountI = (int) Math.ceil(interpolation * this.targetInterpolationAmount[0]);
+                // casting to int acts as a Math.floor() call
+                int targetAmountF = (int) (interpolation * this.targetInterpolationAmount[1]);
+                long targetAmountT = (long) (interpolation * this.fluidAThermalEnergy * this.pipeVolModifier * this.controller.hEUCount);
+
+                int missingAmountI = targetAmountI - this.interpolationAmount[0];
+                int missingAmountF = targetAmountF - this.interpolationAmount[1];
+                long missingAmountT = targetAmountT - this.thermalInterpolation;
+
+                // kill the recipe if we run out of input
+                int actualDrain = tankIOHelper(new FluidStack(this.fluidAInitial, missingAmountI), true, true);
+                if (actualDrain != missingAmountI) {
+                    this.resetRecipe();
+                    return false;
+                }
+
+                tankIOHelper(new FluidStack(this.fluidAInitial, missingAmountI), true, false);
+                tankIOHelper(new FluidStack(this.fluidAFinal, missingAmountF), false, false);
+                this.thermalEnergy += missingAmountT;
+
+                this.interpolationAmount[0] = targetAmountI;
+                this.interpolationAmount[1] = targetAmountF;
+                this.thermalInterpolation = targetAmountT;
+            }
+            return true;
+        }
+
+        private int tankIOHelper(FluidStack stack, boolean in, boolean simulate) {
+            if (in) {
+                FluidStack drain = this.controller.inputFluidInventory.drain(stack, !simulate);
+                if (drain == null) return 0;
+                return drain.amount;
+            } else {
+                return this.controller.outputFluidInventory.fill(stack, !simulate);
             }
         }
 
@@ -595,6 +644,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             } else if (badPiping) {
                 validGrid = validPiping;
                 badPiping = !validPiping;
+                if (validGrid) finalStructureCheck();
             }
         }
 
@@ -606,15 +656,21 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             }
             Map<Fluid, Integer> tankFluids = getTankFluids();
             if (this.validRecipe) {
-                // check to make sure we have enough fluid to do another iteration
-                if (!(hasFluidAmount(this.fluidAInitial.getFluid(),
-                        this.fluidAInitial.amount * this.pipeVolModifier * this.controller.hEUCount) &&
-                        hasFluidAmount(this.fluidBInitial.getFluid(),
-                                this.fluidBInitial.amount * this.pipeVolModifier * this.controller.hEUCount))) {
-                    // kill the recipe if we don't have enough stuff
-                    this.resetRecipe();
+                if (this.recipeProgress <= 1 && !(hasFluid(this.fluidAInitial) && hasFluid(this.fluidBInitial)
+                        && canInsert(this.fluidAFinal) && canInsert(this.fluidBFinal))) {
+                    this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
+                    // there is no need to perform the expensive recipe search if nothing changes in the inputs.
+                    this.needsNotification = true;
                 }
             } else {
+                if (this.needsNotification) {
+                    if (!this.controller.notifiedFluidInputList.isEmpty()
+                            || !this.controller.notifiedFluidOutputList.isEmpty()) {
+                        this.controller.notifiedFluidInputList.clear();
+                        this.controller.notifiedFluidOutputList.clear();
+                        this.needsNotification = false;
+                    } else return false;
+                }
                 // figure out if there is an exchange we can do
                 Map<Fluid, Tuple<FluidStack, long[]>> cooling_map = HeatExchangerRecipeHandler.getCoolingMapCopy();
                 Map<Fluid, Tuple<FluidStack, long[]>> heating_map = HeatExchangerRecipeHandler.getHeatingMapCopy();
@@ -654,6 +710,14 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 }
             }
             return this.validRecipe;
+        }
+
+        private FluidStack fluidAdjusted(FluidStack stack) {
+            return new FluidStack(stack, stack.amount * this.pipeVolModifier * this.controller.hEUCount);
+        }
+
+        private FluidStack fluidAdjusted(FluidStack stack, int mult) {
+            return new FluidStack(stack, stack.amount * mult);
         }
 
         private void finalRecipeCheck() {
@@ -699,9 +763,13 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             return burning || leaking || corroding || shattering || melting;
         }
 
-        private boolean hasFluidAmount(Fluid fluid, int amount) {
+        private boolean hasFluid(FluidStack fluid) {
             Map<Fluid, Integer> tankFluids = getTankFluids();
-            return tankFluids.containsKey(fluid) && tankFluids.get(fluid) >= amount;
+            return tankFluids.containsKey(fluid.getFluid()) && tankFluids.get(fluid.getFluid()) >= fluid.amount;
+        }
+
+        private boolean canInsert(FluidStack fluid) {
+            return this.controller.outputFluidInventory.fill(fluid, false) == fluid.amount;
         }
 
         private void recalcuateRecipeDuration() {
@@ -741,7 +809,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                         this.pipeLength, this.pipeVolModifier,
                         Math.floor(this.durationModifier * 100) / 100));
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.energy",
-                        this.thermalEnergy / 1000));
+                        TextFormattingUtil.formatLongToCompactString(this.thermalEnergy)));
                 if (cachedLength != 0) {
                     textList.add(new TextComponentTranslation(
                             "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));
