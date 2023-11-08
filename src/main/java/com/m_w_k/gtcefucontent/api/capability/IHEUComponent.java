@@ -2,9 +2,10 @@ package com.m_w_k.gtcefucontent.api.capability;
 
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityHeatExchanger;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityHeatExchanger;
 
 import gregtech.api.unification.material.Material;
 

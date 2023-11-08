@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import gregtech.api.capability.impl.ItemHandlerList;
-import gregtech.api.util.GTTransferUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,9 +26,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
@@ -45,6 +43,7 @@ import codechicken.lib.vec.Matrix4;
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.capability.*;
 import gregtech.api.capability.impl.FluidTankList;
+import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.fluids.MaterialFluid;
 import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.metatileentity.IDataInfoProvider;
@@ -60,6 +59,7 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.FluidPipeProperties;
 import gregtech.api.unification.material.properties.PropertyKey;
+import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
@@ -73,7 +73,6 @@ import gregtech.core.sound.GTSoundEvents;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase implements IDataInfoProvider, IControllable {
-
 
     protected IItemHandlerModifiable inputInventory;
     protected IItemHandlerModifiable outputInventory;
@@ -589,7 +588,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 int targetAmountI = (int) Math.ceil(interpolation * this.targetInterpolationAmount[0]);
                 // casting to int acts as a Math.floor() call
                 int targetAmountF = (int) (interpolation * this.targetInterpolationAmount[1]);
-                long targetAmountT = (long) (interpolation * this.fluidAThermalEnergy * this.pipeVolModifier * this.controller.hEUCount);
+                long targetAmountT = (long) (interpolation * this.fluidAThermalEnergy * this.pipeVolModifier *
+                        this.controller.hEUCount);
 
                 int missingAmountI = targetAmountI - this.interpolationAmount[0];
                 int missingAmountF = targetAmountF - this.interpolationAmount[1];
@@ -656,16 +656,16 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             }
             Map<Fluid, Integer> tankFluids = getTankFluids();
             if (this.validRecipe) {
-                if (this.recipeProgress <= 1 && !(hasFluid(this.fluidAInitial) && hasFluid(this.fluidBInitial)
-                        && canInsert(this.fluidAFinal) && canInsert(this.fluidBFinal))) {
+                if (this.recipeProgress <= 1 && !(hasFluid(this.fluidAInitial) && hasFluid(this.fluidBInitial) &&
+                        canInsert(this.fluidAFinal) && canInsert(this.fluidBFinal))) {
                     this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
                     // there is no need to perform the expensive recipe search if nothing changes in the inputs.
                     this.needsNotification = true;
                 }
             } else {
                 if (this.needsNotification) {
-                    if (!this.controller.notifiedFluidInputList.isEmpty()
-                            || !this.controller.notifiedFluidOutputList.isEmpty()) {
+                    if (!this.controller.notifiedFluidInputList.isEmpty() ||
+                            !this.controller.notifiedFluidOutputList.isEmpty()) {
                         this.controller.notifiedFluidInputList.clear();
                         this.controller.notifiedFluidOutputList.clear();
                         this.needsNotification = false;

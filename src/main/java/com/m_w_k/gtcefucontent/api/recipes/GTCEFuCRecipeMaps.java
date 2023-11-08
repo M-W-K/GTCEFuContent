@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.m_w_k.gtcefucontent.GTCEFuContentSoundEvents;
-
 import com.m_w_k.gtcefucontent.api.recipes.builders.ExchangerRecipeBuilder;
+
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.recipes.RecipeMap;
@@ -69,7 +69,7 @@ public final class GTCEFuCRecipeMaps {
      */
     public static final RecipeMap<ExchangerRecipeBuilder> EXCHANGER_PLACEHOLDER_MAP = new RecipeMap<>("heat_exchanger",
             1, 0, 1, 1, new ExchangerRecipeBuilder(), false)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, ProgressWidget.MoveType.HORIZONTAL);
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, ProgressWidget.MoveType.HORIZONTAL);
 
     public static void init() {
         FUSION_STACK_RECIPE_MAPS.add(fusionStackRecipeMap("stack"));

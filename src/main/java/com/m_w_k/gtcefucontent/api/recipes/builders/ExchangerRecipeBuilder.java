@@ -1,19 +1,22 @@
 package com.m_w_k.gtcefucontent.api.recipes.builders;
 
+import javax.annotation.Nonnull;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import com.m_w_k.gtcefucontent.api.recipes.recipeproperties.HeatToConvertProperty;
+
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.RecipeMap;
 import gregtech.api.util.EnumValidationResult;
 import gregtech.api.util.GTLog;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import javax.annotation.Nonnull;
 
 public class ExchangerRecipeBuilder extends RecipeBuilder<ExchangerRecipeBuilder> {
 
     public ExchangerRecipeBuilder() {}
 
+    @SuppressWarnings("unused")
     public ExchangerRecipeBuilder(Recipe recipe, RecipeMap<ExchangerRecipeBuilder> recipeMap) {
         super(recipe, recipeMap);
     }
