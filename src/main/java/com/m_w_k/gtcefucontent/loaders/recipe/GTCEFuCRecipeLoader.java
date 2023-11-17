@@ -144,12 +144,14 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.plate, Materials.Neutronium)
                 .input(OrePrefix.dust, Materials.Lutetium, 64)
                 .input(OrePrefix.dust, Materials.Lutetium, 16)
+                .input(OrePrefix.stick, Materials.Thorium, 64)
                 .input(MetaItems.ULTRA_HIGH_POWER_INTEGRATED_CIRCUIT, 64)
                 .input(OrePrefix.wireGtSingle, Materials.RutheniumTriniumAmericiumNeutronate, 32)
                 .input(MetaItems.SENSOR_UV, 8)
                 .input(MetaItems.FIELD_GENERATOR_UV, 8)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12),
-                        Materials.IndiumGalliumPhosphide.getFluid(GTValues.L * 8))
+                        Materials.IndiumGalliumPhosphide.getFluid(GTValues.L * 8),
+                        Materials.Bismuth.getFluid(GTValues.L * 5))
                 .output(GTCEFuCMetaTileEntities.FUSION_STACK[0])
                 .stationResearch(b -> b
                         .researchStack(MetaTileEntities.FUSION_REACTOR[2].getStackForm())
@@ -164,6 +166,7 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.plateDouble, Materials.Neutronium)
                 .input(OrePrefix.dust, Materials.Europium, 64)
                 .input(OrePrefix.dust, Materials.Europium, 32)
+                .input(OrePrefix.stick, Materials.Plutonium241, 64)
                 .input(MetaItems.ULTRA_HIGH_POWER_INTEGRATED_CIRCUIT, 64)
                 .input(OrePrefix.wireGtDouble, Materials.RutheniumTriniumAmericiumNeutronate, 32)
                 .input(MetaItems.ELECTRIC_PUMP_EV, 32)
@@ -184,9 +187,10 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.plateDense, Materials.Neutronium)
                 .input(OrePrefix.dust, Materials.Darmstadtium, 64)
                 .input(OrePrefix.dust, Materials.Darmstadtium, 64)
+                .input(OrePrefix.stick, Materials.Uranium235, 64)
                 .input(MetaItems.ULTRA_HIGH_POWER_INTEGRATED_CIRCUIT, 64)
                 .input(OrePrefix.wireGtQuadruple, Materials.RutheniumTriniumAmericiumNeutronate, 32)
-                .input(MetaBlocks.OPTICAL_PIPES[0], 32)
+                .input(MetaBlocks.OPTICAL_PIPES[0], 48)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 12),
                         Materials.NaquadahAlloy.getFluid(GTValues.L * 8),
                         Materials.PCBCoolant.getFluid(30000))

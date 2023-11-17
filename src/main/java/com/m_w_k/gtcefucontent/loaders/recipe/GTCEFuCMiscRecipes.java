@@ -131,6 +131,12 @@ public final class GTCEFuCMiscRecipes {
         RecipeMaps.ELECTROLYZER_RECIPES.recipeBuilder()
                 .input(MetaItems.NAN_CERTIFICATE)
                 .fluidInputs(Materials.McGuffium239.getFluid(216))
+                .output(OrePrefix.dust, Materials.Neutronium, 64)
+                .output(OrePrefix.dust, Materials.Neutronium, 64)
+                .output(OrePrefix.dust, Materials.Neutronium, 64)
+                .output(OrePrefix.dust, Materials.Neutronium, 64)
+                .output(OrePrefix.dust, Materials.Neutronium, 64)
+                .output(OrePrefix.dust, Materials.Neutronium, 64)
                 .fluidOutputs(new FluidStack(Fluids.XP_JUICE.getFluid(), 200))
                 .duration(8400).EUt(GTValues.VA[GTValues.UV]).buildAndRegister();
 

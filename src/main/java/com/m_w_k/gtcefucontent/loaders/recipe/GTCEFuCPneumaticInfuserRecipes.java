@@ -65,7 +65,7 @@ public final class GTCEFuCPneumaticInfuserRecipes {
                 .fluidInputs(new FluidStack(Fluids.CLOUD_SEED_CONCENTRATED.getFluid(), 300),
                         Materials.Plutonium239.getFluid(72),
                         Materials.Argon.getPlasma(64000))
-                .fluidOutputs(Materials.McGuffium239.getFluid(72))
+                .fluidOutputs(Materials.McGuffium239.getFluid(48))
                 .duration(1380).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
     }
 }

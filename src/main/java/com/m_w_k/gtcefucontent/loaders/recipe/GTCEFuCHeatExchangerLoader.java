@@ -3,6 +3,8 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 import java.util.HashMap;
 import java.util.Map;
 
+import crazypants.enderio.base.fluid.Fluids;
+import gregtech.api.GTValues;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -58,6 +60,13 @@ public final class GTCEFuCHeatExchangerLoader {
                     new FluidStack(property.getFluidCold(), 1),
                     property.getThermalCapacity());
         }
+
+        // custom conversions
+        HeatExchangerRecipeHandler.registerHeatExchange(
+                new FluidStack(Fluids.VAPOR_OF_LEVITY.getFluid(), 55),
+                Materials.Trinium.getFluid(9),
+                waterVaporizationEnergy * GTValues.V[GTValues.UV],
+                false);
     }
 
     public static void postInit() {
