@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import crafttweaker.annotations.ZenRegister;
-import gregtech.api.unification.material.properties.BlastProperty;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
@@ -23,10 +21,12 @@ import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidProperty;
 
+import crafttweaker.annotations.ZenRegister;
 import gregicality.multiblocks.api.fluids.GCYMMetaFluids;
 import gregtech.api.fluids.MetaFluids;
 import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.properties.BlastProperty;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @ZenClass("mods.gtcefucontent.material.Material")

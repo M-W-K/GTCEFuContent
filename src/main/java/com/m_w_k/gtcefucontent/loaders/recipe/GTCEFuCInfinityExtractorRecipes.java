@@ -2,13 +2,13 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES;
 
-import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStorageBlock;
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-import crazypants.enderio.base.init.ModObject;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStorageBlock;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
+
 import gregtech.api.GTValues;
 
 public final class GTCEFuCInfinityExtractorRecipes {
@@ -16,9 +16,12 @@ public final class GTCEFuCInfinityExtractorRecipes {
     private GTCEFuCInfinityExtractorRecipes() {}
 
     static final ItemStack dust = GTCEFuCMetaItems.INFINITY_REAGENT.getStackForm();
-    static final ItemStack block1 = GTCEFuCMetaBlocks.STORAGE_BLOCK.getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_1);
-    static final ItemStack block2 = GTCEFuCMetaBlocks.STORAGE_BLOCK.getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_2);
-    static final ItemStack block3 = GTCEFuCMetaBlocks.STORAGE_BLOCK.getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_3);
+    static final ItemStack block1 = GTCEFuCMetaBlocks.STORAGE_BLOCK
+            .getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_1);
+    static final ItemStack block2 = GTCEFuCMetaBlocks.STORAGE_BLOCK
+            .getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_2);
+    static final ItemStack block3 = GTCEFuCMetaBlocks.STORAGE_BLOCK
+            .getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_3);
 
     public static void init() {
         INFINITY_EXTRACTOR_RECIPES.recipeBuilder()

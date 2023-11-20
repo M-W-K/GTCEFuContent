@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.common.item;
 import gregtech.api.items.metaitem.MetaItem;
 
 public final class GTCEFuCMetaItems {
+
     private GTCEFuCMetaItems() {}
 
     public static MetaItem<?>.MetaValueItem CRYSTAL_VOID; // precient

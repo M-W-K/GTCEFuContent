@@ -1,16 +1,18 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import com.latmod.mods.projectex.item.ProjectEXItems;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import gregtech.api.GTValues;
-import gregtech.api.recipes.ModHandler;
-import gregtech.api.recipes.RecipeMaps;
-import net.minecraft.item.ItemStack;
+import static com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCInfinityExtractorRecipes.*;
 
 import java.util.Collections;
 
-import static com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCInfinityExtractorRecipes.*;
+import net.minecraft.item.ItemStack;
+
+import com.latmod.mods.projectex.item.ProjectEXItems;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
+
+import gregtech.api.GTValues;
+import gregtech.api.recipes.ModHandler;
+import gregtech.api.recipes.RecipeMaps;
 
 @SuppressWarnings("SameParameterValue")
 public final class GTCEFuCPackingLoader {
@@ -23,13 +25,15 @@ public final class GTCEFuCPackingLoader {
         simplePackingRegister("infinity_reagent_block3", GTCEFuCUtil.setStackCount(block2, 9), block3, true);
 
         // I know that this is incredibly annoying. That's the point.
-        stacksIn = new ItemStack[]{GTCEFuCMetaItems.STELLAR_NUGGET.getStackForm(9), new ItemStack(ProjectEXItems.FINAL_STAR_SHARD, 1)};
-        ItemStack[] stacksOut = new ItemStack[]{GTCEFuCMetaItems.STELLAR_INGOT.getStackForm()};
+        stacksIn = new ItemStack[] { GTCEFuCMetaItems.STELLAR_NUGGET.getStackForm(9),
+                new ItemStack(ProjectEXItems.FINAL_STAR_SHARD, 1) };
+        ItemStack[] stacksOut = new ItemStack[] { GTCEFuCMetaItems.STELLAR_INGOT.getStackForm() };
         packerPackingRegister(stacksIn, stacksOut, 1, GTValues.VA[GTValues.UV], true);
     }
 
     public static void simplePackingRegister(String name, ItemStack stackIn, ItemStack stackOut, boolean reversible) {
-        ModHandler.addShapelessRecipe(name + (reversible ? "_pack" : ""), stackOut, Collections.nCopies(stackIn.getCount(), GTCEFuCUtil.setStackCount(stackIn, 1)).toArray());
+        ModHandler.addShapelessRecipe(name + (reversible ? "_pack" : ""), stackOut,
+                Collections.nCopies(stackIn.getCount(), GTCEFuCUtil.setStackCount(stackIn, 1)).toArray());
         RecipeMaps.PACKER_RECIPES.recipeBuilder()
                 .inputs(stackIn)
                 .outputs(stackOut)
@@ -43,7 +47,8 @@ public final class GTCEFuCPackingLoader {
         }
     }
 
-    public static void packerPackingRegister(ItemStack[] stacksIn, ItemStack[] stacksOut, int duration, int EU, boolean reversible) {
+    public static void packerPackingRegister(ItemStack[] stacksIn, ItemStack[] stacksOut, int duration, int EU,
+                                             boolean reversible) {
         RecipeMaps.PACKER_RECIPES.recipeBuilder()
                 .inputs(stacksIn)
                 .outputs(stacksOut)

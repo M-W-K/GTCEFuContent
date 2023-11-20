@@ -1,20 +1,13 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import java.util.Objects;
+import net.minecraft.init.Blocks;
 
+import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
-import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-
-import crazypants.enderio.base.fluid.Fluids;
-import crazypants.enderio.base.init.ModObject;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ingredients.nbtmatch.NBTCondition;
 import gregtech.api.recipes.ingredients.nbtmatch.NBTMatcher;
@@ -41,7 +34,8 @@ public final class GTCEFuCAntimatterCompressorRecipes {
         GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
                 .fluidInputs(Materials.Nickel.getPlasma(1000))
                 .inputs(GTCEFuCInfinityExtractorRecipes.block3)
-                .inputs(GTCEFuCMetaBlocks.HARDENED_CASING.getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_CASING))
+                .inputs(GTCEFuCMetaBlocks.HARDENED_CASING
+                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_CASING))
                 .input(OrePrefix.dust, Materials.Stone, 6)
                 .output(Blocks.BEDROCK)
                 .duration(1000).EUt(GTValues.VA[GTValues.UHV])

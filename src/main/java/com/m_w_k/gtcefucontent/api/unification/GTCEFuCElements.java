@@ -8,8 +8,8 @@ import stanhebben.zenscript.annotations.ZenClass;
 @ZenClass("mods.gtcefucontent.material.Elements")
 @ZenRegister
 public class GTCEFuCElements {
+
     private GTCEFuCElements() {}
 
     public static final Element Ke1 = Elements.add(125, 196, -1, null, "TriniumReduced", "Ke-", true);
-
 }

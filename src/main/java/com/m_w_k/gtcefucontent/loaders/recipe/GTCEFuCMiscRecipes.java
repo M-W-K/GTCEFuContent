@@ -1,20 +1,14 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import java.util.Collection;
-import java.util.Objects;
 
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
-import crazypants.enderio.base.fluid.Fluids;
-import crazypants.enderio.base.init.ModObject;
-import crazypants.enderio.base.material.material.Material;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;

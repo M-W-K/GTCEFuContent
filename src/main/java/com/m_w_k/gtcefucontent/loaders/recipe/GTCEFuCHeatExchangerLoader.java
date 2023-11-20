@@ -3,7 +3,6 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 import java.util.HashMap;
 import java.util.Map;
 
-import gregtech.api.GTValues;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -14,6 +13,7 @@ import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidProperty;
 
+import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 

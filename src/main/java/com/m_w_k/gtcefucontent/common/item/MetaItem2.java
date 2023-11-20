@@ -1,14 +1,16 @@
 package com.m_w_k.gtcefucontent.common.item;
 
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import gregtech.api.items.metaitem.MetaItem;
-import gregtech.api.items.metaitem.StandardMetaItem;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.util.ResourceLocation;
+import static com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems.*;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.util.ResourceLocation;
+
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+
+import gregtech.api.items.metaitem.MetaItem;
+import gregtech.api.items.metaitem.StandardMetaItem;
 
 public class MetaItem2 extends StandardMetaItem {
 

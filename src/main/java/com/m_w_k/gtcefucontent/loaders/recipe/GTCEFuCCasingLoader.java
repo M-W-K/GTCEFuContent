@@ -1,15 +1,11 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import net.minecraft.item.ItemStack;
-
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
-import crazypants.enderio.base.init.ModObject;
 import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;

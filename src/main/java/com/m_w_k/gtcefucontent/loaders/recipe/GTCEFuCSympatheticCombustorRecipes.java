@@ -2,11 +2,8 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES;
 
-import net.minecraftforge.fluids.FluidStack;
-
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 
-import crazypants.enderio.base.fluid.Fluids;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.builders.FuelRecipeBuilder;
 import gregtech.api.unification.material.Materials;
