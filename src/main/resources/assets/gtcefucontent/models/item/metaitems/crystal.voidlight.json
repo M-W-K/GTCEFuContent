@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "gtcefucontent:enderio_assets/items/item_material_weather_crystal"
+  }
+}

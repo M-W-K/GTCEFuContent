@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 import java.util.Collection;
 import java.util.Objects;
 
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -44,9 +45,9 @@ public final class GTCEFuCMiscRecipes {
                 .buildAndRegister();
 
         RecipeMaps.CHEMICAL_BATH_RECIPES.recipeBuilder()
-                .inputs(Material.ENDER_CRYSTAL.getStack())
-                .fluidInputs(Materials.Glowstone.getFluid(76000))
-                .outputs(Material.VIBRANT_CRYSTAL.getStack())
+                .input(GTCEFuCMetaItems.CRYSTAL_ENDER)
+                .fluidInputs(GTCEFuCMaterials.LightEssence.getFluid(32000))
+                .output(GTCEFuCMetaItems.CRYSTAL_ENDLIGHT)
                 .duration(1100).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
         RecipeMaps.VACUUM_RECIPES.recipeBuilder()
@@ -66,13 +67,6 @@ public final class GTCEFuCMiscRecipes {
                 .duration(90)
                 .buildAndRegister();
 
-        RecipeMaps.FORMING_PRESS_RECIPES.recipeBuilder()
-                .input(ModObject.blockDarkIronBars.getItemNN(), 20)
-                .input(OrePrefix.block, Materials.Obsidian, 3)
-                .inputs(GTCEFuCInfinityExtractorRecipes.block1)
-                .output(ModObject.blockReinforcedObsidian.getItemNN())
-                .duration(3000).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
-
         RecipeMaps.DISTILLATION_RECIPES.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.VoidEssence.getFluid(8000))
                 .fluidOutputs(
@@ -82,50 +76,50 @@ public final class GTCEFuCMiscRecipes {
                         Materials.Krypton.getFluid(500),
                         Materials.Xenon.getFluid(500),
                         Materials.Radon.getFluid(1000))
-                .chancedOutput(Material.POWDER_PRECIENT.getStack(), 1000, 100)
+                .chancedOutput(GTCEFuCMetaItems.POWDER_VOID, 1000, 100)
                 .duration(800)
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
 
         RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.recipeBuilder()
-                .inputs(Material.POWDER_PRECIENT.getStack())
-                .outputs(Material.POWDER_ENDER_CYSTAL.getStack())
-                .chancedOutput(Material.POWDER_PULSATING.getStack(), 500, 150)
-                .chancedOutput(Material.POWDER_PULSATING.getStack(), 1000, 212)
-                .duration(200).EUt(24).buildAndRegister();
+                .input(GTCEFuCMetaItems.POWDER_VOID)
+                .output(GTCEFuCMetaItems.POWDER_ENDER)
+                .chancedOutput(GTCEFuCMetaItems.POWDER_STARLIGHT, 500, 150)
+                .chancedOutput(GTCEFuCMetaItems.POWDER_STARLIGHT, 1000, 212)
+                .duration(20000).EUt(24 * 4).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.VoidEssence.getFluid(1000))
-                .inputs(Material.POWDER_ENDER_CYSTAL.getStack())
+                .input(GTCEFuCMetaItems.POWDER_ENDER)
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
-                .outputs(Material.ENDER_CRYSTAL.getStack())
+                .output(GTCEFuCMetaItems.CRYSTAL_ENDER)
                 .fluidOutputs(Materials.Water.getFluid(1000))
                 .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(1000))
-                .inputs(Material.POWDER_PRECIENT.getStack())
+                .input(GTCEFuCMetaItems.POWDER_VOID)
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
-                .outputs(Material.PRECIENT_CRYSTAL.getStack())
+                .output(GTCEFuCMetaItems.CRYSTAL_VOID)
                 .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(1000))
                 .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(1000))
-                .inputs(Material.POWDER_PULSATING.getStack())
+                .input(GTCEFuCMetaItems.POWDER_STARLIGHT)
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
-                .outputs(Material.PULSATING_CRYSTAL.getStack())
+                .output(GTCEFuCMetaItems.CRYSTAL_STARLIGHT)
                 .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(1000))
                 .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
-                .inputs(Material.WEATHER_CRYSTAL.getStack())
+                .input(GTCEFuCMetaItems.CRYSTAL_VOIDLIGHT)
                 .fluidOutputs(Materials.UUMatter.getFluid(144))
-                .outputs(Material.POWDER_VIBRANT.getStack())
+                .output(GTCEFuCMetaItems.POWDER_ENDLIGHT)
                 .duration(300).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
-                .inputs(Material.ENDER_CRYSTAL.getStack())
+                .input(GTCEFuCMetaItems.CRYSTAL_ENDER)
                 .fluidOutputs(GTCEFuCMaterials.ChargedEnder.getFluid(500))
                 .duration(300).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
@@ -148,45 +142,36 @@ public final class GTCEFuCMiscRecipes {
                 .duration(100).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .inputs(Material.VIBRANT_CRYSTAL.getStack(6),
+                .inputs(GTCEFuCMetaItems.CRYSTAL_STARLIGHT.getStackForm(6),
                         new ItemStack(ProjectEXItems.COLLECTOR, 2, 9))
                 .fluidInputs(Materials.UUMatter.getFluid(144))
                 .outputs(new ItemStack(ProjectEXItems.COLLECTOR, 1, 15))
                 .duration(200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .input(ModObject.blockReinforcedObsidian.getItemNN(), 6)
-                .inputs(new ItemStack(ProjectEXItems.RELAY, 2, 9))
+                .inputs(GTCEFuCMetaItems.CRYSTAL_ENDLIGHT.getStackForm(6),
+                        new ItemStack(ProjectEXItems.RELAY, 2, 9))
                 .fluidInputs(Materials.UUMatter.getFluid(216))
                 .outputs(new ItemStack(ProjectEXItems.RELAY, 1, 15))
                 .duration(200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
 
-        if (GTCEFuCUtil.stellarAlloyCheck()) {
-            RecipeMaps.BENDER_RECIPES.recipeBuilder()
-                    .inputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyIngot.getItem()), 5, 3))
-                    .outputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyBall.getItem()), 1, 3))
-                    .duration(8000).EUt(GTValues.VA[GTValues.HV]).buildAndRegister();
+        RecipeMaps.FORMING_PRESS_RECIPES.recipeBuilder()
+                .inputs(GTCEFuCMetaItems.CRYSTAL_VOID.getStackForm(),
+                        GTCEFuCMetaItems.CRYSTAL_ENDLIGHT.getStackForm(2),
+                        GTCEFuCMetaItems.CRYSTAL_STARLIGHT.getStackForm(2),
+                        GTCEFuCMetaItems.INFINITY_REAGENT.getStackForm(64))
+                .input(OrePrefix.dust, GTCEFuCMaterials.TriniumReduced)
+                .output(GTCEFuCMetaItems.CRYSTAL_VOIDLIGHT)
+                .duration(1200).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
-            // I know that this is incredibly annoying. That's the point.
-            RecipeMaps.PACKER_RECIPES.recipeBuilder()
-                    .inputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyNugget.getItem()), 9, 3))
-                    .input(ProjectEXItems.FINAL_STAR_SHARD)
-                    .outputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyIngot.getItem()), 1, 3))
-                    .duration(1).EUt(GTValues.VA[GTValues.UV]).buildAndRegister();
-        }
+        RecipeMaps.BENDER_RECIPES.recipeBuilder()
+                .input(GTCEFuCMetaItems.STELLAR_INGOT, 5)
+                .output(GTCEFuCMetaItems.STELLAR_BALL)
+                .duration(8000).EUt(GTValues.VA[GTValues.HV]).buildAndRegister();
     }
 
     public static void initPost() {
         GTCEFuContent.log("Removing recipes, DON'T BE SCARED OF FML's WARNING ABOUT DANGEROUS ALTERNATIVE PREFIX");
-        if (GTCEFuCUtil.stellarAlloyCheck()) {
-            ModHandler.removeRecipeByName("enderio:auto_stellar_alloy_9_nuggets_to_1_ingot");
-            ModHandler.removeRecipeByName("enderio:auto_stellar_alloy_1_ingot_to_9_nuggets");
-            ModHandler.removeRecipeByName("enderio:auto_stellar_alloy_9_ingots_to_1_block");
-            ModHandler.removeRecipeByName("enderio:auto_stellar_alloy_1_block_to_9_ingots");
-        }
-        ModHandler.removeRecipeByName("enderio:pulsating_crystal");
-        ModHandler.removeRecipeByName("enderio:vibrant_crystal");
-        ModHandler.removeRecipeByName("enderio:reinforced_obsidian");
         ModHandler.removeRecipeByName("projectex:final_star_shard");
         ModHandler.removeRecipeByName("projectex:relay/final");
         ModHandler.removeRecipeByName("projectex:collector/final");

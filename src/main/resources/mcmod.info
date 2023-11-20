@@ -6,7 +6,7 @@
   "version": "${version}",
   "mcversion": "${mcversion}",
   "authorList": ["M-W-K"],
-  "credits": "GregoriusT for making GregTech and textures, and the creators of GCYM for their mod. Vnator for creating the GTCEFu modpack.",
-  "dependencies": ["gregtech", "GregicalityMultiblocks", "EnderIO", "ProjectE", "ProjectEX"]
+  "credits": "GregoriusT for making GregTech and textures, and the creators of GCYM for their mod. Vnator for creating the GTCEFu modpack. The creators of EIO for a number of borrowed textures.",
+  "dependencies": ["gregtech", "GregicalityMultiblocks", "ProjectE", "ProjectEX"]
 }
 ]

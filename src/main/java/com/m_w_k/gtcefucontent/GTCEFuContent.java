@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent;
 
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -28,7 +29,6 @@ public final class GTCEFuContent {
 
     public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.7.4-beta,);" +
             "required-after:gcym@[1.2.5,);" +
-            "required-after:enderio@[5.3,);" +
             "required-after:projecte@[1.4.1,);" +
             "required-after:projectex@[1.2.0,);";
 
@@ -48,6 +48,7 @@ public final class GTCEFuContent {
         GTCEFuCRecipeMaps.init();
 
         GTCEFuCMetaBlocks.init();
+        GTCEFuCMetaItems.init();
         GTCEFuCMetaTileEntities.init();
 
         MetaTileEntityFusionStack.init();

@@ -1,6 +1,8 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
+import crazypants.enderio.base.EnderIO;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -12,6 +14,7 @@ import gregtech.api.GTValues;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
+import net.minecraftforge.fml.common.Loader;
 
 public final class GTCEFuCPneumaticInfuserRecipes {
 
@@ -24,13 +27,6 @@ public final class GTCEFuCPneumaticInfuserRecipes {
                         Materials.Oxygen.getFluid(100))
                 .output(OrePrefix.ingot, Materials.DamascusSteel)
                 .duration(500).EUt(GTValues.VA[GTValues.EV]).buildAndRegister();
-
-        GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
-                .input(OrePrefix.dust, Materials.Obsidian, 4)
-                .fluidInputs(Materials.Tungsten.getFluid(144),
-                        Materials.DamascusSteel.getFluid(144))
-                .outputs(new ItemStack(ModObject.itemAlloyIngot.getItemNN(), 1, 6))
-                .duration(750).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
 
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .input(MetaItems.COVER_SOLAR_PANEL, 64)
@@ -62,7 +58,7 @@ public final class GTCEFuCPneumaticInfuserRecipes {
                 .duration(400).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
 
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
-                .inputs(new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 35))
+                .input(GTCEFuCMetaItems.POWDER_ENDLIGHT)
                 .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(300),
                         Materials.Plutonium239.getFluid(72),
                         Materials.Argon.getPlasma(64000))

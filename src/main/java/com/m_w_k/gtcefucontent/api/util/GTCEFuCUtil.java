@@ -3,30 +3,16 @@ package com.m_w_k.gtcefucontent.api.util;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 
-import crazypants.enderio.base.init.ModObject;
 import gregtech.api.metatileentity.MetaTileEntity;
 
 public final class GTCEFuCUtil {
-
-    private static Boolean stellarAlloyPresent = null;
-
-    public static boolean stellarAlloyCheck() {
-        if (stellarAlloyPresent == null) {
-            stellarAlloyPresent = ModObject.itemAlloyEndergyIngot.getItem() != null &&
-                    ModObject.itemAlloyEndergyBall.getItem() != null &&
-                    ModObject.itemAlloyEndergyNugget.getItem() != null;
-            if (!stellarAlloyPresent)
-                GTCEFuContent.log("Stellar Alloy not found. This is a critical recipe problem.",
-                        GTCEFuContent.LogType.ERROR);
-        }
-        return stellarAlloyPresent;
-    }
 
     public static ResourceLocation gtcefucId(String name) {
         return new ResourceLocation(GTCEFuContent.MODID, name);
@@ -53,5 +39,9 @@ public final class GTCEFuCUtil {
         if (total.isPresent()) {
             return Math.pow(total.getAsDouble(), 1D / numbers.length);
         } else return 0;
+    }
+
+    public static ItemStack setStackCount(ItemStack stack, int count) {
+        return new ItemStack(stack.getItem(), count, stack.getMetadata());
     }
 }

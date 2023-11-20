@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "variant=infinity1": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gtcefucontent:enderio_assets/blocks/block_infinity_0"
+      }
+    },
+    "variant=infinity2": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gtcefucontent:enderio_assets/blocks/block_infinity_1"
+      }
+    },
+    "variant=infinity3": {
+      "model": "minecraft:cube_all",
+      "textures": {
+        "all": "gtcefucontent:enderio_assets/blocks/block_infinity_2"
+      }
+    }
+  }
+}

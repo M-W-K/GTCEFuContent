@@ -91,9 +91,10 @@ public final class GTCEFuCMaterials {
     private static final AtomicBoolean INIT = new AtomicBoolean(false);
 
     // IDs 22500 - 22529 reserved for multiblocks
-    // IDs 22530 - 22559 reserved for normal metaTileEntities
-    // IDs 22560 - 22599 reserved for materials
-    private static final AtomicInteger ID = new AtomicInteger(22560);
+    // IDs 22530 - 22549 reserved for normal metaTileEntities
+    // IDs 22550 - 22569 reserved for meta items
+    // IDs 22570 - 22599 reserved for materials
+    private static final AtomicInteger ID = new AtomicInteger(22570);
 
     public static void register() {
         if (INIT.getAndSet(true)) {

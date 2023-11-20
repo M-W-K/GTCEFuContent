@@ -1,6 +1,8 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import net.minecraft.item.ItemStack;
 
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
@@ -61,8 +63,8 @@ public final class GTCEFuCCasingLoader {
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .inputs(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
                         .getItemVariant(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING, 2),
-                        new ItemStack(ModObject.block_infinity.getItemNN(), 32),
-                        new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 34))
+                        GTCEFuCMetaItems.INFINITY_REAGENT.getStackForm(32),
+                        GTCEFuCMetaItems.POWDER_ENDLIGHT.getStackForm())
                 .input(MetaItems.FIELD_GENERATOR_UV, 6)
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV)
                 .fluidInputs(GTCEFuCMaterials.TriniumReduced.getFluid(1500))

@@ -91,6 +91,9 @@ tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing
 tile.hardened_casing.plasma_pipe_casing.name=Integrated Fusion Piping
 tile.hardened_casing.high_pressure_casing.name=High Pressure Casing
 tile.advanced_casing.null_field_casing.name=Null-Field Casing
+tile.storage_block.infinity1.name=Block of Infinity Reagent
+tile.storage_block.infinity2.name=Compressed Block of Infinity Reagent
+tile.storage_block.infinity3.name=Double Compressed Block of Infinity Reagent
 
 gtcefucontent.material.caesium_chlorine_mix=Caesium-Chlorine Mixture
 gtcefucontent.material.charged_ender=Charged Ender
@@ -103,6 +106,20 @@ gtcefucontent.material.vapor_seed=Primed Vaporous Seed
 gtcefucontent.material.fire_enhancer=Flame Enhancer
 gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
 gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Caesium-Potassium Mixture
+
+metaitem.crystal.void.name=Void Crystal
+metaitem.powder.void.name=Void Powder
+metaitem.crystal.ender.name=Ender Crystal
+metaitem.powder.ender.name=Ender Powder
+metaitem.crystal.starlight.name=Starlight Crystal
+metaitem.powder.starlight.name=Starlight Powder
+metaitem.crystal.endlight.name=Endlight Crystal
+metaitem.powder.endlight.name=Endlight Powder
+metaitem.crystal.voidlight.name=Voidlight Crystal
+metaitem.nugget.stellar_alloy.name=Stellar Alloy Nugget
+metaitem.ingot.stellar_alloy.name=Stellar Alloy Ingot
+metaitem.ball.stellar_alloy.name=Stellar Alloy Core
+metaitem.infinity_reagent.name=Infinity Reagent
 
 gtcefucontent.fluid.hot=Hot %s
 gtcefucontent.fluid.cold=Cold %s

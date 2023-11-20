@@ -39,6 +39,8 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCStarSiphonRecipes.init();
         GTCEFuCAntimatterCompressorRecipes.init();
 
+        GTCEFuCPackingLoader.init();
+
         GTCEFuCCasingLoader.init();
         GTCEFuCHEUComponentLoader.init();
         GTCEFuCMiscRecipes.init();

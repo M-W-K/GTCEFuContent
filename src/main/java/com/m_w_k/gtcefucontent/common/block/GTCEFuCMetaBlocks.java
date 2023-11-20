@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.common.block;
 
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStorageBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -22,18 +23,22 @@ public final class GTCEFuCMetaBlocks {
 
     public static GTCEFuCBlockAdvancedCasing ADVANCED_CASING;
     public static GTCEFuCBlockHardenedCasing HARDENED_CASING;
+    public static GTCEFuCBlockStorageBlock STORAGE_BLOCK;
 
     public static void init() {
         ADVANCED_CASING = new GTCEFuCBlockAdvancedCasing();
         ADVANCED_CASING.setRegistryName("advanced_casing");
         HARDENED_CASING = new GTCEFuCBlockHardenedCasing();
         HARDENED_CASING.setRegistryName("hardened_casing");
+        STORAGE_BLOCK = new GTCEFuCBlockStorageBlock();
+        STORAGE_BLOCK.setRegistryName("storage_block");
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerItemModels() {
         ADVANCED_CASING.onModelRegister();
         registerItemModel(HARDENED_CASING);
+        registerItemModel(STORAGE_BLOCK);
     }
 
     @SideOnly(Side.CLIENT)

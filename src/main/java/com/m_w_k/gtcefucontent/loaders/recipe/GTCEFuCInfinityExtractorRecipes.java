@@ -2,6 +2,9 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES;
 
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStorageBlock;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -12,10 +15,10 @@ public final class GTCEFuCInfinityExtractorRecipes {
 
     private GTCEFuCInfinityExtractorRecipes() {}
 
-    static final ItemStack dust = new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 20);
-    static final ItemStack block1 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 0);
-    private static final ItemStack block2 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 1);
-    static final ItemStack block3 = new ItemStack(ModObject.block_infinity.getItemNN(), 1, 2);
+    static final ItemStack dust = GTCEFuCMetaItems.INFINITY_REAGENT.getStackForm();
+    static final ItemStack block1 = GTCEFuCMetaBlocks.STORAGE_BLOCK.getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_1);
+    static final ItemStack block2 = GTCEFuCMetaBlocks.STORAGE_BLOCK.getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_2);
+    static final ItemStack block3 = GTCEFuCMetaBlocks.STORAGE_BLOCK.getItemVariant(GTCEFuCBlockStorageBlock.StorageType.INFINITY_3);
 
     public static void init() {
         INFINITY_EXTRACTOR_RECIPES.recipeBuilder()

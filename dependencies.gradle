@@ -30,9 +30,6 @@ dependencies {
 
     implementation rfg.deobf("curse.maven:gregicality-multiblocks-564858:4701685-deobf-sources")
 
-    implementation rfg.deobf("curse.maven:endercore-231868:4671384-api")
-    implementation rfg.deobf("curse.maven:enderio-base-297193:4674231")
-
     implementation rfg.deobf("curse.maven:projecte-226410:2702991")
     implementation rfg.deobf("curse.maven:projectex-311378:3014173-sources")
 
@@ -41,5 +38,7 @@ dependencies {
     compileOnlyApi "curse.maven:groovyscript-687577:4749823-dev-sources"
     compileOnlyApi "curse.maven:appeng-223794:2747063"
     compileOnlyApi "curse.maven:ctm-267602:2915363"
+    compileOnlyApi rfg.deobf("curse.maven:endercore-231868:4671384-api")
+    compileOnlyApi rfg.deobf("curse.maven:enderio-base-297193:4674231")
 
 }
