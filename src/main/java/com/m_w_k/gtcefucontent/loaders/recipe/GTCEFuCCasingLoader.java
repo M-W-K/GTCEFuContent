@@ -1,13 +1,12 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 
-import crazypants.enderio.base.fluid.Fluids;
 import crazypants.enderio.base.init.ModObject;
 import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
@@ -66,7 +65,7 @@ public final class GTCEFuCCasingLoader {
                         new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 34))
                 .input(MetaItems.FIELD_GENERATOR_UV, 6)
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV)
-                .fluidInputs(new FluidStack(Fluids.VAPOR_OF_LEVITY.getFluid(), 1500))
+                .fluidInputs(GTCEFuCMaterials.TriniumReduced.getFluid(1500))
                 .outputs(GTCEFuCMetaBlocks.ADVANCED_CASING
                         .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
                 .circuitMeta(6)

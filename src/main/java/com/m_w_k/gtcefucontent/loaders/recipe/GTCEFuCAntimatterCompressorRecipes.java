@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import java.util.Objects;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -48,7 +49,7 @@ public final class GTCEFuCAntimatterCompressorRecipes {
 
             GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
                     .fluidInputs(Materials.Nickel.getPlasma(64000),
-                            new FluidStack(Fluids.LIQUID_SUNSHINE.getFluid(), 1024000))
+                            GTCEFuCMaterials.LightEssence.getFluid(1024000))
                     .input(OrePrefix.dustSmall, Materials.Neutronium)
                     .inputs(new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 19))
                     .inputs(new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 14))
@@ -61,7 +62,7 @@ public final class GTCEFuCAntimatterCompressorRecipes {
             GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
                     // 4096000 = 1 UHV hatch
                     .fluidInputs(Materials.Nickel.getPlasma(4096000 * 4),
-                            new FluidStack(Fluids.XP_JUICE.getFluid(), 1000))
+                            GTCEFuCMaterials.ExperienceEssence.getFluid(1000))
                     .inputNBT(MetaItems.ULTIMATE_BATTERY, NBTMatcher.ANY, NBTCondition.ANY)
                     .inputs(new ItemStack(Objects.requireNonNull(ModObject.itemAlloyEndergyBall.getItem()), 1, 3))
                     .outputs(MetaItems.ULTIMATE_BATTERY.getChargedStack(Long.MAX_VALUE))

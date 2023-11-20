@@ -38,7 +38,7 @@ public final class GTCEFuCMiscRecipes {
                 .fluidInputs(Materials.LiquidAir.getFluid(60000), Materials.Water.getFluid(60000))
                 .input(OrePrefix.dust, Materials.Ash)
                 .input(OrePrefix.dust, Materials.DarkAsh)
-                .fluidOutputs(new FluidStack(Fluids.CLOUD_SEED.getFluid(), 20000))
+                .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(20000))
                 .duration(200)
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
@@ -50,8 +50,10 @@ public final class GTCEFuCMiscRecipes {
                 .duration(1100).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
         RecipeMaps.VACUUM_RECIPES.recipeBuilder()
-                .fluidInputs(new FluidStack(Fluids.CLOUD_SEED.getFluid(), 6000))
-                .fluidOutputs(new FluidStack(Fluids.CLOUD_SEED_CONCENTRATED.getFluid(), 25))
+                .fluidInputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(6000),
+                        Materials.Mercury.getFluid(54))
+                .input(OrePrefix.dustTiny, Materials.Beryllium)
+                .fluidOutputs(GTCEFuCMaterials.VaporSeed.getFluid(25))
                 .duration(120)
                 .EUt(GTValues.VA[GTValues.EV])
                 .buildAndRegister();
@@ -72,7 +74,7 @@ public final class GTCEFuCMiscRecipes {
                 .duration(3000).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
 
         RecipeMaps.DISTILLATION_RECIPES.recipeBuilder()
-                .fluidInputs(new FluidStack(Fluids.ENDER_DISTILLATION.getFluid(), 8000))
+                .fluidInputs(GTCEFuCMaterials.VoidEssence.getFluid(8000))
                 .fluidOutputs(
                         Materials.Helium.getFluid(2000),
                         Materials.Neon.getFluid(2000),
@@ -93,7 +95,7 @@ public final class GTCEFuCMiscRecipes {
                 .duration(200).EUt(24).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
-                .fluidInputs(new FluidStack(Fluids.ENDER_DISTILLATION.getFluid(), 1000))
+                .fluidInputs(GTCEFuCMaterials.VoidEssence.getFluid(1000))
                 .inputs(Material.POWDER_ENDER_CYSTAL.getStack())
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
                 .outputs(Material.ENDER_CRYSTAL.getStack())
@@ -101,19 +103,19 @@ public final class GTCEFuCMiscRecipes {
                 .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
-                .fluidInputs(new FluidStack(Fluids.CLOUD_SEED_CONCENTRATED.getFluid(), 1000))
+                .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(1000))
                 .inputs(Material.POWDER_PRECIENT.getStack())
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
                 .outputs(Material.PRECIENT_CRYSTAL.getStack())
-                .fluidOutputs(new FluidStack(Fluids.CLOUD_SEED.getFluid(), 1000))
+                .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(1000))
                 .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
-                .fluidInputs(new FluidStack(Fluids.CLOUD_SEED_CONCENTRATED.getFluid(), 1000))
+                .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(1000))
                 .inputs(Material.POWDER_PULSATING.getStack())
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
                 .outputs(Material.PULSATING_CRYSTAL.getStack())
-                .fluidOutputs(new FluidStack(Fluids.CLOUD_SEED.getFluid(), 1000))
+                .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(1000))
                 .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
@@ -137,7 +139,7 @@ public final class GTCEFuCMiscRecipes {
                 .output(OrePrefix.dust, Materials.Neutronium, 64)
                 .output(OrePrefix.dust, Materials.Neutronium, 64)
                 .output(OrePrefix.dust, Materials.Neutronium, 64)
-                .fluidOutputs(new FluidStack(Fluids.XP_JUICE.getFluid(), 200))
+                .fluidOutputs(GTCEFuCMaterials.ExperienceEssence.getFluid(200))
                 .duration(8400).EUt(GTValues.VA[GTValues.UV]).buildAndRegister();
 
         RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()
@@ -191,15 +193,15 @@ public final class GTCEFuCMiscRecipes {
     }
 
     public static void cutterUpdate() {
-        GTCEFuContent.log("Updating cutter recipes with Cloud Seed...");
+        GTCEFuContent.log("Updating cutter recipes with Vapor Seed...");
         Collection<Recipe> oldRecipes = RecipeMaps.CUTTER_RECIPES.getRecipeList();
         oldRecipes.forEach(recipe -> {
-            // replicate lubricant recipes, but halve the duration and switch to cloud seed
+            // replicate lubricant recipes, but halve the duration and switch to vapor seed
             if (recipe.hasInputFluid(Materials.Lubricant.getFluid(1))) {
                 // Extrapolation of the greg formula for water, distilled water, and lubricant.
                 int fluidAmount = (int) Math.max(50, Math.min(12500, recipe.getDuration() * recipe.getEUt() / 25.6));
                 RecipeMaps.CUTTER_RECIPES.recipeBuilder()
-                        .fluidInputs(new FluidStack(Fluids.CLOUD_SEED.getFluid(), fluidAmount))
+                        .fluidInputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(fluidAmount))
                         // we know the cutter only has one input
                         .input(recipe.getInputs().get(0))
                         .outputs(recipe.getOutputs().toArray(new ItemStack[0]))

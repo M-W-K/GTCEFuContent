@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -36,33 +37,33 @@ public final class GTCEFuCPneumaticInfuserRecipes {
                 .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 64, 9000, 0)
                 .fluidInputs(Materials.Glowstone.getFluid(4800),
                         Materials.Ice.getFluid(13500))
-                .fluidOutputs(new FluidStack(Fluids.LIQUID_SUNSHINE.getFluid(), 14000))
+                .fluidOutputs(GTCEFuCMaterials.LightEssence.getFluid(14000))
                 .duration(200).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCInfinityExtractorRecipes.dust)
-                .fluidInputs(new FluidStack(Fluids.LIQUID_SUNSHINE.getFluid(), 10000),
-                        Materials.Blaze.getFluid(1296))
-                .fluidOutputs(new FluidStack(Fluids.FIRE_WATER.getFluid(), 10000))
+                .fluidInputs(GTCEFuCMaterials.LightEssence.getFluid(10000),
+                        Materials.Blaze.getFluid(1440))
+                .fluidOutputs(GTCEFuCMaterials.FireEnhancer.getFluid(10000))
                 .duration(250).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCInfinityExtractorRecipes.dust)
-                .fluidInputs(new FluidStack(Fluids.CLOUD_SEED_CONCENTRATED.getFluid(), 100),
+                .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(100),
                         Materials.Hydrogen.getFluid(30000))
-                .fluidOutputs(new FluidStack(Fluids.VAPOR_OF_LEVITY.getFluid(), 5000))
+                .fluidOutputs(GTCEFuCMaterials.TriniumReduced.getFluid(5000))
                 .duration(400).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
 
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCInfinityExtractorRecipes.dust)
-                .fluidInputs(new FluidStack(Fluids.CLOUD_SEED_CONCENTRATED.getFluid(), 100),
-                        Materials.Radon.getFluid(1000))
-                .fluidOutputs(new FluidStack(Fluids.ENDER_DISTILLATION.getFluid(), 5000))
+                .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(100),
+                        Materials.Radon.getFluid(1500))
+                .fluidOutputs(GTCEFuCMaterials.VoidEssence.getFluid(5000))
                 .duration(400).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
 
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .inputs(new ItemStack(ModObject.itemMaterial.getItemNN(), 1, 35))
-                .fluidInputs(new FluidStack(Fluids.CLOUD_SEED_CONCENTRATED.getFluid(), 300),
+                .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(300),
                         Materials.Plutonium239.getFluid(72),
                         Materials.Argon.getPlasma(64000))
                 .fluidOutputs(Materials.McGuffium239.getFluid(48))

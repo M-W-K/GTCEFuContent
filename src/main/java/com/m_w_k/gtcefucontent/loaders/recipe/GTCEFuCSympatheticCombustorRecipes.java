@@ -65,7 +65,7 @@ public final class GTCEFuCSympatheticCombustorRecipes {
                 .buildAndRegister();
         // 1mb fire water = 100 more tick of LV production
         builder.copy().duration(duration * 2 / mod4)
-                .fluidInputs(new FluidStack(Fluids.FIRE_WATER.getFluid(), duration / 1000))
+                .fluidInputs(GTCEFuCMaterials.FireEnhancer.getFluid(duration / 1000))
                 .circuitMeta(i + 10)
                 .buildAndRegister();
         i++;

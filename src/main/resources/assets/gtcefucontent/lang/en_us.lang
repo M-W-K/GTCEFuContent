@@ -94,6 +94,13 @@ tile.advanced_casing.null_field_casing.name=Null-Field Casing
 
 gtcefucontent.material.caesium_chlorine_mix=Caesium-Chlorine Mixture
 gtcefucontent.material.charged_ender=Charged Ender
+gtcefucontent.material.reduced_trinium=Reduced Trinium
+gtcefucontent.material.void_essence=Essence of the Void
+gtcefucontent.material.light_essence=Essence of Light
+gtcefucontent.material.experience_essence=Essence of Experience
+gtcefucontent.material.raw_vapor_seed=Vaporous Seed
+gtcefucontent.material.vapor_seed=Primed Vaporous Seed
+gtcefucontent.material.fire_enhancer=Flame Enhancer
 gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
 gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Caesium-Potassium Mixture
 
