@@ -81,7 +81,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
 
     protected final int tier;
     protected final int hEUCount;
-    protected List<IHEUComponent> notifiedHEUComponentList = new ArrayList<>();
+    protected final List<IHEUComponent> notifiedHEUComponentList = new ArrayList<>();
     protected final HEUGridHandler heuHandler;
 
     private boolean isWorkingEnabled = true;
