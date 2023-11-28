@@ -1,4 +1,4 @@
-//version: 1695527071
+//version: 1700970468
 /*
  * DO NOT CHANGE THIS FILE!
  * Also, you may replace this file at any time if there is an update available.
@@ -456,7 +456,7 @@ configurations {
     }
 }
 
-String mixinProviderSpec = 'zone.rong:mixinbooter:8.3'
+String mixinProviderSpec = 'zone.rong:mixinbooter:8.9'
 dependencies {
     if (usesMixins.toBoolean()) {
         annotationProcessor 'org.ow2.asm:asm-debug-all:5.2'
@@ -501,8 +501,8 @@ dependencies {
         testCompileOnly "me.eigenraven.java8unsupported:java-8-unsupported-shim:1.0.0"
     }
 
-    compileOnlyApi 'org.jetbrains:annotations:23.0.0'
-    annotationProcessor 'org.jetbrains:annotations:23.0.0'
+    compileOnlyApi 'org.jetbrains:annotations:24.1.0'
+    annotationProcessor 'org.jetbrains:annotations:24.1.0'
     patchedMinecraft('net.minecraft:launchwrapper:1.17.2') {
         transitive = false
     }
