@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.m_w_k.gtcefucontent.api.fluids.GTCEFuCFluidStorageKeys;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -11,7 +12,7 @@ import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidProperty;
+import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
 
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
@@ -47,17 +48,17 @@ public final class GTCEFuCHeatExchangerLoader {
         }
 
         // eutectic alloys
-        GTCEFuCThreeTempFluidProperty property;
+        GTCEFuCHeatCapacityProperty property;
         for (Material material : GTCEFuCMaterials.EutecticAlloys.keySet()) {
-            property = material.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID);
+            property = material.getProperty(GTCEFuCPropertyKey.HEAT_CAPACITY);
             HeatExchangerRecipeHandler.registerHeatExchange(
                     material.getFluid(1),
-                    new FluidStack(property.getFluidHot(), 1),
-                    property.getThermalCapacity());
+                    new FluidStack(material.getFluid(GTCEFuCFluidStorageKeys.HOT), 1),
+                    property.getThermalCapacityFluid());
             HeatExchangerRecipeHandler.registerHeatExchange(
                     material.getFluid(1),
-                    new FluidStack(property.getFluidCold(), 1),
-                    property.getThermalCapacity());
+                    new FluidStack(material.getFluid(GTCEFuCFluidStorageKeys.COLD), 1),
+                    property.getThermalCapacityFluid());
         }
 
         // custom conversions

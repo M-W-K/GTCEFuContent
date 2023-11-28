@@ -122,7 +122,7 @@ public class AxisAlignedCubeRenderer implements ICubeRenderer {
                     IVertexOperation[] lightPipeline = ArrayUtils.addAll(pipeline, new LightMapOperation(240, 240),
                             rotation);
                     Textures.renderFace(renderState, renderTranslation, lightPipeline, renderSide, bounds,
-                            emissiveSprite, BloomEffectUtil.getRealBloomLayer());
+                            emissiveSprite, BloomEffectUtil.getEffectiveBloomLayer());
                 } else {
                     Textures.renderFace(renderState, renderTranslation, ArrayUtils.addAll(pipeline, rotation),
                             renderSide, bounds, emissiveSprite, BlockRenderLayer.CUTOUT_MIPPED);

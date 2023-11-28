@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.api.unification;
 
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.fluidAtTemp;
 import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
 import static gregtech.api.GTValues.LuV;
 import static gregtech.api.GTValues.VA;
@@ -13,20 +14,17 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-
-import com.m_w_k.gtcefucontent.api.fluids.fluidType.GTCEFuCFluidTypes;
-import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
+import com.m_w_k.gtcefucontent.api.fluids.GTCEFuCFluidStorageKeys;
+import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCThreeTempFluidProperty;
+import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.fluids.attribute.FluidAttributes;
 
 import crafttweaker.annotations.ZenRegister;
-import gregicality.multiblocks.api.fluids.GCYMMetaFluids;
-import gregtech.api.fluids.MetaFluids;
-import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.BlastProperty;
+import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @ZenClass("mods.gtcefucontent.material.Material")
@@ -119,85 +117,57 @@ public final class GTCEFuCMaterials {
                 .ingot().fluid()
                 .color(0x5E4C6E).iconSet(DULL)
                 .element(GTCEFuCElements.Ke1)
-                .blastTemp(5200, BlastProperty.GasTier.HIGH, VA[LuV], 900)
+                .blast((b) -> b.temp(5200, BlastProperty.GasTier.HIGH).blastStats(VA[LuV], 900))
                 .build();
 
-        VoidEssence = new Material.Builder(ID.getAndIncrement(), gtcefucId("void_essence"))
-                .fluid(FluidTypes.ACID).fluidTemp(0)
-                .color(0x33523F).iconSet(FLUID)
+        VoidEssence = essence(ID.getAndIncrement(), gtcefucId("void_essence"))
+                .color(0x33523F)
                 // .components(Helium, 4, Neon, 4, Argon, 4, Krypton, 1, Xenon, 1, Radon, 2)
                 .build();
 
-        LightEssence = new Material.Builder(ID.getAndIncrement(), gtcefucId("light_essence"))
-                .fluid(FluidTypes.ACID).fluidTemp(1000)
-                .color(0xFFF997).iconSet(GAS)
+        LightEssence = essence(ID.getAndIncrement(), gtcefucId("light_essence"))
+                .color(0xFFF997)
                 .build();
 
-        ExperienceEssence = new Material.Builder(ID.getAndIncrement(), gtcefucId("experience_essence"))
-                .fluid(FluidTypes.ACID)
-                .color(0x04BB00).iconSet(FLUID)
+        ExperienceEssence = essence(ID.getAndIncrement(), gtcefucId("experience_essence"))
+                .color(0x04BB00)
                 .build();
 
         FireEnhancer = new Material.Builder(ID.getAndIncrement(), gtcefucId("fire_enhancer"))
-                .fluid(FluidTypes.GAS).fluidTemp(2000)
+                .gas(fluidAtTemp(2000))
                 .color(0xD69A00).iconSet(FLUID)
                 .build();
 
         VaporSeedRaw = new Material.Builder(ID.getAndIncrement(), gtcefucId("raw_vapor_seed"))
-                .fluid(FluidTypes.GAS).fluidTemp(300)
+                .gas(fluidAtTemp(300))
                 .color(0x20FFF0).iconSet(FLUID)
                 .build();
 
         VaporSeed = new Material.Builder(ID.getAndIncrement(), gtcefucId("vapor_seed"))
-                .fluid().fluidTemp(100)
+                .liquid(fluidAtTemp(100))
                 .color(0x003B78).iconSet(FLUID)
                 .build();
 
         // sea snake
-        EutecticCaesiumSodiumPotassium = new Material.Builder(ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy"))
-                .fluid().fluidTemp(EutecticAlloysString.get("eutectic_csnak_alloy")[1])
-                .colorAverage().iconSet(METALLIC)
+        EutecticCaesiumSodiumPotassium = eutectic(
+                ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy"),
+                EutecticAlloysString.get("eutectic_csnak_alloy"))
+                .colorAverage()
                 .flags(DECOMPOSITION_BY_CENTRIFUGING)
                 .components(Caesium, 4, Sodium, 1, Potassium, 5)
                 .build();
 
-        EutecticCaesiumPotassiumGalliumNaquadahEnriched = new Material.Builder(ID.getAndIncrement(),
-                gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"))
-                        .fluid().fluidTemp(EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy")[1])
-                        .colorAverage().iconSet(METALLIC)
-                        .flags(DECOMPOSITION_BY_ELECTROLYZING)
-                        .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
-                        .build();
+        EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(
+                ID.getAndIncrement(), gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
+                EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"))
+                .colorAverage()
+                .flags(DECOMPOSITION_BY_ELECTROLYZING)
+                .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
+                .build();
 
         populateEutecticMap();
 
-        // generate the hot and cold versions of the eutectic alloys
-        for (Material eutecticAlloy : EutecticAlloys.keySet()) {
-            eutecticAlloy.setProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID, new GTCEFuCThreeTempFluidProperty(
-                    EutecticAlloys.get(eutecticAlloy)[0],
-                    EutecticAlloys.get(eutecticAlloy)[2],
-                    EutecticAlloys.get(eutecticAlloy)[3]));
-
-            MetaFluids.setMaterialFluidTexture(eutecticAlloy, GTCEFuCFluidTypes.HOT,
-                    GCYMMetaFluids.AUTO_GENERATED_MOLTEN_TEXTURE);
-            MetaFluids.setMaterialFluidTexture(eutecticAlloy, GTCEFuCFluidTypes.COLD,
-                    new ResourceLocation("gregtech", "blocks/material_sets/fluid/fluid"));
-
-            Fluid cold = MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.COLD,
-                    EutecticAlloys.get(eutecticAlloy)[0],
-                    false);
-            Fluid hot = MetaFluids.registerFluid(eutecticAlloy, GTCEFuCFluidTypes.HOT,
-                    EutecticAlloys.get(eutecticAlloy)[2],
-                    false);
-            eutecticAlloy.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID).setFluidCold(
-                    cold);
-            eutecticAlloy.getProperty(GTCEFuCPropertyKey.THREE_TEMP_FLUID).setFluidHot(
-                    hot);
-            HeatExchangerRecipeHandler.addEutectic(
-                    GTCEFuCFluidTypes.COLD.getNameForMaterial(eutecticAlloy),
-                    FluidTypes.LIQUID.getNameForMaterial(eutecticAlloy),
-                    GTCEFuCFluidTypes.HOT.getNameForMaterial(eutecticAlloy));
-        }
+        generateEutecticProperties();
     }
 
     private static void populateEutecticMap() {
@@ -206,5 +176,48 @@ public final class GTCEFuCMaterials {
         // 269K to 7420K
         EutecticAlloys.put(EutecticCaesiumPotassiumGalliumNaquadahEnriched,
                 EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"));
+    }
+
+    /**
+     * Call this function after adding more eutectic alloys to the eutectic maps to autogenerate their properties.
+     */
+    public static void generateEutecticProperties() {
+        for (Map.Entry<Material, int[]> eutectic  : EutecticAlloys.entrySet()) {
+            // generate heat capacity properties for eutectic materials
+            if (!eutectic.getKey().hasProperty(GTCEFuCPropertyKey.HEAT_CAPACITY)) {
+                eutectic.getKey().setProperty(GTCEFuCPropertyKey.HEAT_CAPACITY,
+                        new GTCEFuCHeatCapacityProperty(eutectic.getValue()[3], false));
+            }
+        }
+    }
+
+    /**
+     * Generate an essence. Performs functions shared across all essences.
+     * @param id               The MetaItemSubID for this Material. Must be unique.
+     * @param resourceLocation The ModId and Name of this Material. Will be formatted as "<modid>.material.<name>"
+     *                         for the Translation Key.
+     * @return The essence material builder.
+     */
+    public static Material.Builder essence(int id, @NotNull ResourceLocation resourceLocation) {
+        // gaseous, acidic, and cryogenic all at the same time. Stainless steel go brrr.
+        // as an aside, I am very annoyed that I can't put a fluid at 0°K
+        return new Material.Builder(id, resourceLocation)
+                .gas(new FluidBuilder().attributes(FluidAttributes.ACID).temperature(1)).iconSet(FLUID);
+
+    }
+
+    /**
+     * Generate a eutectic material. Performs functions shared across all eutectic materials.
+     * @param id               The MetaItemSubID for this Material. Must be unique.
+     * @param resourceLocation The ModId and Name of this Material. Will be formatted as "<modid>.material.<name>"
+     *                         for the Translation Key.
+     * @param eutecticStats The parameters of the eutectic material.
+     * @return The eutectic material builder.
+     */
+    public static Material.Builder eutectic(int id, @NotNull ResourceLocation resourceLocation, int[] eutecticStats) {
+        return new Material.Builder(id, resourceLocation).iconSet(METALLIC)
+                .fluid(GTCEFuCFluidStorageKeys.COLD, fluidAtTemp(eutecticStats[0]))
+                .liquid(fluidAtTemp(eutecticStats[1]))
+                .fluid(GTCEFuCFluidStorageKeys.HOT, fluidAtTemp(eutecticStats[2]));
     }
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import gregtech.api.fluids.store.FluidStorageKeys;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -153,7 +154,7 @@ public class ForgingFurnaceRecipeProducer {
         // add liquid helium if necessary
         if (material.getBlastTemperature() >= 5000) {
             builder = builder
-                    .fluidInputs(Materials.LiquidHelium.getFluid(500 * inputAmount))
+                    .fluidInputs(Materials.Helium.getFluid(FluidStorageKeys.LIQUID, 500 * inputAmount))
                     .fluidOutputs(Materials.Helium.getFluid(250 * inputAmount));
         }
         // remove cooling time if no hot ingot exists

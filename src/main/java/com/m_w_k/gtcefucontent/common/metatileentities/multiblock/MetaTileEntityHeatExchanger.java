@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import gregtech.api.fluids.GTFluid;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,8 +45,6 @@ import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.capability.*;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
-import gregtech.api.fluids.MaterialFluid;
-import gregtech.api.fluids.fluidType.FluidTypes;
 import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -739,28 +738,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             this.validRecipe = checkRecipeValidity();
         }
 
-        // modified code from TileEntityFluidPipeTickable
         private boolean badFlowCheck(FluidStack stack) {
-            Fluid fluid = stack.getFluid();
-
-            boolean burning = this.pipeProperty.getMaxFluidTemperature() < fluid.getTemperature(stack);
-            boolean leaking = !this.pipeProperty.isGasProof() && fluid.isGaseous(stack);
-            boolean shattering = !this.pipeProperty.isCryoProof() &&
-                    fluid.getTemperature() < IPropertyFluidFilter.CRYOGENIC_TEMPERATURE_THRESHOLD;
-            boolean corroding = false;
-            boolean melting = false;
-
-            if (fluid instanceof MaterialFluid materialFluid) {
-                corroding = !this.pipeProperty.isAcidProof() && materialFluid.getFluidType().equals(FluidTypes.ACID);
-                melting = !this.pipeProperty.isPlasmaProof() && materialFluid.getFluidType().equals(FluidTypes.PLASMA);
-
-                // carrying plasmas which are too hot when plasma proof does not burn pipes
-                if (burning && this.pipeProperty.isPlasmaProof() &&
-                        materialFluid.getFluidType().equals(FluidTypes.PLASMA))
-                    burning = false;
-            }
-
-            return burning || leaking || corroding || shattering || melting;
+            return this.pipeProperty.test(stack);
         }
 
         private boolean hasFluid(FluidStack fluid) {

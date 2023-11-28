@@ -3,6 +3,9 @@ package com.m_w_k.gtcefucontent.api.util;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
+import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.util.RelativeDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -11,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 
 import gregtech.api.metatileentity.MetaTileEntity;
+
+import javax.vecmath.Vector3d;
 
 public final class GTCEFuCUtil {
 
@@ -27,11 +32,15 @@ public final class GTCEFuCUtil {
      * @param z          Positive is controller front, Negative is controller back
      * @return Offset BlockPos
      */
-    public static BlockPos bbHelper(MetaTileEntity controller, int x, int y, int z) {
+    public static BlockPos bbHelper(MultiblockControllerBase controller, int x, int y, int z) {
+        EnumFacing frontFacing = controller.getFrontFacing();
+        EnumFacing upwardsFacing = controller.getUpwardsFacing();
+        boolean isFlipped = controller.isFlipped();
+
         return controller.getPos()
-                .offset(controller.getFrontFacing(), z)
-                .offset(controller.getFrontFacing().getOpposite().rotateY(), x)
-                .offset(EnumFacing.UP, y);
+                .offset(RelativeDirection.FRONT.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), z)
+                .offset(RelativeDirection.LEFT.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), x)
+                .offset(RelativeDirection.UP.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), y);
     }
 
     public static double geometricMean(double... numbers) {
@@ -43,5 +52,9 @@ public final class GTCEFuCUtil {
 
     public static ItemStack setStackCount(ItemStack stack, int count) {
         return new ItemStack(stack.getItem(), count, stack.getMetadata());
+    }
+
+    public static FluidBuilder fluidAtTemp(int temp) {
+        return new FluidBuilder().temperature(temp);
     }
 }

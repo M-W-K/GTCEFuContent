@@ -7,6 +7,10 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import gregtech.client.renderer.IRenderSetup;
+import gregtech.client.shader.postprocessing.BloomType;
+import gregtech.client.utils.*;
+import gregtech.common.metatileentities.multi.electric.MetaTileEntityFusionReactor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -57,20 +61,19 @@ import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.client.shader.postprocessing.BloomEffect;
-import gregtech.client.utils.BloomEffectUtil;
-import gregtech.client.utils.RenderBufferHelper;
-import gregtech.client.utils.RenderUtil;
 import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.BlockFusionCasing;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 
-public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity {
+public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity, IBloomEffect {
 
     protected EnergyContainerList inputEnergyContainers;
     protected long heat = 0;
-    protected Integer color;
+    protected @Nullable Integer color;
+    @SideOnly(Side.CLIENT)
+    private BloomEffectUtil.BloomRenderTicket bloomRenderTicket;
 
     public MetaTileEntityStarSiphon(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.STAR_SIPHON_RECIPES);
@@ -571,34 +574,40 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController impl
 
     @Override
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
-        if (color != null && MinecraftForgeClient.getRenderPass() == 0) {
-            final int c = color;
-            BloomEffectUtil.requestCustomBloom(RENDER_HANDLER, (buffer) -> {
-                int color = RenderUtil.colorInterpolator(c, -1).apply(Eases.EaseQuadIn
-                        .getInterpolation(Math.abs((Math.abs(getOffsetTimer() % 50) + partialTicks) - 25) / 25));
-                float a = (float) (color >> 24 & 255) / 255.0F;
-                float r = (float) (color >> 16 & 255) / 255.0F;
-                float g = (float) (color >> 8 & 255) / 255.0F;
-                float b = (float) (color & 255) / 255.0F;
-                Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-                if (entity != null && isActive()) {
-                    renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Y, r, g, b, a);
-                    renderFixedRing(buffer, x, y, z, EnumFacing.Axis.X, r, g, b, a);
-                    renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Z, r, g, b, a);
-                }
-            });
+        if (this.color != null && this.bloomRenderTicket == null) {
+            this.bloomRenderTicket = BloomEffectUtil.registerBloomRender(FusionBloomSetup.INSTANCE, getBloomType(), this);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void renderBloomEffect(@NotNull BufferBuilder buffer, @NotNull EffectRenderContext context) {
+        Integer c = color;
+        if (c != null && MinecraftForgeClient.getRenderPass() == 0) {
+            int color = RenderUtil.interpolateColor(c, -1, Eases.QUAD_IN
+                    .getInterpolation(Math.abs((Math.abs(getOffsetTimer() % 50L) + context.partialTicks()) - 25F) / 25F));
+            float a = (float) (color >> 24 & 255) / 255.0F;
+            float r = (float) (color >> 16 & 255) / 255.0F;
+            float g = (float) (color >> 8 & 255) / 255.0F;
+            float b = (float) (color & 255) / 255.0F;
+            EnumFacing relativeBack = RelativeDirection.BACK.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped());
+            // since we render a ring on each axis anyway, we don't actually care about it.
+            //EnumFacing.Axis axis = RelativeDirection.UP.getRelativeFacing(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped()).getAxis();
+            double x = (double)this.getPos().getX() - context.cameraX();
+            double y = (double)this.getPos().getY() - context.cameraY();
+            double z = (double)this.getPos().getZ() - context.cameraZ();
+            renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Y, r, g, b, a, relativeBack);
+            renderFixedRing(buffer, x, y, z, EnumFacing.Axis.X, r, g, b, a, relativeBack);
+            renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Z, r, g, b, a, relativeBack);
         }
     }
 
     private void renderFixedRing(BufferBuilder buffer, double x, double y, double z, EnumFacing.Axis axis, float r,
-                                 float g, float b, float a) {
-        int xAxisAligned = getFrontFacing().getOpposite().getXOffset();
-        int zAxisAligned = getFrontFacing().getOpposite().getZOffset();
+                                 float g, float b, float a, EnumFacing relativeBack) {
         buffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
         RenderBufferHelper.renderRing(buffer,
-                x + xAxisAligned * 7 + 0.5,
-                y + 0.5,
-                z + zAxisAligned * 7 + 0.5,
+                x + relativeBack.getXOffset() * 7 + 0.5,
+                y + relativeBack.getYOffset() * 7 + 0.5,
+                z + relativeBack.getZOffset() * 7 + 0.5,
                 6, 0.2, 10, 20,
                 r, g, b, a, axis);
         Tessellator.getInstance().draw();
@@ -610,19 +619,26 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController impl
                 GTCEFuCUtil.bbHelper(this, -6, -6, -13));
     }
 
-    static final BloomEffectUtil.IBloomRenderFast RENDER_HANDLER = new BloomEffectUtil.IBloomRenderFast() {
+    public boolean isGlobalRenderer() {
+        return true;
+    }
 
-        @Override
-        public int customBloomStyle() {
-            return ConfigHolder.client.shader.fusionBloom.useShader ?
-                    ConfigHolder.client.shader.fusionBloom.bloomStyle : -1;
-        }
+    private static BloomType getBloomType() {
+        ConfigHolder.FusionBloom fusionBloom = ConfigHolder.client.shader.fusionBloom;
+        return BloomType.fromValue(fusionBloom.useShader ? fusionBloom.bloomStyle : -1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static final class FusionBloomSetup implements IRenderSetup {
+
+        private static final FusionBloomSetup INSTANCE = new FusionBloomSetup();
 
         float lastBrightnessX;
         float lastBrightnessY;
 
-        @Override
-        @SideOnly(Side.CLIENT)
+        private FusionBloomSetup() {
+        }
+
         public void preDraw(BufferBuilder buffer) {
             BloomEffect.strength = (float) ConfigHolder.client.shader.fusionBloom.strength;
             BloomEffect.baseBrightness = (float) ConfigHolder.client.shader.fusionBloom.baseBrightness;
@@ -637,11 +653,9 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController impl
             GlStateManager.disableTexture2D();
         }
 
-        @Override
-        @SideOnly(Side.CLIENT)
         public void postDraw(BufferBuilder buffer) {
             GlStateManager.enableTexture2D();
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
         }
-    };
+    }
 }

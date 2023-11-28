@@ -2,6 +2,8 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import java.util.Collection;
 
+import gregtech.api.recipes.chance.output.ChancedOutputList;
+import gregtech.api.recipes.chance.output.impl.ChancedItemOutput;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -179,12 +181,16 @@ public final class GTCEFuCMiscRecipes {
             if (recipe.hasInputFluid(Materials.Lubricant.getFluid(1))) {
                 // Extrapolation of the greg formula for water, distilled water, and lubricant.
                 int fluidAmount = (int) Math.max(50, Math.min(12500, recipe.getDuration() * recipe.getEUt() / 25.6));
+
+                ChancedOutputList<ItemStack, ChancedItemOutput> chance = recipe.getChancedOutputs();
+
                 RecipeMaps.CUTTER_RECIPES.recipeBuilder()
                         .fluidInputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(fluidAmount))
                         // we know the cutter only has one input
                         .input(recipe.getInputs().get(0))
                         .outputs(recipe.getOutputs().toArray(new ItemStack[0]))
-                        .chancedOutputs(recipe.getChancedOutputs())
+                        .chancedOutputs(chance.getChancedEntries())
+                        .chancedOutputLogic(chance.getChancedOutputLogic())
                         .duration(recipe.getDuration() / 2)
                         .EUt(recipe.getEUt())
                         .buildAndRegister();
