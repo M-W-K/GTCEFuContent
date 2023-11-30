@@ -320,10 +320,14 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             // Don't drain heat when there is not enough energy and there is still some recipe progress, as that makes
             // it doubly hard to complete the recipe
             // (Will have to recover heat and recipe progress)
-            if ((!isActive || (hasNotEnoughEnergy && progressTime == 0)) && heat > 0) {
+            if (heat > 0 && (!isActive || (hasNotEnoughEnergy && progressTime == 0))) {
                 // heat numbers are so large that exponential decay is wise
-                long lossyHeat = (long) (heat * 0.9);
-                heat = lossyHeat <= 10000 ? 0 : lossyHeat - 10000;
+                long lostHeat = (long) (heat * 0.05) + 10000;
+                // however, certain recipes can't start because of the exponential decay, so we need to compensate
+                // thus, we prevent exponential decay as long as our energy buffer is below the estimated recipe cost
+                if (this.getEnergyStored() < this.getPreviousRecipeDuration() * this.getMaxVoltage())
+                    lostHeat = 10000;
+                heat = Math.max(heat - lostHeat, 0);
             }
         }
 
