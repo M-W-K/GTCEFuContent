@@ -1,25 +1,34 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import static com.m_w_k.gtcefucontent.api.recipes.logic.LimitedPerfectOverclockingLogic.limitedPerfectOverclockingLogic;
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.*;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.vecmath.Vector3d;
 
-import net.minecraft.client.Minecraft;
+import codechicken.lib.raytracer.CuboidRayTraceResult;
+import com.google.common.collect.Lists;
+import com.m_w_k.gtcefucontent.api.util.MultiblockRenderRotHelper;
+import gregtech.api.util.RelativeDirection;
+import gregtech.client.renderer.IRenderSetup;
+import gregtech.client.shader.postprocessing.BloomType;
+import gregtech.client.utils.*;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
@@ -33,7 +42,6 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.GTValues;
@@ -55,24 +63,33 @@ import gregtech.api.util.interpolate.Eases;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.shader.postprocessing.BloomEffect;
-import gregtech.client.utils.BloomEffectUtil;
-import gregtech.client.utils.RenderBufferHelper;
-import gregtech.client.utils.RenderUtil;
-import gregtech.client.utils.TooltipHelper;
 import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluidHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 
-public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity {
+public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity, IBloomEffect, MultiblockRenderRotHelper.HelperUser {
+    // TODO locate lagsource when machine is active
+    protected final Vector3d vecUpDown = new Vector3d();
+    protected final Vector3d vecUpDownMirror = new Vector3d();
+    protected final Vector3d vecLeftRightMirror = new Vector3d();
+    protected final Vector3d vecForwardBack = new Vector3d();
+    protected final Vector3d vecForwardBackMirror = new Vector3d();
+
+    protected final MultiblockRenderRotHelper rotHelper;
+
+    protected final List<Vector3d> activeVecs = new ArrayList<>(2);
+    protected final List<Vector3d> activeMirrorVecs = new ArrayList<>(3);
 
     protected final int overclock_rating;
     protected EnergyContainerList inputEnergyContainers;
     protected long heat = 0;
-    protected Integer color;
+    protected @Nullable Integer color;
+    @SideOnly(Side.CLIENT)
+    private BloomEffectUtil.BloomRenderTicket bloomRenderTicket;
 
     // I had to copy word-for-word so many things from MetaTileEntityFusionReactor because EVERYTHING IS PRIVATE
-    // Credit to the creators of GTCEu I guess... though I'm very salty about it.
+    // Credit to the creators of GTCEu I guess...
     // And yes, I tried to use reflection, and I couldn't get it to stop throwing compile-time errors.
     // Plus, use of reflection isn't the most wise thing either.
     // Seriously, why so many private properties? Make them protected plz k thx
@@ -88,6 +105,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                 return GregtechDataCodes.FUSION_REACTOR_ENERGY_CONTAINER_TRAIT;
             }
         };
+        this.rotHelper = new MultiblockRenderRotHelper(this,
+                vecUpDown, vecUpDownMirror, vecForwardBack, vecForwardBackMirror, vecLeftRightMirror);
     }
 
     @Override
@@ -154,6 +173,21 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         super.formStructure(context);
         this.initializeAbilities();
         ((EnergyContainerHandler) this.energyContainer).setEnergyStored(energyStored);
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.energyContainer = new EnergyContainerHandler(this, 0, 0, 0, 0, 0) {
+
+            @NotNull
+            @Override
+            public String getName() {
+                return GregtechDataCodes.FUSION_REACTOR_ENERGY_CONTAINER_TRAIT;
+            }
+        };
+        this.inputEnergyContainers = new EnergyContainerList(Lists.newArrayList());
+        this.heat = 0;
     }
 
     @Override
@@ -240,6 +274,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
+            // TODO fix lang
             textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.energy",
                     this.energyContainer.getEnergyStored(), this.energyContainer.getEnergyCapacity()));
             textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.heat", heat));
@@ -306,7 +341,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         }
 
         @Override
-        protected long getMaxVoltage() {
+        public long getMaxVoltage() {
             // Increase the tier-lock voltage twice as fast as normal fusion
             // UEV, UXV, MAX
             return Math.min(GTValues.V[tier(overclock_rating * 2)], super.getMaxVoltage());
@@ -372,162 +407,155 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
-        if (color != null && MinecraftForgeClient.getRenderPass() == 0) {
-            final int c = color;
-            BloomEffectUtil.requestCustomBloom(RENDER_HANDLER, (buffer) -> {
-                int color = RenderUtil.colorInterpolator(c, -1).apply(Eases.EaseQuadIn
-                        .getInterpolation(Math.abs((Math.abs(getOffsetTimer() % 50) + partialTicks) - 25) / 25));
-                float a = (float) (color >> 24 & 255) / 255.0F;
-                float r = (float) (color >> 16 & 255) / 255.0F;
-                float g = (float) (color >> 8 & 255) / 255.0F;
-                float b = (float) (color & 255) / 255.0F;
-                Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-                if (entity != null && isActive()) {
-                    int xAxisAligned = getFrontFacing().getOpposite().getXOffset();
-                    int zAxisAligned = getFrontFacing().getOpposite().getZOffset();
-                    if (overclock_rating == 1) {
-                        double xOffset = xAxisAligned * 7 + 0.5;
-                        double zOffset = zAxisAligned * 7 + 0.5;
-                        renderFusionRing(buffer,
-                                x + xOffset,
-                                y + 2.5,
-                                z + zOffset,
-                                r, g, b, a);
-                        renderFusionRing(buffer,
-                                x + xOffset,
-                                y - 1.5,
-                                z + zOffset,
-                                r, g, b, a);
-                    } else if (overclock_rating == 2) {
-                        double xOffset = xAxisAligned * 4 + 0.5;
-                        double zOffset = zAxisAligned * 4 + 0.5;
-                        double xMod = zAxisAligned * 10;
-                        double zMod = xAxisAligned * 10;
-                        renderFusionRing(buffer,
-                                x + xOffset + xMod,
-                                y - 1.5,
-                                z + zOffset + zMod,
-                                r, g, b, a);
-                        renderFusionRing(buffer,
-                                x + xOffset + xMod,
-                                y - 5.5,
-                                z + zOffset + zMod,
-                                r, g, b, a);
-
-                        renderFusionRing(buffer,
-                                x + xOffset - xMod,
-                                y - 1.5,
-                                z + zOffset - zMod,
-                                r, g, b, a);
-                        renderFusionRing(buffer,
-                                x + xOffset - xMod,
-                                y - 5.5,
-                                z + zOffset - zMod,
-                                r, g, b, a);
-                    } else {
-                        double xOffset = xAxisAligned + 0.5;
-                        double zOffset = zAxisAligned + 0.5;
-                        double xMod = zAxisAligned * 10;
-                        double zMod = xAxisAligned * 10;
-                        double xShift = xAxisAligned * 10;
-                        double zShift = zAxisAligned * 10;
-                        renderFusionRing(buffer,
-                                x + xOffset + xMod + xShift,
-                                y - 4.5,
-                                z + zOffset + zMod + zShift,
-                                r, g, b, a);
-                        renderFusionRing(buffer,
-                                x + xOffset + xMod + xShift,
-                                y - 8.5,
-                                z + zOffset + zMod + zShift,
-                                r, g, b, a);
-
-                        renderFusionRing(buffer,
-                                x + xOffset - xMod + xShift,
-                                y - 4.5,
-                                z + zOffset - zMod + zShift,
-                                r, g, b, a);
-                        renderFusionRing(buffer,
-                                x + xOffset - xMod + xShift,
-                                y - 8.5,
-                                z + zOffset - zMod + zShift,
-                                r, g, b, a);
-
-                        renderFusionRing(buffer,
-                                x + xOffset + xMod - xShift,
-                                y - 4.5,
-                                z + zOffset + zMod - zShift,
-                                r, g, b, a);
-                        renderFusionRing(buffer,
-                                x + xOffset + xMod - xShift,
-                                y - 8.5,
-                                z + zOffset + zMod - zShift,
-                                r, g, b, a);
-
-                        renderFusionRing(buffer,
-                                x + xOffset - xMod - xShift,
-                                y - 4.5,
-                                z + zOffset - zMod - zShift,
-                                r, g, b, a);
-                        renderFusionRing(buffer,
-                                x + xOffset - xMod - xShift,
-                                y - 8.5,
-                                z + zOffset - zMod - zShift,
-                                r, g, b, a);
-                    }
-                }
-            });
+        if (this.color != null && this.bloomRenderTicket == null) {
+            this.bloomRenderTicket = BloomEffectUtil.registerBloomRender(FusionBloomSetup.INSTANCE, getBloomType(), this);
         }
     }
 
-    // very useful if you need to render a large number of rings with a single block
-    protected void renderFusionRing(BufferBuilder buffer, double x, double y, double z, float r, float g, float b,
-                                    float a) {
+
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void renderBloomEffect(@NotNull BufferBuilder buffer, @NotNull EffectRenderContext context) {
+        Integer c = color;
+        if (c == null) return;
+        int color = RenderUtil.interpolateColor(c, -1, Eases.QUAD_IN
+                .getInterpolation(Math.abs((Math.abs(getOffsetTimer() % 50) + context.partialTicks()) - 25) / 25));
+        float a = (float) (color >> 24 & 255) / 255.0F;
+        float r = (float) (color >> 16 & 255) / 255.0F;
+        float g = (float) (color >> 8 & 255) / 255.0F;
+        float b = (float) (color & 255) / 255.0F;
+
+        double x = (double)this.getPos().getX() - context.cameraX();
+        double y = (double)this.getPos().getY() - context.cameraY();
+        double z = (double)this.getPos().getZ() - context.cameraZ();
+
+        rotHelper.calculateRots(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped());
+        rotHelper.rotVecs();
+
+        renderFusionRings(buffer, x, y, z, r, g, b, a);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRenderBloomEffect(@NotNull EffectRenderContext context) {
+        return color != null;
+    }
+
+    public void resetVecs() {
+        this.activeVecs.clear();
+        this.activeMirrorVecs.clear();
+        if (this.overclock_rating == 1) {
+            setVec(this.vecUpDownMirror, 2);
+            setVec(this.vecForwardBack, -7);
+        } else if (this.overclock_rating == 2) {
+            setVec(this.vecUpDown, -4);
+            setVec(this.vecUpDownMirror, 2);
+            setVec(this.vecForwardBack, -4);
+            setVec(this.vecLeftRightMirror, 10);
+        } else {
+            setVec(this.vecUpDown, -7);
+            setVec(this.vecUpDownMirror, 2);
+            setVec(this.vecForwardBack, -1);
+            setVec(this.vecLeftRightMirror, 10);
+            setVec(this.vecForwardBackMirror, 10);
+        }
+    }
+
+    private void setVec(Vector3d vec, double value) {
+        if (vec == this.vecUpDown) {
+            this.activeVecs.add(vec);
+            vec.set(0, value, 0);
+        } else if (vec == this.vecUpDownMirror) {
+            this.activeMirrorVecs.add(vec);
+            vec.set(0, value, 0);
+        } else if (vec == this.vecForwardBack) {
+            this.activeVecs.add(vec);
+            vec.set(value, 0, 0);
+        } else if (vec == this.vecForwardBackMirror) {
+            this.activeMirrorVecs.add(vec);
+            vec.set(value, 0, 0);
+        } else if (vec == this.vecLeftRightMirror) {
+            this.activeMirrorVecs.add(vec);
+            vec.set(0, 0, value);
+        }
+    }
+
+    protected void renderFusionRings(BufferBuilder buffer, double x, double y, double z, float r, float g, float b, float a) {
+        Vector3d vec = new Vector3d(x, y, z);
+        for (Vector3d vector : activeVecs) {
+            vec.add(vector);
+        }
+        // start a nesting process to go through mirror vecs
+        renderFusionRingsNestHelp(buffer, vec, r, g, b, a, activeMirrorVecs);
+    }
+
+    private void renderFusionRingsNestHelp(BufferBuilder buffer, Vector3d vec, float r, float g, float b, float a, List<Vector3d> mirrorVecs) {
+        // get the top vector
+        Vector3d mirrorVector = mirrorVecs.get(0);
+        Vector3d vecPos = new Vector3d(vec);
+        vecPos.add(mirrorVector);
+        Vector3d vecNeg = new Vector3d(vec);
+        vecNeg.sub(mirrorVector);
+        if (mirrorVecs.size() > 1) {
+            // get a slice without the top vector
+            mirrorVecs = mirrorVecs.subList(1, mirrorVecs.size());
+            // keep nesting
+            renderFusionRingsNestHelp(buffer, vecPos, r, g, b, a, mirrorVecs);
+            renderFusionRingsNestHelp(buffer, vecNeg, r, g, b, a, mirrorVecs);
+        } else {
+            // start rendering
+            renderFusionRing(buffer, vecPos, r, g, b, a);
+            renderFusionRing(buffer, vecNeg, r, g, b, a);
+        }
+
+    }
+
+    protected void renderFusionRing(BufferBuilder buffer, Vector3d vec, float r, float g, float b, float a) {
+
         buffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
         RenderBufferHelper.renderRing(buffer,
-                x, y, z, 6, 0.2, 10, 20,
-                r, g, b, a, EnumFacing.Axis.Y);
+                vec.getX() + 0.5, vec.getY() + 0.5, vec.getZ() + 0.5, 6, 0.2, 10, 20,
+                r, g, b, a,
+                RelativeDirection.UP.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped()).getAxis());
         Tessellator.getInstance().draw();
     }
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         if (overclock_rating == 1) {
-            return new AxisAlignedBB(GTCEFuCUtil.bbHelper(this, 6, 2, -1),
-                    GTCEFuCUtil.bbHelper(this, -6, -2, -13));
+            return new AxisAlignedBB(bbHelper(this, 6, 2, -1),
+                    bbHelper(this, -6, -2, -13));
         } else if (overclock_rating == 2) {
-            return new AxisAlignedBB(GTCEFuCUtil.bbHelper(this, 16, -2, 2),
-                    GTCEFuCUtil.bbHelper(this, -16, -6, -10));
+            return new AxisAlignedBB(bbHelper(this, 16, -2, 2),
+                    bbHelper(this, -16, -6, -10));
         } else {
-            return new AxisAlignedBB(GTCEFuCUtil.bbHelper(this, 16, -4, 15),
-                    GTCEFuCUtil.bbHelper(this, -16, -8, -17));
+            return new AxisAlignedBB(bbHelper(this, 16, -4, 15),
+                    bbHelper(this, -16, -8, -17));
         }
     }
 
-    @Override
-    public boolean shouldRenderInPass(int pass) {
-        return pass == 0;
-    }
-
-    @Override
     public boolean isGlobalRenderer() {
         return true;
     }
 
-    static final BloomEffectUtil.IBloomRenderFast RENDER_HANDLER = new BloomEffectUtil.IBloomRenderFast() {
+    private static BloomType getBloomType() {
+        ConfigHolder.FusionBloom fusionBloom = ConfigHolder.client.shader.fusionBloom;
+        return BloomType.fromValue(fusionBloom.useShader ? fusionBloom.bloomStyle : -1);
+    }
 
-        @Override
-        public int customBloomStyle() {
-            return ConfigHolder.client.shader.fusionBloom.useShader ?
-                    ConfigHolder.client.shader.fusionBloom.bloomStyle : -1;
-        }
+    @SideOnly(Side.CLIENT)
+    private static final class FusionBloomSetup implements IRenderSetup {
+
+        private static final FusionBloomSetup INSTANCE = new FusionBloomSetup();
 
         float lastBrightnessX;
         float lastBrightnessY;
 
-        @Override
-        @SideOnly(Side.CLIENT)
+        private FusionBloomSetup() {}
+
         public void preDraw(BufferBuilder buffer) {
             BloomEffect.strength = (float) ConfigHolder.client.shader.fusionBloom.strength;
             BloomEffect.baseBrightness = (float) ConfigHolder.client.shader.fusionBloom.baseBrightness;
@@ -542,13 +570,11 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             GlStateManager.disableTexture2D();
         }
 
-        @Override
-        @SideOnly(Side.CLIENT)
         public void postDraw(BufferBuilder buffer) {
             GlStateManager.enableTexture2D();
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
         }
-    };
+    }
 
     protected static int tier(int overclock_rating) {
         return overclock_rating + GTValues.UV;
