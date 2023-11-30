@@ -66,7 +66,7 @@ public final class MultiblockRenderRotHelper {
         rotMatrixY.transform(horizontal);
 
         // second step - rotate around the NEW z-axis to get aligned with vectorForward
-        temp.cross(vectorUp, vertical); // cross product to determine sign of rotation
+        temp.cross(horizontal, vectorForward); // cross product to determine sign of rotation
         double sum = Math.round(temp.z + temp.x + temp.y);
         double rotZ = vectorForward.angle(horizontal) * (sum != 0 ? sum : 1);
         rotMatrixZ.rotX(rotZ);
