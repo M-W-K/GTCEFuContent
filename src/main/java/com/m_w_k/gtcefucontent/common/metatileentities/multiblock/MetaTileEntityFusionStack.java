@@ -239,7 +239,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         super.updateFormedValid();
         if (recipeMapWorkable.isWorking() && color == null) {
             if (recipeMapWorkable.getPreviousRecipe() != null &&
-                    recipeMapWorkable.getPreviousRecipe().getFluidOutputs().size() > 0) {
+                    !recipeMapWorkable.getPreviousRecipe().getFluidOutputs().isEmpty()) {
                 int newColor = 0xFF000000 |
                         recipeMapWorkable.getPreviousRecipe().getFluidOutputs().get(0).getFluid().getColor();
                 if (!Objects.equals(color, newColor)) {
