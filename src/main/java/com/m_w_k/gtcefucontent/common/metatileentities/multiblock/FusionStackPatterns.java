@@ -80,7 +80,8 @@ final class FusionStackPatterns {
                         getFluidHatchAlternate(variant)
                                 .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(4)))
                 .where('Y',
-                        stateIndex(5).or(getEnergyHatches().setPreviewCount((int) (8 * Math.pow(2.0, variant)))))
+                        stateIndex(5).or(stateIndex(6))
+                                .or(getEnergyHatches().setPreviewCount((int) (8 * Math.pow(2.0, variant)))))
                 .where('D', air())
                 .where('#', any());
     }
