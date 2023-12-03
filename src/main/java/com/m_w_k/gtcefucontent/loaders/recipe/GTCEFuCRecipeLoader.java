@@ -122,6 +122,28 @@ public final class GTCEFuCRecipeLoader {
         // Assembler recipes
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
+                .input(GCYMMetaTileEntities.STEAM_ENGINE)
+                .input(OrePrefix.circuit, MarkerMaterials.Tier.ZPM, 2)
+                .input(OrePrefix.cableGtOctal, Materials.BlackSteel, 64)
+                .input(OrePrefix.cableGtHex, Materials.TungstenSteel, 40)
+                .input(OrePrefix.gearSmall, Materials.HSSG, 64)
+                .input(OrePrefix.gearSmall, Materials.HSSG, 64)
+                .input(OrePrefix.gear, Materials.BlackBronze, 64)
+                .input(OrePrefix.stickLong, Materials.RhodiumPlatedPalladium, 32)
+                .input(OrePrefix.screw, Materials.Apatite, 64)
+                .input(OrePrefix.screw, Materials.Apatite, 24)
+                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 4),
+                        Materials.StyreneButadieneRubber.getFluid(12000),
+                        GTCEFuCMaterials.VaporSeedRaw.getFluid(84000),
+                        Materials.Lubricant.getFluid(12000))
+                .output(GTCEFuCMetaTileEntities.MEGA_STEAM_ENGINE)
+                .stationResearch(b -> b
+                        .researchStack(MetaTileEntities.LARGE_STEAM_TURBINE.getStackForm())
+                        .CWUt(16)
+                        .EUt(GTValues.VA[GTValues.IV]))
+                .duration(600).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
+
+        RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
                 .inputs(MetaTileEntities.FORGE_HAMMER[GTValues.IV].getStackForm(),
                         MetaTileEntities.ELECTRIC_BLAST_FURNACE.getStackForm(),
                         MetaTileEntities.VACUUM_FREEZER.getStackForm(),
