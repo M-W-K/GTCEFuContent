@@ -82,6 +82,8 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMulti
 
 public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity, IBloomEffect, MultiblockRenderRotHelper.HelperUser {
     // TODO locate lagsource when machine is active
+    // SOMETHING about this class differs from MetaTileEntityFusionReactor and is the source.
+    // confirmed by duplicating that class in the project and testing it out.
     protected final Vector3d vecUpDown = new Vector3d();
     protected final Vector3d vecUpDownMirror = new Vector3d();
     protected final Vector3d vecLeftRightMirror = new Vector3d();
@@ -110,7 +112,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         super(metaTileEntityId, GTCEFuCRecipeMaps.FUSION_STACK_RECIPE_MAPS.get(overclock_rating(tier) - 1));
         this.recipeMapWorkable = new FusionStackRecipeLogic(this);
         this.overclock_rating = overclock_rating(tier);
-        this.energyContainer = new EnergyContainerHandler(this, Integer.MAX_VALUE, 0, 0, 0, 0) {
+        this.energyContainer = new EnergyContainerHandler(this, 0, 0, 0, 0, 0) {
 
             @Nonnull
             @Override
@@ -156,6 +158,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                 .build();
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart sourcePart) {
         if (sourcePart instanceof MetaTileEntityFluidHatch || sourcePart instanceof MetaTileEntityMultiFluidHatch)
@@ -186,7 +189,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         long energyStored = this.energyContainer.getEnergyStored();
         super.formStructure(context);
         this.initializeAbilities();
-        ((EnergyContainerHandler) this.energyContainer).setEnergyStored(energyStored);
+        ((EnergyContainerHandler)this.energyContainer).setEnergyStored(energyStored);
     }
 
     @Override
@@ -214,7 +217,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         this.inputEnergyContainers = new EnergyContainerList(energyInputs);
         long euCapacity = calculateEnergyStorageFactor(energyInputs.size());
         // Allow for adaptive max voltage
-        this.energyContainer = new EnergyContainerHandler(this, euCapacity, inputEnergyContainers.getInputVoltage(), 0,
+        this.energyContainer = new EnergyContainerHandler(this, euCapacity, GTValues.V[tier(overclock_rating * 2)], 0,
                 0, 0) {
 
             @Nonnull
@@ -515,6 +518,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
     protected ICubeRenderer getFrontOverlay() {
@@ -738,7 +742,6 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     }
 
     protected void renderFusionRing(BufferBuilder buffer, Vector3d vec, float r, float g, float b, float a) {
-
         buffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_COLOR);
         RenderBufferHelper.renderRing(buffer,
                 vec.getX() + 0.5, vec.getY() + 0.5, vec.getZ() + 0.5, 6, 0.2, 10, 20,
