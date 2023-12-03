@@ -57,4 +57,8 @@ public final class GTCEFuCUtil {
     public static FluidBuilder fluidAtTemp(int temp) {
         return new FluidBuilder().temperature(temp);
     }
+
+    public static int truncateLong(long number) {
+        return (int)Math.min(Integer.MAX_VALUE, number);
+    }
 }

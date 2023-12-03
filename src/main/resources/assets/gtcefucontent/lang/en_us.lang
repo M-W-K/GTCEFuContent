@@ -20,6 +20,10 @@ gtcefucontent.machine.electrode_blast_smelter.name=Electrode Blast Smelter
 gtcefucontent.machine.electrode_blast_smelter.tooltip=Thicc Rotary Hearth Furnace
 gregtech.multiblock.electrode_blast_smelter.description=Performs both Blast Furnace and Alloy Blast Smelting recipes.
 
+gtcefucontent.machine.mega_steam_engine.name=Large-Scale Industrial Steam Engine
+gtcefucontent.machine.mega_steam_engine.tooltip=Dynamo hatch tier limited by Voltage Control Unit tier.
+gtcefucontent.machine.mega_steam_engine.error.vcu=Dynamo hatch tier exceeds Voltage Control Unit tier!
+
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
 gtcefucontent.machine.fusion_stack.coolant=DOES NOT REQUIRE COOLANT
 gtcefucontent.machine.fusion_stack.stack.name=Fusion Reactor Computer Type "Stack"
