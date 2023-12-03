@@ -577,10 +577,9 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
                 }
                 return false;
             }, () -> GregTechAPI.PSS_BATTERIES.entrySet().stream()
-                    .sorted(Comparator.comparingInt(entry -> entry.getValue().getTier()))
+                    .filter((entry) -> entry.getValue().getTier() == GTValues.UV)
                     .map(entry -> new BlockInfo(entry.getKey(), null))
-                    .toArray(BlockInfo[]::new))
-                            .addTooltips("gregtech.multiblock.pattern.error.batteries");
+                    .toArray(BlockInfo[]::new));
 
     protected class AntimatterCompressorRecipeLogic extends MultiblockRecipeLogic {
 
