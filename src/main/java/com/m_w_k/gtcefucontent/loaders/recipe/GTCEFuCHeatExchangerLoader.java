@@ -61,6 +61,10 @@ public final class GTCEFuCHeatExchangerLoader {
                     material.getFluid(1),
                     new FluidStack(material.getFluid(GTCEFuCFluidStorageKeys.COLD), 1),
                     property.getThermalCapacityFluid());
+            // register as a eutectic
+            HeatExchangerRecipeHandler.addEutectic(material.getFluid(),
+                    material.getFluid(GTCEFuCFluidStorageKeys.COLD),
+                    material.getFluid(GTCEFuCFluidStorageKeys.HOT));
         }
 
         // custom conversions
