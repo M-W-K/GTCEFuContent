@@ -81,9 +81,6 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluid
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 
 public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity, IBloomEffect, MultiblockRenderRotHelper.HelperUser {
-    // TODO locate lagsource when machine is active
-    // SOMETHING about this class differs from MetaTileEntityFusionReactor and is the source.
-    // confirmed by duplicating that class in the project and testing it out.
     protected final Vector3d vecUpDown = new Vector3d();
     protected final Vector3d vecUpDownMirror = new Vector3d();
     protected final Vector3d vecLeftRightMirror = new Vector3d();
