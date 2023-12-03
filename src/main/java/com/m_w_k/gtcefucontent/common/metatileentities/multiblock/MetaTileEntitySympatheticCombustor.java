@@ -1,11 +1,15 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
@@ -29,12 +33,13 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
+import org.jetbrains.annotations.Nullable;
 
 public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController {
 
     public MetaTileEntitySympatheticCombustor(ResourceLocation metaTileEntityId) {
-        // EV tier, but obtainable in late HV
-        super(metaTileEntityId, GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES, GTValues.EV);
+        // Maximum overclock of UHV
+        super(metaTileEntityId, GTCEFuCRecipeMaps.SYMPATHETIC_COMBUSTOR_RECIPES, GTValues.UHV);
     }
 
     @NotNull
@@ -97,6 +102,13 @@ public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController
         // Unfortunately, no interface for energy hatches is available to instanceof with
         return iMultiblockPart instanceof MetaTileEntityEnergyHatch ? Textures.PLASCRETE :
                 Textures.STABLE_TITANIUM_CASING;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
+                               boolean advanced) {
+        super.addInformation(stack, player, tooltip, advanced);
+        tooltip.add(I18n.format("gcym.machine.steam_engine.tooltip.1", GTValues.VNF[GTValues.UHV]));
     }
 
     @Override
