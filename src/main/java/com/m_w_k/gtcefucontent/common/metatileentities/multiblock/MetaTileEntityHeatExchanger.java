@@ -164,11 +164,11 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
 
     protected FactoryBlockPattern wherify(FactoryBlockPattern pattern, int tier) {
         return pattern
-                .where('I', stateIndex(0).setMinGlobalLimited(2 * tier).or(autoAbilities(true, false))
+                .where('I', stateIndex(0).setMinGlobalLimited((tier - 3) * tier).or(autoAbilities(true, false))
                         .or(abilities(MultiblockAbility.IMPORT_FLUIDS).setPreviewCount(2))
                         .or(abilities(MultiblockAbility.EXPORT_FLUIDS).setPreviewCount(2))
-                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setPreviewCount(2))
-                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setPreviewCount(2)))
+                        .or(abilities(MultiblockAbility.IMPORT_ITEMS).setMaxGlobalLimited(1, 1))
+                        .or(abilities(MultiblockAbility.EXPORT_ITEMS).setMaxGlobalLimited(1, 1)))
                 .where('C', stateIndex(1))
                 .where('G', stateIndex(2))
                 .where('E', metaTileEntities(GTCEFuCMetaTileEntities.HEU_ENDPOINTS))
