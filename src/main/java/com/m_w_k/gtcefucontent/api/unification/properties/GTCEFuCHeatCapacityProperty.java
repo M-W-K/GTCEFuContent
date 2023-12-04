@@ -2,10 +2,9 @@ package com.m_w_k.gtcefucontent.api.unification.properties;
 
 import gregtech.api.unification.material.properties.IMaterialProperty;
 import gregtech.api.unification.material.properties.MaterialProperties;
-import gregtech.api.unification.material.properties.PropertyKey;
-
 
 public class GTCEFuCHeatCapacityProperty implements IMaterialProperty {
+
     private final int thermalCapacityIngot;
 
     public GTCEFuCHeatCapacityProperty(int thermalCapacity, boolean ingotCapacity) {
@@ -16,6 +15,7 @@ public class GTCEFuCHeatCapacityProperty implements IMaterialProperty {
         return thermalCapacityIngot / 144;
     }
 
+    @SuppressWarnings("unused")
     public int getThermalCapacityIngot() {
         return thermalCapacityIngot;
     }

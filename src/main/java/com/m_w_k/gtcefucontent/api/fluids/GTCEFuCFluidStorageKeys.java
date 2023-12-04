@@ -1,12 +1,14 @@
 package com.m_w_k.gtcefucontent.api.fluids;
 
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+
 import gregicality.multiblocks.api.unification.material.GCYMMaterialIconTypes;
 import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.unification.material.info.MaterialIconType;
 
 @SuppressWarnings("CodeBlock2Expr")
 final public class GTCEFuCFluidStorageKeys {
+
     public static final FluidStorageKey COLD;
     public static final FluidStorageKey HOT;
 

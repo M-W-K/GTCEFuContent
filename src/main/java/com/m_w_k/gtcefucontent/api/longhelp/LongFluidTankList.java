@@ -1,18 +1,23 @@
 package com.m_w_k.gtcefucontent.api.longhelp;
 
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import gregtech.api.capability.IMultipleTankHandler;
-import gregtech.api.capability.impl.FluidTankList;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidTank;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidTank;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+
+import gregtech.api.capability.IMultipleTankHandler;
+import gregtech.api.capability.impl.FluidTankList;
+
+@SuppressWarnings("unused")
 public class LongFluidTankList extends FluidTankList implements ILongMultipleTankHandler {
+
     // it would be great if there were fewer private properties and more protected ones smh
     private final MultiFluidTankEntry[] fluidTanks;
 
@@ -30,7 +35,8 @@ public class LongFluidTankList extends FluidTankList implements ILongMultipleTan
         this.fluidTanks = list.toArray(new MultiFluidTankEntry[0]);
     }
 
-    public LongFluidTankList(boolean allowSameFluidFill, @NotNull IMultipleTankHandler parent, IFluidTank... additionalTanks) {
+    public LongFluidTankList(boolean allowSameFluidFill, @NotNull IMultipleTankHandler parent,
+                             IFluidTank... additionalTanks) {
         super(allowSameFluidFill, parent, additionalTanks);
         ArrayList<MultiFluidTankEntry> list = new ArrayList<>(parent.getFluidTanks());
         for (IFluidTank tank : additionalTanks) list.add(wrapIntoEntry(tank));
@@ -137,7 +143,7 @@ public class LongFluidTankList extends FluidTankList implements ILongMultipleTan
         }
         LongFluidStack totalDrained = null;
         for (IFluidTank handler : fluidTanks) {
-            FluidStack drain =  handler.drain(GTCEFuCUtil.truncateLong(maxDrain), doDrain);
+            FluidStack drain = handler.drain(GTCEFuCUtil.truncateLong(maxDrain), doDrain);
             if (drain != null) {
                 if (totalDrained == null) {
                     totalDrained = new LongFluidStack(drain.getFluid(), drain.amount);

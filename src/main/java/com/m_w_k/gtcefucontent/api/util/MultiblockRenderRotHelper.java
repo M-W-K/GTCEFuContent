@@ -1,19 +1,22 @@
 package com.m_w_k.gtcefucontent.api.util;
 
-import gregtech.api.util.RelativeDirection;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.Vec3i;
-import org.apache.commons.lang3.tuple.MutableTriple;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.Vec3i;
+
+import org.apache.commons.lang3.tuple.MutableTriple;
+
+import gregtech.api.util.RelativeDirection;
 
 /**
  * Contains generalized code to help with rendering rotatable multiblocks
- * <br> <br>
+ * <br>
+ * <br>
  * Allows you to register vectors to then be rotated based on the multiblock's rotation.
  */
 public final class MultiblockRenderRotHelper {
@@ -32,8 +35,10 @@ public final class MultiblockRenderRotHelper {
 
     /**
      * Vector registry must occur on helper creation.
-     * @param parent The instantiator of this helper.
-     * @param vecsToRegister The vectors to be rotated by this helper. If these are not <code>final</code>, errors may occur.
+     * 
+     * @param parent         The instantiator of this helper.
+     * @param vecsToRegister The vectors to be rotated by this helper. If these are not <code>final</code>, errors may
+     *                       occur.
      */
     public MultiblockRenderRotHelper(HelperUser parent, Vector3d... vecsToRegister) {
         this.parent = parent;
@@ -42,9 +47,9 @@ public final class MultiblockRenderRotHelper {
 
     public void calculateRots(EnumFacing frontFacing, EnumFacing upwardsFacing, boolean isFlipped) {
         // check cache
-        if (matrixCache.getLeft() == frontFacing
-                && matrixCache.getMiddle() == upwardsFacing
-                && matrixCache.getRight() == isFlipped) return;
+        if (matrixCache.getLeft() == frontFacing && matrixCache.getMiddle() == upwardsFacing &&
+                matrixCache.getRight() == isFlipped)
+            return;
 
         // convert provided EnumFacings to relative EnumFacings
         Vec3i vecUp = RelativeDirection.UP.getRelativeFacing(frontFacing, upwardsFacing, isFlipped).getDirectionVec();
@@ -91,7 +96,7 @@ public final class MultiblockRenderRotHelper {
         // if our vec cache is valid, then we don't need to rotate the vecs
         if (!validVecCache) {
             for (Vector3d vec : registeredVecs) {
-                 rotMatrixVertCorrect.transform(vec);
+                rotMatrixVertCorrect.transform(vec);
                 // go backwards because no associative property
                 rotMatrixX.transform(vec);
                 rotMatrixZ.transform(vec);
@@ -105,6 +110,7 @@ public final class MultiblockRenderRotHelper {
 
     @FunctionalInterface
     public interface HelperUser {
+
         void resetVecs();
     }
 }

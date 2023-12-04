@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import gregtech.api.fluids.store.FluidStorageKeys;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -14,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 
 import gregtech.api.GTValues;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.recipes.RecipeBuilder;
 import gregtech.api.recipes.builders.BlastRecipeBuilder;
 import gregtech.api.recipes.logic.OverclockingLogic;

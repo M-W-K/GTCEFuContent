@@ -5,32 +5,11 @@ import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.*;
 
 import java.util.*;
 import java.util.function.DoubleSupplier;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3d;
 
-import codechicken.lib.raytracer.CuboidRayTraceResult;
-import com.google.common.collect.Lists;
-import com.google.common.util.concurrent.AtomicDouble;
-import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
-import com.m_w_k.gtcefucontent.api.util.MultiblockRenderRotHelper;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.ModularUI;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.gui.widgets.ImageCycleButtonWidget;
-import gregtech.api.gui.widgets.ImageWidget;
-import gregtech.api.gui.widgets.IndicatorImageWidget;
-import gregtech.api.gui.widgets.ProgressWidget;
-import gregtech.api.metatileentity.multiblock.*;
-import gregtech.api.util.RelativeDirection;
-import gregtech.api.util.TextComponentUtil;
-import gregtech.api.util.TextFormattingUtil;
-import gregtech.client.renderer.IRenderSetup;
-import gregtech.client.shader.postprocessing.BloomType;
-import gregtech.client.utils.*;
-import gregtech.common.metatileentities.multi.electric.MetaTileEntityFusionReactor;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -41,46 +20,62 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.AtomicDouble;
+import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.api.util.MultiblockRenderRotHelper;
 
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.*;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.ModularUI;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.gui.widgets.ImageCycleButtonWidget;
+import gregtech.api.gui.widgets.ImageWidget;
+import gregtech.api.gui.widgets.IndicatorImageWidget;
+import gregtech.api.gui.widgets.ProgressWidget;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.*;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
 import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
+import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.api.util.interpolate.Eases;
 import gregtech.client.renderer.ICubeRenderer;
+import gregtech.client.renderer.IRenderSetup;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.shader.postprocessing.BloomEffect;
+import gregtech.client.shader.postprocessing.BloomType;
+import gregtech.client.utils.*;
 import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluidHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
 
-public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity, IBloomEffect, MultiblockRenderRotHelper.HelperUser {
+public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity,
+                                       IBloomEffect, MultiblockRenderRotHelper.HelperUser {
+
     protected final Vector3d vecUpDown = new Vector3d();
     protected final Vector3d vecUpDownMirror = new Vector3d();
     protected final Vector3d vecLeftRightMirror = new Vector3d();
@@ -186,7 +181,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         long energyStored = this.energyContainer.getEnergyStored();
         super.formStructure(context);
         this.initializeAbilities();
-        ((EnergyContainerHandler)this.energyContainer).setEnergyStored(energyStored);
+        ((EnergyContainerHandler) this.energyContainer).setEnergyStored(energyStored);
     }
 
     @Override
@@ -298,14 +293,14 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                         1.0 * energyContainer.getEnergyStored() / energyContainer.getEnergyCapacity() : 0,
                 4, 144, 94, 7,
                 GuiTextures.PROGRESS_BAR_FUSION_ENERGY, ProgressWidget.MoveType.HORIZONTAL)
-                .setHoverTextConsumer(this::addEnergyBarHoverText));
+                        .setHoverTextConsumer(this::addEnergyBarHoverText));
 
         // Heat Bar
         builder.widget(new ProgressWidget(
                 () -> energyContainer.getEnergyCapacity() > 0 ? 1.0 * heat / energyContainer.getEnergyCapacity() : 0,
                 100, 144, 94, 7,
                 GuiTextures.PROGRESS_BAR_FUSION_HEAT, ProgressWidget.MoveType.HORIZONTAL)
-                .setHoverTextConsumer(this::addHeatBarHoverText));
+                        .setHoverTextConsumer(this::addHeatBarHoverText));
 
         // Indicator Widget
         builder.widget(new IndicatorImageWidget(174, 122, 17, 17, getLogo())
@@ -315,13 +310,16 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         // Title
         if (overclock_rating == 1) {
             // Stack
-            builder.widget(new ImageWidget(62, 9, 74, 12, GTCEFuCGuiTextures.FUSION_REACTOR_STACK_TITLE).setIgnoreColor(true));
+            builder.widget(
+                    new ImageWidget(62, 9, 74, 12, GTCEFuCGuiTextures.FUSION_REACTOR_STACK_TITLE).setIgnoreColor(true));
         } else if (overclock_rating == 2) {
             // Array
-            builder.widget(new ImageWidget(63, 9, 73, 12, GTCEFuCGuiTextures.FUSION_REACTOR_ARRAY_TITLE).setIgnoreColor(true));
+            builder.widget(
+                    new ImageWidget(63, 9, 73, 12, GTCEFuCGuiTextures.FUSION_REACTOR_ARRAY_TITLE).setIgnoreColor(true));
         } else {
             // Complex
-            builder.widget(new ImageWidget(57, 9, 84, 12, GTCEFuCGuiTextures.FUSION_REACTOR_COMPLEX_TITLE).setIgnoreColor(true));
+            builder.widget(new ImageWidget(57, 9, 84, 12, GTCEFuCGuiTextures.FUSION_REACTOR_COMPLEX_TITLE)
+                    .setIgnoreColor(true));
         }
 
         // Fusion Diagram + Progress Bar
@@ -332,7 +330,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         builder.widget(FusionProgressSupplier.Type.BOTTOM_RIGHT.getWidget(this));
 
         // Fusion Legend
-        //builder.widget(new ImageWidget(7, 98, 108, 41, GuiTextures.FUSION_REACTOR_LEGEND).setIgnoreColor(true));
+        // builder.widget(new ImageWidget(7, 98, 108, 41, GuiTextures.FUSION_REACTOR_LEGEND).setIgnoreColor(true));
 
         // Power Button + Detail
         builder.widget(new ImageCycleButtonWidget(173, 211, 18, 18, GuiTextures.BUTTON_POWER,
@@ -342,7 +340,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         // Voiding Mode Button
         builder.widget(new ImageCycleButtonWidget(173, 189, 18, 18, GuiTextures.BUTTON_VOID_MULTIBLOCK,
                 4, this::getVoidingMode, this::setVoidingMode)
-                .setTooltipHoverString(MultiblockWithDisplayBase::getVoidingModeTooltip));
+                        .setTooltipHoverString(MultiblockWithDisplayBase::getVoidingModeTooltip));
 
         // Distinct Buses Unavailable Image
         builder.widget(new ImageWidget(173, 171, 18, 18, GuiTextures.BUTTON_NO_DISTINCT_BUSES)
@@ -468,16 +466,15 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                         () -> instance.recipeMapWorkable.isActive() ?
                                 instance.progressBarSupplier.getSupplier(this).getAsDouble() : 0,
                         x, y, width, height, texture, moveType)
-                        .setIgnoreColor(true)
-                        .setHoverTextConsumer(
-                                tl -> MultiblockDisplayText.builder(tl, instance.isStructureFormed())
-                                        .setWorkingStatus(instance.recipeMapWorkable.isWorkingEnabled(),
-                                                instance.recipeMapWorkable.isActive())
-                                        .addWorkingStatusLine());
+                                .setIgnoreColor(true)
+                                .setHoverTextConsumer(
+                                        tl -> MultiblockDisplayText.builder(tl, instance.isStructureFormed())
+                                                .setWorkingStatus(instance.recipeMapWorkable.isWorkingEnabled(),
+                                                        instance.recipeMapWorkable.isActive())
+                                                .addWorkingStatusLine());
             }
         }
     }
-
 
     private void addEnergyBarHoverText(List<ITextComponent> hoverList) {
         ITextComponent energyInfo = TextComponentUtil.stringWithColor(
@@ -635,11 +632,10 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
     @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if (this.color != null && this.bloomRenderTicket == null) {
-            this.bloomRenderTicket = BloomEffectUtil.registerBloomRender(FusionBloomSetup.INSTANCE, getBloomType(), this);
+            this.bloomRenderTicket = BloomEffectUtil.registerBloomRender(FusionBloomSetup.INSTANCE, getBloomType(),
+                    this);
         }
     }
-
-
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -653,9 +649,9 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         float g = (float) (color >> 8 & 255) / 255.0F;
         float b = (float) (color & 255) / 255.0F;
 
-        double x = (double)this.getPos().getX() - context.cameraX();
-        double y = (double)this.getPos().getY() - context.cameraY();
-        double z = (double)this.getPos().getZ() - context.cameraZ();
+        double x = (double) this.getPos().getX() - context.cameraX();
+        double y = (double) this.getPos().getY() - context.cameraY();
+        double z = (double) this.getPos().getZ() - context.cameraZ();
 
         rotHelper.calculateRots(this.getFrontFacing(), this.getUpwardsFacing(), this.isFlipped());
         rotHelper.rotVecs();
@@ -708,7 +704,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         }
     }
 
-    protected void renderFusionRings(BufferBuilder buffer, double x, double y, double z, float r, float g, float b, float a) {
+    protected void renderFusionRings(BufferBuilder buffer, double x, double y, double z, float r, float g, float b,
+                                     float a) {
         Vector3d vec = new Vector3d(x, y, z);
         for (Vector3d vector : activeVecs) {
             vec.add(vector);
@@ -717,7 +714,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         renderFusionRingsNestHelp(buffer, vec, r, g, b, a, activeMirrorVecs);
     }
 
-    private void renderFusionRingsNestHelp(BufferBuilder buffer, Vector3d vec, float r, float g, float b, float a, List<Vector3d> mirrorVecs) {
+    private void renderFusionRingsNestHelp(BufferBuilder buffer, Vector3d vec, float r, float g, float b, float a,
+                                           List<Vector3d> mirrorVecs) {
         // get the top vector
         Vector3d mirrorVector = mirrorVecs.get(0);
         Vector3d vecPos = new Vector3d(vec);
@@ -735,7 +733,6 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             renderFusionRing(buffer, vecPos, r, g, b, a);
             renderFusionRing(buffer, vecNeg, r, g, b, a);
         }
-
     }
 
     protected void renderFusionRing(BufferBuilder buffer, Vector3d vec, float r, float g, float b, float a) {
@@ -780,7 +777,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
         private FusionBloomSetup() {}
 
-        public void preDraw(BufferBuilder buffer) {
+        public void preDraw(@NotNull BufferBuilder buffer) {
             BloomEffect.strength = (float) ConfigHolder.client.shader.fusionBloom.strength;
             BloomEffect.baseBrightness = (float) ConfigHolder.client.shader.fusionBloom.baseBrightness;
             BloomEffect.highBrightnessThreshold = (float) ConfigHolder.client.shader.fusionBloom.highBrightnessThreshold;
@@ -794,7 +791,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             GlStateManager.disableTexture2D();
         }
 
-        public void postDraw(BufferBuilder buffer) {
+        public void postDraw(@NotNull BufferBuilder buffer) {
             GlStateManager.enableTexture2D();
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
         }

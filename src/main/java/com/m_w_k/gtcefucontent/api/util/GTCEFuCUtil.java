@@ -3,9 +3,6 @@ package com.m_w_k.gtcefucontent.api.util;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
-import gregtech.api.fluids.FluidBuilder;
-import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
-import gregtech.api.util.RelativeDirection;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -13,9 +10,9 @@ import net.minecraft.util.math.BlockPos;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 
-import gregtech.api.metatileentity.MetaTileEntity;
-
-import javax.vecmath.Vector3d;
+import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
+import gregtech.api.util.RelativeDirection;
 
 public final class GTCEFuCUtil {
 
@@ -59,6 +56,6 @@ public final class GTCEFuCUtil {
     }
 
     public static int truncateLong(long number) {
-        return (int)Math.min(Integer.MAX_VALUE, number);
+        return (int) Math.min(Integer.MAX_VALUE, number);
     }
 }

@@ -8,9 +8,10 @@ import javax.annotation.Nonnull;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 
@@ -33,7 +34,6 @@ import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
-import org.jetbrains.annotations.Nullable;
 
 public class MetaTileEntitySympatheticCombustor extends FuelMultiblockController {
 

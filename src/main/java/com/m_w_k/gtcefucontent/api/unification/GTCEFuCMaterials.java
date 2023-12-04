@@ -14,17 +14,19 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import net.minecraft.util.ResourceLocation;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.api.fluids.GTCEFuCFluidStorageKeys;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
-import gregtech.api.fluids.FluidBuilder;
-import gregtech.api.fluids.attribute.FluidAttributes;
 
 import crafttweaker.annotations.ZenRegister;
+import gregtech.api.fluids.FluidBuilder;
+import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.BlastProperty;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @ZenClass("mods.gtcefucontent.material.Material")
@@ -152,18 +154,18 @@ public final class GTCEFuCMaterials {
         EutecticCaesiumSodiumPotassium = eutectic(
                 ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy"),
                 EutecticAlloysString.get("eutectic_csnak_alloy"))
-                .colorAverage()
-                .flags(DECOMPOSITION_BY_CENTRIFUGING)
-                .components(Caesium, 4, Sodium, 1, Potassium, 5)
-                .build();
+                        .colorAverage()
+                        .flags(DECOMPOSITION_BY_CENTRIFUGING)
+                        .components(Caesium, 4, Sodium, 1, Potassium, 5)
+                        .build();
 
         EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(
                 ID.getAndIncrement(), gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
                 EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"))
-                .colorAverage()
-                .flags(DECOMPOSITION_BY_ELECTROLYZING)
-                .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
-                .build();
+                        .colorAverage()
+                        .flags(DECOMPOSITION_BY_ELECTROLYZING)
+                        .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
+                        .build();
 
         populateEutecticMap();
 
@@ -182,7 +184,7 @@ public final class GTCEFuCMaterials {
      * Call this function after adding more eutectic alloys to the eutectic maps to autogenerate their properties.
      */
     public static void generateEutecticProperties() {
-        for (Map.Entry<Material, int[]> eutectic  : EutecticAlloys.entrySet()) {
+        for (Map.Entry<Material, int[]> eutectic : EutecticAlloys.entrySet()) {
             // generate heat capacity properties for eutectic materials
             if (!eutectic.getKey().hasProperty(GTCEFuCPropertyKey.HEAT_CAPACITY)) {
                 eutectic.getKey().setProperty(GTCEFuCPropertyKey.HEAT_CAPACITY,
@@ -193,6 +195,7 @@ public final class GTCEFuCMaterials {
 
     /**
      * Generate an essence. Performs functions shared across all essences.
+     * 
      * @param id               The MetaItemSubID for this Material. Must be unique.
      * @param resourceLocation The ModId and Name of this Material. Will be formatted as "<modid>.material.<name>"
      *                         for the Translation Key.
@@ -203,15 +206,15 @@ public final class GTCEFuCMaterials {
         // as an aside, I am very annoyed that I can't put a fluid at 0°K
         return new Material.Builder(id, resourceLocation)
                 .gas(new FluidBuilder().attributes(FluidAttributes.ACID).temperature(1)).iconSet(FLUID);
-
     }
 
     /**
      * Generate a eutectic material. Performs functions shared across all eutectic materials.
+     * 
      * @param id               The MetaItemSubID for this Material. Must be unique.
      * @param resourceLocation The ModId and Name of this Material. Will be formatted as "<modid>.material.<name>"
      *                         for the Translation Key.
-     * @param eutecticStats The parameters of the eutectic material.
+     * @param eutecticStats    The parameters of the eutectic material.
      * @return The eutectic material builder.
      */
     public static Material.Builder eutectic(int id, @NotNull ResourceLocation resourceLocation, int[] eutecticStats) {

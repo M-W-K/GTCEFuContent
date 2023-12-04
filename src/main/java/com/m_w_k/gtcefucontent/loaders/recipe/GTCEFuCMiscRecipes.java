@@ -2,8 +2,6 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import java.util.Collection;
 
-import gregtech.api.recipes.chance.output.ChancedOutputList;
-import gregtech.api.recipes.chance.output.impl.ChancedItemOutput;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -15,6 +13,8 @@ import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.recipes.chance.output.ChancedOutputList;
+import gregtech.api.recipes.chance.output.impl.ChancedItemOutput;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
@@ -164,6 +164,8 @@ public final class GTCEFuCMiscRecipes {
                 .input(GTCEFuCMetaItems.STELLAR_INGOT, 5)
                 .output(GTCEFuCMetaItems.STELLAR_BALL)
                 .duration(8000).EUt(GTValues.VA[GTValues.HV]).buildAndRegister();
+
+        // TODO compressed steam 10 tick HV 102400 -> 640
     }
 
     public static void initPost() {

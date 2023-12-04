@@ -5,8 +5,8 @@ import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.*;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
+import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
 import gregtech.api.GTValues;
 import gregtech.api.fluids.store.FluidStorageKeys;

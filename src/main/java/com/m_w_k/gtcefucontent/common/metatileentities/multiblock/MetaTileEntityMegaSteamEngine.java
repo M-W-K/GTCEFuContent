@@ -1,10 +1,28 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import java.util.List;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.m_w_k.gtcefucontent.api.longhelp.ILongMultipleTankHandler;
 import com.m_w_k.gtcefucontent.api.longhelp.LongFluidStack;
 import com.m_w_k.gtcefucontent.api.longhelp.LongFluidTankList;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+
 import gregicality.multiblocks.api.metatileentity.GCYMMultiblockAbility;
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
@@ -14,7 +32,6 @@ import gregtech.api.GTValues;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.IRotorHolder;
-import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
 import gregtech.api.metatileentity.ITieredMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -36,21 +53,6 @@ import gregtech.client.renderer.texture.Textures;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMufflerHatch;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
 
@@ -123,11 +125,14 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
 
     protected TraceabilityPredicate stateIndex(int id) {
         return states(switch (id) {
-            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STEAM_CASING);
-            case 1 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.VIBRATION_SAFE_CASING);
+            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                    .getState(BlockLargeMultiblockCasing.CasingType.STEAM_CASING);
+            case 1 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                    .getState(BlockLargeMultiblockCasing.CasingType.VIBRATION_SAFE_CASING);
             case 2 -> GTCEFuCMetaBlocks.HARDENED_CASING.getState(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING);
             case 3 -> MetaBlocks.COMPUTER_CASING.getState(BlockComputerCasing.CasingType.HIGH_POWER_CASING);
-            case 4 -> GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);
+            case 4 -> GCYMMetaBlocks.UNIQUE_CASING
+                    .getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);
             case 5 -> MetaBlocks.COMPRESSED.get(Materials.SamariumMagnetic).getBlock(Materials.SamariumMagnetic);
             case 6 -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.TUNGSTENSTEEL_GEARBOX);
         });
@@ -250,6 +255,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
     }
 
     protected static class MSEMultiblockFuelRecipeLogic extends MultiblockFuelRecipeLogic {
+
         public MSEMultiblockFuelRecipeLogic(MetaTileEntityMegaSteamEngine tileEntity) {
             super(tileEntity);
         }
@@ -291,7 +297,8 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
                 Recipe recipe = findRecipe(Integer.MAX_VALUE, getInputInventory(), getInputTank());
 
                 return recipe == null ? null : getInputTank().drain(
-                        new LongFluidStack(recipe.getFluidInputs().get(0).getInputFluidStack().getFluid(), Long.MAX_VALUE),
+                        new LongFluidStack(recipe.getFluidInputs().get(0).getInputFluidStack().getFluid(),
+                                Long.MAX_VALUE),
                         false);
             }
             FluidStack fuelStack = previousRecipe.getFluidInputs().get(0).getInputFluidStack();

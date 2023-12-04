@@ -1,15 +1,18 @@
 package com.m_w_k.gtcefucontent.api.longhelp;
 
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 
+@SuppressWarnings("unused")
 public class LongFluidStack extends FluidStack {
+
     public long longAmount;
 
     public LongFluidStack(Fluid fluid, long amount) {
@@ -29,24 +32,20 @@ public class LongFluidStack extends FluidStack {
 
     @Nullable
     public static LongFluidStack loadLongFluidStackFromNBT(NBTTagCompound nbt) {
-        if (nbt == null)
-        {
+        if (nbt == null) {
             return null;
         }
-        if (!nbt.hasKey("FluidName", Constants.NBT.TAG_STRING))
-        {
+        if (!nbt.hasKey("FluidName", Constants.NBT.TAG_STRING)) {
             return null;
         }
 
         String fluidName = nbt.getString("FluidName");
-        if (FluidRegistry.getFluid(fluidName) == null)
-        {
+        if (FluidRegistry.getFluid(fluidName) == null) {
             return null;
         }
         LongFluidStack stack = new LongFluidStack(FluidRegistry.getFluid(fluidName), nbt.getLong("LongAmount"));
 
-        if (nbt.hasKey("Tag"))
-        {
+        if (nbt.hasKey("Tag")) {
             stack.tag = nbt.getCompoundTag("Tag");
         }
         return stack;
