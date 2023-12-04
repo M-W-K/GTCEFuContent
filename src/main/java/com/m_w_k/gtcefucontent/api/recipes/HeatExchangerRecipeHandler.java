@@ -214,13 +214,13 @@ public final class HeatExchangerRecipeHandler {
     }
 
     /**
-     * Register a fluid as a variant of a eutectic alloy.
+     * Register one or more fluids as a variant of a eutectic alloy.
      * 
-     * @param fluidNames The fluids to register.
+     * @param fluids The fluids to register.
      */
     @SuppressWarnings("SimplifyStreamApiCallChains")
-    public static void addEutectic(String... fluidNames) {
-        EUTECTICS.addAll(Arrays.stream(fluidNames).collect(Collectors.toList()));
+    public static void addEutectic(Fluid... fluids) {
+        EUTECTICS.addAll(Arrays.stream(fluids).map(Fluid::getName).collect(Collectors.toList()));
     }
 
     /**
