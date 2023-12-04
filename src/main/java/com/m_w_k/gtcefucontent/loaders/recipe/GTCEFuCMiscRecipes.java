@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import java.util.Collection;
 
+import gregtech.api.fluids.store.FluidStorageKeys;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -19,16 +20,27 @@ import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
 
+import static gregtech.api.GTValues.*;
+import static gregtech.api.GTValues.LV;
+import static gregtech.api.GTValues.V;
+
 public final class GTCEFuCMiscRecipes {
 
     private GTCEFuCMiscRecipes() {}
 
     public static void init() {
+        RecipeMaps.STEAM_TURBINE_FUELS.recipeBuilder()
+                .fluidInputs(GTCEFuCMaterials.PreheatedWater.getFluid(FluidStorageKeys.GAS, 4))
+                .fluidOutputs(Materials.DistilledWater.getFluid(4))
+                .duration(20)
+                .EUt((int) V[LV])
+                .buildAndRegister();
+
         RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.ChargedEnder.getFluid(1))
                 .fluidOutputs(Materials.Beryllium.getFluid(1))
                 .duration(750)
-                .EUt((int) GTValues.V[GTValues.EV])
+                .EUt((int) V[EV])
                 .buildAndRegister();
 
         RecipeMaps.LARGE_CHEMICAL_RECIPES.recipeBuilder()
@@ -37,14 +49,14 @@ public final class GTCEFuCMiscRecipes {
                 .input(OrePrefix.dust, Materials.DarkAsh)
                 .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(20000))
                 .duration(200)
-                .EUt(GTValues.VA[GTValues.EV])
+                .EUt(VA[EV])
                 .buildAndRegister();
 
         RecipeMaps.CHEMICAL_BATH_RECIPES.recipeBuilder()
                 .input(GTCEFuCMetaItems.CRYSTAL_ENDER)
                 .fluidInputs(GTCEFuCMaterials.LightEssence.getFluid(32000))
                 .output(GTCEFuCMetaItems.CRYSTAL_ENDLIGHT)
-                .duration(1100).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
+                .duration(1100).EUt(VA[LuV]).buildAndRegister();
 
         RecipeMaps.VACUUM_RECIPES.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(6000),
@@ -52,14 +64,14 @@ public final class GTCEFuCMiscRecipes {
                 .input(OrePrefix.dustTiny, Materials.Beryllium)
                 .fluidOutputs(GTCEFuCMaterials.VaporSeed.getFluid(25))
                 .duration(120)
-                .EUt(GTValues.VA[GTValues.EV])
+                .EUt(VA[EV])
                 .buildAndRegister();
 
         RecipeMaps.MIXER_RECIPES.recipeBuilder()
                 .fluidInputs(Materials.Lutetium.getFluid(144))
                 .input(OrePrefix.dust, Materials.Stone)
                 .output(OrePrefix.dust, Materials.Lutetium)
-                .EUt(GTValues.VA[GTValues.IV])
+                .EUt(VA[IV])
                 .duration(90)
                 .buildAndRegister();
 
@@ -74,7 +86,7 @@ public final class GTCEFuCMiscRecipes {
                         Materials.Radon.getFluid(1000))
                 .chancedOutput(GTCEFuCMetaItems.POWDER_VOID, 1000, 100)
                 .duration(800)
-                .EUt(GTValues.VA[GTValues.EV])
+                .EUt(VA[EV])
                 .buildAndRegister();
 
         RecipeMaps.ELECTROMAGNETIC_SEPARATOR_RECIPES.recipeBuilder()
@@ -90,7 +102,7 @@ public final class GTCEFuCMiscRecipes {
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
                 .output(GTCEFuCMetaItems.CRYSTAL_ENDER)
                 .fluidOutputs(Materials.Water.getFluid(1000))
-                .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
+                .duration(1800).EUt(VA[ZPM]).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(1000))
@@ -98,7 +110,7 @@ public final class GTCEFuCMiscRecipes {
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
                 .output(GTCEFuCMetaItems.CRYSTAL_VOID)
                 .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(1000))
-                .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
+                .duration(1800).EUt(VA[ZPM]).buildAndRegister();
 
         RecipeMaps.AUTOCLAVE_RECIPES.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(1000))
@@ -106,18 +118,18 @@ public final class GTCEFuCMiscRecipes {
                 .input(OrePrefix.dustTiny, Materials.SodaAsh)
                 .output(GTCEFuCMetaItems.CRYSTAL_STARLIGHT)
                 .fluidOutputs(GTCEFuCMaterials.VaporSeedRaw.getFluid(1000))
-                .duration(1800).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
+                .duration(1800).EUt(VA[ZPM]).buildAndRegister();
 
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
                 .input(GTCEFuCMetaItems.CRYSTAL_VOIDLIGHT)
                 .fluidOutputs(Materials.UUMatter.getFluid(144))
                 .output(GTCEFuCMetaItems.POWDER_ENDLIGHT)
-                .duration(300).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
+                .duration(300).EUt(VA[UHV]).buildAndRegister();
 
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
                 .input(GTCEFuCMetaItems.CRYSTAL_ENDER)
                 .fluidOutputs(GTCEFuCMaterials.ChargedEnder.getFluid(500))
-                .duration(300).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
+                .duration(300).EUt(VA[LuV]).buildAndRegister();
 
         // Yep. That's exactly how much neutronium I'm expecting them to make.
         RecipeMaps.ELECTROLYZER_RECIPES.recipeBuilder()
@@ -130,26 +142,26 @@ public final class GTCEFuCMiscRecipes {
                 .output(OrePrefix.dust, Materials.Neutronium, 64)
                 .output(OrePrefix.dust, Materials.Neutronium, 64)
                 .fluidOutputs(GTCEFuCMaterials.ExperienceEssence.getFluid(200))
-                .duration(8400).EUt(GTValues.VA[GTValues.UV]).buildAndRegister();
+                .duration(8400).EUt(VA[UV]).buildAndRegister();
 
         RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()
                 .input(ProjectEXItems.FINAL_STAR)
                 .output(ProjectEXItems.FINAL_STAR_SHARD, 8)
-                .duration(100).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
+                .duration(100).EUt(VA[UHV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCMetaItems.CRYSTAL_STARLIGHT.getStackForm(6),
                         new ItemStack(ProjectEXItems.COLLECTOR, 2, 9))
                 .fluidInputs(Materials.UUMatter.getFluid(144))
                 .outputs(new ItemStack(ProjectEXItems.COLLECTOR, 1, 15))
-                .duration(200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
+                .duration(200).EUt(VA[UHV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCMetaItems.CRYSTAL_ENDLIGHT.getStackForm(6),
                         new ItemStack(ProjectEXItems.RELAY, 2, 9))
                 .fluidInputs(Materials.UUMatter.getFluid(216))
                 .outputs(new ItemStack(ProjectEXItems.RELAY, 1, 15))
-                .duration(200).EUt(GTValues.VA[GTValues.UHV]).buildAndRegister();
+                .duration(200).EUt(VA[UHV]).buildAndRegister();
 
         RecipeMaps.FORMING_PRESS_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCMetaItems.CRYSTAL_VOID.getStackForm(),
@@ -158,12 +170,12 @@ public final class GTCEFuCMiscRecipes {
                         GTCEFuCMetaItems.INFINITY_REAGENT.getStackForm(64))
                 .input(OrePrefix.dust, GTCEFuCMaterials.TriniumReduced)
                 .output(GTCEFuCMetaItems.CRYSTAL_VOIDLIGHT)
-                .duration(1200).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
+                .duration(1200).EUt(VA[ZPM]).buildAndRegister();
 
         RecipeMaps.BENDER_RECIPES.recipeBuilder()
                 .input(GTCEFuCMetaItems.STELLAR_INGOT, 5)
                 .output(GTCEFuCMetaItems.STELLAR_BALL)
-                .duration(8000).EUt(GTValues.VA[GTValues.HV]).buildAndRegister();
+                .duration(8000).EUt(VA[HV]).buildAndRegister();
 
         // TODO compressed steam 10 tick HV 102400 -> 640
     }

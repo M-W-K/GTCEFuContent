@@ -18,7 +18,7 @@ public final class HeatExchangerRecipeHandler {
     /**
      * Approximate conversion of heat units to EU, assuming that the fluid heater is perfectly efficient.
      */
-    public static final long HEU = GTCEFuCHeatExchangerLoader.waterVaporizationEnergy / 150;
+    public static final long HEU = GTCEFuCHeatExchangerLoader.waterToSteamEnergy / 150;
 
     private static final Map<Fluid, Tuple<FluidStack, long[]>> HEATING_MAP = new HashMap<>();
     private static final Map<Fluid, Tuple<FluidStack, long[]>> COOLING_MAP = new HashMap<>();

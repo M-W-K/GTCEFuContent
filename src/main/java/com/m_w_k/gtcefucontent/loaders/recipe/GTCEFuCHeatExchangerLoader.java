@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 import java.util.HashMap;
 import java.util.Map;
 
+import gregtech.api.fluids.store.FluidStorageKeys;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -22,15 +23,29 @@ public final class GTCEFuCHeatExchangerLoader {
 
     private GTCEFuCHeatExchangerLoader() {}
 
+    public static final long waterHeatCapacity = 418600;
+    public static final long waterHeatOfVaporization = 2260000L;
     // heat up by 80°K, then add the heat of vaporization
-    public static final long waterVaporizationEnergy = 418600 * 80 + 2260000L;
+    public static final long waterToSteamEnergy = waterHeatCapacity * 80 + waterHeatOfVaporization;
 
     public static void init() {
         // water <-> steam
         HeatExchangerRecipeHandler.registerHeatExchange(
-                Materials.DistilledWater.getFluid(1),
+                Materials.Water.getFluid(1),
                 Materials.Steam.getFluid(160),
-                waterVaporizationEnergy);
+                waterToSteamEnergy);
+
+        // d. water <-> preheated water
+        HeatExchangerRecipeHandler.registerHeatExchange(
+                Materials.DistilledWater.getFluid(1),
+                GTCEFuCMaterials.PreheatedWater.getFluid(1),
+                waterHeatCapacity * 80);
+
+        // preheated water <-> hps
+        HeatExchangerRecipeHandler.registerHeatExchange(
+                GTCEFuCMaterials.PreheatedWater.getFluid(1),
+                GTCEFuCMaterials.PreheatedWater.getFluid(FluidStorageKeys.GAS, 1),
+                waterHeatOfVaporization);
 
         // plasmas
         Map<Material, Integer> plasmaMap = new HashMap<>();
@@ -45,8 +60,8 @@ public final class GTCEFuCHeatExchangerLoader {
             Material material = entry.getKey();
             HeatExchangerRecipeHandler.registerHeatExchange(material.getPlasma(1),
                     material.getFluid(1),
-                    // 8L of steam potential per EU, or quadruple effective EU output before efficiency bonuses.
-                    waterVaporizationEnergy * entry.getValue() / 20, false);
+                    // 4L of steam potential per EU, or double effective EU output before efficiency bonuses.
+                    waterToSteamEnergy * entry.getValue() / 40, false);
         }
 
         // eutectic alloys
@@ -71,7 +86,7 @@ public final class GTCEFuCHeatExchangerLoader {
         HeatExchangerRecipeHandler.registerHeatExchange(
                 GTCEFuCMaterials.TriniumReduced.getFluid(55),
                 Materials.Trinium.getFluid(9),
-                waterVaporizationEnergy * GTValues.V[GTValues.UV],
+                waterToSteamEnergy * GTValues.V[GTValues.UV],
                 false);
     }
 

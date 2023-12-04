@@ -5,8 +5,7 @@ import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
 import static gregtech.api.GTValues.LuV;
 import static gregtech.api.GTValues.VA;
 import static gregtech.api.unification.material.Materials.*;
-import static gregtech.api.unification.material.info.MaterialFlags.DECOMPOSITION_BY_CENTRIFUGING;
-import static gregtech.api.unification.material.info.MaterialFlags.DECOMPOSITION_BY_ELECTROLYZING;
+import static gregtech.api.unification.material.info.MaterialFlags.*;
 import static gregtech.api.unification.material.info.MaterialIconSet.*;
 
 import java.util.HashMap;
@@ -36,6 +35,7 @@ public final class GTCEFuCMaterials {
     public static Material EutecticCaesiumSodiumPotassium;
     public static Material EutecticCaesiumPotassiumGalliumNaquadahEnriched;
 
+    public static Material PreheatedWater;
     public static Material CaesiumChlorineMix;
     public static Material ChargedEnder;
     public static Material TriniumReduced;
@@ -102,6 +102,14 @@ public final class GTCEFuCMaterials {
         }
 
         GTCEFuCMaterialFlagAddition.init();
+
+        PreheatedWater = new Material.Builder(ID.getAndIncrement(), gtcefucId("preheated_water"))
+                .liquid(new FluidBuilder().temperature(373))
+                .gas(new FluidBuilder().temperature(973).customStill().name("hps").translation("gtcefucontent.fluid.hps"))
+                .color(0x4A94EE)
+                .flags(DISABLE_DECOMPOSITION)
+                .components(Hydrogen, 2, Oxygen, 1)
+                .build();
 
         CaesiumChlorineMix = new Material.Builder(ID.getAndIncrement(), gtcefucId("caesium_chlorine_mix"))
                 .dust()

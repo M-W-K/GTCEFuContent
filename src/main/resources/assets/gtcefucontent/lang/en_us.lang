@@ -100,6 +100,8 @@ tile.storage_block.infinity1.name=Block of Infinity Reagent
 tile.storage_block.infinity2.name=Compressed Block of Infinity Reagent
 tile.storage_block.infinity3.name=Double Compressed Block of Infinity Reagent
 
+gtcefucontent.material.preheated_water=Preheated Water
+gtcefucontent.fluid.hps=High Pressure Steam
 gtcefucontent.material.caesium_chlorine_mix=Caesium-Chlorine Mixture
 gtcefucontent.material.charged_ender=Charged Ender
 gtcefucontent.material.reduced_trinium=Reduced Trinium
