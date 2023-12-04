@@ -2,7 +2,6 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,7 +21,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -67,11 +65,12 @@ import gregtech.common.metatileentities.MetaTileEntities;
 public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                                       implements IFastRenderMetaTileEntity, IBloomEffect {
 
+    protected static final int NO_COLOR = 0;
     protected EnergyContainerList inputEnergyContainers;
     protected long heat = 0;
-    protected @Nullable Integer color;
+    private int fusionRingColor = NO_COLOR;
     @SideOnly(Side.CLIENT)
-    private BloomEffectUtil.BloomRenderTicket bloomRenderTicket;
+    private boolean registeredBloomRenderTicket;
 
     public MetaTileEntityStarSiphon(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.STAR_SIPHON_RECIPES);
@@ -415,6 +414,7 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                 return GregtechDataCodes.FUSION_REACTOR_ENERGY_CONTAINER_TRAIT;
             }
         };
+        this.setFusionRingColor(NO_COLOR);
     }
 
     private long calculateEnergyStorageFactor(int energyInputAmount) {
@@ -428,50 +428,50 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
             if (energyAdded > 0) this.inputEnergyContainers.removeEnergy(energyAdded);
         }
         super.updateFormedValid();
-        if (recipeMapWorkable.isWorking() && color == null) {
+        if (recipeMapWorkable.isWorking() && fusionRingColor == NO_COLOR) {
             if (recipeMapWorkable.getPreviousRecipe() != null &&
-                    recipeMapWorkable.getPreviousRecipe().getFluidOutputs().size() > 0) {
-                int newColor = 0xFF000000 |
-                        recipeMapWorkable.getPreviousRecipe().getFluidOutputs().get(0).getFluid().getColor();
-                if (!Objects.equals(color, newColor)) {
-                    color = newColor;
-                    writeCustomData(GregtechDataCodes.UPDATE_COLOR, this::writeColor);
-                }
+                    !recipeMapWorkable.getPreviousRecipe().getFluidOutputs().isEmpty()) {
+                setFusionRingColor(0xFF000000 |
+                        recipeMapWorkable.getPreviousRecipe().getFluidOutputs().get(0).getFluid().getColor());
             }
-        } else if (!recipeMapWorkable.isWorking() && isStructureFormed() && color != null) {
-            color = null;
-            writeCustomData(GregtechDataCodes.UPDATE_COLOR, this::writeColor);
+        } else if (!recipeMapWorkable.isWorking() && isStructureFormed()) {
+            setFusionRingColor(NO_COLOR);
         }
     }
 
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
-        writeColor(buf);
+        buf.writeVarInt(this.fusionRingColor);
     }
 
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
-        readColor(buf);
+        this.fusionRingColor = buf.readVarInt();
     }
 
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
         if (dataId == GregtechDataCodes.UPDATE_COLOR) {
-            readColor(buf);
+            this.fusionRingColor = buf.readVarInt();
+        } else {
+            super.receiveCustomData(dataId, buf);
         }
     }
 
-    private void readColor(PacketBuffer buf) {
-        color = buf.readBoolean() ? buf.readVarInt() : null;
+    protected int getFusionRingColor() {
+        return this.fusionRingColor;
     }
 
-    private void writeColor(PacketBuffer buf) {
-        buf.writeBoolean(color != null);
-        if (color != null) {
-            buf.writeVarInt(color);
+    protected boolean hasFusionRingColor() {
+        return this.fusionRingColor != NO_COLOR;
+    }
+
+    protected void setFusionRingColor(int fusionRingColor) {
+        if (this.fusionRingColor != fusionRingColor) {
+            this.fusionRingColor = fusionRingColor;
+            writeCustomData(GregtechDataCodes.UPDATE_COLOR, buf -> buf.writeVarInt(fusionRingColor));
         }
     }
 
@@ -572,35 +572,33 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
 
     @Override
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
-        if (this.color != null && this.bloomRenderTicket == null) {
-            this.bloomRenderTicket = BloomEffectUtil.registerBloomRender(FusionBloomSetup.INSTANCE, getBloomType(),
-                    this);
+        if (this.hasFusionRingColor() && !this.registeredBloomRenderTicket) {
+            this.registeredBloomRenderTicket = true;
+            BloomEffectUtil.registerBloomRender(FusionBloomSetup.INSTANCE, getBloomType(), this, this);
         }
     }
 
     @SideOnly(Side.CLIENT)
     public void renderBloomEffect(@NotNull BufferBuilder buffer, @NotNull EffectRenderContext context) {
-        Integer c = color;
-        if (c != null && MinecraftForgeClient.getRenderPass() == 0) {
-            int color = RenderUtil.interpolateColor(c, -1, Eases.QUAD_IN
-                    .getInterpolation(
-                            Math.abs((Math.abs(getOffsetTimer() % 50L) + context.partialTicks()) - 25F) / 25F));
-            float a = (float) (color >> 24 & 255) / 255.0F;
-            float r = (float) (color >> 16 & 255) / 255.0F;
-            float g = (float) (color >> 8 & 255) / 255.0F;
-            float b = (float) (color & 255) / 255.0F;
-            EnumFacing relativeBack = RelativeDirection.BACK.getRelativeFacing(this.getFrontFacing(),
-                    this.getUpwardsFacing(), this.isFlipped());
-            // since we render a ring on each axis anyway, we don't actually care about it.
-            // EnumFacing.Axis axis = RelativeDirection.UP.getRelativeFacing(this.getFrontFacing(),
-            // this.getUpwardsFacing(), this.isFlipped()).getAxis();
-            double x = (double) this.getPos().getX() - context.cameraX();
-            double y = (double) this.getPos().getY() - context.cameraY();
-            double z = (double) this.getPos().getZ() - context.cameraZ();
-            renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Y, r, g, b, a, relativeBack);
-            renderFixedRing(buffer, x, y, z, EnumFacing.Axis.X, r, g, b, a, relativeBack);
-            renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Z, r, g, b, a, relativeBack);
-        }
+        if (!this.hasFusionRingColor()) return;
+        int color = RenderUtil.interpolateColor(this.getFusionRingColor(), -1, Eases.QUAD_IN
+                .getInterpolation(
+                        Math.abs((Math.abs(getOffsetTimer() % 50L) + context.partialTicks()) - 25F) / 25F));
+        float a = (float) (color >> 24 & 255) / 255.0F;
+        float r = (float) (color >> 16 & 255) / 255.0F;
+        float g = (float) (color >> 8 & 255) / 255.0F;
+        float b = (float) (color & 255) / 255.0F;
+        EnumFacing relativeBack = RelativeDirection.BACK.getRelativeFacing(this.getFrontFacing(),
+                this.getUpwardsFacing(), this.isFlipped());
+        // since we render a ring on each axis anyway, we don't actually care about it.
+        // EnumFacing.Axis axis = RelativeDirection.UP.getRelativeFacing(this.getFrontFacing(),
+        // this.getUpwardsFacing(), this.isFlipped()).getAxis();
+        double x = (double) this.getPos().getX() - context.cameraX();
+        double y = (double) this.getPos().getY() - context.cameraY();
+        double z = (double) this.getPos().getZ() - context.cameraZ();
+        renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Y, r, g, b, a, relativeBack);
+        renderFixedRing(buffer, x, y, z, EnumFacing.Axis.X, r, g, b, a, relativeBack);
+        renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Z, r, g, b, a, relativeBack);
     }
 
     private void renderFixedRing(BufferBuilder buffer, double x, double y, double z, EnumFacing.Axis axis, float r,
@@ -613,6 +611,12 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                 6, 0.2, 10, 20,
                 r, g, b, a, axis);
         Tessellator.getInstance().draw();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldRenderBloomEffect(@NotNull EffectRenderContext context) {
+        return this.hasFusionRingColor();
     }
 
     @Override
