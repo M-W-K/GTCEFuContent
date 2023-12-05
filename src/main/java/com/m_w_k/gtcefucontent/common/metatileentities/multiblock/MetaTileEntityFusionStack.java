@@ -120,7 +120,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityFusionStack(metaTileEntityId, tier(overclock_rating));
+        return new MetaTileEntityFusionStack(metaTileEntityId, tier());
     }
 
     @NotNull
@@ -211,7 +211,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         this.inputEnergyContainers = new EnergyContainerList(energyInputs);
         long euCapacity = calculateEnergyStorageFactor(energyInputs.size());
         // Allow for adaptive max voltage
-        this.energyContainer = new EnergyContainerHandler(this, euCapacity, GTValues.V[tier(overclock_rating * 2)], 0,
+        this.energyContainer = new EnergyContainerHandler(this, euCapacity, GTValues.V[this.tier2()], 0,
                 0, 0) {
 
             @Nonnull
@@ -561,6 +561,19 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         }
 
         @Override
+        protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
+            super.modifyOverclockPre(values, storage);
+
+            // Limit the number of OCs to the difference in fusion reactor MK.
+            // I.e., a MK2 reactor can overclock a MK1 recipe once, and a
+            // MK3 reactor can overclock a MK2 recipe once, or a MK1 recipe twice.
+            long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
+            int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart);
+            if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier2();
+            values[2] = Math.min(fusionTier, values[2]);
+        }
+
+        @Override
         public long getMaxVoltage() {
             // Increase the tier-lock voltage twice as fast as normal fusion
             // UEV, UXV, MAX
@@ -800,6 +813,14 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
     protected static int tier(int overclock_rating) {
         return overclock_rating + GTValues.UV;
+    }
+
+    protected int tier() {
+        return this.overclock_rating + GTValues.UV;
+    }
+
+    protected int tier2() {
+        return this.overclock_rating * 2 + GTValues.UV;
     }
 
     protected static int overclock_rating(int tier) {
