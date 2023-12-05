@@ -1,9 +1,17 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import gregicality.multiblocks.api.unification.GCYMMaterialFlags;
+import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.FluidConstants;
 import gregtech.api.fluids.store.FluidStorageKeys;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.unification.OreDictUnifier;
+import gregtech.api.unification.material.properties.PropertyKey;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -18,6 +26,10 @@ import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.annotation.Nullable;
 
 public final class GTCEFuCHeatExchangerLoader {
 
@@ -48,21 +60,22 @@ public final class GTCEFuCHeatExchangerLoader {
                 waterHeatOfVaporization);
 
         // plasmas
-        Map<Material, Integer> plasmaMap = new HashMap<>();
-        plasmaMap.put(Materials.Helium, -40 * 2048);
-        plasmaMap.put(Materials.Oxygen, -48 * 2048);
-        plasmaMap.put(Materials.Nitrogen, -64 * 2048);
-        plasmaMap.put(Materials.Argon, -96 * 2048);
-        plasmaMap.put(Materials.Iron, -96 * 2048);
-        plasmaMap.put(Materials.Nickel, -192 * 2048);
+        Collection<Recipe> recipes = RecipeMaps.PLASMA_GENERATOR_FUELS.getRecipeList();
+        Map<Fluid, Material> plasmas = GregTechAPI.materialManager.getRegisteredMaterials().stream()
+                .filter((a) -> a.hasProperty(PropertyKey.FLUID) && a.getFluid(FluidStorageKeys.PLASMA) != null)
+                .collect(Collectors.toMap((a) -> a.getFluid(FluidStorageKeys.PLASMA), Function.identity()));
 
-        for (Map.Entry<Material, Integer> entry : plasmaMap.entrySet()) {
-            Material material = entry.getKey();
-            HeatExchangerRecipeHandler.registerHeatExchange(material.getPlasma(1),
-                    material.getFluid(1),
-                    // 4L of steam potential per EU, or double effective EU output before efficiency bonuses.
-                    waterToSteamEnergy * entry.getValue() / 40, false);
-        }
+        recipes.forEach((entry) -> {
+            // only true plasmas that are processed via plasma generator are registered
+            Material material = plasmas.get(entry.getFluidInputs().get(0).getInputFluidStack().getFluid());
+            if (material != null) {
+                int eu = entry.getEUt() * entry.getDuration();
+                HeatExchangerRecipeHandler.registerHeatExchange(material.getPlasma(1),
+                        material.getFluid(1),
+                        // 4L of steam potential per EU, or double effective EU output before efficiency bonuses.
+                        waterToSteamEnergy * eu / 40, false);
+            }
+        });
 
         // eutectic alloys
         GTCEFuCHeatCapacityProperty property;
