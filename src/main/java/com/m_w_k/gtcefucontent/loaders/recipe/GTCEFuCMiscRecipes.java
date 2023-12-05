@@ -32,7 +32,7 @@ public final class GTCEFuCMiscRecipes {
         RecipeMaps.STEAM_TURBINE_FUELS.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.PreheatedWater.getFluid(FluidStorageKeys.GAS, 4))
                 .fluidOutputs(Materials.DistilledWater.getFluid(4))
-                .duration(20)
+                .duration(16)
                 .EUt((int) V[LV])
                 .buildAndRegister();
 
