@@ -10,6 +10,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3d;
 
+import gregtech.api.capability.IHPCAComponentHatch;
+import gregtech.common.metatileentities.multi.multiblockpart.hpca.MetaTileEntityHPCAComponent;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -20,8 +22,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -120,7 +124,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityFusionStack(metaTileEntityId, tier());
+        return new MetaTileEntityFusionStack(metaTileEntityId, tier(1));
     }
 
     @NotNull
@@ -129,23 +133,15 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         return (switch (overclock_rating) {
             default -> FusionStackPatterns.FUSION_STACK;
             case 2 -> FusionStackPatterns.FUSION_ARRAY;
-            case 3 -> // since the complex has tile entities, they need to have a direction alignment specified based on
-                      // the controller's alignment
-                FusionStackPatterns.FUSION_COMPLEX
-                        .where('5',
-                                FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(),
-                                        MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
-                        .where('6',
-                                FusionStackPatterns.metaTileEntitiesModified(this.getFrontFacing().rotateY(),
-                                        MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT))
-                        .where('7',
-                                FusionStackPatterns.metaTileEntitiesModified(
-                                        this.getFrontFacing().rotateY().getOpposite(),
-                                        MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
-                        .where('8',
-                                FusionStackPatterns.metaTileEntitiesModified(
-                                        this.getFrontFacing().rotateY().getOpposite(),
-                                        MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT));
+            case 3 -> FusionStackPatterns.FUSION_COMPLEX
+                    .where('5',
+                            metaTileEntities(MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
+                    .where('6',
+                            metaTileEntities(MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT))
+                    .where('7',
+                            metaTileEntities(MetaTileEntities.HPCA_ADVANCED_COMPUTATION_COMPONENT))
+                    .where('8',
+                            metaTileEntities(MetaTileEntities.HPCA_ACTIVE_COOLER_COMPONENT));
         })
                 .where('X', selfPredicate())
                 .build();
@@ -183,6 +179,22 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         super.formStructure(context);
         this.initializeAbilities();
         ((EnergyContainerHandler) this.energyContainer).setEnergyStored(energyStored);
+        // rotate HPCA components into alignment
+        List<IHPCAComponentHatch> hpcaParts = getAbilities(MultiblockAbility.HPCA_COMPONENT);
+        hpcaParts.stream().map(a -> {
+            if (a instanceof MetaTileEntityHPCAComponent c) return c;
+            return null;
+        }).filter(Objects::nonNull).forEach(part -> {
+            BlockPos relPos = part.getPos().subtract(this.getPos());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+            if (filteredPos(relPos, left) > 0) setFrontFacing(part, left);
+            else setFrontFacing(part, left.getOpposite());
+        });
+    }
+
+    private void setFrontFacing(MetaTileEntityHPCAComponent part, EnumFacing facing) {
+        if (part.getFrontFacing() != facing)
+            part.setFrontFacing(facing);
     }
 
     @Override
@@ -211,7 +223,7 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         this.inputEnergyContainers = new EnergyContainerList(energyInputs);
         long euCapacity = calculateEnergyStorageFactor(energyInputs.size());
         // Allow for adaptive max voltage
-        this.energyContainer = new EnergyContainerHandler(this, euCapacity, GTValues.V[this.tier2()], 0,
+        this.energyContainer = new EnergyContainerHandler(this, euCapacity, GTValues.V[this.tier(2)], 0,
                 0, 0) {
 
             @Nonnull
@@ -560,24 +572,25 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                     overclock_rating);
         }
 
-        @Override
-        protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
-            super.modifyOverclockPre(values, storage);
-
-            // Limit the number of OCs to the difference in fusion reactor MK.
-            // I.e., a MK2 reactor can overclock a MK1 recipe once, and a
-            // MK3 reactor can overclock a MK2 recipe once, or a MK1 recipe twice.
-            long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
-            int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart);
-            if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier2();
-            values[2] = Math.min(fusionTier, values[2]);
-        }
+//        @Override
+//        protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
+//            super.modifyOverclockPre(values, storage);
+//
+//            // Limit the number of OCs to the difference in fusion reactor tier.
+//            // However, effective tier goes up by two per for fusion stacks.
+//            // In addition, the recipemap euToStart doubles every tier
+//            long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
+//            int startEUFactor = (int) Math.pow(2, MetaTileEntityFusionStack.this.tier(1));
+//            int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart / startEUFactor);
+//            if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier(2);
+//            values[2] = Math.min(fusionTier, values[2]);
+//        }
 
         @Override
         public long getMaxVoltage() {
             // Increase the tier-lock voltage twice as fast as normal fusion
             // UEV, UXV, MAX
-            return Math.min(GTValues.V[tier(overclock_rating * 2)], super.getMaxVoltage());
+            return Math.min(GTValues.V[MetaTileEntityFusionStack.this.tier(2)], super.getMaxVoltage());
         }
 
         @Override
@@ -811,16 +824,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         }
     }
 
-    protected static int tier(int overclock_rating) {
-        return overclock_rating + GTValues.UV;
-    }
-
-    protected int tier() {
-        return this.overclock_rating + GTValues.UV;
-    }
-
-    protected int tier2() {
-        return this.overclock_rating * 2 + GTValues.UV;
+    protected int tier(int mult) {
+        return this.overclock_rating * mult + GTValues.UV;
     }
 
     protected static int overclock_rating(int tier) {

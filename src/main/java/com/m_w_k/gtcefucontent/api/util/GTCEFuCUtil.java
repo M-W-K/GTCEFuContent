@@ -13,6 +13,7 @@ import com.m_w_k.gtcefucontent.GTCEFuContent;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.util.RelativeDirection;
+import net.minecraft.util.math.Vec3i;
 
 public final class GTCEFuCUtil {
 
@@ -38,6 +39,18 @@ public final class GTCEFuCUtil {
                 .offset(RelativeDirection.FRONT.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), z)
                 .offset(RelativeDirection.LEFT.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), x)
                 .offset(RelativeDirection.UP.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), y);
+    }
+
+    public static int filteredPos(BlockPos pos, EnumFacing facing) {
+        return filteredPos(pos, facing.getAxis()) * facing.getAxisDirection().getOffset();
+    }
+
+    public static int filteredPos(BlockPos pos, EnumFacing.Axis axis) {
+        return switch (axis) {
+            case Y -> pos.getY();
+            case X -> pos.getX();
+            default -> pos.getZ();
+        };
     }
 
     public static double geometricMean(double... numbers) {
