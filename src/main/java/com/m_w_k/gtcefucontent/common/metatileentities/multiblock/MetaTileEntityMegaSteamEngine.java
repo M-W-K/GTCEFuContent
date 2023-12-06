@@ -1,12 +1,21 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
+import gregtech.api.GregTechAPI;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.common.ConfigHolder;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -54,15 +63,29 @@ import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMufflerHatch;
 
-public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
+public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController implements IProgressBarMultiblock {
 
     protected boolean validVCU;
+    protected long kineticEnergy;
+    // the larger the shaft mass, the slower the engine will ramp up
+    protected final int shaftMass;
+    // the amount of kinetic energy to lose to friction every tick, half before and half after energy extraction
+    protected final int friction;
+    // the amount of power to generate per RPM
+    protected final int generatorStrength;
 
-    public MetaTileEntityMegaSteamEngine(ResourceLocation metaTileEntityId) {
+    public MetaTileEntityMegaSteamEngine(ResourceLocation metaTileEntityId, int shaftMass, int friction, int generatorStrength) {
         super(metaTileEntityId, RecipeMaps.STEAM_TURBINE_FUELS, GTValues.OpV);
-        this.recipeMapWorkable = new MSEMultiblockFuelRecipeLogic(this);
+        this.recipeMapWorkable = new MSEMultiblockWorkableHandler(this);
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[GTValues.OpV]);
         this.validVCU = false;
+        this.shaftMass = shaftMass;
+        this.friction = friction;
+        this.generatorStrength = generatorStrength;
+    }
+
+    public MetaTileEntityMegaSteamEngine(ResourceLocation metaTileEntityID) {
+        this(metaTileEntityID, 100000, (int) GTValues.V[GTValues.ZPM], (int) GTValues.V[GTValues.ZPM]);
     }
 
     @Override
@@ -153,9 +176,101 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
     }
 
     @Override
+    protected void updateFormedValid() {
+        if (!hasMufflerMechanics() || isMufflerFaceFree()) {
+            this.recipeMapWorkable.updateWorkable();
+            // remove half of our friction value from the maximum output
+            long generated = this.energyContainer.addEnergy(getEnergyOut() - this.friction / 2);
+            this.kineticEnergy -= generated + friction;
+            if (this.kineticEnergy < 0) this.kineticEnergy = 0;
+        }
+    }
+
+    @Override
     public void invalidateStructure() {
         super.invalidateStructure();
         this.validVCU = false;
+    }
+
+    public int getNumProgressBars() {
+        return 3;
+    }
+
+    @Override
+    public double getFillPercentage(int index) {
+        if (index == 0) {
+            long[] fuelAmount = new long[2];
+            if (getInputFluidInventory() != null) {
+                MSEMultiblockWorkableHandler recipeLogic = (MSEMultiblockWorkableHandler) recipeMapWorkable;
+                if (recipeLogic.getInputFluidStack() != null) {
+                    LongFluidStack testStack = recipeLogic.getInputFluidStack().copy();
+                    testStack.setAmount(Long.MAX_VALUE);
+                    fuelAmount = getTotalLongFluidAmount(testStack, getInputFluidInventory());
+                }
+            }
+            return fuelAmount[1] != 0 ? 1.0 * fuelAmount[0] / fuelAmount[1] : 0;
+        } else if (index == 1) {
+            return this.getRPM() / this.maxRPM();
+        } else {
+            // I think it's reasonable to assume we do not have more than the integer limit of lubricant
+            int[] lubricantAmount = new int[2];
+            if (getInputFluidInventory() != null) {
+                lubricantAmount = getTotalFluidAmount(GTCEFuCMaterials.VaporSeedRaw.getFluid(Integer.MAX_VALUE),
+                        getInputFluidInventory());
+            }
+            return lubricantAmount[1] != 0 ? 1.0 * lubricantAmount[0] / lubricantAmount[1] : 0;
+        }
+    }
+
+    @Override
+    public TextureArea getProgressBarTexture(int index) {
+        if (index == 0) {
+            return GuiTextures.PROGRESS_BAR_LCE_FUEL;
+        } else if (index == 1) {
+            return GuiTextures.PROGRESS_BAR_TURBINE_ROTOR_SPEED;
+        } else {
+            return GuiTextures.PROGRESS_BAR_LCE_LUBRICANT;
+        }
+    }
+
+    public void addBarHoverText(List<ITextComponent> hoverList, int index) {
+        if (index == 0) {
+            addFuelText(hoverList);
+        } else if (index == 1) {
+            ITextComponent rpmTranslated = TextComponentUtil.translationWithColor(
+                    TextFormatting.WHITE,
+                    "gregtech.multiblock.turbine.rotor_rpm_unit_name");
+            ITextComponent rotorInfo = TextComponentUtil.translationWithColor(
+                    TextFormatting.WHITE,
+                    "%s / %s %s",
+                    TextFormattingUtil.formatNumbers(getRPM()),
+                    TextFormattingUtil.formatNumbers(maxRPM()),
+                    rpmTranslated);
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "gtcefucontent.machine.mega_steam_engine.display.shaft_speed",
+                    rotorInfo));
+        } else {
+            // Lubricant
+            int lubricantStored = 0;
+            int lubricantCapacity = 0;
+            if (isStructureFormed() && getInputFluidInventory() != null) {
+                // Hunt for tanks with lubricant in them
+                int[] lubricantAmount = getTotalFluidAmount(GTCEFuCMaterials.VaporSeedRaw.getFluid(Integer.MAX_VALUE),
+                        getInputFluidInventory());
+                lubricantStored = lubricantAmount[0];
+                lubricantCapacity = lubricantAmount[1];
+            }
+
+            ITextComponent lubricantInfo = TextComponentUtil.stringWithColor(
+                    TextFormatting.GOLD,
+                    TextFormattingUtil.formatNumbers(lubricantStored) + " / " +
+                            TextFormattingUtil.formatNumbers(lubricantCapacity) + " L");
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "gtcefucontent.machine.mega_steam_engine.display.lubricant_amount",
+                    lubricantInfo));
+        }
     }
 
     @Override
@@ -163,7 +278,13 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gcym.machine.steam_engine.tooltip.1", GTValues.VNF[GTValues.OpV]));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.1"));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.2", this.generatorStrength));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.3", this.friction));
+        tooltip.add(I18n.format("gtcefucontent.universal.tooltip.uses_per_hour_vapor_seed", 20000));
     }
+
+
 
     @Override
     protected void addErrorText(List<ITextComponent> textList) {
@@ -211,7 +332,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
         long fuelStored = 0;
         long fuelCapacity = 0;
         FluidStack fuelStack = null;
-        MSEMultiblockFuelRecipeLogic recipeLogic = (MSEMultiblockFuelRecipeLogic) recipeMapWorkable;
+        MSEMultiblockWorkableHandler recipeLogic = (MSEMultiblockWorkableHandler) recipeMapWorkable;
         if (isStructureFormed() && recipeLogic.getInputFluidStack() != null && getInputFluidInventory() != null) {
             fuelStack = recipeLogic.getInputFluidStack().copy();
             fuelStack.amount = Integer.MAX_VALUE;
@@ -254,10 +375,28 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
         return new long[] { fluidAmount, fluidCapacity };
     }
 
-    protected static class MSEMultiblockFuelRecipeLogic extends MultiblockFuelRecipeLogic {
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        data.setLong("KE", this.kineticEnergy);
+        return data;
+    }
 
-        public MSEMultiblockFuelRecipeLogic(MetaTileEntityMegaSteamEngine tileEntity) {
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        this.kineticEnergy = data.getLong("KE");
+    }
+
+    protected static class MSEMultiblockWorkableHandler extends MultiblockFuelRecipeLogic {
+
+        private static final FluidStack LUBRICANT_STACK = GTCEFuCMaterials.VaporSeedRaw.getFluid(5);
+
+        protected MetaTileEntityMegaSteamEngine engine;
+
+        public MSEMultiblockWorkableHandler(MetaTileEntityMegaSteamEngine tileEntity) {
             super(tileEntity);
+            engine = tileEntity;
         }
 
         @Override
@@ -307,15 +446,83 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController {
 
         @Override
         protected ILongMultipleTankHandler getInputTank() {
-            MetaTileEntityMegaSteamEngine controller = (MetaTileEntityMegaSteamEngine) metaTileEntity;
-            return controller.getInputFluidInventory();
+            return this.engine.getInputFluidInventory();
+        }
+
+        @Override
+        protected void updateRecipeProgress() {
+            drainLubricant();
+            super.updateRecipeProgress();
+        }
+
+        @Override
+        protected boolean shouldSearchForRecipes() {
+            return super.shouldSearchForRecipes() && checkLubricant();
+        }
+
+        public boolean checkLubricant() {
+            // check lubricant and invalidate if it fails
+            IMultipleTankHandler inputTank = engine.getInputFluidInventory();
+            if (LUBRICANT_STACK.isFluidStackIdentical(inputTank.drain(LUBRICANT_STACK, false))) {
+                return true;
+            } else {
+                invalidate();
+                return false;
+            }
+        }
+
+        public void drainLubricant() {
+            if (totalContinuousRunningTime == 1 || totalContinuousRunningTime % 18 == 0) {
+                IMultipleTankHandler inputTank = engine.getInputFluidInventory();
+                inputTank.drain(LUBRICANT_STACK, true);
+            }
         }
 
         @Override
         protected boolean canProgressRecipe() {
-            if (metaTileEntity instanceof MetaTileEntityMegaSteamEngine engine)
-                return engine.hasValidVCU() && super.canProgressRecipe();
-            else return false;
+            return this.engine.hasValidVCU() && checkLubricant() && super.canProgressRecipe();
         }
+
+        @Override
+        protected boolean drawEnergy(int recipeEUt, boolean simulate) {
+            long euToDraw = boostProduction(recipeEUt);
+            long resultEnergy = this.engine.kineticEnergy - euToDraw;
+            if (resultEnergy >= 0L && resultEnergy <= getEnergyCapacity()) {
+                if (!simulate) this.engine.kineticEnergy -= euToDraw;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        protected long getEnergyStored() {
+            return this.engine.kineticEnergy;
+        }
+
+        @Override
+        protected long getEnergyCapacity() {
+            return this.engine.maxKE();
+        }
+
+        @Override
+        public int getInfoProviderEUt() {
+            return (int) this.engine.getEnergyOut();
+        }
+    }
+
+    protected double getRPM() {
+        return Math.pow(2D * this.kineticEnergy / this.shaftMass, 0.5);
+    }
+
+    protected long getEnergyOut() {
+        return Math.min((long) (this.getRPM() * this.generatorStrength), this.kineticEnergy);
+    }
+
+    protected double maxRPM() {
+        return this.recipeMapWorkable.getMaxVoltage() / (double) this.generatorStrength;
+    }
+
+    protected long maxKE() {
+        return (long) (0.5 * this.shaftMass * maxRPM() * maxRPM());
     }
 }

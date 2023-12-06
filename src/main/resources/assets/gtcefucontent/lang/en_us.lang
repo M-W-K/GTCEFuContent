@@ -21,8 +21,12 @@ gtcefucontent.machine.electrode_blast_smelter.tooltip=Thicc Rotary Hearth Furnac
 gregtech.multiblock.electrode_blast_smelter.description=Performs both Blast Furnace and Alloy Blast Smelting recipes.
 
 gtcefucontent.machine.mega_steam_engine.name=Large-Scale Industrial Steam Engine
-gtcefucontent.machine.mega_steam_engine.tooltip=Dynamo hatch tier limited by Voltage Control Unit tier.
+gtcefucontent.machine.mega_steam_engine.tooltip.1=Dynamo hatch tier limited by Voltage Control Unit tier.
+gtcefucontent.machine.mega_steam_engine.tooltip.2=Generates §f%s EU/t§7 per RPM.
+gtcefucontent.machine.mega_steam_engine.tooltip.3=Loses §f%s§7 kinetic energy per tick.
 gtcefucontent.machine.mega_steam_engine.error.vcu=Dynamo hatch tier exceeds Voltage Control Unit tier!
+gtcefucontent.machine.mega_steam_engine.display.shaft_speed=Engine Speed: %s
+gtcefucontent.machine.mega_steam_engine.display.lubricant_amount=Vaporous Seed: %s
 
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
 gtcefucontent.machine.fusion_stack.coolant=DOES NOT REQUIRE COOLANT
@@ -132,3 +136,5 @@ gtcefucontent.fluid.hot=Hot %s
 gtcefucontent.fluid.cold=Cold %s
 
 gtcefucontent.recipe.heattoconvert=Heat to convert: %sJ
+
+gtcefucontent.universal.tooltip.uses_per_hour_vapor_seed=Uses §f%,d L/hr §7of Vaporous Seed while working

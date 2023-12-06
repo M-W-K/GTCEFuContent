@@ -134,7 +134,6 @@ public final class GTCEFuCRecipeLoader {
                 .input(OrePrefix.screw, Materials.Apatite, 24)
                 .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 4),
                         Materials.StyreneButadieneRubber.getFluid(12000),
-                        GTCEFuCMaterials.VaporSeedRaw.getFluid(84000),
                         Materials.Lubricant.getFluid(12000))
                 .output(GTCEFuCMetaTileEntities.MEGA_STEAM_ENGINE)
                 .stationResearch(b -> b
