@@ -1,3 +1,6 @@
+death.attack.toxic_atmo=%s's lungs were shredded
+death.attack.suffocation=%s couldn't breathe
+
 gtcefucontent.machine.infinity_extractor.name=Infinity Extractor
 gtcefucontent.machine.infinity_extractor.tooltip=Exploiting the §4I§6n§ef§ai§b§3n§1i§9t§5e
 recipemap.infinity_extractor.name=Infinity Extractor
@@ -133,6 +136,10 @@ metaitem.nugget.stellar_alloy.name=Stellar Alloy Nugget
 metaitem.ingot.stellar_alloy.name=Stellar Alloy Ingot
 metaitem.ball.stellar_alloy.name=Stellar Alloy Core
 metaitem.infinity_reagent.name=Infinity Reagent
+metaitem.simple_gas_mask.name=Primitive Gas Mask
+metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
+metaitem.gas_mask.name=Gas Mask
+metaitem.gas_mask.tooltip=Survive in toxic environments
 
 gtcefucontent.fluid.hot=Hot %s
 gtcefucontent.fluid.cold=Cold %s

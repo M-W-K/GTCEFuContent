@@ -92,9 +92,8 @@ public final class GTCEFuCMaterials {
 
     // IDs 22500 - 22529 reserved for multiblocks
     // IDs 22530 - 22549 reserved for normal metaTileEntities
-    // IDs 22550 - 22569 reserved for meta items
     // IDs 22570 - 22599 reserved for materials
-    private static final AtomicInteger ID = new AtomicInteger(22570);
+    private static int id = 22569;
 
     public static void register() {
         if (INIT.getAndSet(true)) {
@@ -103,7 +102,7 @@ public final class GTCEFuCMaterials {
 
         GTCEFuCMaterialFlagAddition.init();
 
-        PreheatedWater = new Material.Builder(ID.getAndIncrement(), gtcefucId("preheated_water"))
+        PreheatedWater = new Material.Builder(id++, gtcefucId("preheated_water"))
                 .liquid(new FluidBuilder().temperature(373))
                 .gas(new FluidBuilder().temperature(973).customStill().name("hps").translation("gtcefucontent.fluid.hps"))
                 .color(0x4A94EE)
@@ -111,56 +110,56 @@ public final class GTCEFuCMaterials {
                 .components(Hydrogen, 2, Oxygen, 1)
                 .build();
 
-        CaesiumChlorineMix = new Material.Builder(ID.getAndIncrement(), gtcefucId("caesium_chlorine_mix"))
+        CaesiumChlorineMix = new Material.Builder(id++, gtcefucId("caesium_chlorine_mix"))
                 .dust()
                 .colorAverage().iconSet(FINE)
                 .flags(DECOMPOSITION_BY_CENTRIFUGING)
                 .components(Caesium, 16, Chlorine, 1)
                 .build();
 
-        ChargedEnder = new Material.Builder(ID.getAndIncrement(), gtcefucId("charged_ender"))
+        ChargedEnder = new Material.Builder(id++, gtcefucId("charged_ender"))
                 .fluid()
                 .color(0xa0cefa).iconSet(FLUID)
                 .build();
 
-        TriniumReduced = new Material.Builder(ID.getAndIncrement(), gtcefucId("reduced_trinium"))
+        TriniumReduced = new Material.Builder(id++, gtcefucId("reduced_trinium"))
                 .ingot().fluid()
                 .color(0x5E4C6E).iconSet(DULL)
                 .element(GTCEFuCElements.Ke1)
                 .blast((b) -> b.temp(5200, BlastProperty.GasTier.HIGH).blastStats(VA[LuV], 900))
                 .build();
 
-        VoidEssence = essence(ID.getAndIncrement(), gtcefucId("void_essence"))
+        VoidEssence = essence(id++, gtcefucId("void_essence"))
                 .color(0x33523F)
                 // .components(Helium, 4, Neon, 4, Argon, 4, Krypton, 1, Xenon, 1, Radon, 2)
                 .build();
 
-        LightEssence = essence(ID.getAndIncrement(), gtcefucId("light_essence"))
+        LightEssence = essence(id++, gtcefucId("light_essence"))
                 .color(0xFFF997)
                 .build();
 
-        ExperienceEssence = essence(ID.getAndIncrement(), gtcefucId("experience_essence"))
+        ExperienceEssence = essence(id++, gtcefucId("experience_essence"))
                 .color(0x04BB00)
                 .build();
 
-        FireEnhancer = new Material.Builder(ID.getAndIncrement(), gtcefucId("fire_enhancer"))
+        FireEnhancer = new Material.Builder(id++, gtcefucId("fire_enhancer"))
                 .gas(fluidAtTemp(2000))
                 .color(0xD69A00).iconSet(FLUID)
                 .build();
 
-        VaporSeedRaw = new Material.Builder(ID.getAndIncrement(), gtcefucId("raw_vapor_seed"))
+        VaporSeedRaw = new Material.Builder(id++, gtcefucId("raw_vapor_seed"))
                 .gas(fluidAtTemp(300))
                 .color(0x20FFF0).iconSet(FLUID)
                 .build();
 
-        VaporSeed = new Material.Builder(ID.getAndIncrement(), gtcefucId("vapor_seed"))
+        VaporSeed = new Material.Builder(id++, gtcefucId("vapor_seed"))
                 .liquid(fluidAtTemp(100))
                 .color(0x003B78).iconSet(FLUID)
                 .build();
 
         // sea snake
         EutecticCaesiumSodiumPotassium = eutectic(
-                ID.getAndIncrement(), gtcefucId("eutectic_csnak_alloy"),
+                id++, gtcefucId("eutectic_csnak_alloy"),
                 EutecticAlloysString.get("eutectic_csnak_alloy"))
                         .colorAverage()
                         .flags(DECOMPOSITION_BY_CENTRIFUGING)
@@ -168,7 +167,7 @@ public final class GTCEFuCMaterials {
                         .build();
 
         EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(
-                ID.getAndIncrement(), gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
+                id++, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
                 EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"))
                         .colorAverage()
                         .flags(DECOMPOSITION_BY_ELECTROLYZING)

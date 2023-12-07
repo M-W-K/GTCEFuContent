@@ -47,6 +47,8 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCEutecticLoader.init();
         GTCEFuCHeatExchangerLoader.init();
 
+        GTCEFuCCraftingRecipeLoader.init();
+
         controllerRecipes();
 
         GTCEFuContent.log("Recipe construction complete.");

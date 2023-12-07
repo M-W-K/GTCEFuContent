@@ -1,5 +1,7 @@
 package com.m_w_k.gtcefucontent.common.item;
 
+import com.m_w_k.gtcefucontent.common.item.armor.GTCEFuCMetaArmor;
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem;
 
 public final class GTCEFuCMetaItems {
@@ -23,8 +25,14 @@ public final class GTCEFuCMetaItems {
 
     public static MetaItem<?>.MetaValueItem INFINITY_REAGENT;
 
+    public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
+    public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
+
     public static void init() {
-        MetaItem2 first = new MetaItem2();
+        GTCEFuCMetaItem first = new GTCEFuCMetaItem();
         first.setRegistryName("meta_item_2");
+        GTCEFuCMetaArmor armor = new GTCEFuCMetaArmor();
+        armor.setRegistryName("gtcefuc_armor");
+
     }
 }

@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent;
 
+import com.m_w_k.gtcefucontent.common.misc.PlayerDimEquipChecker;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -53,6 +54,8 @@ public final class GTCEFuContent {
 
         MetaTileEntityFusionStack.init();
         MetaTileEntityAntimatterCompressor.init();
+
+        PlayerDimEquipChecker.init();
 
         proxy.preLoad();
         log("PreInit complete");
