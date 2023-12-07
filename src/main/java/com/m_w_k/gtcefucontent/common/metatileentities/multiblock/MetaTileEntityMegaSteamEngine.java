@@ -460,7 +460,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
             return super.shouldSearchForRecipes() && checkLubricant();
         }
 
-        public boolean checkLubricant() {
+        protected boolean checkLubricant() {
             // check lubricant and invalidate if it fails
             IMultipleTankHandler inputTank = engine.getInputFluidInventory();
             if (LUBRICANT_STACK.isFluidStackIdentical(inputTank.drain(LUBRICANT_STACK, false))) {
@@ -471,7 +471,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
             }
         }
 
-        public void drainLubricant() {
+        protected void drainLubricant() {
             if (totalContinuousRunningTime == 1 || totalContinuousRunningTime % 18 == 0) {
                 IMultipleTankHandler inputTank = engine.getInputFluidInventory();
                 inputTank.drain(LUBRICANT_STACK, true);
