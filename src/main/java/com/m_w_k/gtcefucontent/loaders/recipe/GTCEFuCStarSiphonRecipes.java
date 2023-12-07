@@ -19,7 +19,7 @@ public final class GTCEFuCStarSiphonRecipes {
 
     private GTCEFuCStarSiphonRecipes() {}
 
-    private final static List<ItemStack> starsRaw = new ArrayList<>() {
+    public final static List<ItemStack> starsRaw = new ArrayList<>() {
 
         {
             this.add(new ItemStack(Objects.requireNonNull(ItemPE.getByNameOrId("projecte:item.pe_fuel")), 2, 1));

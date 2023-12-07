@@ -7,6 +7,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
+import com.m_w_k.gtcefucontent.client.utils.GTCEFuCRotatableCubeRenderHelper;
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCStarSiphonRecipes;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
@@ -25,7 +27,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -76,8 +77,15 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     protected EnergyContainerList inputEnergyContainers;
     protected long heat = 0;
     private int fusionRingColor = NO_COLOR;
+    private int starTier = -1;
     @SideOnly(Side.CLIENT)
     private boolean registeredBloomRenderTicket;
+
+    private final GTCEFuCRotatableCubeRenderHelper cubeRenderHelper1;
+    private final GTCEFuCRotatableCubeRenderHelper cubeRenderHelper2;
+    private final GTCEFuCRotatableCubeRenderHelper cubeRenderHelper3;
+    private float partialTicksPrev;
+    private static MetaTileEntityStarSiphon renderingController;
 
     public MetaTileEntityStarSiphon(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.STAR_SIPHON_RECIPES);
@@ -90,6 +98,9 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                 return GregtechDataCodes.FUSION_REACTOR_ENERGY_CONTAINER_TRAIT;
             }
         };
+        this.cubeRenderHelper1 = new GTCEFuCRotatableCubeRenderHelper().setSize(1, 1, 1);
+        this.cubeRenderHelper2 = new GTCEFuCRotatableCubeRenderHelper().setSize(0.6, 0.6, 0.6);
+        this.cubeRenderHelper3 = new GTCEFuCRotatableCubeRenderHelper().setSize(0.3, 0.3, 0.3);
     }
 
     @NotNull
@@ -466,18 +477,22 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
         buf.writeVarInt(this.fusionRingColor);
+        buf.writeVarInt(this.starTier);
     }
 
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
         this.fusionRingColor = buf.readVarInt();
+        this.starTier = buf.readVarInt();
     }
 
     @Override
     public void receiveCustomData(int dataId, PacketBuffer buf) {
         if (dataId == GregtechDataCodes.UPDATE_COLOR) {
             this.fusionRingColor = buf.readVarInt();
+        } else if (dataId == GregtechDataCodes.UPDATE_PARTICLE) {
+            this.starTier = buf.readVarInt();
         } else {
             super.receiveCustomData(dataId, buf);
         }
@@ -495,6 +510,13 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
         if (this.fusionRingColor != fusionRingColor) {
             this.fusionRingColor = fusionRingColor;
             writeCustomData(GregtechDataCodes.UPDATE_COLOR, buf -> buf.writeVarInt(fusionRingColor));
+        }
+    }
+
+    protected void setStarTier(int starTier) {
+        if (this.starTier != starTier) {
+            this.starTier = starTier;
+            writeCustomData(GregtechDataCodes.UPDATE_PARTICLE, buf -> buf.writeVarInt(starTier));
         }
     }
 
@@ -555,6 +577,8 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
 
     protected class StarSiphonRecipeLogic extends MultiblockRecipeLogic {
 
+        private boolean stopping;
+
         public StarSiphonRecipeLogic(MetaTileEntityStarSiphon tileEntity) {
             super(tileEntity);
         }
@@ -582,6 +606,24 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
         }
 
         @Override
+        protected void completeRecipe() {
+            super.completeRecipe();
+            this.stopping = true;
+        }
+
+        @Override
+        public void invalidate() {
+            super.invalidate();
+            setStarTier(-1);
+        }
+
+        @Override
+        protected void trySearchNewRecipe() {
+            super.trySearchNewRecipe();
+            if (this.stopping) setStarTier(-1);
+        }
+
+        @Override
         public boolean checkRecipe(@Nonnull Recipe recipe) {
             if (!super.checkRecipe(recipe))
                 return false;
@@ -592,8 +634,11 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
 
             long heatDiff = recipe.getProperty(FusionEUToStartProperty.getInstance(), 0L) - heat;
             // if the stored heat is >= required energy, recipe is okay to run
-            if (heatDiff <= 0)
+            if (heatDiff <= 0) {
+                setStarTier((GTCEFuCStarSiphonRecipes.starsRaw.indexOf(recipe.getAllItemOutputs().get(0))) / 6);
+                this.stopping = false;
                 return true;
+            }
 
             // if the remaining energy needed is more than stored, do not run
             if (energyContainer.getEnergyStored() < heatDiff)
@@ -603,6 +648,10 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
             energyContainer.removeEnergy(heatDiff);
             // increase the stored heat
             heat += heatDiff;
+
+            // calculate the tier of the star
+            setStarTier((GTCEFuCStarSiphonRecipes.starsRaw.indexOf(recipe.getAllItemOutputs().get(0))) / 6);
+            this.stopping = false;
             return true;
         }
 
@@ -641,15 +690,39 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
         float b = (float) (color & 255) / 255.0F;
         EnumFacing relativeBack = RelativeDirection.BACK.getRelativeFacing(this.getFrontFacing(),
                 this.getUpwardsFacing(), this.isFlipped());
-        // since we render a ring on each axis anyway, we don't actually care about it.
-        // EnumFacing.Axis axis = RelativeDirection.UP.getRelativeFacing(this.getFrontFacing(),
-        // this.getUpwardsFacing(), this.isFlipped()).getAxis();
         double x = (double) this.getPos().getX() - context.cameraX();
         double y = (double) this.getPos().getY() - context.cameraY();
         double z = (double) this.getPos().getZ() - context.cameraZ();
         renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Y, r, g, b, a, relativeBack);
         renderFixedRing(buffer, x, y, z, EnumFacing.Axis.X, r, g, b, a, relativeBack);
         renderFixedRing(buffer, x, y, z, EnumFacing.Axis.Z, r, g, b, a, relativeBack);
+        float dif = context.partialTicks() - this.partialTicksPrev;
+        // if we've gone negative, add the remaining partial tick for the prev tick and the partial tick for this tick
+        if (dif < 0) dif = context.partialTicks() + 1 - this.partialTicksPrev;
+        this.partialTicksPrev = context.partialTicks();
+        cubeRenderHelper1.setDisplacement(
+                x + relativeBack.getXOffset() * 7 + 0.5,
+                y + relativeBack.getYOffset() * 7 + 0.5,
+                z + relativeBack.getZOffset() * 7 + 0.5)
+                .rotateY(dif / 10).renderCubeFrame(buffer,
+                        253/255f, 243/255f, 158/255f, 1, 100); // 253 243 158
+
+        if (this.getStarTier() > 0) {
+            cubeRenderHelper2.setDisplacement(
+                            x + relativeBack.getXOffset() * 7 + 0.5,
+                            y + relativeBack.getYOffset() * 7 + 0.5,
+                            z + relativeBack.getZOffset() * 7 + 0.5)
+                    .rotateZ(-dif / 50).rotateX(dif / 20).renderCubeFrame(buffer,
+                            142/255f, 62/255f, 236/255f, 1, 60); // 142 62 236
+        }
+        if (this.getStarTier() > 1) {
+            cubeRenderHelper3.setDisplacement(
+                            x + relativeBack.getXOffset() * 7 + 0.5,
+                            y + relativeBack.getYOffset() * 7 + 0.5,
+                            z + relativeBack.getZOffset() * 7 + 0.5)
+                    .rotateY(-dif / 10).rotateZ(dif).renderCubeFrame(buffer,
+                            225/255f, 57/255f, 43/255f, 1, 30); // 225 57 43
+        }
     }
 
     private void renderFixedRing(BufferBuilder buffer, double x, double y, double z, EnumFacing.Axis axis, float r,
@@ -668,6 +741,10 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     @SideOnly(Side.CLIENT)
     public boolean shouldRenderBloomEffect(@NotNull EffectRenderContext context) {
         return this.hasFusionRingColor();
+    }
+
+    public int getStarTier() {
+        return starTier;
     }
 
     @Override
