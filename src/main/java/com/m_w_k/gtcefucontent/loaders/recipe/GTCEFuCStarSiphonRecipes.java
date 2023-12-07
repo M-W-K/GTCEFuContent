@@ -47,8 +47,8 @@ public final class GTCEFuCStarSiphonRecipes {
     private final static List<List<ItemStack>> stars = new ArrayList<>() {
 
         {
-            this.add(starsRaw.subList(1, 6));
-            this.add(starsRaw.subList(7, 12));
+            this.add(starsRaw.subList(1, 7));
+            this.add(starsRaw.subList(7, 13));
             this.add(starsRaw.subList(13, 19));
         }
     };
@@ -60,7 +60,7 @@ public final class GTCEFuCStarSiphonRecipes {
             int mod2 = (int) Math.pow(2.0, t);
             i = 0;
             for (ItemStack star : tier) {
-                int fluid = (int) (Math.pow(2.0, t * 6 + i - 2) * 125);
+                int fluid = (int) (Math.pow(2.0, t * 7 + i - 2) * 125);
                 GTCEFuCRecipeMaps.STAR_SIPHON_RECIPES.recipeBuilder()
                         .inputNBT(star.getItem(), 1, star.getMetadata(), NBTMatcher.ANY, NBTCondition.ANY)
                         .outputs(starsRaw.get(t * 6 + i))
