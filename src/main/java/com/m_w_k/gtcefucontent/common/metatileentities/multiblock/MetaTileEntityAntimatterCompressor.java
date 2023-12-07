@@ -7,6 +7,12 @@ import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Lists;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.metatileentity.multiblock.*;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -14,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,10 +40,6 @@ import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.*;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IBatteryData;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
@@ -56,7 +59,7 @@ import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 
 // cursed child of a power substation and a fusion reactor
-public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockController {
+public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockController implements IProgressBarMultiblock {
 
     protected EnergyContainerList inputEnergyContainers;
     protected long heat = 0;
@@ -483,9 +486,6 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
         super.addDisplayText(textList);
         if (isStructureFormed()) {
             textList.add(new TextComponentTranslation("gtcefucontent.machine.antimatter_compressor.info"));
-            textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.energy",
-                    this.energyContainer.getEnergyStored(), this.energyContainer.getEnergyCapacity()));
-            textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.heat", heat));
         }
     }
 
@@ -517,6 +517,22 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
         // Make sure we also fill up with energy from the NBT on world load
         ((EnergyContainerHandler) this.energyContainer).setEnergyStored(energyStored + energyLoaded);
         energyLoaded = 0;
+    }
+
+    @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.energyContainer = new EnergyContainerHandler(this, 0, 0, 0, 0, 0) {
+
+            @NotNull
+            @Override
+            public String getName() {
+                return GregtechDataCodes.FUSION_REACTOR_ENERGY_CONTAINER_TRAIT;
+            }
+        };
+        this.batteryCount = 0;
+        this.inputEnergyContainers = new EnergyContainerList(Lists.newArrayList());
+        this.heat = 0;
     }
 
     @Override
@@ -579,6 +595,52 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
                     .filter((entry) -> entry.getValue().getTier() == GTValues.UV)
                     .map(entry -> new BlockInfo(entry.getKey(), null))
                     .toArray(BlockInfo[]::new));
+
+    @Override
+    public int getNumProgressBars() {
+        return 2;
+    }
+
+    @Override
+    public double getFillPercentage(int index) {
+        if (index == 0) {
+            return (double) this.energyContainer.getEnergyStored() / this.energyContainer.getEnergyCapacity();
+        } else {
+            return (double) this.heat / this.energyContainer.getEnergyCapacity();
+        }
+    }
+
+    @Override
+    public TextureArea getProgressBarTexture(int index) {
+        if (index == 0) {
+            return GuiTextures.PROGRESS_BAR_FUSION_ENERGY;
+        } else {
+            return GuiTextures.PROGRESS_BAR_FUSION_HEAT;
+        }
+    }
+
+    @Override
+    public void addBarHoverText(List<ITextComponent> hoverList, int index) {
+        if (index == 0) {
+            ITextComponent energyInfo = TextComponentUtil.stringWithColor(
+                    TextFormatting.AQUA,
+                    TextFormattingUtil.formatNumbers(energyContainer.getEnergyStored()) + " / " +
+                            TextFormattingUtil.formatNumbers(energyContainer.getEnergyCapacity()) + " EU");
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "gregtech.multiblock.energy_stored",
+                    energyInfo));
+        } else {
+            ITextComponent heatInfo = TextComponentUtil.stringWithColor(
+                    TextFormatting.RED,
+                    TextFormattingUtil.formatNumbers(heat) + " / " +
+                            TextFormattingUtil.formatNumbers(energyContainer.getEnergyCapacity()));
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "gregtech.multiblock.fusion_reactor.heat",
+                    heatInfo));
+        }
+    }
 
     protected class AntimatterCompressorRecipeLogic extends MultiblockRecipeLogic {
 

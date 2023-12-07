@@ -6,6 +6,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Lists;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -20,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -63,7 +70,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
 
 public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
-                                      implements IFastRenderMetaTileEntity, IBloomEffect {
+                                      implements IFastRenderMetaTileEntity, IBloomEffect, IProgressBarMultiblock {
 
     protected static final int NO_COLOR = 0;
     protected EnergyContainerList inputEnergyContainers;
@@ -396,6 +403,22 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     }
 
     @Override
+    public void invalidateStructure() {
+        super.invalidateStructure();
+        this.energyContainer = new EnergyContainerHandler(this, 0, 0, 0, 0, 0) {
+
+            @NotNull
+            @Override
+            public String getName() {
+                return GregtechDataCodes.FUSION_REACTOR_ENERGY_CONTAINER_TRAIT;
+            }
+        };
+        this.inputEnergyContainers = new EnergyContainerList(Lists.newArrayList());
+        this.heat = 0;
+        this.setFusionRingColor(NO_COLOR);
+    }
+
+    @Override
     protected void initializeAbilities() {
         this.inputInventory = new ItemHandlerList(getAbilities(MultiblockAbility.IMPORT_ITEMS));
         this.inputFluidInventory = new FluidTankList(true, getAbilities(MultiblockAbility.IMPORT_FLUIDS));
@@ -476,16 +499,6 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     }
 
     @Override
-    protected void addDisplayText(List<ITextComponent> textList) {
-        super.addDisplayText(textList);
-        if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.energy",
-                    this.energyContainer.getEnergyStored(), this.energyContainer.getEnergyCapacity()));
-            textList.add(new TextComponentTranslation("gregtech.multiblock.fusion_reactor.heat", heat));
-        }
-    }
-
-    @Override
     public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip,
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
@@ -494,9 +507,50 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
         tooltip.add(I18n.format("gregtech.machine.fusion_reactor.overclocking"));
     }
 
-    @SuppressWarnings("unused")
-    public long getHeat() {
-        return heat;
+    @Override
+    public int getNumProgressBars() {
+        return 2;
+    }
+
+    @Override
+    public double getFillPercentage(int index) {
+        if (index == 0) {
+            return (double) this.energyContainer.getEnergyStored() / this.energyContainer.getEnergyCapacity();
+        } else {
+            return (double) this.heat / this.energyContainer.getEnergyCapacity();
+        }
+    }
+
+    @Override
+    public TextureArea getProgressBarTexture(int index) {
+        if (index == 0) {
+            return GuiTextures.PROGRESS_BAR_FUSION_ENERGY;
+        } else {
+            return GuiTextures.PROGRESS_BAR_FUSION_HEAT;
+        }
+    }
+
+    @Override
+    public void addBarHoverText(List<ITextComponent> hoverList, int index) {
+        if (index == 0) {
+            ITextComponent energyInfo = TextComponentUtil.stringWithColor(
+                    TextFormatting.AQUA,
+                    TextFormattingUtil.formatNumbers(energyContainer.getEnergyStored()) + " / " +
+                            TextFormattingUtil.formatNumbers(energyContainer.getEnergyCapacity()) + " EU");
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "gregtech.multiblock.energy_stored",
+                    energyInfo));
+        } else {
+            ITextComponent heatInfo = TextComponentUtil.stringWithColor(
+                    TextFormatting.RED,
+                    TextFormattingUtil.formatNumbers(heat) + " / " +
+                            TextFormattingUtil.formatNumbers(energyContainer.getEnergyCapacity()));
+            hoverList.add(TextComponentUtil.translationWithColor(
+                    TextFormatting.GRAY,
+                    "gregtech.multiblock.fusion_reactor.heat",
+                    heatInfo));
+        }
     }
 
     protected class StarSiphonRecipeLogic extends MultiblockRecipeLogic {
@@ -522,11 +576,8 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
             // has fully wiped recipe progress
             // Don't drain heat when there is not enough energy and there is still some recipe progress, as that makes
             // it doubly hard to complete the recipe
-            // (Will have to recover heat and recipe progress)
-            if ((!isActive || (hasNotEnoughEnergy && progressTime == 0)) && heat > 0) {
-                // heat numbers are so large that exponential decay is wise
-                long lossyHeat = (long) (heat * 0.9);
-                heat = lossyHeat <= 10000 ? 0 : lossyHeat - 10000;
+            if (heat > 0 && (!isActive || !workingEnabled || (hasNotEnoughEnergy && progressTime == 0))) {
+                heat = heat <= 30000 ? 0 : heat - 30000;
             }
         }
 
