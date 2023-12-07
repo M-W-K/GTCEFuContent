@@ -6,6 +6,11 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
+import gregtech.api.util.TextComponentUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,7 +75,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase implements IDataInfoProvider, IControllable {
+public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
 
     protected IItemHandlerModifiable inputInventory;
     protected IItemHandlerModifiable outputInventory;
@@ -340,6 +345,29 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         return notifiedHEUComponentList;
     }
 
+    @Override
+    public double getFillPercentage(int index) {
+        return (double) this.heuHandler.thermalEnergy / this.heuHandler.getMaxHeat();
+    }
+
+    @Override
+    public TextureArea getProgressBarTexture(int index) {
+        return GTCEFuCGuiTextures.PROGRESS_BAR_HEU_HEAT;
+    }
+
+    @Override
+    public void addBarHoverText(List<ITextComponent> hoverList, int index) {
+        ITextComponent heatInfo = TextComponentUtil.translationWithColor(
+                TextFormatting.DARK_RED,
+                "gtcefucontent.machine.heat_exchanger.heat1",
+                TextFormattingUtil.formatLongToCompactString(this.heuHandler.thermalEnergy),
+                TextFormattingUtil.formatLongToCompactString(this.heuHandler.getMaxHeat()));
+        hoverList.add(TextComponentUtil.translationWithColor(
+                TextFormatting.GRAY,
+                "gtcefucontent.machine.heat_exchanger.heat2",
+                heatInfo));
+    }
+
     public static class HEUGridHandler {
 
         private final MetaTileEntityHeatExchanger controller;
@@ -375,6 +403,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
         private FluidStack fluidBInitial;
         private FluidStack fluidBFinal;
         private long fluidBThermalEnergy;
+        private long cachedMaxEnergy = 0;
+        private boolean validMaxHeatCache = true;
         private int requiredPipeLength;
 
         public HEUGridHandler(MetaTileEntityHeatExchanger controller) {
@@ -524,6 +554,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             this.requiredPipeLength = 0;
             this.invalidReason = "";
             this.recipeProgress = 0;
+            this.validMaxHeatCache = false;
         }
 
         public void tick() {
@@ -542,7 +573,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                     this.targetInterpolationAmount[0] = fluidAdjusted(fluidAInitial).amount;
                     this.targetInterpolationAmount[1] = fluidAdjusted(fluidAFinal).amount;
                 }
-                if (runInterpolationLogic((double) this.recipeProgress / this.recipeTime)) {
+                if (runInterpolationLogic(getInterpolation())) {
                     // try to process fluid B
                     int mult = (int) (this.thermalEnergy / this.fluidBThermalEnergy);
                     while (mult > 0) {
@@ -561,7 +592,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                     }
                     if (this.validRecipe) {
                         // move recipe forward a step if we haven't stocked too much thermal energy.
-                        this.slowedRecipe = this.thermalEnergy > this.fluidAThermalEnergy * 2;
+                        this.slowedRecipe = this.thermalEnergy > getMaxHeat() * 0.9;
                         if (!slowedRecipe) this.recipeProgress++;
                         else this.invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.amount2";
                     }
@@ -591,6 +622,23 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                     this.controller.notifiedHEUComponentList.clear();
                 }
             }
+        }
+
+        protected double getInterpolation() {
+            return (double) this.recipeProgress / this.recipeTime;
+        }
+
+        protected long getMaxHeat() {
+            if (!this.validMaxHeatCache) {
+                // it seems counterintuitive, and it is.
+                long newMax = Math.min(this.fluidAThermalEnergy, this.fluidBThermalEnergy) * 10;
+                // prevent shrinking the bar smaller than our current thermal energy
+                if (newMax >= this.thermalEnergy) {
+                    this.cachedMaxEnergy = newMax;
+                    this.validMaxHeatCache = true;
+                }
+            }
+            return this.cachedMaxEnergy;
         }
 
         private boolean runInterpolationLogic(double interpolation) {
@@ -755,6 +803,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
             }
             // do another validity check to ensure we have sufficient input amounts in our tanks
             this.validRecipe = checkRecipeValidity();
+            this.validMaxHeatCache = false;
         }
 
         private boolean badFlowCheck(FluidStack stack) {
@@ -806,8 +855,6 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase imple
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info",
                         this.pipeLength * (this.reflectionCount + 1), this.pipeVolModifier,
                         Math.floor(this.durationModifier * 100) / 100));
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.energy",
-                        TextFormattingUtil.formatLongToCompactString(this.thermalEnergy)));
                 if (cachedLength != 0) {
                     textList.add(new TextComponentTranslation(
                             "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));

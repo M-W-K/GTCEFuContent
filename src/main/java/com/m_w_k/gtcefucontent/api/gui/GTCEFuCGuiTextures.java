@@ -10,4 +10,7 @@ public final class GTCEFuCGuiTextures {
             .fullImage("textures/gui/widget/fusion_reactor_array_title.png");
     public static final TextureArea FUSION_REACTOR_COMPLEX_TITLE = TextureArea
             .fullImage("textures/gui/widget/fusion_reactor_complex_title.png");
+
+    public static final TextureArea PROGRESS_BAR_HEU_HEAT = TextureArea
+            .fullImage("textures/gui/progress_bar/progress_bar_heu_heat.png");
 }
