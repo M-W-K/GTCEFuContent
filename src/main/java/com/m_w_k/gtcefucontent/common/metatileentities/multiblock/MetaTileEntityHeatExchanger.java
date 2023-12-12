@@ -1,7 +1,6 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -390,6 +389,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         private String invalidReason;
 
         private boolean validRecipe;
+        private FluidStack[] prevRecipeInfo;
         private boolean slowedRecipe;
         private int cachedLength;
         private int recipeTime;
@@ -537,6 +537,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             this.durationModifier = 0;
             this.thermalEnergy = 0;
             this.recipeTime = 0;
+            this.recipeProgress = 0;
             this.invalidReason = "";
             this.badPiping = false;
             this.componentsInv = new ItemStackHandler(0);
@@ -547,13 +548,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             this.validRecipe = false;
             this.fluidAInitial = null;
             this.fluidAFinal = null;
-            this.fluidAThermalEnergy = 0;
             this.fluidBInitial = null;
             this.fluidBFinal = null;
-            this.fluidBThermalEnergy = 0;
-            this.requiredPipeLength = 0;
             this.invalidReason = "";
-            this.recipeProgress = 0;
             this.validMaxHeatCache = false;
         }
 
@@ -599,8 +596,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 }
             } else {
                 this.controller.setActive(false);
-                this.thermalEnergy = 0;
-                this.recipeProgress = 0;
+                // decay stocked thermal energy
+                this.thermalEnergy *= 0.99;
             }
 
             // piping I/O
@@ -737,19 +734,33 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                         this.needsNotification = false;
                     } else return false;
                 }
+
+                if (prevRecipeCheck(tankFluids)) {
+                    // previous valid recipe is now valid!
+                    fluidAInitial = prevRecipeInfo[0];
+                    fluidBInitial = prevRecipeInfo[2];
+                    fluidAFinal = prevRecipeInfo[1];
+                    fluidBFinal = prevRecipeInfo[3];
+                    this.validRecipe = true;
+                    this.validRecipe = checkRecipeValidity();
+                    this.validMaxHeatCache = false;
+                    return this.validRecipe;
+                }
+
                 // figure out if there is an exchange we can do
+
                 Map<Fluid, Tuple<FluidStack, long[]>> cooling_map = HeatExchangerRecipeHandler.getCoolingMapCopy();
                 Map<Fluid, Tuple<FluidStack, long[]>> heating_map = HeatExchangerRecipeHandler.getHeatingMapCopy();
-                Set<Map.Entry<Fluid, Integer>> coolables = tankFluids.entrySet().stream()
-                        .filter(fluidIntegerEntry -> cooling_map.containsKey(fluidIntegerEntry.getKey()))
-                        .collect(Collectors.toSet());
-                Set<Map.Entry<Fluid, Integer>> heatables = tankFluids.entrySet().stream()
-                        .filter(fluidIntegerEntry -> heating_map.containsKey(fluidIntegerEntry.getKey()))
-                        .collect(Collectors.toSet());
                 // iterate through coolables and heatables to see if we have a valid recipe
                 Tuple<int[], FluidStack[]> exchangeData = null;
-                for (Map.Entry<Fluid, Integer> coolable : coolables) {
-                    for (Map.Entry<Fluid, Integer> heatable : heatables) {
+                for (Map.Entry<Fluid, Integer> coolable : tankFluids.entrySet()) {
+                    // move on if this entry is not a coolable
+                    if (!cooling_map.containsKey(coolable.getKey())) continue;
+
+                    for (Map.Entry<Fluid, Integer> heatable : tankFluids.entrySet()) {
+                        // move on if this entry is not a heatable
+                        if (!heating_map.containsKey(coolable.getKey())) continue;
+
                         exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable.getKey(), heatable.getKey());
                         if (exchangeData != null) {
                             // we found a recipe!
@@ -774,6 +785,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                     }
                     if (exchangeData != null) break;
                 }
+
+                // there is no need to perform the expensive recipe search if nothing changes in the inputs.
+                if (exchangeData == null) this.needsNotification = true;
             }
             return this.validRecipe;
         }
@@ -806,6 +820,24 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             this.validMaxHeatCache = false;
         }
 
+        private boolean prevRecipeCheck(Map<Fluid, Integer> tankFluids) {
+            // if we are no longer compatible with the previous recipe fluids,
+            // we should enable searching for a new recipe.
+            if (badFlowCheck(prevRecipeInfo[0]) || badFlowCheck(prevRecipeInfo[1]) ||
+                    badFlowCheck(prevRecipeInfo[2]) || badFlowCheck(prevRecipeInfo[3])) {
+                invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.fluid");
+                return false;
+            }
+            if (this.requiredPipeLength > this.pipeLength * (this.reflectionCount + 1)) {
+                invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.len");
+                return false;
+            }
+            return tankFluids.containsKey(prevRecipeInfo[0].getFluid())
+                    && tankFluids.containsKey(prevRecipeInfo[1].getFluid())
+                    && tankFluids.containsKey(prevRecipeInfo[2].getFluid())
+                    && tankFluids.containsKey(prevRecipeInfo[3].getFluid());
+        }
+
         private boolean badFlowCheck(FluidStack stack) {
             return !this.pipeProperty.test(stack);
         }
@@ -820,6 +852,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
 
         private void recalcuateRecipeDuration() {
+            this.recipeProgress = 0;
             // correction so that the analogous operation would process the same amount of thermal energy per second
             double floatingRecipeTime = (double) this.fluidAThermalEnergy / this.fluidBThermalEnergy;
             floatingRecipeTime = (1 + floatingRecipeTime) / 2;
@@ -844,6 +877,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
         private void cacheValues() {
             this.cachedLength = this.requiredPipeLength;
+            this.prevRecipeInfo =
+                    new FluidStack[]{this.fluidAInitial, this.fluidAFinal, this.fluidBInitial, this.fluidBFinal};
         }
 
         private void clearCache() {
