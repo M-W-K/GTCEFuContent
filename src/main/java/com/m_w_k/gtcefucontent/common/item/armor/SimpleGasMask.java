@@ -1,28 +1,17 @@
 package com.m_w_k.gtcefucontent.common.item.armor;
 
-import gregtech.api.capability.GregtechCapabilities;
-import gregtech.api.capability.IElectricItem;
-import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.api.items.armor.ArmorUtils;
-import gregtech.api.items.armor.IArmorLogic;
-import gregtech.api.items.metaitem.ElectricStats;
-import gregtech.api.items.metaitem.stats.IItemBehaviour;
-import net.minecraft.client.resources.I18n;
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ISpecialArmor;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import gregtech.api.items.armor.ArmorMetaItem;
+import gregtech.api.items.armor.IArmorLogic;
+import gregtech.api.items.metaitem.stats.IItemBehaviour;
 
 public class SimpleGasMask implements IArmorLogic {
 
@@ -39,6 +28,7 @@ public class SimpleGasMask implements IArmorLogic {
     @Override
     public void addToolComponents(ArmorMetaItem.ArmorMetaValueItem mvi) {
         mvi.addComponents(new IItemBehaviour() {
+
             @Override
             public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
                 return onRightClick(world, player, hand);

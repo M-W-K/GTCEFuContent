@@ -13,7 +13,6 @@ import com.m_w_k.gtcefucontent.GTCEFuContent;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.util.RelativeDirection;
-import net.minecraft.util.math.Vec3i;
 
 public final class GTCEFuCUtil {
 

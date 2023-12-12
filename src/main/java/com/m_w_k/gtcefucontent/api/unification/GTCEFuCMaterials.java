@@ -11,7 +11,6 @@ import static gregtech.api.unification.material.info.MaterialIconSet.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -104,7 +103,8 @@ public final class GTCEFuCMaterials {
 
         PreheatedWater = new Material.Builder(id++, gtcefucId("preheated_water"))
                 .liquid(new FluidBuilder().temperature(373))
-                .gas(new FluidBuilder().temperature(973).customStill().name("hps").translation("gtcefucontent.fluid.hps"))
+                .gas(new FluidBuilder().temperature(973).customStill().name("hps")
+                        .translation("gtcefucontent.fluid.hps"))
                 .color(0x4A94EE)
                 .flags(DISABLE_DECOMPOSITION)
                 .components(Hydrogen, 2, Oxygen, 1)

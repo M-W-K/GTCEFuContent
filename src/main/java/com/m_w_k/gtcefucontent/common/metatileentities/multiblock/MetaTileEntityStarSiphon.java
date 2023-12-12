@@ -6,14 +6,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.google.common.collect.Lists;
-import com.m_w_k.gtcefucontent.client.utils.GTCEFuCRotatableCubeRenderHelper;
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCStarSiphonRecipes;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
-import gregtech.api.util.TextComponentUtil;
-import gregtech.api.util.TextFormattingUtil;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -35,18 +27,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.Lists;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.client.utils.GTCEFuCRotatableCubeRenderHelper;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCStarSiphonRecipes;
 
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.*;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.IFastRenderMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.RecipeMapMultiblockController;
 import gregtech.api.pattern.BlockPattern;
@@ -56,6 +54,8 @@ import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
 import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.api.util.interpolate.Eases;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.IRenderSetup;
@@ -705,23 +705,23 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                 y + relativeBack.getYOffset() * 7 + 0.5,
                 z + relativeBack.getZOffset() * 7 + 0.5)
                 .rotateY(dif / 10).renderCubeFrame(buffer,
-                        253/255f, 243/255f, 158/255f, 1, 100); // 253 243 158
+                        253 / 255f, 243 / 255f, 158 / 255f, 1, 100); // 253 243 158
 
         if (this.getStarTier() > 0) {
             cubeRenderHelper2.setDisplacement(
-                            x + relativeBack.getXOffset() * 7 + 0.5,
-                            y + relativeBack.getYOffset() * 7 + 0.5,
-                            z + relativeBack.getZOffset() * 7 + 0.5)
+                    x + relativeBack.getXOffset() * 7 + 0.5,
+                    y + relativeBack.getYOffset() * 7 + 0.5,
+                    z + relativeBack.getZOffset() * 7 + 0.5)
                     .rotateZ(-dif / 50).rotateX(dif / 20).renderCubeFrame(buffer,
-                            142/255f, 62/255f, 236/255f, 1, 60); // 142 62 236
+                            142 / 255f, 62 / 255f, 236 / 255f, 1, 60); // 142 62 236
         }
         if (this.getStarTier() > 1) {
             cubeRenderHelper3.setDisplacement(
-                            x + relativeBack.getXOffset() * 7 + 0.5,
-                            y + relativeBack.getYOffset() * 7 + 0.5,
-                            z + relativeBack.getZOffset() * 7 + 0.5)
+                    x + relativeBack.getXOffset() * 7 + 0.5,
+                    y + relativeBack.getYOffset() * 7 + 0.5,
+                    z + relativeBack.getZOffset() * 7 + 0.5)
                     .rotateY(-dif / 10).rotateZ(dif).renderCubeFrame(buffer,
-                            225/255f, 57/255f, 43/255f, 1, 30); // 225 57 43
+                            225 / 255f, 57 / 255f, 43 / 255f, 1, 30); // 225 57 43
         }
     }
 

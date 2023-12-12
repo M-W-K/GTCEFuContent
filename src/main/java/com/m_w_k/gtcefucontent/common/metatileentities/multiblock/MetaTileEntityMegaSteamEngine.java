@@ -1,21 +1,13 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import gregtech.api.GregTechAPI;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.common.ConfigHolder;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -29,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import com.m_w_k.gtcefucontent.api.longhelp.ILongMultipleTankHandler;
 import com.m_w_k.gtcefucontent.api.longhelp.LongFluidStack;
 import com.m_w_k.gtcefucontent.api.longhelp.LongFluidTankList;
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 
@@ -42,6 +35,8 @@ import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.IRotorHolder;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.ITieredMetaTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -74,7 +69,8 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     // the amount of power to generate per RPM
     protected final int generatorStrength;
 
-    public MetaTileEntityMegaSteamEngine(ResourceLocation metaTileEntityId, int shaftMass, int friction, int generatorStrength) {
+    public MetaTileEntityMegaSteamEngine(ResourceLocation metaTileEntityId, int shaftMass, int friction,
+                                         int generatorStrength) {
         super(metaTileEntityId, RecipeMaps.STEAM_TURBINE_FUELS, GTValues.OpV);
         this.recipeMapWorkable = new MSEMultiblockWorkableHandler(this);
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[GTValues.OpV]);
@@ -283,8 +279,6 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.3", this.friction));
         tooltip.add(I18n.format("gtcefucontent.universal.tooltip.uses_per_hour_vapor_seed", 20000));
     }
-
-
 
     @Override
     protected void addErrorText(List<ITextComponent> textList) {

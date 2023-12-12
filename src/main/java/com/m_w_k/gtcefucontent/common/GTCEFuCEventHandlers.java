@@ -1,9 +1,5 @@
 package com.m_w_k.gtcefucontent.common;
 
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import com.m_w_k.gtcefucontent.common.misc.PlayerDimEquipChecker;
-import gregtech.api.items.armor.ArmorMetaItem;
-import gregtech.common.items.MetaItems;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -12,12 +8,15 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
+import com.m_w_k.gtcefucontent.common.misc.PlayerDimEquipChecker;
 
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.unification.material.event.MaterialEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @Mod.EventBusSubscriber(modid = GTCEFuContent.MODID)
 public final class GTCEFuCEventHandlers {
@@ -52,6 +51,5 @@ public final class GTCEFuCEventHandlers {
         if (valueItem.isItemEqual(GTCEFuCMetaItems.GAS_MASK.getStackForm())) {
             event.getEntityLiving().removePotionEffect(MobEffects.NIGHT_VISION);
         }
-
     }
 }

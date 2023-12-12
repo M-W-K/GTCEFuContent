@@ -6,11 +6,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
-import gregtech.api.util.TextComponentUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,6 +32,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
+import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
 import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbility;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
@@ -49,10 +45,12 @@ import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.capability.*;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
+import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
 import gregtech.api.metatileentity.multiblock.MultiblockAbility;
 import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
@@ -64,6 +62,7 @@ import gregtech.api.unification.material.properties.FluidPipeProperties;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.util.GTTransferUtils;
 import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
@@ -75,7 +74,8 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
+public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
+                                         implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
 
     protected IItemHandlerModifiable inputInventory;
     protected IItemHandlerModifiable outputInventory;

@@ -10,8 +10,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.vecmath.Vector3d;
 
-import gregtech.api.capability.IHPCAComponentHatch;
-import gregtech.common.metatileentities.multi.multiblockpart.hpca.MetaTileEntityHPCAComponent;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -45,6 +43,7 @@ import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.GTValues;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.IHPCAComponentHatch;
 import gregtech.api.capability.impl.*;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.ModularUI;
@@ -76,6 +75,7 @@ import gregtech.common.ConfigHolder;
 import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityFluidHatch;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMultiFluidHatch;
+import gregtech.common.metatileentities.multi.multiblockpart.hpca.MetaTileEntityHPCAComponent;
 
 public class MetaTileEntityFusionStack extends RecipeMapMultiblockController implements IFastRenderMetaTileEntity,
                                        IBloomEffect, MultiblockRenderRotHelper.HelperUser {
@@ -186,7 +186,8 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
             return null;
         }).filter(Objects::nonNull).forEach(part -> {
             BlockPos relPos = part.getPos().subtract(this.getPos());
-            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(), isFlipped());
+            EnumFacing left = RelativeDirection.LEFT.getRelativeFacing(getFrontFacing(), getUpwardsFacing(),
+                    isFlipped());
             if (filteredPos(relPos, left) > 0) setFrontFacing(part, left);
             else setFrontFacing(part, left.getOpposite());
         });
@@ -572,19 +573,19 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                     overclock_rating);
         }
 
-//        @Override
-//        protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
-//            super.modifyOverclockPre(values, storage);
-//
-//            // Limit the number of OCs to the difference in fusion reactor tier.
-//            // However, effective tier goes up by two per for fusion stacks.
-//            // In addition, the recipemap euToStart doubles every tier
-//            long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
-//            int startEUFactor = (int) Math.pow(2, MetaTileEntityFusionStack.this.tier(1));
-//            int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart / startEUFactor);
-//            if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier(2);
-//            values[2] = Math.min(fusionTier, values[2]);
-//        }
+        // @Override
+        // protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
+        // super.modifyOverclockPre(values, storage);
+        //
+        // // Limit the number of OCs to the difference in fusion reactor tier.
+        // // However, effective tier goes up by two per for fusion stacks.
+        // // In addition, the recipemap euToStart doubles every tier
+        // long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
+        // int startEUFactor = (int) Math.pow(2, MetaTileEntityFusionStack.this.tier(1));
+        // int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart / startEUFactor);
+        // if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier(2);
+        // values[2] = Math.min(fusionTier, values[2]);
+        // }
 
         @Override
         public long getMaxVoltage() {

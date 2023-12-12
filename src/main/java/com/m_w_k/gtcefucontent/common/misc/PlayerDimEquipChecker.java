@@ -1,20 +1,22 @@
 package com.m_w_k.gtcefucontent.common.misc;
 
-import com.m_w_k.gtcefucontent.api.damagesources.GTCEFuCDamageSources;
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import gregtech.api.damagesources.DamageSources;
-import gregtech.api.unification.material.Materials;
-import gregtech.common.items.MetaItems;
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+
+import java.util.Objects;
+import java.util.Optional;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
-import java.util.Objects;
-import java.util.Optional;
+import com.m_w_k.gtcefucontent.api.damagesources.GTCEFuCDamageSources;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import gregtech.api.damagesources.DamageSources;
+import gregtech.api.unification.material.Materials;
+import gregtech.common.items.MetaItems;
 
 public final class PlayerDimEquipChecker {
 
@@ -33,7 +35,8 @@ public final class PlayerDimEquipChecker {
 
     private static void miningDimCheck(EntityPlayer player) {
         // simple gas mask
-        if (GTCEFuCMetaItems.SIMPLE_GAS_MASK.isItemEqual(player.getItemStackFromSlot(HEAD)) || sealedHelmetCheck(player)) {
+        if (GTCEFuCMetaItems.SIMPLE_GAS_MASK.isItemEqual(player.getItemStackFromSlot(HEAD)) ||
+                sealedHelmetCheck(player)) {
             if (drainOxy(player)) {
                 return;
             }
@@ -65,9 +68,8 @@ public final class PlayerDimEquipChecker {
 
     private static boolean sealedHelmetCheck(EntityPlayer player) {
         ItemStack headItem = player.getItemStackFromSlot(HEAD);
-        return GTCEFuCMetaItems.GAS_MASK.isItemEqual(headItem)
-                || MetaItems.NANO_HELMET.isItemEqual(headItem)
-                || MetaItems.QUANTUM_HELMET.isItemEqual(headItem);
+        return GTCEFuCMetaItems.GAS_MASK.isItemEqual(headItem) || MetaItems.NANO_HELMET.isItemEqual(headItem) ||
+                MetaItems.QUANTUM_HELMET.isItemEqual(headItem);
     }
 
     private static void armorCheck(EntityPlayer player) {
@@ -77,11 +79,12 @@ public final class PlayerDimEquipChecker {
         ItemStack legItem = player.getItemStackFromSlot(LEGS);
         ItemStack feetItem = player.getItemStackFromSlot(FEET);
         int count = 0;
-        if (!MetaItems.QUANTUM_HELMET.isItemEqual(headItem)) count+=5;
-        if (!MetaItems.QUANTUM_CHESTPLATE.isItemEqual(chestItem)
-                && !MetaItems.QUANTUM_CHESTPLATE_ADVANCED.isItemEqual(chestItem)) count+=8;
-        if (!MetaItems.QUANTUM_LEGGINGS.isItemEqual(legItem)) count+=7;
-        if (!MetaItems.QUANTUM_BOOTS.isItemEqual(feetItem)) count+=4;
+        if (!MetaItems.QUANTUM_HELMET.isItemEqual(headItem)) count += 5;
+        if (!MetaItems.QUANTUM_CHESTPLATE.isItemEqual(chestItem) &&
+                !MetaItems.QUANTUM_CHESTPLATE_ADVANCED.isItemEqual(chestItem))
+            count += 8;
+        if (!MetaItems.QUANTUM_LEGGINGS.isItemEqual(legItem)) count += 7;
+        if (!MetaItems.QUANTUM_BOOTS.isItemEqual(feetItem)) count += 4;
         player.attackEntityFrom(DamageSources.getRadioactiveDamage(), count / 24f);
     }
 

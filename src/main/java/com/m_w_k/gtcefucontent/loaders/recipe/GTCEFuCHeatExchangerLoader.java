@@ -4,14 +4,6 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import gregicality.multiblocks.api.unification.GCYMMaterialFlags;
-import gregtech.api.GregTechAPI;
-import gregtech.api.fluids.FluidConstants;
-import gregtech.api.fluids.store.FluidStorageKeys;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.properties.PropertyKey;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -24,12 +16,13 @@ import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityPro
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
+import gregtech.api.fluids.store.FluidStorageKeys;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import javax.annotation.Nullable;
+import gregtech.api.unification.material.properties.PropertyKey;
 
 public final class GTCEFuCHeatExchangerLoader {
 

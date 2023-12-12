@@ -1,8 +1,11 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import static gregtech.api.GTValues.*;
+import static gregtech.api.GTValues.LV;
+import static gregtech.api.GTValues.V;
+
 import java.util.Collection;
 
-import gregtech.api.fluids.store.FluidStorageKeys;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -10,7 +13,7 @@ import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
-import gregtech.api.GTValues;
+import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;
@@ -19,10 +22,6 @@ import gregtech.api.recipes.chance.output.impl.ChancedItemOutput;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
-
-import static gregtech.api.GTValues.*;
-import static gregtech.api.GTValues.LV;
-import static gregtech.api.GTValues.V;
 
 public final class GTCEFuCMiscRecipes {
 

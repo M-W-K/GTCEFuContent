@@ -1,6 +1,7 @@
 package com.m_w_k.gtcefucontent.common.item;
 
 import com.m_w_k.gtcefucontent.common.item.armor.GTCEFuCMetaArmor;
+
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.items.metaitem.MetaItem;
 
@@ -33,6 +34,5 @@ public final class GTCEFuCMetaItems {
         first.setRegistryName("meta_item_2");
         GTCEFuCMetaArmor armor = new GTCEFuCMetaArmor();
         armor.setRegistryName("gtcefuc_armor");
-
     }
 }

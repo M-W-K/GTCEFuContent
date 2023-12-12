@@ -1,15 +1,13 @@
 package com.m_w_k.gtcefucontent.client.utils;
 
-import com.m_w_k.gtcefucontent.api.util.MultiblockRenderRotHelper;
-import gregtech.client.utils.RenderBufferHelper;
+import javax.vecmath.Matrix3d;
+import javax.vecmath.Vector3d;
+
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix3d;
-import javax.vecmath.Vector3d;
+import org.lwjgl.opengl.GL11;
 
 public class GTCEFuCRotatableCubeRenderHelper {
 
@@ -149,6 +147,5 @@ public class GTCEFuCRotatableCubeRenderHelper {
         tempVec1.add(offsetVec);
 
         return buffer.pos(tempVec1.getX(), tempVec1.getY(), tempVec1.getZ());
-
     }
 }

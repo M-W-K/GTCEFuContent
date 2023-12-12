@@ -7,12 +7,6 @@ import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.google.common.collect.Lists;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.metatileentity.multiblock.*;
-import gregtech.api.util.TextComponentUtil;
-import gregtech.api.util.TextFormattingUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -25,6 +19,7 @@ import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.google.common.collect.Lists;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
@@ -38,8 +33,11 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.IEnergyContainer;
 import gregtech.api.capability.impl.*;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.*;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
@@ -50,6 +48,8 @@ import gregtech.api.recipes.recipeproperties.FusionEUToStartProperty;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.util.BlockInfo;
 import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
@@ -59,7 +59,8 @@ import gregtech.common.metatileentities.MetaTileEntities;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityEnergyHatch;
 
 // cursed child of a power substation and a fusion reactor
-public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockController implements IProgressBarMultiblock {
+public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockController
+                                                implements IProgressBarMultiblock {
 
     protected EnergyContainerList inputEnergyContainers;
     protected long heat = 0;
