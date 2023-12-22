@@ -823,6 +823,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         private boolean prevRecipeCheck(Map<Fluid, Integer> tankFluids) {
             // if we are no longer compatible with the previous recipe fluids,
             // we should enable searching for a new recipe.
+            if (prevRecipeInfo == null) return false;
             if (badFlowCheck(prevRecipeInfo[0]) || badFlowCheck(prevRecipeInfo[1]) ||
                     badFlowCheck(prevRecipeInfo[2]) || badFlowCheck(prevRecipeInfo[3])) {
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.fluid");
