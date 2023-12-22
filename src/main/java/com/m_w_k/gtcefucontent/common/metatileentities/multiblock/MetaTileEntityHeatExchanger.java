@@ -833,10 +833,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.len");
                 return false;
             }
-            return tankFluids.containsKey(prevRecipeInfo[0].getFluid())
-                    && tankFluids.containsKey(prevRecipeInfo[1].getFluid())
-                    && tankFluids.containsKey(prevRecipeInfo[2].getFluid())
-                    && tankFluids.containsKey(prevRecipeInfo[3].getFluid());
+            return tankFluids.containsKey(prevRecipeInfo[0].getFluid()) &&
+                    tankFluids.containsKey(prevRecipeInfo[1].getFluid()) &&
+                    tankFluids.containsKey(prevRecipeInfo[2].getFluid()) &&
+                    tankFluids.containsKey(prevRecipeInfo[3].getFluid());
         }
 
         private boolean badFlowCheck(FluidStack stack) {
@@ -878,8 +878,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
         private void cacheValues() {
             this.cachedLength = this.requiredPipeLength;
-            this.prevRecipeInfo =
-                    new FluidStack[]{this.fluidAInitial, this.fluidAFinal, this.fluidBInitial, this.fluidBFinal};
+            this.prevRecipeInfo = new FluidStack[] { this.fluidAInitial, this.fluidAFinal, this.fluidBInitial,
+                    this.fluidBFinal };
         }
 
         private void clearCache() {

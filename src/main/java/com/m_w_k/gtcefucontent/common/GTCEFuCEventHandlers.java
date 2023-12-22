@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent.common;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;

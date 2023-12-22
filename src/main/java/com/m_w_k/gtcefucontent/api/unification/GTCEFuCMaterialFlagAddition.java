@@ -1,21 +1,14 @@
 package com.m_w_k.gtcefucontent.api.unification;
 
+import static gregtech.api.unification.material.Materials.Thorium;
+
 import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.FluidState;
 import gregtech.api.fluids.store.FluidStorageKeys;
-import gregtech.api.unification.Elements;
-import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.info.MaterialFlags;
 import gregtech.api.unification.material.properties.PropertyKey;
-
-import static gregtech.api.unification.material.Materials.STD_METAL;
-import static gregtech.api.unification.material.Materials.Thorium;
-import static gregtech.api.unification.material.info.MaterialFlags.GENERATE_DENSE;
-import static gregtech.api.unification.material.info.MaterialFlags.GENERATE_ROD;
-import static gregtech.api.unification.material.info.MaterialIconSet.SHINY;
-import static gregtech.api.util.GTUtility.gregtechId;
 
 public final class GTCEFuCMaterialFlagAddition {
 
