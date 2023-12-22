@@ -573,19 +573,19 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
                     overclock_rating);
         }
 
-        // @Override
-        // protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
-        // super.modifyOverclockPre(values, storage);
-        //
-        // // Limit the number of OCs to the difference in fusion reactor tier.
-        // // However, effective tier goes up by two per for fusion stacks.
-        // // In addition, the recipemap euToStart doubles every tier
-        // long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
-        // int startEUFactor = (int) Math.pow(2, MetaTileEntityFusionStack.this.tier(1));
-        // int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart / startEUFactor);
-        // if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier(2);
-        // values[2] = Math.min(fusionTier, values[2]);
-        // }
+         @Override
+         protected void modifyOverclockPre(int @NotNull [] values, @NotNull IRecipePropertyStorage storage) {
+         super.modifyOverclockPre(values, storage);
+
+         // Limit the number of OCs to the difference in fusion reactor tier.
+         // However, effective tier goes up by two per for fusion stacks.
+         // In addition, the recipemap euToStart doubles every tier
+         long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
+         int startEUFactor = (int) Math.pow(2, MetaTileEntityFusionStack.this.tier(1));
+         int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart / startEUFactor);
+         if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier(2);
+         values[2] = Math.min(fusionTier, values[2]);
+         }
 
         @Override
         public long getMaxVoltage() {
