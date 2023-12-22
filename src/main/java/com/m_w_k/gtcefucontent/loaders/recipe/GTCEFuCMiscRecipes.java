@@ -36,6 +36,13 @@ public final class GTCEFuCMiscRecipes {
                 .buildAndRegister();
 
         RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
+                .fluidInputs(Materials.Thorium.getPlasma(1))
+                .fluidOutputs(Materials.Thorium.getFluid(1))
+                .duration(532)
+                .EUt((int) V[EV])
+                .buildAndRegister();
+
+        RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
                 .fluidInputs(GTCEFuCMaterials.ChargedEnder.getFluid(1))
                 .fluidOutputs(Materials.Beryllium.getFluid(1))
                 .duration(750)

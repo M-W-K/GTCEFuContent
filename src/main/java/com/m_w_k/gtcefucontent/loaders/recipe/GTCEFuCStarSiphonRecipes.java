@@ -64,7 +64,7 @@ public final class GTCEFuCStarSiphonRecipes {
                 GTCEFuCRecipeMaps.STAR_SIPHON_RECIPES.recipeBuilder()
                         .inputNBT(star.getItem(), 1, star.getMetadata(), NBTMatcher.ANY, NBTCondition.ANY)
                         .outputs(starsRaw.get(t * 6 + i))
-                        .fluidOutputs(Materials.Nickel.getPlasma(fluid))
+                        .fluidOutputs(Materials.Thorium.getPlasma(fluid))
                         .EUToStart(mod2 * 20000000000L)
                         .duration(16).EUt((int) (GTValues.V[GTValues.UV + t] * 2)).buildAndRegister();
                 i++;
