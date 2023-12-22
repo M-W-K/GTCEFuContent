@@ -28,7 +28,7 @@ public final class GTCEFuContent {
     public static final String NAME = "GregTechCEFuContent";
     public static final String VERSION = "1.4.2";
 
-    public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.8.2-beta,);" +
+    public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.8.4-beta,);" +
             "required-after:gcym@[1.2.6,);" +
             "required-after:projecte@[1.4.1,);" +
             "required-after:projectex@[1.2.0,);";
