@@ -59,6 +59,14 @@ public final class GTCEFuCUtil {
         } else return 0;
     }
 
+    public static double pythagoreanAverage(double... numbers) {
+        double sum = 0;
+        for (double d : numbers) {
+            sum += Math.pow(d, 2);
+        }
+        return Math.pow(sum, 0.5);
+    }
+
     public static ItemStack setStackCount(ItemStack stack, int count) {
         return new ItemStack(stack.getItem(), count, stack.getMetadata());
     }

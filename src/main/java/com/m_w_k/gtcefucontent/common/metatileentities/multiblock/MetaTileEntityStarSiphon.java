@@ -1,11 +1,15 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.api.util.InterpolatingPoint;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,6 +22,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -69,6 +74,10 @@ import gregtech.common.blocks.BlockFusionCasing;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.GLUtessellatorCallback;
+import org.lwjgl.util.glu.Sphere;
+import org.lwjgl.util.glu.tessellation.GLUtessellatorImpl;
 
 public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                                       implements IFastRenderMetaTileEntity, IBloomEffect, IProgressBarMultiblock {
@@ -84,8 +93,9 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     private final GTCEFuCRotatableCubeRenderHelper cubeRenderHelper1;
     private final GTCEFuCRotatableCubeRenderHelper cubeRenderHelper2;
     private final GTCEFuCRotatableCubeRenderHelper cubeRenderHelper3;
+    private final List<InterpolatingPoint> pointList = new ObjectArrayList<>(75);
+    private final Random random = new Random();
     private float partialTicksPrev;
-    private static MetaTileEntityStarSiphon renderingController;
 
     public MetaTileEntityStarSiphon(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.STAR_SIPHON_RECIPES);
@@ -101,6 +111,9 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
         this.cubeRenderHelper1 = new GTCEFuCRotatableCubeRenderHelper().setSize(1, 1, 1);
         this.cubeRenderHelper2 = new GTCEFuCRotatableCubeRenderHelper().setSize(0.6, 0.6, 0.6);
         this.cubeRenderHelper3 = new GTCEFuCRotatableCubeRenderHelper().setSize(0.3, 0.3, 0.3);
+        for (int i = 0; i < 75; i++) {
+            pointList.add(new InterpolatingPoint(InterpolatingPoint.InterpolationMode.ACCELERATING, 100));
+        }
     }
 
     @NotNull
@@ -700,6 +713,12 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
         // if we've gone negative, add the remaining partial tick for the prev tick and the partial tick for this tick
         if (dif < 0) dif = context.partialTicks() + 1 - this.partialTicksPrev;
         this.partialTicksPrev = context.partialTicks();
+        handlePoints(buffer, dif,
+                x + relativeBack.getXOffset() * 7 + 0.5,
+                y + relativeBack.getYOffset() * 7 + 0.5,
+                z + relativeBack.getZOffset() * 7 + 0.5,
+                r, g, b, a);
+
         cubeRenderHelper1.setDisplacement(
                 x + relativeBack.getXOffset() * 7 + 0.5,
                 y + relativeBack.getYOffset() * 7 + 0.5,
@@ -723,6 +742,26 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                     .rotateY(-dif / 10).rotateZ(dif).renderCubeFrame(buffer,
                             225 / 255f, 57 / 255f, 43 / 255f, 1, 30); // 225 57 43
         }
+    }
+
+    private void handlePoints(BufferBuilder buffer, float dif, double x, double y, double z,
+                              float r, float g, float b, float a) {
+        for (InterpolatingPoint point : pointList) {
+            if (point.isFinished()) {
+                Vec3i dest = EnumFacing.random(random).getDirectionVec();
+                point.setup(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1,
+                        dest.getX() * 5, dest.getY() * 5, dest.getZ() * 5);
+            } else {
+                point.progress(dif);
+            }
+        }
+        buffer.begin(GL11.GL_POINTS, DefaultVertexFormats.POSITION_COLOR);
+        for (InterpolatingPoint point : pointList) {
+            GL11.glPointSize((float) (40 / GTCEFuCUtil.pythagoreanAverage(point.x() + x, point.y() + y, point.z() + z)));
+            buffer.pos(point.x() + x, point.y() + y, point.z() + z).color(r, g, b, a).endVertex();
+        }
+        Tessellator.getInstance().draw();
+        GL11.glPointSize(1);
     }
 
     private void renderFixedRing(BufferBuilder buffer, double x, double y, double z, EnumFacing.Axis axis, float r,
