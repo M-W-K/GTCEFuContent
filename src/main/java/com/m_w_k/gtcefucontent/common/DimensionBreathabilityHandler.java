@@ -1,8 +1,12 @@
 package com.m_w_k.gtcefucontent.common;
 
-import com.m_w_k.gtcefucontent.api.damagesources.GTCEFuCDamageSources;
-import gregtech.api.damagesources.DamageSources;
-import gregtech.api.unification.material.Materials;
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -11,12 +15,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import com.m_w_k.gtcefucontent.api.damagesources.GTCEFuCDamageSources;
 
-import static net.minecraft.inventory.EntityEquipmentSlot.*;
+import gregtech.api.damagesources.DamageSources;
+import gregtech.api.unification.material.Materials;
 
 public final class DimensionBreathabilityHandler {
 

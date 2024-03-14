@@ -1,18 +1,17 @@
 package com.m_w_k.gtcefucontent;
 
-import com.m_w_k.gtcefucontent.common.DimensionBreathabilityHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import org.apache.logging.log4j.Logger;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.common.CommonProxy;
+import com.m_w_k.gtcefucontent.common.DimensionBreathabilityHandler;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
@@ -28,7 +27,7 @@ public final class GTCEFuContent {
 
     public static final String MODID = "gtcefucontent";
     public static final String NAME = "GregTechCEFuContent";
-    public static final String VERSION = "1.4.2";
+    public static final String VERSION = "1.4.3";
 
     public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.8.4-beta,);" +
             "required-after:gcym@[1.2.6,);" +

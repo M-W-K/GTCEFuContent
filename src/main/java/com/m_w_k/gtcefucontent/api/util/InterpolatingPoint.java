@@ -38,7 +38,7 @@ public class InterpolatingPoint {
         if (currentPathTime > PATH_TIME + randomPathTime) currentPathTime = PATH_TIME + randomPathTime;
 
         position.interpolate(origin, destination, mode.getFrom(currentPathTime / (PATH_TIME + randomPathTime)));
-        if(currentPathTime >= PATH_TIME + randomPathTime) finished = true;
+        if (currentPathTime >= PATH_TIME + randomPathTime) finished = true;
     }
 
     public double x() {
@@ -58,7 +58,10 @@ public class InterpolatingPoint {
     }
 
     public enum InterpolationMode {
-        LINEAR, ACCELERATING, DECELERATING;
+
+        LINEAR,
+        ACCELERATING,
+        DECELERATING;
 
         double getFrom(double interpolation) {
             return switch (this) {

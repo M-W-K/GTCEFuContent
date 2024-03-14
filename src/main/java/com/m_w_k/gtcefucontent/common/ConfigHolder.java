@@ -1,7 +1,8 @@
 package com.m_w_k.gtcefucontent.common;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import net.minecraftforge.common.config.Config;
+
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 
 @Config(modid = GTCEFuContent.MODID)
 public class ConfigHolder {

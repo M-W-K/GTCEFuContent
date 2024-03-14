@@ -1,15 +1,12 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.api.util.InterpolatingPoint;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -35,6 +32,7 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.collect.Lists;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.api.util.InterpolatingPoint;
 import com.m_w_k.gtcefucontent.client.utils.GTCEFuCRotatableCubeRenderHelper;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
@@ -74,10 +72,7 @@ import gregtech.common.blocks.BlockFusionCasing;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.MetaTileEntities;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.GLUtessellatorCallback;
-import org.lwjgl.util.glu.Sphere;
-import org.lwjgl.util.glu.tessellation.GLUtessellatorImpl;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
                                       implements IFastRenderMetaTileEntity, IBloomEffect, IProgressBarMultiblock {
@@ -757,7 +752,8 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
         }
         buffer.begin(GL11.GL_POINTS, DefaultVertexFormats.POSITION_COLOR);
         for (InterpolatingPoint point : pointList) {
-            GL11.glPointSize((float) (40 / GTCEFuCUtil.pythagoreanAverage(point.x() + x, point.y() + y, point.z() + z)));
+            GL11.glPointSize(
+                    (float) (40 / GTCEFuCUtil.pythagoreanAverage(point.x() + x, point.y() + y, point.z() + z)));
             buffer.pos(point.x() + x, point.y() + y, point.z() + z).color(r, g, b, a).endVertex();
         }
         Tessellator.getInstance().draw();
