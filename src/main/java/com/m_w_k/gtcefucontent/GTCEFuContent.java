@@ -1,11 +1,14 @@
 package com.m_w_k.gtcefucontent;
 
+import com.m_w_k.gtcefucontent.common.DimensionBreathabilityHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Logger;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
@@ -15,7 +18,6 @@ import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityAntimatterCompressor;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityFusionStack;
-import com.m_w_k.gtcefucontent.common.misc.PlayerDimEquipChecker;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCMiscRecipes;
 
 @Mod(modid = GTCEFuContent.MODID,
@@ -55,8 +57,6 @@ public final class GTCEFuContent {
         MetaTileEntityFusionStack.init();
         MetaTileEntityAntimatterCompressor.init();
 
-        PlayerDimEquipChecker.init();
-
         proxy.preLoad();
         log("PreInit complete");
     }
@@ -66,6 +66,12 @@ public final class GTCEFuContent {
         log("Beginning PostInit");
         GTCEFuCMiscRecipes.initPost();
         log("PostInit complete");
+    }
+
+    @EventHandler
+    public static void serverStart(FMLServerStartingEvent event) {
+        log("Loading breathability config.");
+        DimensionBreathabilityHandler.loadConfig();
     }
 
     public static void log(Object message, LogType logType) {

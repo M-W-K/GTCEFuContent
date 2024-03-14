@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -13,7 +14,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import com.m_w_k.gtcefucontent.common.misc.PlayerDimEquipChecker;
 
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.unification.material.event.MaterialEvent;
@@ -31,7 +31,7 @@ public final class GTCEFuCEventHandlers {
         if (event.side.isServer() && event.phase == TickEvent.Phase.END) {
             // check every second
             if (FMLCommonHandler.instance().getMinecraftServerInstance().getTickCounter() % 20 == 0) {
-                PlayerDimEquipChecker.checkPlayer(event.player);
+                DimensionBreathabilityHandler.checkPlayer(event.player);
             }
         }
     }
