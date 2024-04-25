@@ -857,7 +857,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             // correction so that the analogous operation would process the same amount of thermal energy per second
             double floatingRecipeTime = (double) this.fluidAThermalEnergy / this.fluidBThermalEnergy;
             floatingRecipeTime = (1 + floatingRecipeTime) / 2;
-            this.recipeTime = (int) (3 * floatingRecipeTime * durationModifier);
+            this.recipeTime = (int) (3 * floatingRecipeTime * durationModifier *
+                    controller.getMaintenanceDurationMultiplier());
         }
 
         private Map<Fluid, Integer> getTankFluids() {
