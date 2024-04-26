@@ -12,13 +12,14 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
+import org.apache.commons.lang3.tuple.Triple;
 
 public final class HeatExchangerRecipeHandler {
 
     /**
      * Approximate conversion of heat units to EU, assuming that the fluid heater is perfectly efficient.
      */
-    public static final long HEU = GTCEFuCHeatExchangerLoader.waterToSteamEnergy / 150;
+    public static final long HEU = GTCEFuCHeatExchangerLoader.WATER_TO_STEAM_ENERGY / 150;
 
     private static final Map<Fluid, Tuple<FluidStack, long[]>> HEATING_MAP = new HashMap<>();
     private static final Map<Fluid, Tuple<FluidStack, long[]>> COOLING_MAP = new HashMap<>();
@@ -95,8 +96,7 @@ public final class HeatExchangerRecipeHandler {
         if (thermalEnergy == 0)
             GTCEFuContent.log("Someone tried to register a zero-energy Heat Exchanger recipe. THIS IS INVALID!",
                     GTCEFuContent.LogType.WARN);
-
-        if (thermalEnergy > 0) {
+        else if (thermalEnergy > 0) {
             HEATING_MAP.put(fluidA.getFluid(), new Tuple<>(fluidB, new long[] { fluidA.amount, thermalEnergy }));
             if (isTwoWay)
                 COOLING_MAP.put(fluidB.getFluid(), new Tuple<>(fluidA, new long[] { fluidB.amount, thermalEnergy }));
@@ -130,6 +130,35 @@ public final class HeatExchangerRecipeHandler {
         HEATING,
         COOLING,
         BOTH
+    }
+
+    /**
+     * Find out whether we can do a heat exchange with a given fluid, given a direction of exchange and a
+     * temperature limit.
+     *
+     * @param fluid The first fluid
+     * @param type The direction of exchange. SHOULD NOT BE {@code ExchangeType.BOTH}
+     * @return A triple, where the first value is the required amount of input fluid, the second value is the required
+     * thermal energy, and the third value is the output FluidStack. If the conversion cannot be done, returns null.
+     */
+    @Nullable
+    public static Triple<Integer, Long, FluidStack> getHeatExchange(Fluid fluid, ExchangeType type, int temperatureLimit) {
+        Tuple<FluidStack, long[]> info = null;
+        if (type == ExchangeType.HEATING) {
+            if (fluid.getTemperature() >= temperatureLimit) return null;
+            info = HEATING_MAP.get(fluid);
+            // We can't heat to more than the temperature limit
+            if (info.getFirst().getFluid().getTemperature() > temperatureLimit)
+                return null;
+        } else if (type == ExchangeType.COOLING) {
+            if (fluid.getTemperature() <= temperatureLimit) return null;
+            info = COOLING_MAP.get(fluid);
+            // We can't cool fluid to less than the temperature limit
+            if (info.getFirst().getFluid().getTemperature() < temperatureLimit)
+                return null;
+        }
+        if (info == null) return null;
+        return Triple.of((int)info.getSecond()[0], info.getSecond()[1], info.getFirst().copy());
     }
 
     /**

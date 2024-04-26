@@ -25,6 +25,7 @@ public final class GTCEFuCMetaTileEntities {
     public static MetaTileEntityAntimatterCompressor ANTIMATTER_COMPRESSOR;
     public static final MetaTileEntityFusionStack[] FUSION_STACK = new MetaTileEntityFusionStack[3];
     public static final MetaTileEntityHeatExchanger[] HEAT_EXCHANGER = new MetaTileEntityHeatExchanger[3];
+    public static final MetaTileEntityHeatReclaimer[] HEAT_RECLAIMER = new MetaTileEntityHeatReclaimer[2];
 
     public static final Map<IHEUComponent.HEUComponentType, MetaTileEntityHEUComponent> HEU_COMPONENTS = new HashMap<>(
             5);
@@ -66,6 +67,11 @@ public final class GTCEFuCMetaTileEntities {
                 new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.medium"), GTValues.ZPM));
         HEAT_EXCHANGER[2] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
                 new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.large"), GTValues.UV));
+
+        HEAT_RECLAIMER[0] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+                new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.basic"), false));
+        HEAT_RECLAIMER[1] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+                new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.advanced"), true));
 
         HEU_COMPONENTS.put(E_STANDARD, registerMetaTileEntity(TILE_ID.getAndIncrement(),
                 new MetaTileEntityHEUComponent(gtcefucId("heu_endpoint.standard"), E_STANDARD)));

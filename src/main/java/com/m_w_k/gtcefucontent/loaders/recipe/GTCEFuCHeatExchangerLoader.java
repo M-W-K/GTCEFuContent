@@ -28,29 +28,36 @@ public final class GTCEFuCHeatExchangerLoader {
 
     private GTCEFuCHeatExchangerLoader() {}
 
-    public static final long waterHeatCapacity = 418600;
-    public static final long waterHeatOfVaporization = 2260000L;
+    public static final long WATER_HEAT_CAPACITY = 418600;
+    public static final long WATER_HEAT_OF_VAPORIZATION = 2260000L;
+    /**
+     * 1L water -> 160L steam
+     */
     // heat up by 80°K, then add the heat of vaporization
-    public static final long waterToSteamEnergy = waterHeatCapacity * 80 + waterHeatOfVaporization;
+    public static final long WATER_TO_STEAM_ENERGY = WATER_HEAT_CAPACITY * 80 + WATER_HEAT_OF_VAPORIZATION;
+    /**
+     * Thermal energy for a single EU, assuming 2L steam is 1 EU.
+     */
+    public static final long SINGLE_EU_ENERGY = WATER_TO_STEAM_ENERGY / 80;
 
     public static void init() {
         // water <-> steam
         HeatExchangerRecipeHandler.registerHeatExchange(
                 Materials.Water.getFluid(1),
                 Materials.Steam.getFluid(160),
-                waterToSteamEnergy);
+                WATER_TO_STEAM_ENERGY);
 
         // d. water <-> preheated water
         HeatExchangerRecipeHandler.registerHeatExchange(
                 Materials.DistilledWater.getFluid(1),
                 GTCEFuCMaterials.PreheatedWater.getFluid(1),
-                waterHeatCapacity * 80);
+                WATER_HEAT_CAPACITY * 80);
 
         // preheated water <-> hps
         HeatExchangerRecipeHandler.registerHeatExchange(
                 GTCEFuCMaterials.PreheatedWater.getFluid(1),
                 GTCEFuCMaterials.PreheatedWater.getFluid(FluidStorageKeys.GAS, 1),
-                waterHeatOfVaporization);
+                WATER_HEAT_OF_VAPORIZATION);
 
         // plasmas
         Collection<Recipe> recipes = RecipeMaps.PLASMA_GENERATOR_FUELS.getRecipeList();
@@ -66,7 +73,7 @@ public final class GTCEFuCHeatExchangerLoader {
                 HeatExchangerRecipeHandler.registerHeatExchange(material.getPlasma(1),
                         material.getFluid(1),
                         // 4L of steam potential per EU, or double effective EU output before efficiency bonuses.
-                        waterToSteamEnergy * eu / 40, false);
+                        SINGLE_EU_ENERGY * eu * 2, false);
             }
         });
 
@@ -92,7 +99,7 @@ public final class GTCEFuCHeatExchangerLoader {
         HeatExchangerRecipeHandler.registerHeatExchange(
                 GTCEFuCMaterials.TriniumReduced.getFluid(55),
                 Materials.Trinium.getFluid(9),
-                waterToSteamEnergy * GTValues.V[GTValues.UV],
+                WATER_TO_STEAM_ENERGY * GTValues.V[GTValues.UV],
                 false);
     }
 
