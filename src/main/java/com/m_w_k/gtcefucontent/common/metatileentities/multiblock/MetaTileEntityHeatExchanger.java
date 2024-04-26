@@ -5,11 +5,11 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import gregtech.api.metatileentity.MTETrait;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.Tuple;
@@ -74,7 +74,7 @@ import gregtech.core.sound.GTSoundEvents;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
-                                         implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
+                                         implements IDataInfoProvider, IProgressBarMultiblock {
 
     protected IItemHandlerModifiable inputInventory;
     protected IItemHandlerModifiable outputInventory;
@@ -86,8 +86,6 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     protected final List<IHEUComponent> notifiedHEUComponentList = new ArrayList<>();
     protected final HEUGridHandler heuHandler;
 
-    private boolean isWorkingEnabled = true;
-
     public MetaTileEntityHeatExchanger(ResourceLocation metaTileEntityId, int tier) {
         super(metaTileEntityId);
         this.tier = tier;
@@ -97,7 +95,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     @Override
     protected void updateFormedValid() {
-        if (isWorkingEnabled()) {
+        if (this.heuHandler.isWorkingEnabled()) {
             heuHandler.tick();
         } else {
             // clear our stored thermal energy when stopped
@@ -114,8 +112,6 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     @Override
     public void invalidateStructure() {
-        // super sets this to false but doesn't send a sync packet
-        this.setActive(false);
         super.invalidateStructure();
         this.resetTileAbilities();
         this.heuHandler.onStructureInvalidate();
@@ -205,7 +201,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     public void renderMetaTileEntity(CCRenderState renderState, Matrix4 translation, IVertexOperation[] pipeline) {
         super.renderMetaTileEntity(renderState, translation, pipeline);
         this.getFrontOverlay().renderOrientedState(renderState, translation, pipeline, getFrontFacing(),
-                this.isActive() || !this.isWorkingEnabled(), this.isWorkingEnabled());
+                this.isActive() || !this.heuHandler.isWorkingEnabled(), this.heuHandler.isWorkingEnabled());
     }
 
     @SideOnly(Side.CLIENT)
@@ -257,81 +253,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
     }
 
-    public <T> T getCapability(Capability<T> capability, EnumFacing side) {
-        if (capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE) {
-            return GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this);
-        }
-        return super.getCapability(capability, side);
-    }
-
     @Override
     public boolean isActive() {
-        return lastActive && isWorkingEnabled;
-    }
-
-    @Override
-    public void writeInitialSyncData(PacketBuffer buf) {
-        super.writeInitialSyncData(buf);
-        buf.writeBoolean(this.lastActive);
-        buf.writeBoolean(this.isWorkingEnabled);
-    }
-
-    @Override
-    public void receiveInitialSyncData(PacketBuffer buf) {
-        super.receiveInitialSyncData(buf);
-        this.lastActive = buf.readBoolean();
-        this.isWorkingEnabled = buf.readBoolean();
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        data.setBoolean("isWorkingEnabled", this.isWorkingEnabled);
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        this.isWorkingEnabled = data.getBoolean("isWorkingEnabled");
-    }
-
-    public void setActive(boolean active) {
-        if (this.lastActive != active) {
-            this.lastActive = active;
-            markDirty();
-            if (getWorld() != null && !getWorld().isRemote) {
-                writeCustomData(GregtechDataCodes.IS_WORKING, buf -> buf.writeBoolean(lastActive));
-            }
-        }
-    }
-
-    @Override
-    public void receiveCustomData(int dataId, PacketBuffer buf) {
-        super.receiveCustomData(dataId, buf);
-        if (dataId == GregtechDataCodes.WORKING_ENABLED) {
-            this.isWorkingEnabled = buf.readBoolean();
-            this.scheduleRenderUpdate();
-        }
-        if (dataId == GregtechDataCodes.IS_WORKING) {
-            this.scheduleRenderUpdate();
-        }
-    }
-
-    @Override
-    public boolean isWorkingEnabled() {
-        return this.isWorkingEnabled;
-    }
-
-    @Override
-    public void setWorkingEnabled(boolean isWorkingAllowed) {
-        if (this.isWorkingEnabled != isWorkingAllowed) {
-            this.isWorkingEnabled = isWorkingAllowed;
-            markDirty();
-            if (getWorld() != null && !getWorld().isRemote) {
-                writeCustomData(GregtechDataCodes.WORKING_ENABLED, buf -> buf.writeBoolean(isWorkingEnabled));
-            }
-        }
+        return this.heuHandler.isActive() && this.heuHandler.isWorkingEnabled();
     }
 
     public void addNotifiedHeuComponent(IHEUComponent component) {
@@ -367,9 +291,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 heatInfo));
     }
 
-    public static class HEUGridHandler {
-
-        private final MetaTileEntityHeatExchanger controller;
+    public static class HEUGridHandler extends MTETrait implements IControllable {
 
         private IItemHandlerModifiable componentsInv = new ItemStackHandler(0);
         private boolean badPiping = false;
@@ -406,9 +328,12 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         private long cachedMaxEnergy = 0;
         private boolean validMaxHeatCache = true;
         private int requiredPipeLength;
+        
+        private boolean isActive;
+        private boolean workingEnabled = true;
 
         public HEUGridHandler(MetaTileEntityHeatExchanger controller) {
-            this.controller = controller;
+            super(controller);
         }
 
         public void onStructureForm(Collection<IHEUComponent> components) {
@@ -467,7 +392,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             advancedEndpointValidityCheck();
             if (!this.validGrid) return;
             // fix pipe length
-            this.pipeLength /= this.controller.hEUCount;
+            this.pipeLength /= this.getMetaTileEntity().hEUCount;
             // 2/3 processing time if the exchanger uses conductive piping
             this.durationModifier = (this.pipeHolderVariant == IHEUComponent.HEUComponentType.H_CONDUCTIVE ? 4 :
                     6) / 3D;
@@ -479,7 +404,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             // no need to proceed if we have no returning endpoints
             if (this.reflectingEndpoints.size() == 0) return;
 
-            double reflectraw = this.reflectingEndpoints.size() / (double) this.controller.hEUCount;
+            double reflectraw = this.reflectingEndpoints.size() / (double) this.getMetaTileEntity().hEUCount;
             this.reflectionCount = (int) reflectraw;
             if (reflectionCount != reflectraw) {
                 // bad reflective endpoint count, no need for complex examination
@@ -522,6 +447,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
 
         private void onStructureInvalidate() {
+            setActive(false);
             resetStructure();
             resetRecipe();
             clearCache();
@@ -557,7 +483,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         public void tick() {
             // recipe processing
             if (checkRecipeValidity()) {
-                this.controller.setActive(true);
+                this.setActive(true);
                 if (this.recipeProgress >= this.recipeTime) {
                     // recipe completion
                     this.runInterpolationLogic(1D);
@@ -576,12 +502,12 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                     while (mult > 0) {
                         FluidStack fluidBInitialAdj = fluidAdjusted(fluidBInitial, mult);
                         FluidStack fluidBFinalAdj = fluidAdjusted(fluidBFinal, mult);
-                        FluidStack fill = this.controller.inputFluidInventory.drain(fluidBInitialAdj, false);
-                        int drain = this.controller.outputFluidInventory.fill(fluidBFinalAdj, false);
+                        FluidStack fill = this.getMetaTileEntity().inputFluidInventory.drain(fluidBInitialAdj, false);
+                        int drain = this.getMetaTileEntity().outputFluidInventory.fill(fluidBFinalAdj, false);
                         if (fill != null && fill.amount == fluidBInitialAdj.amount && drain == fluidBFinalAdj.amount) {
                             this.thermalEnergy -= this.fluidBThermalEnergy * mult;
-                            this.controller.inputFluidInventory.drain(fluidBInitialAdj, true);
-                            this.controller.outputFluidInventory.fill(fluidBFinalAdj, true);
+                            this.getMetaTileEntity().inputFluidInventory.drain(fluidBInitialAdj, true);
+                            this.getMetaTileEntity().outputFluidInventory.fill(fluidBFinalAdj, true);
                             break;
                         } else mult--;
                         // If we have no mult left, we either have no fluid B or no space for fluid B
@@ -595,7 +521,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                     }
                 }
             } else {
-                this.controller.setActive(false);
+                this.setActive(false);
                 // decay stocked thermal energy
                 this.thermalEnergy *= 0.99;
             }
@@ -603,20 +529,20 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             // piping I/O
             if (this.componentsInv.getSlots() != 0) {
                 // piping fill processing
-                if (this.controller.inputInventory.getSlots() != 0) {
-                    GTTransferUtils.moveInventoryItems(this.controller.inputInventory, this.componentsInv);
+                if (this.getMetaTileEntity().inputInventory.getSlots() != 0) {
+                    GTTransferUtils.moveInventoryItems(this.getMetaTileEntity().inputInventory, this.componentsInv);
                 }
 
                 // piping empty processing
-                if (this.controller.outputInventory.getSlots() != 0) {
-                    GTTransferUtils.moveInventoryItems(this.componentsInv, this.controller.outputInventory);
+                if (this.getMetaTileEntity().outputInventory.getSlots() != 0) {
+                    GTTransferUtils.moveInventoryItems(this.componentsInv, this.getMetaTileEntity().outputInventory);
                 }
 
                 // recheck piping validity
-                List<IHEUComponent> notifiedComponentList = this.controller.getNotifiedHEUComponentList();
+                List<IHEUComponent> notifiedComponentList = this.getMetaTileEntity().getNotifiedHEUComponentList();
                 if (!notifiedComponentList.isEmpty()) {
                     updateComponentPipingStatus(notifiedComponentList);
-                    this.controller.notifiedHEUComponentList.clear();
+                    this.getMetaTileEntity().notifiedHEUComponentList.clear();
                 }
             }
         }
@@ -645,7 +571,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 // casting to int acts as a Math.floor() call
                 int targetAmountF = (int) (interpolation * this.targetInterpolationAmount[1]);
                 long targetAmountT = (long) (interpolation * this.fluidAThermalEnergy * this.pipeVolModifier *
-                        this.controller.hEUCount);
+                        this.getMetaTileEntity().hEUCount);
 
                 int missingAmountI = targetAmountI - this.interpolationAmount[0];
                 int missingAmountF = targetAmountF - this.interpolationAmount[1];
@@ -671,11 +597,11 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
         private int tankIOHelper(FluidStack stack, boolean in, boolean simulate) {
             if (in) {
-                FluidStack drain = this.controller.inputFluidInventory.drain(stack, !simulate);
+                FluidStack drain = this.getMetaTileEntity().inputFluidInventory.drain(stack, !simulate);
                 if (drain == null) return 0;
                 return drain.amount;
             } else {
-                return this.controller.outputFluidInventory.fill(stack, !simulate);
+                return this.getMetaTileEntity().outputFluidInventory.fill(stack, !simulate);
             }
         }
 
@@ -727,10 +653,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 }
             } else {
                 if (this.needsNotification) {
-                    if (!this.controller.notifiedFluidInputList.isEmpty() ||
-                            !this.controller.notifiedFluidOutputList.isEmpty()) {
-                        this.controller.notifiedFluidInputList.clear();
-                        this.controller.notifiedFluidOutputList.clear();
+                    if (!this.getMetaTileEntity().notifiedFluidInputList.isEmpty() ||
+                            !this.getMetaTileEntity().notifiedFluidOutputList.isEmpty()) {
+                        this.getMetaTileEntity().notifiedFluidInputList.clear();
+                        this.getMetaTileEntity().notifiedFluidOutputList.clear();
                         this.needsNotification = false;
                     } else return false;
                 }
@@ -759,7 +685,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
                     for (Map.Entry<Fluid, Integer> heatable : tankFluids.entrySet()) {
                         // move on if this entry is not a heatable
-                        if (!heating_map.containsKey(coolable.getKey())) continue;
+                        if (!heating_map.containsKey(heatable.getKey())) continue;
 
                         exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable.getKey(), heatable.getKey());
                         if (exchangeData != null) {
@@ -793,7 +719,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
 
         private FluidStack fluidAdjusted(FluidStack stack) {
-            return new FluidStack(stack, stack.amount * this.pipeVolModifier * this.controller.hEUCount);
+            return new FluidStack(stack, stack.amount * this.pipeVolModifier * this.getMetaTileEntity().hEUCount);
         }
 
         private FluidStack fluidAdjusted(FluidStack stack, int mult) {
@@ -849,7 +775,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
 
         private boolean canInsert(FluidStack fluid) {
-            return this.controller.outputFluidInventory.fill(fluid, false) == fluid.amount;
+            return this.getMetaTileEntity().outputFluidInventory.fill(fluid, false) == fluid.amount;
         }
 
         private void recalcuateRecipeDuration() {
@@ -858,13 +784,13 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             double floatingRecipeTime = (double) this.fluidAThermalEnergy / this.fluidBThermalEnergy;
             floatingRecipeTime = (1 + floatingRecipeTime) / 2;
             this.recipeTime = (int) (3 * floatingRecipeTime * durationModifier *
-                    controller.getMaintenanceDurationMultiplier());
+                    this.getMetaTileEntity().getMaintenanceDurationMultiplier());
         }
 
         private Map<Fluid, Integer> getTankFluids() {
             Map<Fluid, Integer> fluidMap = new HashMap<>();
             FluidStack stack;
-            for (IFluidTankProperties tank : this.controller.inputFluidInventory.getTankProperties()) {
+            for (IFluidTankProperties tank : this.getMetaTileEntity().inputFluidInventory.getTankProperties()) {
                 stack = tank.getContents();
                 if (stack != null) {
                     if (fluidMap.containsKey(stack.getFluid())) {
@@ -875,6 +801,94 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 }
             }
             return fluidMap;
+        }
+
+        @Override
+        public void writeInitialSyncData(PacketBuffer buf) {
+            super.writeInitialSyncData(buf);
+            buf.writeBoolean(this.isActive);
+            buf.writeBoolean(this.workingEnabled);
+        }
+
+        @Override
+        public void receiveInitialSyncData(PacketBuffer buf) {
+            super.receiveInitialSyncData(buf);
+            this.isActive = buf.readBoolean();
+            this.workingEnabled = buf.readBoolean();
+        }
+
+        @Override
+        public @NotNull NBTTagCompound serializeNBT() {
+            NBTTagCompound tag = super.serializeNBT();
+            tag.setBoolean("WorkEnabled", workingEnabled);
+            tag.setLong("ThermalEnergy", thermalEnergy);
+            return tag;
+        }
+
+        @Override
+        public void deserializeNBT(@NotNull NBTTagCompound tag) {
+            super.deserializeNBT(tag);
+            this.workingEnabled = tag.getBoolean("WorkEnabled");
+            this.thermalEnergy = tag.getLong("ThermalEnergy");
+        }
+
+        public void setActive(boolean active) {
+            if (this.isActive != active) {
+                this.isActive = active;
+                this.getMetaTileEntity().markDirty();
+                World world = this.getMetaTileEntity().getWorld();
+                if (world != null && !world.isRemote) {
+                    writeCustomData(GregtechDataCodes.IS_WORKING, buf -> buf.writeBoolean(isActive));
+                }
+            }
+        }
+
+        @Override
+        public boolean isWorkingEnabled() {
+            return this.workingEnabled;
+        }
+
+        @Override
+        public void setWorkingEnabled(boolean workingEnabled) {
+            this.workingEnabled = workingEnabled;
+            metaTileEntity.markDirty();
+            World world = metaTileEntity.getWorld();
+            if (world != null && !world.isRemote) {
+                writeCustomData(GregtechDataCodes.WORKING_ENABLED, buf -> buf.writeBoolean(workingEnabled));
+            }
+        }
+
+        @Override
+        public @NotNull MetaTileEntityHeatExchanger getMetaTileEntity() {
+            return (MetaTileEntityHeatExchanger) super.getMetaTileEntity();
+        }
+
+        @Override
+        public final @NotNull String getName() {
+            return GregtechDataCodes.ABSTRACT_WORKABLE_TRAIT;
+        }
+
+        @Override
+        public <T> T getCapability(Capability<T> capability) {
+            if (capability == GregtechTileCapabilities.CAPABILITY_CONTROLLABLE) {
+                return GregtechTileCapabilities.CAPABILITY_CONTROLLABLE.cast(this);
+            }
+            return null;
+        }
+
+        @Override
+        public void receiveCustomData(int dataId, @NotNull PacketBuffer buf) {
+            if (dataId == GregtechDataCodes.WORKABLE_ACTIVE) {
+                this.isActive = buf.readBoolean();
+                this.getMetaTileEntity().scheduleRenderUpdate();
+            } else if (dataId == GregtechDataCodes.WORKING_ENABLED) {
+                this.workingEnabled = buf.readBoolean();
+                this.getMetaTileEntity().scheduleRenderUpdate();
+            }
+        }
+        
+        public boolean isActive() {
+            return isActive;
         }
 
         private void cacheValues() {
