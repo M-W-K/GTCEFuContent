@@ -5,7 +5,6 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import gregtech.api.metatileentity.MTETrait;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,6 +45,7 @@ import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
 import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.IDataInfoProvider;
+import gregtech.api.metatileentity.MTETrait;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
 import gregtech.api.metatileentity.multiblock.IMultiblockPart;
@@ -328,7 +328,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         private long cachedMaxEnergy = 0;
         private boolean validMaxHeatCache = true;
         private int requiredPipeLength;
-        
+
         private boolean isActive;
         private boolean workingEnabled = true;
 
@@ -886,7 +886,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 this.getMetaTileEntity().scheduleRenderUpdate();
             }
         }
-        
+
         public boolean isActive() {
             return isActive;
         }

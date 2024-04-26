@@ -1,11 +1,40 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.apache.commons.lang3.tuple.Triple;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
@@ -37,34 +66,9 @@ import gregtech.common.blocks.BlockMultiblockCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMufflerHatch;
 import gregtech.core.sound.GTSoundEvents;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.tuple.Triple;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
-        implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
+                                         implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
 
     private final boolean isAdvanced;
     private MetaTileEntityMufflerHatch muffler;
@@ -99,14 +103,14 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         if (isWorkingEnabled) {
             recoverEnergy();
             setActive(tryFluidHeating());
-        // leak thermal energy
+            // leak thermal energy
         } else this.thermalEnergy *= 0.99;
     }
 
     protected boolean tryFluidHeating() {
         boolean atLeastOneExchange = false;
         for (IMultipleTankHandler.MultiFluidTankEntry multiFluidTankEntry : this.inputFluidInventory) {
-            FluidStack fluid =  multiFluidTankEntry.getFluid();
+            FluidStack fluid = multiFluidTankEntry.getFluid();
             if (fluid == null) break;
             if (this.isAdvanced && !HeatExchangerRecipeHandler.isEutectic(fluid.getFluid())) break;
             if (lastExchange == null || fluid.getFluid() != lastExchange.inputFluid) {
@@ -145,7 +149,8 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
                 this.watchedController = null;
                 return;
             }
-            if (muffler.getController() instanceof RecipeMapMultiblockController controller && isValidController(controller))
+            if (muffler.getController() instanceof RecipeMapMultiblockController controller &&
+                    isValidController(controller))
                 this.watchedController = controller;
             else this.watchedController = null;
         }
@@ -193,7 +198,7 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
     @Nullable
     protected MetaTileEntityMufflerHatch getMufflerHatch() {
         TileEntity te = getWorld().getTileEntity(this.getPos().offset(
-                        RelativeDirection.BACK.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), 2));
+                RelativeDirection.BACK.getRelativeFacing(frontFacing, upwardsFacing, isFlipped), 2));
         if (te instanceof MetaTileEntityHolder holder) {
             MetaTileEntity mte = holder.getMetaTileEntity();
             if (mte instanceof MetaTileEntityMufflerHatch hatch) return hatch;
@@ -221,10 +226,12 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         return states(id == 0 ?
                 (advanced ?
                         (MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE)) :
-                        (GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING.getState(BlockLargeMultiblockCasing.CasingType.STEAM_CASING))) :
+                        (GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
+                                .getState(BlockLargeMultiblockCasing.CasingType.STEAM_CASING))) :
                 (advanced ?
                         (GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)) :
-                        (MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING))));
+                        (MetaBlocks.MULTIBLOCK_CASING
+                                .getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING))));
     }
 
     @Override
@@ -307,10 +314,12 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         if (isStructureFormed()) {
             if (this.muffler == null) {
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error"));
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error.muffler"));
+                textList.add(
+                        new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error.muffler"));
             } else if (this.watchedController == null) {
                 textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error"));
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error.controller"));
+                textList.add(new TextComponentTranslation(
+                        "gtcefucontent.multiblock.heat_reclaimer.display.error.controller"));
             }
         }
     }
@@ -393,6 +402,7 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
     }
 
     protected static class Exchange {
+
         public final Fluid inputFluid;
         public final Triple<Integer, Long, FluidStack> triple;
 

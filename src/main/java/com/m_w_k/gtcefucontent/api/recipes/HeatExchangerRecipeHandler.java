@@ -10,9 +10,10 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
-import org.apache.commons.lang3.tuple.Triple;
 
 public final class HeatExchangerRecipeHandler {
 
@@ -137,12 +138,14 @@ public final class HeatExchangerRecipeHandler {
      * temperature limit.
      *
      * @param fluid The first fluid
-     * @param type The direction of exchange. SHOULD NOT BE {@code ExchangeType.BOTH}
+     * @param type  The direction of exchange. SHOULD NOT BE {@code ExchangeType.BOTH}
      * @return A triple, where the first value is the required amount of input fluid, the second value is the required
-     * thermal energy, and the third value is the output FluidStack. If the conversion cannot be done, returns null.
+     *         thermal energy, and the third value is the output FluidStack. If the conversion cannot be done, returns
+     *         null.
      */
     @Nullable
-    public static Triple<Integer, Long, FluidStack> getHeatExchange(Fluid fluid, ExchangeType type, int temperatureLimit) {
+    public static Triple<Integer, Long, FluidStack> getHeatExchange(Fluid fluid, ExchangeType type,
+                                                                    int temperatureLimit) {
         Tuple<FluidStack, long[]> info = null;
         if (type == ExchangeType.HEATING) {
             if (fluid.getTemperature() >= temperatureLimit) return null;
@@ -158,7 +161,7 @@ public final class HeatExchangerRecipeHandler {
                 return null;
         }
         if (info == null) return null;
-        return Triple.of((int)info.getSecond()[0], info.getSecond()[1], info.getFirst().copy());
+        return Triple.of((int) info.getSecond()[0], info.getSecond()[1], info.getFirst().copy());
     }
 
     /**
