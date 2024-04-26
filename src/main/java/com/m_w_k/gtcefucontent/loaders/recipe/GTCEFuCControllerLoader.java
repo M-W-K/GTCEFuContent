@@ -1,13 +1,14 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import net.minecraft.item.ItemStack;
+
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
+
 import gregicality.multiblocks.api.unification.GCYMMaterials;
-import gregicality.multiblocks.common.block.GCYMMetaBlocks;
-import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.metatileentities.GCYMMetaTileEntities;
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaItem;
@@ -18,13 +19,11 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
-import gregtech.common.blocks.BlockCleanroomCasing;
 import gregtech.common.blocks.BlockMachineCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.items.MetaItems;
 import gregtech.common.metatileentities.MetaTileEntities;
-import net.minecraft.item.ItemStack;
 
 public class GTCEFuCControllerLoader {
 
@@ -94,7 +93,6 @@ public class GTCEFuCControllerLoader {
                 'C', new UnificationEntry(OrePrefix.circuit, MarkerMaterials.Tier.IV),
                 'A', new UnificationEntry(OrePrefix.plateDense, Materials.Asbestos),
                 'F', MetaItems.FIELD_GENERATOR_EV);
-
 
         // Assembler recipes
 
@@ -204,7 +202,7 @@ public class GTCEFuCControllerLoader {
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
                 .input(MetaTileEntities.STEAM_EXTRACTOR_STEEL)
                 .inputs(GTCEFuCMetaBlocks.ADVANCED_CASING
-                                .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING),
+                        .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING),
                         MetaTileEntities.FUSION_REACTOR[1].getStackForm(2),
                         MetaTileEntities.FUSION_REACTOR[2].getStackForm())
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.ULV, 64)
