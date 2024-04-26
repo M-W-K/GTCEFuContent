@@ -112,14 +112,13 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         for (IMultipleTankHandler.MultiFluidTankEntry multiFluidTankEntry : this.inputFluidInventory) {
             FluidStack fluid = multiFluidTankEntry.getFluid();
             if (fluid == null) break;
-            if (this.isAdvanced && !HeatExchangerRecipeHandler.isEutectic(fluid.getFluid())) break;
             if (lastExchange == null || fluid.getFluid() != lastExchange.inputFluid) {
                 var exchange = HeatExchangerRecipeHandler.getHeatExchange(fluid.getFluid(),
                         HeatExchangerRecipeHandler.ExchangeType.HEATING, this.maxTemp);
                 if (exchange == null) continue;
                 lastExchange = new Exchange(fluid.getFluid(), exchange);
             }
-            while (this.thermalEnergy > lastExchange.triple.getMiddle()) {
+            while (this.thermalEnergy * lastExchange.penalty > lastExchange.triple.getMiddle()) {
                 int fillable = this.outputFluidInventory.fill(lastExchange.triple.getRight(), false);
                 if (fillable != lastExchange.triple.getRight().amount) {
                     lastExchange = null;
@@ -132,13 +131,17 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
                     return atLeastOneExchange;
                 }
                 atLeastOneExchange = true;
-                this.thermalEnergy -= lastExchange.triple.getMiddle();
+                this.thermalEnergy -= lastExchange.triple.getMiddle() * lastExchange.penalty;
                 this.inputFluidInventory.drain(drainable, true);
                 this.outputFluidInventory.fill(lastExchange.triple.getRight(), true);
             }
             if (atLeastOneExchange) break;
         }
         return atLeastOneExchange;
+    }
+
+    private double eutecticPenalty(Fluid fluid) {
+        return this.isAdvanced && !HeatExchangerRecipeHandler.isEutectic(fluid) ? 2 : 1;
     }
 
     protected void recoverEnergy() {
@@ -164,7 +167,7 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
     private double recoveryEfficiency(@NotNull MetaTileEntityMufflerHatch muffler) {
         double recovery = Math.max(0.1, muffler.getTier() * 0.1);
         recovery /= this.getMaintenanceDurationMultiplier();
-        return recovery * (this.isAdvanced ? 0.4 : 0.3);
+        return recovery * (this.isAdvanced ? 0.4 : 0.25);
     }
 
     protected static boolean isValidController(RecipeMapMultiblockController controller) {
@@ -401,14 +404,17 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         }
     }
 
-    protected static class Exchange {
+    protected class Exchange {
 
         public final Fluid inputFluid;
         public final Triple<Integer, Long, FluidStack> triple;
 
+        public final double penalty;
+
         public Exchange(Fluid inputFluid, Triple<Integer, Long, FluidStack> triple) {
             this.inputFluid = inputFluid;
             this.triple = triple;
+            this.penalty = eutecticPenalty(inputFluid);
         }
     }
 }

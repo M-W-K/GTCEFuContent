@@ -27,5 +27,7 @@ public final class GTCEFuCMaterialFlagAddition {
 
         Materials.MagnesiumDiboride.addFlags(MaterialFlags.GENERATE_DOUBLE_PLATE);
         Materials.ManganesePhosphide.addFlags(MaterialFlags.GENERATE_DENSE);
+
+        Materials.Asbestos.addFlags(MaterialFlags.GENERATE_DENSE);
     }
 }
