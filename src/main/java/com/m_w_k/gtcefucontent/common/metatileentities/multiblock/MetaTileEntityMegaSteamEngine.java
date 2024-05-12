@@ -307,8 +307,8 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     }
 
     @Override
-    public void runMufflerEffect(float xPos, float yPos, float zPos, float xSpd, float ySpd, float zSpd) {
-        this.getWorld().spawnParticle(EnumParticleTypes.CLOUD, xPos, yPos, zPos, xSpd, ySpd, zSpd);
+    public @NotNull EnumParticleTypes getMufflerParticle() {
+        return EnumParticleTypes.CLOUD;
     }
 
     public boolean hasValidVCU() {
@@ -386,7 +386,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
 
         private static final FluidStack LUBRICANT_STACK = GTCEFuCMaterials.VaporSeedRaw.getFluid(5);
 
-        protected MetaTileEntityMegaSteamEngine engine;
+        protected final MetaTileEntityMegaSteamEngine engine;
 
         public MSEMultiblockWorkableHandler(MetaTileEntityMegaSteamEngine tileEntity) {
             super(tileEntity);

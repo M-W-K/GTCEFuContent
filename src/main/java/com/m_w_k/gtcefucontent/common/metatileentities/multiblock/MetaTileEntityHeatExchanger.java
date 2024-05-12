@@ -804,14 +804,14 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
 
         @Override
-        public void writeInitialSyncData(PacketBuffer buf) {
+        public void writeInitialSyncData(@NotNull PacketBuffer buf) {
             super.writeInitialSyncData(buf);
             buf.writeBoolean(this.isActive);
             buf.writeBoolean(this.workingEnabled);
         }
 
         @Override
-        public void receiveInitialSyncData(PacketBuffer buf) {
+        public void receiveInitialSyncData(@NotNull PacketBuffer buf) {
             super.receiveInitialSyncData(buf);
             this.isActive = buf.readBoolean();
             this.workingEnabled = buf.readBoolean();

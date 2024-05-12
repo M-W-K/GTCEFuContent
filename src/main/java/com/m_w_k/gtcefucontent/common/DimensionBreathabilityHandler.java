@@ -50,8 +50,7 @@ public final class DimensionBreathabilityHandler {
                 for (String breath : breaths) {
                     switch (breath.charAt(0)) {
                         case 's' -> s = true;
-                        case 't' -> t = Integer.parseInt(breath.substring(1).trim());
-                        case 'r' -> r = Integer.parseInt(breath.substring(1).trim());
+                        case 't', 'r' -> t = Integer.parseInt(breath.substring(1).trim());
                     }
                 }
                 BreathabilityInfo info = new BreathabilityInfo(s, false, t, r);

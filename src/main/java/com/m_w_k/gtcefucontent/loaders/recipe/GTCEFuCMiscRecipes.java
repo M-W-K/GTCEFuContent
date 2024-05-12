@@ -1,8 +1,6 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import static gregtech.api.GTValues.*;
-import static gregtech.api.GTValues.LV;
-import static gregtech.api.GTValues.V;
 
 import java.util.Collection;
 

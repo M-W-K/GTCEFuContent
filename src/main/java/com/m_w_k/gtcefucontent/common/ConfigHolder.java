@@ -4,6 +4,7 @@ import net.minecraftforge.common.config.Config;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 
+@SuppressWarnings("CanBeFinal")
 @Config(modid = GTCEFuContent.MODID)
 public class ConfigHolder {
 

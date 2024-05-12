@@ -31,12 +31,12 @@ public class SimpleGasMask implements IArmorLogic {
 
             @Override
             public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-                return onRightClick(world, player, hand);
+                return onRightClick(player, hand);
             }
         });
     }
 
-    public ActionResult<ItemStack> onRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onRightClick(EntityPlayer player, EnumHand hand) {
         if (player.getHeldItem(hand).getItem() instanceof ArmorMetaItem) {
             ItemStack armor = player.getHeldItem(hand);
             if (armor.getItem() instanceof ArmorMetaItem &&

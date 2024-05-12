@@ -6,7 +6,7 @@ public class InterpolatingPoint {
 
     protected static final int PATH_TIME = 200;
 
-    protected float timeRandomMax = 0;
+    protected float timeRandomMax;
     protected float randomPathTime;
 
     protected float currentPathTime = 0;
