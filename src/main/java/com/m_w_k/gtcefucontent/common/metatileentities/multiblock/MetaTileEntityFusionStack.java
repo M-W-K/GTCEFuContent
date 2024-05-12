@@ -579,11 +579,10 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
 
             // Limit the number of OCs to the difference in fusion reactor tier.
             // However, effective tier goes up by two per for fusion stacks.
-            // In addition, the recipemap euToStart doubles every tier
+            // This is compensated for by the euToStart doubling as well.
             long euToStart = storage.getRecipePropertyValue(FusionEUToStartProperty.getInstance(), 0L);
-            int startEUFactor = (int) Math.pow(2, MetaTileEntityFusionStack.this.tier(1));
-            int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart / startEUFactor);
-            if (fusionTier != 0) fusionTier -= MetaTileEntityFusionStack.this.tier(2);
+            int fusionTier = FusionEUToStartProperty.getFusionTier(euToStart);
+            if (fusionTier != 0) fusionTier = MetaTileEntityFusionStack.this.tier(2) - fusionTier;
             values[2] = Math.min(fusionTier, values[2]);
         }
 
@@ -591,7 +590,13 @@ public class MetaTileEntityFusionStack extends RecipeMapMultiblockController imp
         public long getMaxVoltage() {
             // Increase the tier-lock voltage twice as fast as normal fusion
             // UEV, UXV, MAX
-            return Math.min(GTValues.V[MetaTileEntityFusionStack.this.tier(2)], super.getMaxVoltage());
+            return Math.min(GTValues.V[MetaTileEntityFusionStack.this.tier(2)], this.getSumMaxVoltage());
+        }
+
+        private long getSumMaxVoltage() {
+            // restore old logic of sum voltage across all hatches.
+            // fusion stacks rely on excessive number of UHV hatches since UHV-exceeding hatches aren't available.
+            return inputEnergyContainers.getInputVoltage();
         }
 
         @Override
