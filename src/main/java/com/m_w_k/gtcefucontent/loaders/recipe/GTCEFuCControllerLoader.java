@@ -238,6 +238,6 @@ public class GTCEFuCControllerLoader {
                         .researchStack(GTCEFuCMetaTileEntities.STAR_SIPHON.getStackForm())
                         .CWUt(576)
                         .EUt(GTValues.VA[GTValues.UEV]))
-                .duration(1600).EUt(GTValues.VA[GTValues.UIV]).buildAndRegister();
+                .duration(1600).EUt(GTValues.VA[GTValues.UEV]).buildAndRegister();
     }
 }
