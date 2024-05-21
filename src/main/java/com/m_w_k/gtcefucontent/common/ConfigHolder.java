@@ -45,4 +45,8 @@ public class ConfigHolder {
      * quark suite boots w/ radiation 18
      * quark suite adv. chest w/ radiation 52
      */
+
+    @Config.Comment({ "Whether to override ProjectEX collector & relay recipes with gregified ones." })
+    @Config.RequiresMcRestart
+    public static boolean overrideProjectEXGeneration = true;
 }

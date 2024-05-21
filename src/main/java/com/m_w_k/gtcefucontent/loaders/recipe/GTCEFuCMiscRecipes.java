@@ -185,7 +185,6 @@ public final class GTCEFuCMiscRecipes {
     }
 
     public static void initPost() {
-        GTCEFuContent.log("Removing recipes, DON'T BE SCARED OF FML's WARNING ABOUT DANGEROUS ALTERNATIVE PREFIX");
         ModHandler.removeRecipeByName("projectex:final_star_shard");
         ModHandler.removeRecipeByName("projectex:relay/final");
         ModHandler.removeRecipeByName("projectex:collector/final");

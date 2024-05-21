@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent;
 
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCCraftingRecipeLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -63,7 +64,9 @@ public final class GTCEFuContent {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         log("Beginning PostInit");
+        GTCEFuContent.log("Removing recipes, DON'T BE SCARED OF FML's WARNING ABOUT DANGEROUS ALTERNATIVE PREFIX");
         GTCEFuCMiscRecipes.initPost();
+        GTCEFuCCraftingRecipeLoader.initPost();
         log("PostInit complete");
     }
 
