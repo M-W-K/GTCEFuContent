@@ -1,29 +1,27 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import java.util.Set;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+
 import com.latmod.mods.projectex.block.EnumTier;
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.common.ConfigHolder;
-import gregtech.api.GTValues;
-import gregtech.api.GregTechAPI;
-import gregtech.api.unification.material.MarkerMaterials;
-import gregtech.api.unification.material.Material;
-import gregtech.common.metatileentities.MetaTileEntities;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
+import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.recipes.ModHandler;
+import gregtech.api.unification.material.MarkerMaterials;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
-import java.util.Set;
+import gregtech.common.metatileentities.MetaTileEntities;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class GTCEFuCCraftingRecipeLoader {
 
@@ -44,10 +42,11 @@ public class GTCEFuCCraftingRecipeLoader {
     }
 
     private static void emcGeneration() {
-        Material[] tiers = new Material[]{MarkerMaterials.Tier.ULV, MarkerMaterials.Tier.LV, MarkerMaterials.Tier.MV,
+        Material[] tiers = new Material[] { MarkerMaterials.Tier.ULV, MarkerMaterials.Tier.LV, MarkerMaterials.Tier.MV,
                 MarkerMaterials.Tier.HV, MarkerMaterials.Tier.EV, MarkerMaterials.Tier.IV, MarkerMaterials.Tier.LuV,
                 MarkerMaterials.Tier.ZPM, MarkerMaterials.Tier.UV, MarkerMaterials.Tier.UHV, MarkerMaterials.Tier.UEV,
-                MarkerMaterials.Tier.UIV, MarkerMaterials.Tier.UXV, MarkerMaterials.Tier.OpV, MarkerMaterials.Tier.MAX};
+                MarkerMaterials.Tier.UIV, MarkerMaterials.Tier.UXV, MarkerMaterials.Tier.OpV,
+                MarkerMaterials.Tier.MAX };
         // ULV to UHV in lowtier, to MAX in hightier
         for (int i = 0; i <= (GregTechAPI.isHighTier() ? GTValues.MAX : GTValues.UHV); i++) {
             EnumTier tier = EnumTier.byMeta(i);

@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent;
 
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCCraftingRecipeLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -18,6 +17,7 @@ import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityAntimatterCompressor;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityFusionStack;
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCCraftingRecipeLoader;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCMiscRecipes;
 
 @Mod(modid = GTCEFuContent.MODID,
