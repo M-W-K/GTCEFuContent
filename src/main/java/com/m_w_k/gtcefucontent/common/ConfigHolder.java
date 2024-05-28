@@ -46,7 +46,15 @@ public class ConfigHolder {
      * quark suite adv. chest w/ radiation 52
      */
 
-    @Config.Comment({ "Whether to override ProjectEX collector & relay recipes with gregified ones." })
+    @Config.Comment({ "Whether to override ProjectEX collector & relay recipes with gregified ones.",
+            "Default: true" })
     @Config.RequiresMcRestart
     public static boolean overrideProjectEXGeneration = true;
+
+
+    @Config.Comment({ "The multiplicative bonus per unique fuel used in the Sympathetic Combustor.",
+            "0 means no bonus, 100 means 100% extra efficiency per.",
+            "Default: 15" })
+    @Config.RangeInt(min = 0, max = 100)
+    public static int sympatheticCombustorBonus = 15;
 }

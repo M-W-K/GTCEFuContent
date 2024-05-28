@@ -11,7 +11,6 @@ public final class GTCEFuCRecipeLoader {
 
         GTCEFuCInfinityExtractorRecipes.init();
         GTCEFuCPneumaticInfuserRecipes.init();
-        GTCEFuCSympatheticCombustorRecipes.init();
         GTCEFuCStarSiphonRecipes.init();
         GTCEFuCAntimatterCompressorRecipes.init();
 

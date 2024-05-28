@@ -7,6 +7,14 @@ recipemap.infinity_extractor.name=Infinity Extractor
 
 gtcefucontent.machine.sympathetic_combustor.name=Sympathetic Combustor
 gtcefucontent.machine.sympathetic_combustor.tooltip=Extreme efficiency, at what cost?
+gtcefucontent.multiblock.sympathetic_combustor.efficiency=Efficiency Multiplier: %s
+gtcefucontent.multiblock.sympathetic_combustor.enhancement=Flame Enhancer Bonus: %s
+gtcefucontent.multiblock.sympathetic_combustor.enhancer=Flame Enhancer consumed for bonus: %s
+gtcefucontent.multiblock.sympathetic_combustor.throttle_increment=Increase throttle by §a+5%%§r/n§7Combustor can output less EU and consume less fuel (efficiency is not lost)
+gtcefucontent.multiblock.sympathetic_combustor.throttle_decrement=Decrease throttle by §c-5%%§r/n§7Combustor can output less EU and consume less fuel (efficiency is not lost)
+gtcefucontent.multiblock.sympathetic_combustor.throttle=Throttle: %s
+gtcefucontent.multiblock.sympathetic_combustor.progress=Recipe Progress
+gregtech.multiblock.sympathetic_combustor.description=A multiblock that accepts any combustible fuel, be it solid, liquid, or semisolid. Every unique fuel provided will cause a multiplicative efficiency bonus. When inputs are consumed, as many as available are consumed, with the restriction of only one solid fuel type per bus. The more balanced the EU contribution of the fuels, the higher the bonus. Flame Enhancer, when provided, applies a separate efficiency multiplier that can go up to 2x.
 recipemap.sympathetic_combustor.name=Sympathetic Combustor
 
 gtcefucontent.machine.pneumatic_infuser.name=Pneumatic Infuser

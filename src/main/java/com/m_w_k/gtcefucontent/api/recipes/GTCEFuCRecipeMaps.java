@@ -29,16 +29,6 @@ public final class GTCEFuCRecipeMaps {
             1, 1, 3, 1, new SimpleRecipeBuilder(), false)
                     .setSound(GTSoundEvents.BOILER);
 
-    public static final RecipeMap<FuelRecipeBuilder> SYMPATHETIC_COMBUSTOR_RECIPES = new RecipeMap<>(
-            "sympathetic_combustor",
-            3, 0, 6, 0, new FuelRecipeBuilder(), false)
-                    .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
-                    .setSlotOverlay(false, false, true, GuiTextures.INT_CIRCUIT_OVERLAY)
-                    .setSlotOverlay(false, true, GuiTextures.FURNACE_OVERLAY_2)
-                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
-                    .allowEmptyOutput()
-                    .setSound(GTSoundEvents.COMBUSTION);
-
     public static final RecipeMap<BlastRecipeBuilder> FORGING_FURNACE_RECIPES = new RecipeMap<>("forging_furnace",
             3, 3, 2, 1, new BlastRecipeBuilder(), false)
                     .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
