@@ -47,6 +47,12 @@ public final class GTCEFuCMiscRecipes {
                 .EUt((int) V[EV])
                 .buildAndRegister();
 
+        RecipeMaps.GAS_TURBINE_FUELS.recipeBuilder()
+                .fluidInputs(GTCEFuCMaterials.ChargedEnder.getFluid(1))
+                .duration(700)
+                .EUt((int) V[EV])
+                .buildAndRegister();
+
         RecipeMaps.LARGE_CHEMICAL_RECIPES.recipeBuilder()
                 .fluidInputs(Materials.LiquidAir.getFluid(60000), Materials.Water.getFluid(60000))
                 .input(OrePrefix.dust, Materials.Ash)
