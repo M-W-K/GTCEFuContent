@@ -49,4 +49,10 @@ public class HeatToConvertProperty extends RecipeProperty<Long> {
     public boolean hideDuration() {
         return true;
     }
+
+    @Override
+    public int getInfoHeight(Object value) {
+        // jank patch over bug where EUt, duration, and total EU still take up space
+        return 0;
+    }
 }
