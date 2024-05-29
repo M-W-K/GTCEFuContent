@@ -5,25 +5,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
-import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import com.m_w_k.gtcefucontent.common.ConfigHolder;
-import gregtech.api.capability.impl.EnergyContainerList;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.Widget;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.WidgetGroup;
-import gregtech.api.metatileentity.multiblock.*;
-import gregtech.api.pattern.PatternMatchContext;
-import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.util.GTUtility;
-import gregtech.api.util.TextComponentUtil;
-import gregtech.api.util.TextFormattingUtil;
-import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,28 +16,48 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
+import com.m_w_k.gtcefucontent.common.ConfigHolder;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
 import gregtech.api.GTValues;
+import gregtech.api.capability.impl.EnergyContainerList;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.Widget;
+import gregtech.api.gui.widgets.ClickButtonWidget;
+import gregtech.api.gui.widgets.WidgetGroup;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.*;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
+import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
+import gregtech.api.recipes.Recipe;
+import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import gregtech.common.blocks.*;
 import gregtech.common.metatileentities.MetaTileEntities;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBase implements IProgressBarMultiblock {
 
@@ -71,7 +72,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
 
     private int throttlePercentage = 100;
 
-    private static final int[] EMPTY = new int[] {0, 0};
+    private static final int[] EMPTY = new int[] { 0, 0 };
 
     public MetaTileEntitySympatheticCombustor(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId);
@@ -154,7 +155,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
             }
         }
 
-        for (var bus :getAbilities(MultiblockAbility.IMPORT_ITEMS)) {
+        for (var bus : getAbilities(MultiblockAbility.IMPORT_ITEMS)) {
             // one contributing item variant per bus
             ItemStack item = null;
             for (int slot = 0; slot < bus.getSlots(); slot++) {
@@ -255,13 +256,13 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
             }
         }
         if (eu == 0) return EMPTY;
-        else return new int[] {eu, quant};
+        else return new int[] { eu, quant };
     }
 
     protected int[] determineItemBurnability(ItemStack item, long maxVoltage) {
         if (maxVoltage < GTValues.V[GTValues.LV]) return EMPTY;
         // 10 EU per burntime, min tier of LV
-        return new int[] {TileEntityFurnace.getItemBurnTime(item) * 10 * item.getCount(), item.getCount()};
+        return new int[] { TileEntityFurnace.getItemBurnTime(item) * 10 * item.getCount(), item.getCount() };
     }
 
     private void incrementThrottle(Widget.ClickData clickData) {
@@ -322,9 +323,9 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return iMultiblockPart instanceof IMultiblockAbilityPart<?> abilityPart &&
+        return iMultiblockPart instanceof IMultiblockAbilityPart<?>abilityPart &&
                 abilityPart.getAbility() == MultiblockAbility.OUTPUT_ENERGY ? Textures.PLASCRETE :
-                Textures.STABLE_TITANIUM_CASING;
+                        Textures.STABLE_TITANIUM_CASING;
     }
 
     @Override

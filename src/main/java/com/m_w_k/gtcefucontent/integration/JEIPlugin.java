@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.integration;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
+
 import gregtech.api.GTValues;
 import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -24,10 +25,14 @@ public class JEIPlugin implements IModPlugin {
     @Override
     public void register(IModRegistry registry) {
         guiHelper = registry.getJeiHelpers().getGuiHelper();
-        registerRecipeMapCatalyst(registry, RecipeMaps.COMBUSTION_GENERATOR_FUELS, GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR);
-        registerRecipeMapCatalyst(registry, RecipeMaps.GAS_TURBINE_FUELS, GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR);
-        registerRecipeMapCatalyst(registry, RecipeMaps.SEMI_FLUID_GENERATOR_FUELS, GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR);
-        registry.addRecipeCatalyst(GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR.getStackForm(), VanillaRecipeCategoryUid.FUEL);
+        registerRecipeMapCatalyst(registry, RecipeMaps.COMBUSTION_GENERATOR_FUELS,
+                GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR);
+        registerRecipeMapCatalyst(registry, RecipeMaps.GAS_TURBINE_FUELS,
+                GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR);
+        registerRecipeMapCatalyst(registry, RecipeMaps.SEMI_FLUID_GENERATOR_FUELS,
+                GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR);
+        registry.addRecipeCatalyst(GTCEFuCMetaTileEntities.SYMPATHETIC_COMBUSTOR.getStackForm(),
+                VanillaRecipeCategoryUid.FUEL);
 
         for (var mte : GTCEFuCMetaTileEntities.HEAT_EXCHANGER) {
             registerRecipeMapCatalyst(registry, GTCEFuCRecipeMaps.EXCHANGER_PLACEHOLDER_MAP, mte);

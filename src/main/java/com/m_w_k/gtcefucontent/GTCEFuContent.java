@@ -1,19 +1,5 @@
 package com.m_w_k.gtcefucontent;
 
-import gregtech.api.GTValues;
-import gregtech.api.gui.resources.TextureArea;
-import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.SteamMetaTileEntity;
-import gregtech.api.recipes.RecipeMap;
-import gregtech.api.recipes.RecipeMaps;
-import gregtech.api.recipes.category.GTRecipeCategory;
-import gregtech.api.recipes.machines.RecipeMapFurnace;
-import gregtech.integration.jei.recipe.RecipeMapCategory;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.IModPlugin;
-import mezz.jei.api.IModRegistry;
-import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;

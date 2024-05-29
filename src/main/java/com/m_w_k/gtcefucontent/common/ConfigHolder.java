@@ -51,7 +51,6 @@ public class ConfigHolder {
     @Config.RequiresMcRestart
     public static boolean overrideProjectEXGeneration = true;
 
-
     @Config.Comment({ "The multiplicative bonus per unique fuel used in the Sympathetic Combustor.",
             "0 means no bonus, 100 means 100% extra efficiency per.",
             "Default: 15" })
