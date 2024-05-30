@@ -211,6 +211,9 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
             this.fireEnhancerConsumed = desiredEnhancer - unsatisfiedEnhancer;
             this.fireEnhancerMult = 1 + (double) this.fireEnhancerConsumed / desiredEnhancer;
             eu *= this.fireEnhancerMult;
+        } else {
+            this.fireEnhancerMult = 1;
+            this.fireEnhancerConsumed = 0;
         }
 
         this.remainingEU += eu;
@@ -343,15 +346,18 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
                                 "gregtech.multiblock.turbine.energy_per_tick",
                                 energyFormatted, voltageName));
 
-                        // Efficiency line
-                        ITextComponent efficiency = TextComponentUtil.stringWithColor(
-                                TextFormatting.AQUA,
-                                TextFormattingUtil.formatNumbers(this.efficiencyMult) + "x");
+                        if (this.efficiencyMult != 1) {
+                            // Efficiency line
+                            ITextComponent efficiency = TextComponentUtil.stringWithColor(
+                                    TextFormatting.AQUA,
+                                    TextFormattingUtil.formatNumbers(this.efficiencyMult) + "x");
 
-                        tl.add(TextComponentUtil.translationWithColor(
-                                TextFormatting.GRAY,
-                                "gtcefucontent.multiblock.sympathetic_combustor.efficiency",
-                                efficiency));
+                            tl.add(TextComponentUtil.translationWithColor(
+                                    TextFormatting.GRAY,
+                                    "gtcefucontent.multiblock.sympathetic_combustor.efficiency",
+                                    efficiency));
+                        }
+
                         if (this.fireEnhancerMult != 1) {
                             // Fire Enhancement line
                             ITextComponent enhancement = TextComponentUtil.stringWithColor(
