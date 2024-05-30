@@ -121,11 +121,11 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
     // I know this is a jank abomination but idc
     protected boolean doEUOutput() {
         if (this.remainingEU <= 0) return true;
-        long output = Math.min(energyContainer.getOutputVoltage(), this.remainingEU) * this.throttlePercentage / 100;
+        long output = Math.min(this.getOutputVoltage(), this.remainingEU) * this.throttlePercentage / 100;
         long energyOutput = this.energyContainer.addEnergy(output);
         // always consume at least 1 amp of our output voltage, affected by throttle
         this.remainingEU -= Math.max(energyOutput,
-                GTValues.V[GTUtility.getFloorTierByVoltage(this.energyContainer.getOutputVoltage())] *
+                GTValues.V[GTUtility.getFloorTierByVoltage(this.getOutputVoltage())] *
                         this.throttlePercentage / 100);
         this.remainingEU = Math.max(this.remainingEU, 0);
         // if the next output tick would not provide the full output, consume inputs.
@@ -332,7 +332,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
                 .setWorkingStatus(true, isActive())
                 .addCustom(tl -> {
                     if (isStructureFormed()) {
-                        long outVoltage = this.energyContainer.getOutputVoltage() * this.throttlePercentage / 100;
+                        long outVoltage = this.getOutputVoltage() * this.throttlePercentage / 100;
                         // EU line
                         String energyFormatted = TextFormattingUtil.formatNumbers(outVoltage);
                         ITextComponent voltageName = new TextComponentString(
@@ -386,6 +386,10 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
                     }
                 })
                 .addWorkingStatusLine();
+    }
+
+    private long getOutputVoltage() {
+        return this.energyContainer.getOutputVoltage() * this.energyContainer.getOutputAmperage();
     }
 
     private TextFormatting getNumberColor(int number) {
