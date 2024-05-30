@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.capability.GregtechDataCodes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -100,9 +101,6 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
         resetTileAbilities();
         this.highestHatchVoltage = 0;
         this.throttlePercentage = 100;
-        this.efficiencyMult = 1;
-        this.fireEnhancerMult = 1;
-        this.fireEnhancerConsumed = 0;
     }
 
     private void initializeAbilities() {
@@ -334,7 +332,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
                 .setWorkingStatus(true, isActive())
                 .addCustom(tl -> {
                     if (isStructureFormed()) {
-                        long outVoltage = isActive() ? energyContainer.getOutputVoltage() : 0;
+                        long outVoltage = this.energyContainer.getOutputVoltage() * this.throttlePercentage / 100;
                         // EU line
                         String energyFormatted = TextFormattingUtil.formatNumbers(outVoltage);
                         ITextComponent voltageName = new TextComponentString(
@@ -431,7 +429,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public NBTTagCompound writeToNBT(@NotNull NBTTagCompound data) {
         data.setInteger("ThrottlePercentage", throttlePercentage);
         data.setLong("RemainingEU", remainingEU);
         data.setLong("MaxEU", maxEU);
@@ -442,7 +440,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(@NotNull NBTTagCompound data) {
         throttlePercentage = data.getInteger("ThrottlePercentage");
         remainingEU = data.getLong("RemainingEU");
         maxEU = data.getLong("MaxEU");
@@ -455,6 +453,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
     @Override
     public void writeInitialSyncData(PacketBuffer buf) {
         super.writeInitialSyncData(buf);
+        buf.writeBoolean(lastActive);
         buf.writeVarInt(throttlePercentage);
         buf.writeDouble(efficiencyMult);
         buf.writeDouble(fireEnhancerMult);
@@ -464,6 +463,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
     @Override
     public void receiveInitialSyncData(PacketBuffer buf) {
         super.receiveInitialSyncData(buf);
+        lastActive = buf.readBoolean();
         throttlePercentage = buf.readVarInt();
         efficiencyMult = buf.readDouble();
         fireEnhancerMult = buf.readDouble();
@@ -494,7 +494,8 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
 
     @Override
     public boolean isActive() {
-        return this.remainingEU > 0;
+        if (getHolder() != null && getHolder().isClientSide()) return this.isStructureFormed() && this.lastActive;
+        else return this.isStructureFormed() && this.remainingEU > 0;
     }
 
     @Override
@@ -507,7 +508,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
         public final Item item;
         public final int meta;
 
-        public ItemData(ItemStack stack) {
+        public ItemData(@NotNull ItemStack stack) {
             this.item = stack.getItem();
             this.meta = stack.getMetadata();
         }
