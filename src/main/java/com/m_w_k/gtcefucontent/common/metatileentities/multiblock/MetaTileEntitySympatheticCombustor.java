@@ -123,10 +123,10 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
         if (this.remainingEU <= 0) return true;
         long output = Math.min(this.getOutputVoltage(), this.remainingEU) * this.throttlePercentage / 100;
         long energyOutput = this.energyContainer.addEnergy(output);
-        // always consume at least 1 amp of our output voltage, affected by throttle
+        // always consume at least 1 amp of our output voltage, affected by throttle and maintenance bonus
         this.remainingEU -= Math.max(energyOutput,
                 GTValues.V[GTUtility.getFloorTierByVoltage(this.getOutputVoltage())] *
-                        this.throttlePercentage / 100);
+                        this.throttlePercentage / 100) * this.getMaintenanceDurationMultiplier();
         this.remainingEU = Math.max(this.remainingEU, 0);
         // if the next output tick would not provide the full output, consume inputs.
         return this.remainingEU - output <= 0;
