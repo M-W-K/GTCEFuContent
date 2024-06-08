@@ -50,7 +50,7 @@ public final class GTCEFuCMaterials {
      * <br>
      * int[0] - The minimum temperature of the alloy
      * <br>
-     * int[1] - The default temperature  of the alloy
+     * int[1] - The default temperature of the alloy
      * <br>
      * int[2] - The maximum temperature of the alloy
      * <br>
@@ -74,7 +74,7 @@ public final class GTCEFuCMaterials {
      * <br>
      * int[0] - The minimum temperature of the alloy
      * <br>
-     * int[1] - The default temperature  of the alloy
+     * int[1] - The default temperature of the alloy
      * <br>
      * int[2] - The maximum temperature of the alloy
      * <br>

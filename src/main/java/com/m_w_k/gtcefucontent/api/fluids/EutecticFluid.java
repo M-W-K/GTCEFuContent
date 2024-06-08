@@ -1,8 +1,23 @@
 package com.m_w_k.gtcefucontent.api.fluids;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.google.common.base.Preconditions;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
+
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.FluidState;
 import gregtech.api.fluids.GTFluid;
@@ -10,21 +25,6 @@ import gregtech.api.fluids.GTFluidRegistration;
 import gregtech.api.fluids.store.FluidStorageKey;
 import gregtech.api.unification.material.Material;
 import gregtech.api.util.FluidTooltipUtil;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static gregtech.api.fluids.FluidConstants.CRYOGENIC_FLUID_THRESHOLD;
 
 public class EutecticFluid extends GTFluid.GTMaterialFluid {
 
@@ -107,7 +107,8 @@ public class EutecticFluid extends GTFluid.GTMaterialFluid {
             name = key.getRegistryNameFor(material.getName());
         }
 
-        private void determineTextures(@Nullable Material material, @Nullable FluidStorageKey key, @NotNull String modid) {
+        private void determineTextures(@Nullable Material material, @Nullable FluidStorageKey key,
+                                       @NotNull String modid) {
             if (material != null && key != null) {
                 if (hasCustomStill) {
                     still = new ResourceLocation(modid, "blocks/fluids/fluid." + name);

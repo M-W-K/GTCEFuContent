@@ -1,19 +1,20 @@
 package com.m_w_k.gtcefucontent.api.recipes;
 
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
+
 import java.util.*;
 
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public final class HeatExchangerRecipeHandler {
 
@@ -31,7 +32,8 @@ public final class HeatExchangerRecipeHandler {
     }
 
     /**
-     * Registers a two-way heat exchange. Use this overload for simple fluid heating and cooling. Do not do this for Eutectics!
+     * Registers a two-way heat exchange. Use this overload for simple fluid heating and cooling. Do not do this for
+     * Eutectics!
      * 
      * @param fluidA          The first fluid
      * @param fluidB          The second fluid
@@ -146,7 +148,7 @@ public final class HeatExchangerRecipeHandler {
      */
     @Nullable
     public static HalfExchangeData getHeatExchange(FluidStack fluid, ExchangeType type,
-                                                                    int temperatureLimit) {
+                                                   int temperatureLimit) {
         if (type == ExchangeType.HEATING) {
             if (getTemp(fluid) >= temperatureLimit) return null;
             HalfExchangeData data = getHeating(fluid);
@@ -254,7 +256,8 @@ public final class HeatExchangerRecipeHandler {
         if (mapped != null) return mapped;
         if (fluid.getFluid() instanceof EutecticFluid eutectic && eutectic.getMaxTemperature() > getTemp(fluid)) {
             fluid = new FluidStack(fluid, 1);
-            return new HalfExchangeData(fluid, eutectic.getWithTemperature(fluid, Integer.MAX_VALUE), eutectic.getThermalCapacity());
+            return new HalfExchangeData(fluid, eutectic.getWithTemperature(fluid, Integer.MAX_VALUE),
+                    eutectic.getThermalCapacity());
         } else return null;
     }
 
@@ -326,5 +329,4 @@ public final class HeatExchangerRecipeHandler {
     public static boolean isEutectic(Fluid fluid) {
         return fluid instanceof EutecticFluid;
     }
-
 }

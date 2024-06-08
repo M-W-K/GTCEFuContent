@@ -1,13 +1,12 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
+
 import java.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.api.recipes.FullExchangeData;
-import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +20,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
 import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
 import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbility;
+import com.m_w_k.gtcefucontent.api.recipes.FullExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
@@ -73,9 +72,8 @@ import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                                          implements IDataInfoProvider, IProgressBarMultiblock {

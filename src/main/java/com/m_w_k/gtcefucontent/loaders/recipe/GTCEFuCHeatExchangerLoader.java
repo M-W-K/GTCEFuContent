@@ -1,18 +1,19 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
-import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
@@ -22,9 +23,6 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
-import net.minecraftforge.fluids.FluidStack;
-
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 public final class GTCEFuCHeatExchangerLoader {
 

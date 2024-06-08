@@ -5,7 +5,6 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.capability.GregtechDataCodes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -126,7 +125,8 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
         // always consume at least 1 amp of our output voltage, affected by throttle and maintenance bonus
         this.remainingEU -= Math.max(energyOutput,
                 GTValues.V[GTUtility.getFloorTierByVoltage(this.getOutputVoltage())] *
-                        this.throttlePercentage / 100) * this.getMaintenanceDurationMultiplier();
+                        this.throttlePercentage / 100) *
+                this.getMaintenanceDurationMultiplier();
         this.remainingEU = Math.max(this.remainingEU, 0);
         // if the next output tick would not provide the full output, consume inputs.
         return this.remainingEU - output <= 0;

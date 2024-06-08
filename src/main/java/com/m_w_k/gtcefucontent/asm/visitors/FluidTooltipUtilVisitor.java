@@ -1,10 +1,12 @@
 package com.m_w_k.gtcefucontent.asm.visitors;
 
-import gregtech.asm.util.ObfMapping;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import gregtech.asm.util.ObfMapping;
+
 public class FluidTooltipUtilVisitor extends MethodVisitor implements Opcodes {
+
     public static final String TARGET_CLASS_NAME = "gregtech/api/util/FluidTooltipUtil";
     public static final ObfMapping TARGET_METHOD = new ObfMapping(TARGET_CLASS_NAME, "getFluidTooltip",
             targetSignature());

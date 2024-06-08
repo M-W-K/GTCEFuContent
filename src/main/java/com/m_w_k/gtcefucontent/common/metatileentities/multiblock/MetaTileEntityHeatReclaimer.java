@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
+import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 

@@ -1,8 +1,8 @@
 package com.m_w_k.gtcefucontent.api.recipes;
 
-import net.minecraftforge.fluids.FluidStack;
-
 import java.math.BigInteger;
+
+import net.minecraftforge.fluids.FluidStack;
 
 public class FullExchangeData {
 

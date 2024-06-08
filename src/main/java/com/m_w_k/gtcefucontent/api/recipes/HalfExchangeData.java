@@ -1,12 +1,14 @@
 package com.m_w_k.gtcefucontent.api.recipes;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Contract;
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 import javax.annotation.Nullable;
 
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.jetbrains.annotations.Contract;
+
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 
 public class HalfExchangeData {
 

@@ -2,6 +2,8 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.*;
 
+import net.minecraftforge.fluids.FluidStack;
+
 import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
@@ -14,8 +16,6 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 public final class GTCEFuCEutecticLoader {
 
