@@ -1,19 +1,19 @@
 package com.m_w_k.gtcefucontent.api.recipes;
 
-import java.math.BigInteger;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.util.Tuple;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.apache.commons.lang3.tuple.Triple;
-
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
+
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 public final class HeatExchangerRecipeHandler {
 
@@ -22,52 +22,67 @@ public final class HeatExchangerRecipeHandler {
      */
     public static final long HEU = GTCEFuCHeatExchangerLoader.WATER_TO_STEAM_ENERGY / 150;
 
-    private static final Map<Fluid, Tuple<FluidStack, long[]>> HEATING_MAP = new HashMap<>();
-    private static final Map<Fluid, Tuple<FluidStack, long[]>> COOLING_MAP = new HashMap<>();
-    private static final Set<String> EUTECTICS = new HashSet<>();
+    private static final Map<Fluid, HalfExchangeData> HEATING_MAP = new Object2ObjectOpenHashMap<>();
+    private static final Map<Fluid, HalfExchangeData> COOLING_MAP = new Object2ObjectOpenHashMap<>();
+    private static final Set<EutecticFluid> EUTECTICS = new ObjectOpenHashSet<>();
+
+    public static void registerEutectic(EutecticFluid fluid) {
+        EUTECTICS.add(fluid);
+    }
 
     /**
-     * Registers a two-way heat exchange. Use this overload for simple fluid heating and cooling.
+     * Registers a two-way heat exchange. Use this overload for simple fluid heating and cooling. Do not do this for Eutectics!
      * 
      * @param fluidA          The first fluid
      * @param fluidB          The second fluid
-     * @param thermalCapacity The energy required to increase the temp of fluid A by 1 degree,
-     *                        in order to reach fluid B, in units of J.
+     * @param thermalCapacity The energy required to increase/energy released by decreasing the temp of fluid A by 1
+     *                        degree,in order to reach fluid B, in units of J.
      *                        This means that 418600 units would increase the temperature of 1L water by 1°K,
      *                        as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
      *                        <br>
      *                        <br>
-     *                        Note that if this is negative,
-     *                        it would require thermal energy to cool fluid A into fluid B, and vice versa.
+     *                        Note that if this is negative when fluid B is hotter than fluid A,
+     *                        it would release thermal energy to heat fluid A into fluid B, and vice versa.
      */
     public static void registerHeatExchange(FluidStack fluidA, FluidStack fluidB, int thermalCapacity) {
         registerHeatExchange(fluidA, fluidB, thermalCapacity, true);
     }
 
     /**
-     * Registers a heat exchange. Use this overload for simple fluid heating and cooling.
+     * Registers a heat exchange. Use this overload for simple fluid heating and cooling. Do not do this for Eutectics!
      * 
      * @param fluidA          The first fluid
      * @param fluidB          The second fluid
-     * @param thermalCapacity The energy required to increase the temp of fluid A by 1 degree,
-     *                        in order to reach fluid B, in units of J.
+     * @param thermalCapacity The energy required to increase/energy released by decreasing the temp of fluid A by 1
+     *                        degree,in order to reach fluid B, in units of J.
      *                        This means that 418600 units would increase the temperature of 1L water by 1°K,
      *                        as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
      *                        <br>
      *                        <br>
-     *                        Note that if this is negative,
-     *                        it would require thermal energy to cool fluid A into fluid B, and vice versa.
+     *                        Note that if this is negative when fluid B is hotter than fluid A,
+     *                        it would release thermal energy to heat fluid A into fluid B, and vice versa.
      * @param isTwoWay        Whether the heat exchange should be reversible.
      */
     public static void registerHeatExchange(FluidStack fluidA, FluidStack fluidB, int thermalCapacity,
                                             boolean isTwoWay) {
-        int tempDifference = fluidB.getFluid().getTemperature() - fluidA.getFluid().getTemperature();
+        int tempDifference = getTemp(fluidB) - getTemp(fluidA);
         // If tempDifference is positive, then we are heating fluid, and vice versa.
-        registerHeatExchange(fluidA, fluidB, (long) tempDifference * thermalCapacity, isTwoWay);
+        // No zero-energy conversions, they would cause divide by 0 errors.
+        if (thermalCapacity == 0)
+            GTCEFuContent.log("Someone tried to register a zero-energy Heat Exchanger recipe. THIS IS INVALID!",
+                    GTCEFuContent.LogType.WARN);
+        else if (thermalCapacity > 0) {
+            HEATING_MAP.put(fluidA.getFluid(), new HalfExchangeData(fluidA, fluidB, thermalCapacity));
+            if (isTwoWay) COOLING_MAP.put(fluidB.getFluid(), new HalfExchangeData(fluidB, fluidA, thermalCapacity));
+        } else {
+            COOLING_MAP.put(fluidA.getFluid(), new HalfExchangeData(fluidA, fluidB, -thermalCapacity));
+            if (isTwoWay) HEATING_MAP.put(fluidB.getFluid(), new HalfExchangeData(fluidB, fluidA, -thermalCapacity));
+
+        }
     }
 
     /**
-     * Registers a two-way heat exchange. Use this overload for more complex conversions.
+     * Registers a two-way heat exchange. Use this overload for more complex conversions. Do not do this for Eutectics!
      * 
      * @param fluidA        The first fluid
      * @param fluidB        The second fluid
@@ -81,7 +96,7 @@ public final class HeatExchangerRecipeHandler {
     }
 
     /**
-     * Registers a heat exchange. Use this overload for more complex conversions.
+     * Registers a heat exchange. Use this overload for more complex conversions. Do not do this for Eutectics!
      * 
      * @param fluidA        The first fluid
      * @param fluidB        The second fluid
@@ -93,20 +108,8 @@ public final class HeatExchangerRecipeHandler {
      */
     public static void registerHeatExchange(FluidStack fluidA, FluidStack fluidB, long thermalEnergy,
                                             boolean isTwoWay) {
-        // No zero-energy conversions, they would cause divide by 0 errors.
-        if (thermalEnergy == 0)
-            GTCEFuContent.log("Someone tried to register a zero-energy Heat Exchanger recipe. THIS IS INVALID!",
-                    GTCEFuContent.LogType.WARN);
-        else if (thermalEnergy > 0) {
-            HEATING_MAP.put(fluidA.getFluid(), new Tuple<>(fluidB, new long[] { fluidA.amount, thermalEnergy }));
-            if (isTwoWay)
-                COOLING_MAP.put(fluidB.getFluid(), new Tuple<>(fluidA, new long[] { fluidB.amount, thermalEnergy }));
-        } else {
-            COOLING_MAP.put(fluidA.getFluid(), new Tuple<>(fluidB, new long[] { fluidA.amount, -thermalEnergy }));
-            if (isTwoWay)
-                HEATING_MAP.put(fluidB.getFluid(), new Tuple<>(fluidA, new long[] { fluidB.amount, -thermalEnergy }));
-
-        }
+        int tempDifference = getTemp(fluidB) - getTemp(fluidA);
+        registerHeatExchange(fluidA, fluidB, (int) (thermalEnergy / tempDifference), isTwoWay);
     }
 
     /**
@@ -138,121 +141,180 @@ public final class HeatExchangerRecipeHandler {
      * temperature limit.
      *
      * @param fluid The first fluid
-     * @param type  The direction of exchange. SHOULD NOT BE {@code ExchangeType.BOTH}
-     * @return A triple, where the first value is the required amount of input fluid, the second value is the required
-     *         thermal energy, and the third value is the output FluidStack. If the conversion cannot be done, returns
-     *         null.
+     * @param type  The direction of exchange. Should not be {@link ExchangeType#BOTH}
+     * @return the exchange data
      */
     @Nullable
-    public static Triple<Integer, Long, FluidStack> getHeatExchange(Fluid fluid, ExchangeType type,
+    public static HalfExchangeData getHeatExchange(FluidStack fluid, ExchangeType type,
                                                                     int temperatureLimit) {
-        Tuple<FluidStack, long[]> info = null;
         if (type == ExchangeType.HEATING) {
-            if (fluid.getTemperature() >= temperatureLimit) return null;
-            info = HEATING_MAP.get(fluid);
+            if (getTemp(fluid) >= temperatureLimit) return null;
+            HalfExchangeData data = getHeating(fluid);
+            if (data == null) return null;
             // We can't heat to more than the temperature limit
-            if (info.getFirst().getFluid().getTemperature() > temperatureLimit)
-                return null;
+            if (getTemp(data.out) > temperatureLimit) {
+                EutecticFluid eutectic = data.getEutectic();
+                if (eutectic != null) {
+                    FluidStack newOut = eutectic.getWithTemperature(data.out, temperatureLimit);
+                    if (getTemp(newOut) <= temperatureLimit) return HalfExchangeData.withNewOut(data, newOut);
+                }
+            }
         } else if (type == ExchangeType.COOLING) {
-            if (fluid.getTemperature() <= temperatureLimit) return null;
-            info = COOLING_MAP.get(fluid);
+            if (getTemp(fluid) <= temperatureLimit) return null;
+            HalfExchangeData data = getCooling(fluid);
+            if (data == null) return null;
             // We can't cool fluid to less than the temperature limit
-            if (info.getFirst().getFluid().getTemperature() < temperatureLimit)
-                return null;
+            if (getTemp(data.out) < temperatureLimit) {
+                EutecticFluid eutectic = data.getEutectic();
+                if (eutectic != null) {
+                    FluidStack newOut = eutectic.getWithTemperature(data.out, temperatureLimit);
+                    if (getTemp(newOut) >= temperatureLimit) return HalfExchangeData.withNewOut(data, newOut);
+                }
+            }
         }
-        if (info == null) return null;
-        return Triple.of((int) info.getSecond()[0], info.getSecond()[1], info.getFirst().copy());
+        return null;
     }
 
     /**
-     * Find out whether we can do a heat exchange with two fluids, and if so what are the mb values for the involved
-     * fluids.
+     * Find out whether we can do a heat exchange with two fluids, and if so return the exchange.
      * 
      * @param fluidA The first fluid
      * @param fluidB The second fluid
-     * @return A tuple of arrays, where the first array is the required amount of fluidA and fluidB respectively,
-     *         and the second array is the output FluidStacks in order. If the conversion cannot be done, returns null.
+     * @return the exchange data
      */
     @Nullable
-    public static Tuple<int[], FluidStack[]> getHeatExchange(Fluid fluidA, Fluid fluidB) {
-        int tempDifference = fluidB.getTemperature() - fluidA.getTemperature();
+    public static FullExchangeData getHeatExchange(FluidStack fluidA, FluidStack fluidB) {
+        int tempDifference = getTemp(fluidB) - getTemp(fluidA);
         if (tempDifference == 0) return null;
 
-        Tuple<FluidStack, long[]> A;
-        Tuple<FluidStack, long[]> B;
+        HalfExchangeData A;
+        HalfExchangeData B;
 
         boolean heatA = tempDifference > 0;
 
         if (heatA) {
             // Heating A, Cooling B
-            A = HEATING_MAP.get(fluidA);
-            B = COOLING_MAP.get(fluidB);
+            A = getHeating(fluidA);
+            B = getCooling(fluidB);
         } else {
             // Cooling A, Heating B
-            A = COOLING_MAP.get(fluidA);
-            B = HEATING_MAP.get(fluidB);
+            A = getCooling(fluidA);
+            B = getHeating(fluidB);
         }
 
         if (A == null || B == null) return null;
 
         if (heatA) {
             // We can't heat A to more than B's starting temp, and we can't cool B to less than A's starting temp
-            if (A.getFirst().getFluid().getTemperature() > fluidB.getTemperature() ||
-                    B.getFirst().getFluid().getTemperature() < fluidA.getTemperature())
-                return null;
+            int bIn = getTemp(B.in);
+            if (getTemp(A.out) > bIn) {
+                EutecticFluid eutectic = A.getEutectic();
+                if (eutectic != null) {
+                    FluidStack newOut = eutectic.getWithTemperature(A.out, bIn);
+                    if (getTemp(newOut) > bIn) return null;
+                    else A = HalfExchangeData.withNewOut(A, newOut);
+                } else return null;
+            }
+            int aIn = getTemp(A.in);
+            if (getTemp(B.out) < aIn) {
+                EutecticFluid eutectic = B.getEutectic();
+                if (eutectic != null) {
+                    FluidStack newOut = eutectic.getWithTemperature(B.out, bIn);
+                    if (getTemp(newOut) < bIn) return null;
+                    else B = HalfExchangeData.withNewOut(B, newOut);
+                } else return null;
+            }
         } else {
             // We can't cool A to less than B's starting temp, and we can't heat B to more than A's starting temp
-            if (A.getFirst().getFluid().getTemperature() < fluidB.getTemperature() ||
-                    B.getFirst().getFluid().getTemperature() > fluidA.getTemperature())
-                return null;
+            int bIn = getTemp(B.in);
+            if (getTemp(A.out) < bIn) {
+                EutecticFluid eutectic = A.getEutectic();
+                if (eutectic != null) {
+                    FluidStack newOut = eutectic.getWithTemperature(A.out, bIn);
+                    if (getTemp(newOut) < bIn) return null;
+                    else A = HalfExchangeData.withNewOut(A, newOut);
+                } else return null;
+            }
+            int aIn = getTemp(A.in);
+            if (getTemp(B.out) > aIn) {
+                EutecticFluid eutectic = B.getEutectic();
+                if (eutectic != null) {
+                    FluidStack newOut = eutectic.getWithTemperature(B.out, bIn);
+                    if (getTemp(newOut) > bIn) return null;
+                    else B = HalfExchangeData.withNewOut(B, newOut);
+                } else return null;
+            }
         }
 
-        long factorA = A.getSecond()[1];
-        long factorB = B.getSecond()[1];
-        long gcd = BigInteger.valueOf(factorA).gcd(BigInteger.valueOf(factorB)).intValue();
-        factorA /= gcd;
-        factorB /= gcd;
-        // say A's conversion took 180 energy units and B's conversion gave 120.
-        // Now we have 3 for A, 2 for B, and a gcd of 60.
-        int amountA = (int) (A.getSecond()[0] * factorA);
-        int amountB = (int) (B.getSecond()[0] * factorB);
-        FluidStack outA = new FluidStack(A.getFirst(), (int) (A.getFirst().amount * factorA));
-        FluidStack outB = new FluidStack(B.getFirst(), (int) (B.getFirst().amount * factorB));
-        return new Tuple<>(new int[] { amountA, amountB }, new FluidStack[] { outA, outB });
+        return new FullExchangeData(A, B);
+    }
+
+    private static HalfExchangeData getHeating(FluidStack fluid) {
+        HalfExchangeData mapped = HEATING_MAP.get(fluid.getFluid());
+        if (mapped != null) return mapped;
+        if (fluid.getFluid() instanceof EutecticFluid eutectic && eutectic.getMaxTemperature() > getTemp(fluid)) {
+            fluid = new FluidStack(fluid, 1);
+            return new HalfExchangeData(fluid, eutectic.getWithTemperature(fluid, Integer.MAX_VALUE), eutectic.getThermalCapacity());
+        } else return null;
+    }
+
+    private static HalfExchangeData getCooling(FluidStack fluid) {
+        HalfExchangeData mapped = COOLING_MAP.get(fluid.getFluid());
+        if (mapped != null) return mapped;
+        if (fluid.getFluid() instanceof EutecticFluid eutectic && eutectic.getMinTemperature() < getTemp(fluid)) {
+            fluid = new FluidStack(fluid, 1);
+            return new HalfExchangeData(fluid, eutectic.getWithTemperature(fluid, 0), eutectic.getThermalCapacity());
+        } else return null;
     }
 
     /**
-     * Gets a copy of the cooling map. The key is the fluid the exchange takes in,
-     * the FluidStack is the fluid the exchange puts out,
-     * and the long[] encodes the amount of input fluid and the thermal energy of the exchange.
+     * Gets a copy of the cooling map.
      * 
      * @return Copy of the cooling map.
      */
-    public static Map<Fluid, Tuple<FluidStack, long[]>> getCoolingMapCopy() {
+    public static Map<Fluid, HalfExchangeData> getCoolingMapCopy() {
         // We don't want people to be able to modify the map directly
-        return new HashMap<>(COOLING_MAP);
+        return new Object2ObjectOpenHashMap<>(COOLING_MAP);
     }
 
     /**
-     * Gets a copy of the heating map. The key is the fluid the exchange takes in,
-     * the FluidStack is the fluid the exchange puts out,
-     * and the long[] encodes the amount of input fluid and the thermal energy of the exchange.
-     * 
+     * Gets a copy of the heating map.
+     *
      * @return Copy of the heating map.
      */
-    public static Map<Fluid, Tuple<FluidStack, long[]>> getHeatingMapCopy() {
+    public static Map<Fluid, HalfExchangeData> getHeatingMapCopy() {
         // We don't want people to be able to modify the map directly
-        return new HashMap<>(HEATING_MAP);
+        return new Object2ObjectOpenHashMap<>(HEATING_MAP);
     }
 
     /**
-     * Register one or more fluids as a variant of a eutectic alloy.
-     * 
-     * @param fluids The fluids to register.
+     * Gets a copy of the registered eutectics.
+     *
+     * @return Copy of the registered eutectics.
      */
-    @SuppressWarnings("SimplifyStreamApiCallChains")
-    public static void addEutectic(Fluid... fluids) {
-        EUTECTICS.addAll(Arrays.stream(fluids).map(Fluid::getName).collect(Collectors.toList()));
+    public static Set<EutecticFluid> getEutecticsCopy() {
+        // We don't want people to be able to modify the map directly
+        return new ObjectOpenHashSet<>(EUTECTICS);
+    }
+
+    /**
+     * Check if a given fluid can be cooled.
+     *
+     * @param fluid The fluid to check.
+     * @return Whether the fluid can be cooled.
+     */
+    public static boolean isCoolable(Fluid fluid) {
+        return isEutectic(fluid) || COOLING_MAP.containsKey(fluid);
+    }
+
+    /**
+     * Check if a given fluid can be heated.
+     *
+     * @param fluid The fluid to check.
+     * @return Whether the fluid can be heated.
+     */
+    public static boolean isHeatable(Fluid fluid) {
+        return isEutectic(fluid) || HEATING_MAP.containsKey(fluid);
     }
 
     /**
@@ -262,6 +324,7 @@ public final class HeatExchangerRecipeHandler {
      * @return Whether the fluid is a eutectic alloy.
      */
     public static boolean isEutectic(Fluid fluid) {
-        return EUTECTICS.contains(fluid.getName());
+        return fluid instanceof EutecticFluid;
     }
+
 }

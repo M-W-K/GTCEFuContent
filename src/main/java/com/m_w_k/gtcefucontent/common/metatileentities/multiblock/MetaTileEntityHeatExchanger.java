@@ -5,13 +5,15 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.api.recipes.FullExchangeData;
+import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -72,6 +74,8 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                                          implements IDataInfoProvider, IProgressBarMultiblock {
@@ -255,7 +259,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     @Override
     public boolean isActive() {
-        return this.heuHandler.isActive() && this.heuHandler.isWorkingEnabled();
+        return this.isStructureFormed() && this.heuHandler.isActive() && this.heuHandler.isWorkingEnabled();
     }
 
     public void addNotifiedHeuComponent(IHEUComponent component) {
@@ -457,6 +461,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             this.validGrid = false;
             this.pipeHolderVariant = null;
             this.reflectionCount = 0;
+            this.reflectingEndpoints.clear();
             this.pipeLength = 0;
             this.pipeProperty = null;
             this.pipeVolModifier = 0;
@@ -553,8 +558,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
         protected long getMaxHeat() {
             if (!this.validMaxHeatCache) {
-                // it seems counterintuitive, and it is.
-                long newMax = Math.min(this.fluidAThermalEnergy, this.fluidBThermalEnergy) * 10;
+                long newMax = Math.max(this.fluidAThermalEnergy, this.fluidBThermalEnergy) * 10;
                 // prevent shrinking the bar smaller than our current thermal energy
                 if (newMax >= this.thermalEnergy) {
                     this.cachedMaxEnergy = newMax;
@@ -580,7 +584,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 // kill the recipe if we run out of input
                 int actualDrain = tankIOHelper(new FluidStack(this.fluidAInitial, missingAmountI), true, true);
                 if (actualDrain != missingAmountI) {
-                    this.resetRecipe();
+                    this.needsNotification = true;
+                    this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
                     return false;
                 }
 
@@ -643,7 +648,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 this.validRecipe = false;
                 return false;
             }
-            Map<Fluid, Integer> tankFluids = getTankFluids();
+            var tankFluids = getTankFluids();
             if (this.validRecipe) {
                 if (this.recipeProgress <= 1 && !(hasFluid(this.fluidAInitial) && hasFluid(this.fluidBInitial) &&
                         canInsert(this.fluidAFinal) && canInsert(this.fluidBFinal))) {
@@ -675,33 +680,27 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
                 // figure out if there is an exchange we can do
 
-                Map<Fluid, Tuple<FluidStack, long[]>> cooling_map = HeatExchangerRecipeHandler.getCoolingMapCopy();
-                Map<Fluid, Tuple<FluidStack, long[]>> heating_map = HeatExchangerRecipeHandler.getHeatingMapCopy();
-                // iterate through coolables and heatables to see if we have a valid recipe
-                Tuple<int[], FluidStack[]> exchangeData = null;
-                for (Map.Entry<Fluid, Integer> coolable : tankFluids.entrySet()) {
+                FullExchangeData exchangeData = null;
+                for (FluidStack coolable : tankFluids.keySet()) {
                     // move on if this entry is not a coolable
-                    if (!cooling_map.containsKey(coolable.getKey())) continue;
+                    if (!HeatExchangerRecipeHandler.isCoolable(coolable.getFluid())) continue;
 
-                    for (Map.Entry<Fluid, Integer> heatable : tankFluids.entrySet()) {
+                    for (FluidStack heatable : tankFluids.keySet()) {
                         // move on if this entry is not a heatable
-                        if (!heating_map.containsKey(heatable.getKey())) continue;
+                        if (!HeatExchangerRecipeHandler.isHeatable(heatable.getFluid())) continue;
 
-                        exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable.getKey(), heatable.getKey());
+                        exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable, heatable);
                         if (exchangeData != null) {
                             // we found a recipe!
-                            Tuple<FluidStack, long[]> A = cooling_map.get(coolable.getKey());
-                            Tuple<FluidStack, long[]> B = heating_map.get(heatable.getKey());
-                            fluidAInitial = new FluidStack(coolable.getKey(), (int) A.getSecond()[0]);
-                            fluidBInitial = new FluidStack(heatable.getKey(), (int) B.getSecond()[0]);
-                            fluidAFinal = A.getFirst();
-                            fluidBFinal = B.getFirst();
-                            fluidAThermalEnergy = A.getSecond()[1];
-                            fluidBThermalEnergy = B.getSecond()[1];
+                            fluidAInitial = exchangeData.initialA;
+                            fluidBInitial = exchangeData.initialB;
+                            fluidAFinal = exchangeData.finalA;
+                            fluidBFinal = exchangeData.finalB;
+                            fluidAThermalEnergy = Math.abs(exchangeData.thermalEnergyA);
+                            fluidBThermalEnergy = Math.abs(exchangeData.thermalEnergyB);
                             this.requiredPipeLength = (int) Math.sqrt(GTCEFuCUtil.geometricMean(
-                                    fluidAInitial.getFluid().getTemperature() - fluidAFinal.getFluid().getTemperature(),
-                                    fluidBFinal.getFluid().getTemperature() -
-                                            fluidBInitial.getFluid().getTemperature()));
+                                    getTemp(fluidAInitial) - getTemp(fluidAFinal),
+                                    getTemp(fluidBFinal) - getTemp(fluidBInitial)));
                             recalcuateRecipeDuration();
                             this.validRecipe = true;
                             cacheValues();
@@ -746,7 +745,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             this.validMaxHeatCache = false;
         }
 
-        private boolean prevRecipeCheck(Map<Fluid, Integer> tankFluids) {
+        private boolean prevRecipeCheck(Map<FluidStack, FluidStack> tankFluids) {
             // if we are no longer compatible with the previous recipe fluids,
             // we should enable searching for a new recipe.
             if (prevRecipeInfo == null) return false;
@@ -759,10 +758,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.len");
                 return false;
             }
-            return tankFluids.containsKey(prevRecipeInfo[0].getFluid()) &&
-                    tankFluids.containsKey(prevRecipeInfo[1].getFluid()) &&
-                    tankFluids.containsKey(prevRecipeInfo[2].getFluid()) &&
-                    tankFluids.containsKey(prevRecipeInfo[3].getFluid());
+            return tankFluids.containsKey(prevRecipeInfo[0]) &&
+                    tankFluids.containsKey(prevRecipeInfo[1]) &&
+                    tankFluids.containsKey(prevRecipeInfo[2]) &&
+                    tankFluids.containsKey(prevRecipeInfo[3]);
         }
 
         private boolean badFlowCheck(FluidStack stack) {
@@ -770,8 +769,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
 
         private boolean hasFluid(FluidStack fluid) {
-            Map<Fluid, Integer> tankFluids = getTankFluids();
-            return tankFluids.containsKey(fluid.getFluid()) && tankFluids.get(fluid.getFluid()) >= fluid.amount;
+            FluidStack existing = getTankFluids().get(fluid);
+            return existing != null && existing.amount >= fluid.amount;
         }
 
         private boolean canInsert(FluidStack fluid) {
@@ -787,20 +786,24 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                     this.getMetaTileEntity().getMaintenanceDurationMultiplier());
         }
 
-        private Map<Fluid, Integer> getTankFluids() {
-            Map<Fluid, Integer> fluidMap = new HashMap<>();
+        // returns a map of fluidStacks mapped to themselves. Yep.
+        private Map<FluidStack, FluidStack> getTankFluids() {
+            Map<FluidStack, FluidStack> fluids = new Object2ObjectOpenHashMap<>();
             FluidStack stack;
             for (IFluidTankProperties tank : this.getMetaTileEntity().inputFluidInventory.getTankProperties()) {
                 stack = tank.getContents();
                 if (stack != null) {
-                    if (fluidMap.containsKey(stack.getFluid())) {
-                        fluidMap.put(stack.getFluid(), stack.amount + fluidMap.get(stack.getFluid()));
+                    // behold my witchcraft
+                    FluidStack existing = fluids.get(stack);
+                    if (existing != null) {
+                        existing.amount += stack.amount;
                     } else {
-                        fluidMap.put(stack.getFluid(), stack.amount);
+                        FluidStack copy = stack.copy();
+                        fluids.put(copy, copy);
                     }
                 }
             }
-            return fluidMap;
+            return fluids;
         }
 
         @Override

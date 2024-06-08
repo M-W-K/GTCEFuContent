@@ -1,8 +1,8 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import static com.m_w_k.gtcefucontent.api.fluids.GTCEFuCFluidStorageKeys.*;
 import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.*;
 
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
@@ -14,6 +14,8 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 public final class GTCEFuCEutecticLoader {
 
@@ -26,7 +28,7 @@ public final class GTCEFuCEutecticLoader {
                 .fluidInputs(Materials.SodiumPotassium.getFluid(1000))
                 .fluidInputs(Materials.Oxygen.getFluid(FluidStorageKeys.LIQUID, 500))
                 .fluidOutputs(
-                        EutecticCaesiumSodiumPotassium.getFluid(COLD, 1000),
+                        getEutectic(EutecticCaesiumSodiumPotassium, 1000, 0),
                         Materials.Oxygen.getFluid(500))
                 .duration(1500).EUt(GTValues.VA[GTValues.MV]).buildAndRegister();
 
@@ -39,7 +41,7 @@ public final class GTCEFuCEutecticLoader {
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .input(OrePrefix.dust, CaesiumChlorineMix, 17)
                 .fluidInputs(
-                        EutecticCaesiumSodiumPotassium.getFluid(COLD, 1000),
+                        getEutectic(EutecticCaesiumSodiumPotassium, 1000, 0),
                         Materials.NaquadahEnriched.getFluid(432),
                         Materials.Gallium.getFluid(576))
                 .output(OrePrefix.dust, Materials.Salt)
@@ -49,34 +51,41 @@ public final class GTCEFuCEutecticLoader {
         GTCEFuCHeatCapacityProperty property;
         for (Material eutectic : EutecticAlloys.keySet()) {
             property = eutectic.getProperty(GTCEFuCPropertyKey.HEAT_CAPACITY);
+            EutecticFluid fluid = (EutecticFluid) eutectic.getFluid();
 
-            int heatDiff = eutectic.getFluid().getTemperature() - eutectic.getFluid(COLD).getTemperature();
+            int heatDiff = fluid.getTemperature() - fluid.getMinTemperature();
             RecipeMaps.FLUID_HEATER_RECIPES.recipeBuilder()
-                    .fluidInputs(eutectic.getFluid(COLD, 10))
+                    .fluidInputs(fluid.stackWithTemperature(10, 0))
                     .fluidOutputs(eutectic.getFluid(10))
                     .duration((int) (10L * property.getThermalCapacityFluid() * heatDiff /
                             (30 * HeatExchangerRecipeHandler.HEU)))
                     .EUt(30).buildAndRegister();
             RecipeMaps.VACUUM_RECIPES.recipeBuilder()
                     .fluidInputs(eutectic.getFluid(100))
-                    .fluidOutputs(eutectic.getFluid(COLD, 100))
+                    .fluidOutputs(fluid.stackWithTemperature(100, 0))
                     .duration((int) (100L * property.getThermalCapacityFluid() * heatDiff /
                             (60 * HeatExchangerRecipeHandler.HEU)))
                     .EUt(120).buildAndRegister();
 
-            heatDiff = eutectic.getFluid(HOT).getTemperature() - eutectic.getFluid().getTemperature();
+            heatDiff = fluid.getMaxTemperature() - fluid.getTemperature();
             RecipeMaps.FLUID_HEATER_RECIPES.recipeBuilder()
                     .fluidInputs(eutectic.getFluid(10))
-                    .fluidOutputs(eutectic.getFluid(HOT, 10))
+                    .fluidOutputs(fluid.stackWithTemperature(10, Integer.MAX_VALUE))
                     .duration((int) (10L * property.getThermalCapacityFluid() * heatDiff /
                             (30 * HeatExchangerRecipeHandler.HEU)))
                     .EUt(30).buildAndRegister();
             RecipeMaps.VACUUM_RECIPES.recipeBuilder()
-                    .fluidInputs(eutectic.getFluid(HOT, 100))
+                    .fluidInputs(fluid.stackWithTemperature(100, Integer.MAX_VALUE))
                     .fluidOutputs(eutectic.getFluid(100))
                     .duration((int) (100L * property.getThermalCapacityFluid() * heatDiff /
                             (60 * HeatExchangerRecipeHandler.HEU)))
                     .EUt(120).buildAndRegister();
         }
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static FluidStack getEutectic(Material eutectic, int amount, int temperature) {
+        EutecticFluid fluid = (EutecticFluid) eutectic.getFluid();
+        return fluid.stackWithTemperature(amount, temperature);
     }
 }

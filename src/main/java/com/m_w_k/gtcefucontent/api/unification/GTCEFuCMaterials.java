@@ -1,7 +1,6 @@
 package com.m_w_k.gtcefucontent.api.unification;
 
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.fluidAtTemp;
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.*;
 import static gregtech.api.GTValues.LuV;
 import static gregtech.api.GTValues.VA;
 import static gregtech.api.unification.material.Materials.*;
@@ -16,7 +15,6 @@ import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.m_w_k.gtcefucontent.api.fluids.GTCEFuCFluidStorageKeys;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
@@ -50,13 +48,13 @@ public final class GTCEFuCMaterials {
      * <br>
      * String - The name of this eutectic alloy
      * <br>
-     * int[0] - The temperature of the cold alloy
+     * int[0] - The minimum temperature of the alloy
      * <br>
-     * int[1] - The temperature of the normal alloy
+     * int[1] - The default temperature  of the alloy
      * <br>
-     * int[1] - The temperature of the hot alloy
+     * int[2] - The maximum temperature of the alloy
      * <br>
-     * int[2] - The heat capacity, in units of J/L.
+     * int[3] - The heat capacity, in units of J/L.
      * This means that 418600 units would increase the temperature of 1L water by 1°K,
      * as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
      * A negative specific heat capacity violates the laws of thermodynamics.
@@ -74,13 +72,13 @@ public final class GTCEFuCMaterials {
      * <br>
      * Material - The Material of this eutectic alloy
      * <br>
-     * int[0] - The temperature of the cold alloy
+     * int[0] - The minimum temperature of the alloy
      * <br>
-     * int[1] - The temperature of the normal alloy
+     * int[1] - The default temperature  of the alloy
      * <br>
-     * int[2] - The temperature of the hot alloy
+     * int[2] - The maximum temperature of the alloy
      * <br>
-     * int[2] - The specific heat capacity, in units of J/L.
+     * int[3] - The specific heat capacity, in units of J/L.
      * This means that 418600 units would increase the temperature of 1L water by 1°K,
      * as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
      * A negative specific heat capacity violates the laws of thermodynamics.
@@ -226,8 +224,6 @@ public final class GTCEFuCMaterials {
      */
     public static Material.Builder eutectic(int id, @NotNull ResourceLocation resourceLocation, int[] eutecticStats) {
         return new Material.Builder(id, resourceLocation).iconSet(METALLIC)
-                .fluid(GTCEFuCFluidStorageKeys.COLD, fluidAtTemp(eutecticStats[0]))
-                .liquid(fluidAtTemp(eutecticStats[1]))
-                .fluid(GTCEFuCFluidStorageKeys.HOT, fluidAtTemp(eutecticStats[2]));
+                .liquid(eutecticWithStats(eutecticStats[0], eutecticStats[1], eutecticStats[2]));
     }
 }

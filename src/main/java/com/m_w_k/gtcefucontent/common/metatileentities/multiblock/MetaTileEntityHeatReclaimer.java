@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,7 +25,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,28 +112,27 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         for (IMultipleTankHandler.MultiFluidTankEntry multiFluidTankEntry : this.inputFluidInventory) {
             FluidStack fluid = multiFluidTankEntry.getFluid();
             if (fluid == null) break;
-            if (lastExchange == null || fluid.getFluid() != lastExchange.inputFluid) {
-                var exchange = HeatExchangerRecipeHandler.getHeatExchange(fluid.getFluid(),
+            if (lastExchange == null || fluid != lastExchange.in) {
+                var exchange = HeatExchangerRecipeHandler.getHeatExchange(fluid,
                         HeatExchangerRecipeHandler.ExchangeType.HEATING, this.maxTemp);
                 if (exchange == null) continue;
-                lastExchange = new Exchange(fluid.getFluid(), exchange);
+                lastExchange = new Exchange(exchange);
             }
-            while (this.thermalEnergy * lastExchange.penalty > lastExchange.triple.getMiddle()) {
-                int fillable = this.outputFluidInventory.fill(lastExchange.triple.getRight(), false);
-                if (fillable != lastExchange.triple.getRight().amount) {
+            while (this.thermalEnergy * lastExchange.penalty > lastExchange.thermalEnergy) {
+                int fillable = this.outputFluidInventory.fill(lastExchange.out, false);
+                if (fillable != lastExchange.out.amount) {
                     lastExchange = null;
                     return atLeastOneExchange;
                 }
-                FluidStack drainable = this.inputFluidInventory.drain(
-                        new FluidStack(fluid.getFluid(), lastExchange.triple.getLeft()), false);
-                if (drainable == null || drainable.amount != lastExchange.triple.getLeft()) {
+                FluidStack drainable = this.inputFluidInventory.drain(lastExchange.in, false);
+                if (drainable == null || drainable.amount != lastExchange.in.amount) {
                     lastExchange = null;
                     return atLeastOneExchange;
                 }
                 atLeastOneExchange = true;
-                this.thermalEnergy -= lastExchange.triple.getMiddle() * lastExchange.penalty;
+                this.thermalEnergy -= lastExchange.thermalEnergy * lastExchange.penalty;
                 this.inputFluidInventory.drain(drainable, true);
-                this.outputFluidInventory.fill(lastExchange.triple.getRight(), true);
+                this.outputFluidInventory.fill(lastExchange.out, true);
             }
             if (atLeastOneExchange) break;
         }
@@ -404,17 +403,17 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         }
     }
 
-    protected class Exchange {
-
-        public final Fluid inputFluid;
-        public final Triple<Integer, Long, FluidStack> triple;
+    protected class Exchange extends HalfExchangeData {
 
         public final double penalty;
 
-        public Exchange(Fluid inputFluid, Triple<Integer, Long, FluidStack> triple) {
-            this.inputFluid = inputFluid;
-            this.triple = triple;
-            this.penalty = eutecticPenalty(inputFluid);
+        public Exchange(HalfExchangeData data) {
+            super();
+            this.in = data.in;
+            this.out = data.out;
+            this.thermalCapacity = data.thermalCapacity;
+            this.thermalEnergy = data.thermalEnergy;
+            this.penalty = eutecticPenalty(data.getEutectic());
         }
     }
 }

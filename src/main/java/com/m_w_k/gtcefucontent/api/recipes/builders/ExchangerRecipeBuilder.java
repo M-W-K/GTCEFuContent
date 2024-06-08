@@ -39,7 +39,6 @@ public class ExchangerRecipeBuilder extends RecipeBuilder<ExchangerRecipeBuilder
         return super.applyProperty(key, value);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public ExchangerRecipeBuilder heatToConvert(long HeatToConvert) {
         if (HeatToConvert == 0) {
             GTLog.logger.error("Heat to convert cannot be equal to 0", new IllegalArgumentException());

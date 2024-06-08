@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.api.util;
 import java.util.Arrays;
 import java.util.OptionalDouble;
 
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -13,6 +14,7 @@ import com.m_w_k.gtcefucontent.GTCEFuContent;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
 import gregtech.api.util.RelativeDirection;
+import net.minecraftforge.fluids.FluidStack;
 
 public final class GTCEFuCUtil {
 
@@ -73,6 +75,14 @@ public final class GTCEFuCUtil {
 
     public static FluidBuilder fluidAtTemp(int temp) {
         return new FluidBuilder().temperature(temp);
+    }
+
+    public static EutecticFluid.Builder eutecticWithStats(int minTemp, int defaultTemp, int maxTemp) {
+        return new EutecticFluid.Builder().minTemp(minTemp).defaultTemp(defaultTemp).maxTemp(maxTemp);
+    }
+
+    public static int getTemp(FluidStack stack) {
+        return stack.getFluid().getTemperature(stack);
     }
 
     public static int truncateLong(long number) {

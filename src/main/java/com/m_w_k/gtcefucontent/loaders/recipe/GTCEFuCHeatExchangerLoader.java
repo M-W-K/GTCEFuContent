@@ -4,11 +4,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.minecraft.util.Tuple;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
+import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
-import com.m_w_k.gtcefucontent.api.fluids.GTCEFuCFluidStorageKeys;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
@@ -23,6 +22,9 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
+import net.minecraftforge.fluids.FluidStack;
+
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 public final class GTCEFuCHeatExchangerLoader {
 
@@ -77,24 +79,6 @@ public final class GTCEFuCHeatExchangerLoader {
             }
         });
 
-        // eutectic alloys
-        GTCEFuCHeatCapacityProperty property;
-        for (Material material : GTCEFuCMaterials.EutecticAlloys.keySet()) {
-            property = material.getProperty(GTCEFuCPropertyKey.HEAT_CAPACITY);
-            HeatExchangerRecipeHandler.registerHeatExchange(
-                    material.getFluid(1),
-                    new FluidStack(material.getFluid(GTCEFuCFluidStorageKeys.HOT), 1),
-                    property.getThermalCapacityFluid());
-            HeatExchangerRecipeHandler.registerHeatExchange(
-                    material.getFluid(1),
-                    new FluidStack(material.getFluid(GTCEFuCFluidStorageKeys.COLD), 1),
-                    property.getThermalCapacityFluid());
-            // register as a eutectic
-            HeatExchangerRecipeHandler.addEutectic(material.getFluid(),
-                    material.getFluid(GTCEFuCFluidStorageKeys.COLD),
-                    material.getFluid(GTCEFuCFluidStorageKeys.HOT));
-        }
-
         // custom conversions
         HeatExchangerRecipeHandler.registerHeatExchange(
                 GTCEFuCMaterials.TriniumReduced.getFluid(55),
@@ -104,20 +88,36 @@ public final class GTCEFuCHeatExchangerLoader {
     }
 
     public static void postInit() {
-        handleExchangeMap(HeatExchangerRecipeHandler.getHeatingMapCopy(), 1);
-        handleExchangeMap(HeatExchangerRecipeHandler.getCoolingMapCopy(), -1);
+        handleExchangeMap(HeatExchangerRecipeHandler.getHeatingMapCopy());
+        handleExchangeMap(HeatExchangerRecipeHandler.getCoolingMapCopy());
+        handleEutectics(HeatExchangerRecipeHandler.getEutecticsCopy());
     }
 
-    private static void handleExchangeMap(Map<Fluid, Tuple<FluidStack, long[]>> map, int heating) {
-        for (Map.Entry<Fluid, Tuple<FluidStack, long[]>> entry : map.entrySet()) {
-            Tuple<FluidStack, long[]> tuple = entry.getValue();
-            GTCEFuCRecipeMaps.EXCHANGER_PLACEHOLDER_MAP.recipeBuilder()
-                    .circuitMeta(heating + 2)
-                    .fluidInputs(new FluidStack(entry.getKey(), (int) tuple.getSecond()[0]))
-                    .fluidOutputs(tuple.getFirst())
-                    .heatToConvert(tuple.getSecond()[1] * heating)
-                    // the recipemap doesn't actually do anything, it's just there for JEI visualization
-                    .EUt(1).duration(1).buildAndRegister();
+    private static void handleExchangeMap(Map<Fluid, HalfExchangeData> map) {
+        for (HalfExchangeData data : map.values()) {
+            handleExchangeData(data);
         }
+    }
+
+    private static void handleEutectics(Set<EutecticFluid> eutectics) {
+        for (EutecticFluid eutectic : eutectics) {
+            FluidStack base = new FluidStack(eutectic, 1);
+            FluidStack cold = eutectic.stackWithTemperature(1, 0);
+            FluidStack hot = eutectic.stackWithTemperature(1, Integer.MAX_VALUE);
+            handleExchangeData(new HalfExchangeData(base, hot, eutectic.getThermalCapacity()));
+            handleExchangeData(new HalfExchangeData(cold, base, eutectic.getThermalCapacity()));
+            handleExchangeData(new HalfExchangeData(hot, base, eutectic.getThermalCapacity()));
+            handleExchangeData(new HalfExchangeData(base, cold, eutectic.getThermalCapacity()));
+        }
+    }
+
+    private static void handleExchangeData(HalfExchangeData data) {
+        GTCEFuCRecipeMaps.EXCHANGER_PLACEHOLDER_MAP.recipeBuilder()
+                .circuitMeta((getTemp(data.out) > getTemp(data.in)) ? 2 : 1)
+                .fluidInputs(data.in)
+                .fluidOutputs(data.out)
+                .heatToConvert(data.thermalEnergy)
+                // the recipemap doesn't actually do anything, it's just there for JEI visualization
+                .EUt(1).duration(1).buildAndRegister();
     }
 }
