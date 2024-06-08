@@ -679,6 +679,7 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void renderMetaTileEntity(double x, double y, double z, float partialTicks) {
         if (this.hasFusionRingColor() && !this.registeredBloomRenderTicket) {
             this.registeredBloomRenderTicket = true;
