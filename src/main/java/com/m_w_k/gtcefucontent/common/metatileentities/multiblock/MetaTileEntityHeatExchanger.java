@@ -653,6 +653,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                     this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
                     // there is no need to perform the expensive recipe search if nothing changes in the inputs.
                     this.needsNotification = true;
+                    return false;
                 }
             } else {
                 if (this.needsNotification) {
@@ -699,7 +700,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                             this.requiredPipeLength = (int) Math.sqrt(GTCEFuCUtil.geometricMean(
                                     getTemp(fluidAInitial) - getTemp(fluidAFinal),
                                     getTemp(fluidBFinal) - getTemp(fluidBInitial)));
-                            recalcuateRecipeDuration();
+                            recalculateRecipeDuration();
                             this.validRecipe = true;
                             cacheValues();
                             finalRecipeCheck();
@@ -775,7 +776,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             return this.getMetaTileEntity().outputFluidInventory.fill(fluid, false) == fluid.amount;
         }
 
-        private void recalcuateRecipeDuration() {
+        private void recalculateRecipeDuration() {
             this.recipeProgress = 0;
             // correction so that the analogous operation would process the same amount of thermal energy per second
             double floatingRecipeTime = (double) this.fluidAThermalEnergy / this.fluidBThermalEnergy;

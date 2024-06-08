@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.asm;
 
+import com.m_w_k.gtcefucontent.asm.visitors.UniversalBucketVisitor;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
@@ -20,6 +21,12 @@ public class GTCEFuCTransformer implements IClassTransformer, Opcodes {
             ClassWriter classWriter = new ClassWriter(0);
             classReader.accept(new TargetClassVisitor(classWriter, FluidTooltipUtilVisitor.TARGET_METHOD,
                     FluidTooltipUtilVisitor::new), 0);
+            return classWriter.toByteArray();
+        } else if (internalName.equals(UniversalBucketVisitor.TARGET_CLASS_NAME)) {
+            ClassReader classReader = new ClassReader(basicClass);
+            ClassWriter classWriter = new ClassWriter(0);
+            classReader.accept(new TargetClassVisitor(classWriter, UniversalBucketVisitor.TARGET_METHOD,
+                    UniversalBucketVisitor::new), 0);
             return classWriter.toByteArray();
         }
         return basicClass;
