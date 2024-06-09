@@ -7,6 +7,7 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -295,6 +296,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     public static class HEUGridHandler extends MTETrait implements IControllable {
 
+        protected static final float BASE_SPEED = 1000;
+
         private IItemHandlerModifiable componentsInv = new ItemStackHandler(0);
         private boolean badPiping = false;
         private boolean needsNotification = false;
@@ -491,6 +494,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
                 } else if (this.recipeProgress == 1) {
                     this.interpolationCount = 0;
+                    this.recipeProgress++;
                 } else if (!this.slowedRecipe) this.recipeProgress++;
                 else {
                     // extremely slow decay of stocked thermal energy
@@ -509,20 +513,19 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                             this.getMetaTileEntity().inputFluidInventory.drain(fluidBInitialAdj, true);
                             this.getMetaTileEntity().outputFluidInventory.fill(fluidBFinalAdj, true);
                             break;
-                        } else mult--;
+                        } else mult /= 2;
                         // If we have no mult left, we either have no fluid B or no space for fluid B
                         if (mult == 0) this.resetRecipe();
                     }
                     if (this.validRecipe) {
                         // move recipe forward a step if we haven't stocked too much thermal energy.
-                        this.slowedRecipe = this.thermalEnergy +
-                                this.fluidAThermalEnergy * this.operationMultiplier() > getMaxHeat();
+                        this.slowedRecipe = this.thermalEnergy + predictedNextHeat() > getMaxHeat();
                     }
                 }
             } else {
                 this.setActive(false);
-                // slow decay of stocked thermal energy
-                this.thermalEnergy *= 0.99;
+                // extremely slow decay of stocked thermal energy
+                this.thermalEnergy *= 0.999;
             }
 
             // piping I/O
@@ -545,6 +548,14 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             }
         }
 
+        protected long predictedNextHeat() {
+            return this.fluidAThermalEnergy * predictedNextOperationCount();
+        }
+
+        protected int predictedNextOperationCount() {
+            return (int) Math.ceil(this.operationMultiplier() * BASE_SPEED / Math.max(1, this.recipeTime));
+        }
+
         protected int operationMultiplier() {
             return this.pipeVolModifier * this.getMetaTileEntity().hEUCount;
         }
@@ -556,7 +567,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         protected long getMaxHeat() {
             if (!this.validMaxHeatCache) {
                 long newMax = 2 *
-                        Math.min(this.fluidAThermalEnergy * this.operationMultiplier(), this.fluidBThermalEnergy);
+                        Math.max(this.fluidBThermalEnergy, predictedNextHeat());
                 // prevent shrinking the bar smaller than our current thermal energy
                 if (newMax >= this.thermalEnergy) {
                     this.cachedMaxEnergy = newMax;
@@ -568,7 +579,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
         private boolean runInterpolationLogic(double interpolation) {
             if (this.recipeTime != 0 && this.recipeProgress != 0) {
-                int targetInterpolationCount = (int) Math.ceil(interpolation * this.operationMultiplier());
+                int targetInterpolationCount = (int) Math.ceil(interpolation * this.operationMultiplier() * BASE_SPEED);
                 if (targetInterpolationCount > this.interpolationCount) {
                     int missingCount = targetInterpolationCount - this.interpolationCount;
                     FluidStack toDrain = fluidAdjusted(this.fluidAInitial, missingCount);
@@ -635,9 +646,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             var tankFluids = getTankFluids();
             if (this.validRecipe) {
                 if (this.recipeProgress <= 1 &&
-                        !(hasFluid(fluidAdjusted(this.fluidAInitial, this.operationMultiplier()))
+                        !(hasFluid(fluidAdjusted(this.fluidAInitial, this.predictedNextOperationCount()))
                                 && hasFluid(this.fluidBInitial)
-                                && canInsert(fluidAdjusted(this.fluidAFinal, this.operationMultiplier()))
+                                && canInsert(fluidAdjusted(this.fluidAFinal, this.predictedNextOperationCount()))
                                 && canInsert(this.fluidBFinal))) {
                     this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
                     // there is no need to perform the expensive recipe search if nothing changes in the inputs.
@@ -703,7 +714,17 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 // there is no need to perform the expensive recipe search if nothing changes in the inputs.
                 if (exchangeData == null) this.needsNotification = true;
             }
-            return this.validRecipe;
+            return sanityCheck();
+        }
+
+        private boolean sanityCheck() {
+            return this.recipeTime > 0 &&
+                    this.fluidAInitial != null &&
+                    this.fluidBInitial != null &&
+                    this.fluidAFinal != null &&
+                    this.fluidBFinal != null &&
+                    this.fluidAThermalEnergy > 0 &&
+                    this.fluidBThermalEnergy > 0;
         }
 
         private FluidStack fluidAdjusted(FluidStack stack, int mult) {
@@ -767,8 +788,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             // over the course of recipe time, 1 unit of 'fluid a thermal energy' will be produced.
             // thus, in order to achieve a constant thermal energy / time no matter the exchange,
             // multiply recipe time by fluid a thermal energy.
-            this.recipeTime = (int) (0.001 * this.fluidAThermalEnergy * this.durationModifier *
-                    this.getMetaTileEntity().getMaintenanceDurationMultiplier());
+            this.recipeTime = (int) (this.fluidAThermalEnergy * this.durationModifier *
+                    this.getMetaTileEntity().getMaintenanceDurationMultiplier() /
+                    GTCEFuCHeatExchangerLoader.WATER_TO_STEAM_ENERGY);
         }
 
         // returns a map of fluidStacks mapped to themselves. Yep.
