@@ -298,7 +298,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         private IItemHandlerModifiable componentsInv = new ItemStackHandler(0);
         private boolean badPiping = false;
         private boolean needsNotification = false;
-        private final Map<IHEUComponent, Boolean> componentsPiped = new HashMap<>();
+        private final Set<IHEUComponent> componentsPiped = new ObjectOpenHashSet<>();
         private final Set<IHEUComponent> reflectingEndpoints = new ObjectOpenHashSet<>();
         private boolean[] validAxi = new boolean[3];
 
@@ -351,15 +351,13 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                         this.pipeHolderVariant = component.getComponentType();
                     } else
                         if (this.pipeHolderVariant != component.getComponentType())
-                            invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.type");
+                            invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.type", false);
                 }
+                this.componentsPiped.add(component);
                 // check for internal piping
                 if (!component.hasValidPiping()) {
-                    this.componentsPiped.put(component, false);
-                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.fill");
-                    this.badPiping = true;
+                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.fill", true);
                 } else {
-                    this.componentsPiped.put(component, true);
                     pipePropertyCheck(component.getPipeMaterial());
                 }
             }
@@ -377,13 +375,13 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                         this.pipeVolModifier = (int) Math.sqrt(properties.getThroughput());
                         return true;
                     } else if (properties != pipeProperty)
-                        invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.conflict");
+                        invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.conflict", true);
                     else
                         return true;
                 } else
-                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.material");
+                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.material", true);
             } else
-                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.material");
+                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.material", true);
             return false;
         }
 
@@ -409,7 +407,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             this.reflectionCount = (int) reflectraw;
             if (reflectionCount != reflectraw) {
                 // bad reflective endpoint count, no need for complex examination
-                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints");
+                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints", false);
                 return;
             }
             if (reflectionCount == 2) return;
@@ -423,7 +421,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             while (iterator.hasNext()) {
                 IHEUComponent endpoint = iterator.next();
                 if (!checkPosAndNarrowAxis(pos, endpoint.getPos()))
-                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints");
+                    invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.endpoints", false);
             }
         }
 
@@ -435,9 +433,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             return validAxi[0] || validAxi[1] || validAxi[2];
         }
 
-        private void invalidateGrid(String reason) {
+        private void invalidateGrid(String reason, boolean badPiping) {
             this.validGrid = false;
-            this.badPiping = false;
+            this.badPiping = badPiping;
             this.invalidReason = reason;
         }
 
@@ -540,9 +538,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 }
 
                 // recheck piping validity
-                List<IHEUComponent> notifiedComponentList = this.getMetaTileEntity().getNotifiedHEUComponentList();
-                if (!notifiedComponentList.isEmpty()) {
-                    updateComponentPipingStatus(notifiedComponentList);
+                if (!this.getMetaTileEntity().getNotifiedHEUComponentList().isEmpty()) {
+                    updateComponentPipingStatus();
                     this.getMetaTileEntity().notifiedHEUComponentList.clear();
                 }
             }
@@ -558,8 +555,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
         protected long getMaxHeat() {
             if (!this.validMaxHeatCache) {
-                long newMax =
-                        Math.min(this.fluidAThermalEnergy * this.operationMultiplier(), this.fluidBThermalEnergy * 2);
+                long newMax = 2 *
+                        Math.min(this.fluidAThermalEnergy * this.operationMultiplier(), this.fluidBThermalEnergy);
                 // prevent shrinking the bar smaller than our current thermal energy
                 if (newMax >= this.thermalEnergy) {
                     this.cachedMaxEnergy = newMax;
@@ -602,26 +599,19 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             }
         }
 
-        private void updateComponentPipingStatus(List<IHEUComponent> components) {
-            // update our knowledge of component validity
-            for (IHEUComponent component : components) {
-                boolean prevValidity = this.componentsPiped.get(component);
-                if (prevValidity != component.hasValidPiping()) {
-                    this.componentsPiped.put(component, !prevValidity);
-                }
-            }
+        private void updateComponentPipingStatus() {
             // update grid validity
             // check component piping validity
-            Optional<Boolean> validPipingO = componentsPiped.keySet().stream()
+            Optional<Boolean> validPipingO = componentsPiped.stream()
                     .map(IHEUComponent::hasValidPiping)
                     .reduce((a, b) -> a && b);
             boolean validPiping = validPipingO.isPresent() && validPipingO.get();
             if (!validPiping) {
-                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.fill");
+                invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.fill", true);
             } else {
                 // check component pipe properties
                 this.pipeProperty = null;
-                validPipingO = componentsPiped.keySet().stream()
+                validPipingO = componentsPiped.stream()
                         .map((a) -> pipePropertyCheck(a.getPipeMaterial()))
                         .reduce((a, b) -> a && b);
                 validPiping = validPipingO.isPresent() && validPipingO.get();
@@ -631,6 +621,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 validGrid = validPiping;
                 badPiping = !validPiping;
                 if (validGrid) finalStructureCheck();
+            } else {
+                badPiping = !validPiping;
             }
         }
 
