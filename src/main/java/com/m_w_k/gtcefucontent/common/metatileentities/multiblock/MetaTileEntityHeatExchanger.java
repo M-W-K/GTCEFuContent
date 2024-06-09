@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
@@ -85,14 +86,24 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     protected IMultipleTankHandler outputFluidInventory;
 
     protected final int tier;
+    protected final int width;
+    protected final int height;
+    protected final double speedBonus;
     protected final int hEUCount;
     protected final List<IHEUComponent> notifiedHEUComponentList = new ArrayList<>();
     protected final HEUGridHandler heuHandler;
 
-    public MetaTileEntityHeatExchanger(ResourceLocation metaTileEntityId, int tier) {
+    public MetaTileEntityHeatExchanger(ResourceLocation metaTileEntityId, int tier, int sideLength) {
+        this(metaTileEntityId, tier, sideLength, sideLength);
+    }
+
+    public MetaTileEntityHeatExchanger(ResourceLocation metaTileEntityId, int tier, int width, int height) {
         super(metaTileEntityId);
         this.tier = tier;
-        this.hEUCount = (tier - 3) * (tier - 3);
+        this.width = width;
+        this.height = height;
+        this.hEUCount = width * height;
+        this.speedBonus = GTCEFuCUtil.geometricMean(width, height);
         this.heuHandler = new HEUGridHandler(this);
     }
 
@@ -136,33 +147,44 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
-        return new MetaTileEntityHeatExchanger(this.metaTileEntityId, this.tier);
+        return new MetaTileEntityHeatExchanger(this.metaTileEntityId, this.tier, this.width, this.height);
     }
 
     @NotNull
     @Override
     protected BlockPattern createStructurePattern() {
-        return wherify(switch (this.tier) {
-            default -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
-                    .aisle("CIXIC", "#III#", "#III#", "#III#", "CIIIC")
-                    .aisle("CCCCC", "GEEEG", "GEEEG", "GEEEG", "CCCCC")
-                    .aisle("CCCCC", "GPPPG", "GPPPG", "GPPPG", "CCCCC").setRepeatable(4, 16)
-                    .aisle("CCCCC", "GEEEG", "GEEEG", "GEEEG", "CCCCC")
-                    .aisle("CIIIC", "#III#", "#III#", "#III#", "CIIIC");
-            case 7 -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
-                    .aisle("#IIXI#", "#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#")
-                    .aisle("CCCCCC", "GEEEEG", "GEEEEG", "GEEEEG", "GEEEEG", "CCCCCC")
-                    .aisle("CCCCCC", "GPPPPG", "GPPPPG", "GPPPPG", "GPPPPG", "CCCCCC").setRepeatable(4, 16)
-                    .aisle("CCCCCC", "GEEEEG", "GEEEEG", "GEEEEG", "GEEEEG", "CCCCCC")
-                    .aisle("#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#", "#IIII#");
-            case 8 -> FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
-                    .aisle("#IIXII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#")
-                    .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
-                    .aisle("CCCCCCC", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "GPPPPPG", "CCCCCCC")
-                    .setRepeatable(4, 16)
-                    .aisle("CCCCCCC", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "GEEEEEG", "CCCCCCC")
-                    .aisle("#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#", "#IIIII#");
-        }, this.tier).build();
+        return wherify(FactoryBlockPattern.start(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.FRONT)
+                .aisle(generateAisle(AisleType.START))
+                .aisle(generateAisle(AisleType.ENDPOINT))
+                .aisle(generateAisle(AisleType.HOLDER)).setRepeatable(4, 16)
+                .aisle(generateAisle(AisleType.ENDPOINT))
+                .aisle(generateAisle(AisleType.END)), this.tier).build();
+    }
+
+    protected String[] generateAisle(AisleType aisleType) {
+        String[] aisle = new String[this.height + 2];
+        aisle[0] = switch (aisleType) {
+            case START -> {
+                int firstCount = this.width / 2;
+                int secondCount = this.width - 1 - firstCount;
+                yield 'C' + StringUtils.repeat('I', firstCount) + 'X' + StringUtils.repeat('I', secondCount) + 'C';
+            }
+            default -> StringUtils.repeat('C', this.width + 2);
+            case END -> 'C' + StringUtils.repeat('I', this.width) + 'C';
+        };
+        int lastIndex = this.height + 1;
+        for (int i = 1; i < lastIndex; i++) {
+            aisle[i] = switch (aisleType) {
+                case START, END -> '#' + StringUtils.repeat('I', this.width) + '#';
+                case ENDPOINT -> 'G' + StringUtils.repeat('E', this.width) + 'G';
+                case HOLDER -> 'G' + StringUtils.repeat('P', this.width) + 'G';
+            };
+        }
+        aisle[lastIndex] = switch (aisleType) {
+            case START, END -> 'C' + StringUtils.repeat('I', this.width) + 'C';
+            default -> StringUtils.repeat('C', this.width + 2);
+        };
+        return aisle;
     }
 
     protected FactoryBlockPattern wherify(FactoryBlockPattern pattern, int tier) {
@@ -294,6 +316,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 heatInfo));
     }
 
+    protected enum AisleType {
+        START, ENDPOINT, HOLDER, END;
+    }
+
     public static class HEUGridHandler extends MTETrait implements IControllable {
 
         protected static final float BASE_SPEED = 1000;
@@ -398,8 +424,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             // 2/3 processing time if the exchanger uses conductive piping
             this.durationModifier = (this.pipeHolderVariant == IHEUComponent.HEUComponentType.H_CONDUCTIVE ? 4 :
                     6) / 3D;
-            // increase recipe time based on actual pipe length and reflection count
-            this.durationModifier *= (this.reflectionCount + 1) * Math.sqrt(this.pipeLength);
+            this.durationModifier *= (this.reflectionCount + 1) * 10 / this.getMetaTileEntity().speedBonus;
         }
 
         private void advancedEndpointValidityCheck() {

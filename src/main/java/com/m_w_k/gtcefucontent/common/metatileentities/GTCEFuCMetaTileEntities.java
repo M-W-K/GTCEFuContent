@@ -62,11 +62,11 @@ public final class GTCEFuCMetaTileEntities {
                 new MetaTileEntityAntimatterCompressor(gtcefucId("antimatter_compressor")));
 
         HEAT_EXCHANGER[0] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
-                new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.small"), GTValues.LuV));
+                new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.small"), GTValues.LuV, 3));
         HEAT_EXCHANGER[1] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
-                new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.medium"), GTValues.ZPM));
+                new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.medium"), GTValues.ZPM, 4));
         HEAT_EXCHANGER[2] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
-                new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.large"), GTValues.UV));
+                new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.large"), GTValues.UV, 5));
 
         HEAT_RECLAIMER[0] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
                 new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.basic"), false));
