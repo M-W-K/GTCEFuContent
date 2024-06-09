@@ -1,5 +1,8 @@
 package com.m_w_k.gtcefucontent.integration;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeModContainer;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 
@@ -15,12 +18,25 @@ import gregtech.integration.jei.recipe.RecipeMapCategory;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
+import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 
 @mezz.jei.api.JEIPlugin
 public class JEIPlugin implements IModPlugin {
 
     public static IGuiHelper guiHelper;
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        subtypeRegistry.registerSubtypeInterpreter(ForgeModContainer.getInstance().universalBucket,
+                itemStack -> {
+                    NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+                    if (nbtTagCompound == null || nbtTagCompound.isEmpty()) {
+                        return ISubtypeRegistry.ISubtypeInterpreter.NONE;
+                    }
+                    return nbtTagCompound.toString();
+                });
+    }
 
     @Override
     public void register(IModRegistry registry) {

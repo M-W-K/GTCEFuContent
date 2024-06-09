@@ -1,25 +1,22 @@
 package com.m_w_k.gtcefucontent.client;
 
+import java.util.List;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import com.m_w_k.gtcefucontent.common.CommonProxy;
-import gregtech.api.util.FluidTooltipUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.common.CommonProxy;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(Side.CLIENT)

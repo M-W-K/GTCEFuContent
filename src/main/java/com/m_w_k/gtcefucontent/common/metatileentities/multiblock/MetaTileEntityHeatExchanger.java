@@ -7,7 +7,6 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,6 +36,7 @@ import com.m_w_k.gtcefucontent.api.recipes.FullExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
+import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
@@ -646,10 +646,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             var tankFluids = getTankFluids();
             if (this.validRecipe) {
                 if (this.recipeProgress <= 1 &&
-                        !(hasFluid(fluidAdjusted(this.fluidAInitial, this.predictedNextOperationCount()))
-                                && hasFluid(this.fluidBInitial)
-                                && canInsert(fluidAdjusted(this.fluidAFinal, this.predictedNextOperationCount()))
-                                && canInsert(this.fluidBFinal))) {
+                        !(hasFluid(fluidAdjusted(this.fluidAInitial, this.predictedNextOperationCount())) &&
+                                hasFluid(this.fluidBInitial) &&
+                                canInsert(fluidAdjusted(this.fluidAFinal, this.predictedNextOperationCount())) &&
+                                canInsert(this.fluidBFinal))) {
                     this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
                     // there is no need to perform the expensive recipe search if nothing changes in the inputs.
                     this.needsNotification = true;
@@ -929,7 +929,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 if (invalidReason.equals(""))
                     invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.recipe";
                 textList.add(new TextComponentTranslation(invalidReason));
-            } else if (slowedRecipe) textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error.amount2"));
+            } else if (slowedRecipe) textList
+                    .add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error.amount2"));
         }
 
         public void addErrors(List<ITextComponent> textList) {

@@ -1,9 +1,10 @@
 package com.m_w_k.gtcefucontent.asm.visitors;
 
-import gregtech.asm.util.ObfMapping;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+
+import gregtech.asm.util.ObfMapping;
 
 public class UniversalBucketVisitor extends MethodVisitor implements Opcodes {
 

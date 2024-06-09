@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import gregtech.api.GTValues;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +19,7 @@ import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityPro
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
 import crafttweaker.annotations.ZenRegister;
+import gregtech.api.GTValues;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.unification.material.Material;
@@ -45,7 +45,6 @@ public final class GTCEFuCMaterials {
     public static Material VaporSeed;
 
     public static Material NaquadricAlloy;
-
 
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization

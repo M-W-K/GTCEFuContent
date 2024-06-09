@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent.asm.hooks;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,9 +11,9 @@ import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 
+@SuppressWarnings("unused")
 public class UniversalBucketHooks {
 
     public static void generateEutecticBuckets(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
