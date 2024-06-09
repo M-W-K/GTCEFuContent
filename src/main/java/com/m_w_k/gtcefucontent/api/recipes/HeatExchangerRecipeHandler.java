@@ -18,11 +18,6 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public final class HeatExchangerRecipeHandler {
 
-    /**
-     * Approximate conversion of heat units to EU, assuming that the fluid heater is perfectly efficient.
-     */
-    public static final long HEU = GTCEFuCHeatExchangerLoader.WATER_TO_STEAM_ENERGY / 150;
-
     private static final Map<Fluid, HalfExchangeData> HEATING_MAP = new Object2ObjectOpenHashMap<>();
     private static final Map<Fluid, HalfExchangeData> COOLING_MAP = new Object2ObjectOpenHashMap<>();
     private static final Set<EutecticFluid> EUTECTICS = new ObjectOpenHashSet<>();

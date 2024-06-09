@@ -58,13 +58,13 @@ public final class GTCEFuCEutecticLoader {
                     .fluidInputs(fluid.stackWithTemperature(10, 0))
                     .fluidOutputs(eutectic.getFluid(10))
                     .duration((int) (10L * property.getThermalCapacityFluid() * heatDiff /
-                            (30 * HeatExchangerRecipeHandler.HEU)))
+                            (30 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(30).buildAndRegister();
             RecipeMaps.VACUUM_RECIPES.recipeBuilder()
                     .fluidInputs(eutectic.getFluid(100))
                     .fluidOutputs(fluid.stackWithTemperature(100, 0))
                     .duration((int) (100L * property.getThermalCapacityFluid() * heatDiff /
-                            (60 * HeatExchangerRecipeHandler.HEU)))
+                            (120 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(120).buildAndRegister();
 
             heatDiff = fluid.getMaxTemperature() - fluid.getTemperature();
@@ -72,13 +72,13 @@ public final class GTCEFuCEutecticLoader {
                     .fluidInputs(eutectic.getFluid(10))
                     .fluidOutputs(fluid.stackWithTemperature(10, Integer.MAX_VALUE))
                     .duration((int) (10L * property.getThermalCapacityFluid() * heatDiff /
-                            (30 * HeatExchangerRecipeHandler.HEU)))
+                            (30 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(30).buildAndRegister();
             RecipeMaps.VACUUM_RECIPES.recipeBuilder()
                     .fluidInputs(fluid.stackWithTemperature(100, Integer.MAX_VALUE))
                     .fluidOutputs(eutectic.getFluid(100))
                     .duration((int) (100L * property.getThermalCapacityFluid() * heatDiff /
-                            (60 * HeatExchangerRecipeHandler.HEU)))
+                            (120 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(120).buildAndRegister();
         }
     }
