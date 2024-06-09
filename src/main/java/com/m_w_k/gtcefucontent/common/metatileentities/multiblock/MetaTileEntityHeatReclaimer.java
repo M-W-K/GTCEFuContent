@@ -399,6 +399,7 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
             this.scheduleRenderUpdate();
         }
         if (dataId == GregtechDataCodes.IS_WORKING) {
+            this.isActive = buf.readBoolean();
             this.scheduleRenderUpdate();
         }
     }

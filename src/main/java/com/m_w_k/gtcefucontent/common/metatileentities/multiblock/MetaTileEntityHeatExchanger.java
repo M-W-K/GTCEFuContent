@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.m_w_k.gtcefucontent.api.capability.impl.HEUGridHandler;
 import com.m_w_k.gtcefucontent.api.metatileentity.IHeatExchanger;
+import gregtech.api.metatileentity.multiblock.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -41,10 +42,6 @@ import gregtech.api.gui.resources.TextureArea;
 import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
-import gregtech.api.metatileentity.multiblock.IMultiblockPart;
-import gregtech.api.metatileentity.multiblock.IProgressBarMultiblock;
-import gregtech.api.metatileentity.multiblock.MultiblockAbility;
-import gregtech.api.metatileentity.multiblock.MultiblockWithDisplayBase;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
@@ -262,10 +259,12 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
-        super.addDisplayText(textList);
         if (isStructureFormed()) {
             heuHandler.addInfo(textList);
         }
+        MultiblockDisplayText.builder(textList, isStructureFormed())
+                .setWorkingStatus(heuHandler.isWorkingEnabled(), heuHandler.isActive())
+                .addWorkingStatusLine();
     }
 
     @Override

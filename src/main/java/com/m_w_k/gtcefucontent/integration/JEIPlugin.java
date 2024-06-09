@@ -56,6 +56,8 @@ public class JEIPlugin implements IModPlugin {
         for (var mte : GTCEFuCMetaTileEntities.HEAT_RECLAIMER) {
             registerRecipeMapCatalyst(registry, GTCEFuCRecipeMaps.EXCHANGER_PLACEHOLDER_MAP, mte);
         }
+        registerRecipeMapCatalyst(registry, GTCEFuCRecipeMaps.EXCHANGER_PLACEHOLDER_MAP,
+                GTCEFuCMetaTileEntities.HEAT_DISPERSER);
     }
 
     /**

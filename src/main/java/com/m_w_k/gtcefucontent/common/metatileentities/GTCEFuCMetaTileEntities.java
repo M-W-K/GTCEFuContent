@@ -12,6 +12,7 @@ import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.*;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart.MetaTileEntityHEUComponent;
 
 import gregtech.api.GTValues;
+import gregtech.api.fluids.FluidConstants;
 
 public final class GTCEFuCMetaTileEntities {
 
@@ -26,6 +27,7 @@ public final class GTCEFuCMetaTileEntities {
     public static final MetaTileEntityFusionStack[] FUSION_STACK = new MetaTileEntityFusionStack[3];
     public static final MetaTileEntityHeatExchanger[] HEAT_EXCHANGER = new MetaTileEntityHeatExchanger[3];
     public static final MetaTileEntityHeatReclaimer[] HEAT_RECLAIMER = new MetaTileEntityHeatReclaimer[2];
+    public static MetaTileEntityHeatDisperser HEAT_DISPERSER;
 
     public static final Map<IHEUComponent.HEUComponentType, MetaTileEntityHEUComponent> HEU_COMPONENTS =
             new EnumMap<>(IHEUComponent.HEUComponentType.class);
@@ -72,6 +74,9 @@ public final class GTCEFuCMetaTileEntities {
                 new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.basic"), false));
         HEAT_RECLAIMER[1] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
                 new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.advanced"), true));
+        HEAT_DISPERSER = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+                new MetaTileEntityHeatDisperser(gtcefucId("heat_disperser"),
+                        FluidConstants.ROOM_TEMPERATURE, 0.99, 100));
 
         HEU_COMPONENTS.put(E_STANDARD, registerMetaTileEntity(TILE_ID.getAndIncrement(),
                 new MetaTileEntityHEUComponent(gtcefucId("heu_endpoint.standard"), E_STANDARD)));
