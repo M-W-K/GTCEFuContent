@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import gregtech.api.GTValues;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +43,9 @@ public final class GTCEFuCMaterials {
     public static Material FireEnhancer;
     public static Material VaporSeedRaw;
     public static Material VaporSeed;
+
+    public static Material NaquadricAlloy;
+
 
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization
@@ -89,8 +93,10 @@ public final class GTCEFuCMaterials {
 
     // IDs 22500 - 22529 reserved for multiblocks
     // IDs 22530 - 22549 reserved for normal metaTileEntities
-    // IDs 22570 - 22599 reserved for materials
+    // IDs 22570 - 22589 reserved for materials
+    // IDs 22590 - 22599 reserved for eutectics
     private static int id = 22569;
+    private static int eu = 22589;
 
     public static void register() {
         if (INIT.getAndSet(true)) {
@@ -155,9 +161,19 @@ public final class GTCEFuCMaterials {
                 .color(0x003B78).iconSet(FLUID)
                 .build();
 
+        NaquadricAlloy = new Material.Builder(id++, gtcefucId("naquadric_alloy"))
+                .ingot().fluid()
+                .colorAverage().iconSet(SHINY)
+                .flags(GENERATE_PLATE)
+                .fluidPipeProperties(9530, 230, false, false, false, true)
+                .components(Naquadria, 3, Thorium, 5, Cadmium, 1, Lead, 1)
+                .blast(b -> b.temp(7340, BlastProperty.GasTier.HIGHER)
+                        .blastStats(GTValues.VA[GTValues.ZPM], 900))
+                .build();
+
         // sea snake
         EutecticCaesiumSodiumPotassium = eutectic(
-                id++, gtcefucId("eutectic_csnak_alloy"),
+                eu++, gtcefucId("eutectic_csnak_alloy"),
                 EutecticAlloysString.get("eutectic_csnak_alloy"))
                         .colorAverage()
                         .flags(DECOMPOSITION_BY_CENTRIFUGING)
@@ -165,7 +181,7 @@ public final class GTCEFuCMaterials {
                         .build();
 
         EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(
-                id++, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
+                eu++, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
                 EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"))
                         .colorAverage()
                         .flags(DECOMPOSITION_BY_ELECTROLYZING)

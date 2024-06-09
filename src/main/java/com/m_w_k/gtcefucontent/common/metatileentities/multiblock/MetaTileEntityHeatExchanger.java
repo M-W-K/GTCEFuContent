@@ -319,9 +319,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         private int recipeTime;
         private int recipeProgress;
         private FluidStack fluidAInitial;
-        private final int[] targetInterpolationAmount = new int[2];
-        private int[] interpolationAmount = new int[3];
-        private long thermalInterpolation;
+        private int interpolationCount;
         private FluidStack fluidAFinal;
         private long fluidAThermalEnergy;
         private FluidStack fluidBInitial;
@@ -393,6 +391,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             // run endpoint check
             advancedEndpointValidityCheck();
             if (!this.validGrid) return;
+            this.invalidReason = "";
             // fix pipe length
             this.pipeLength /= this.getMetaTileEntity().hEUCount;
             // 2/3 processing time if the exchanger uses conductive piping
@@ -493,11 +492,11 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                     this.recipeProgress = 0;
 
                 } else if (this.recipeProgress == 1) {
-                    // recipe init
-                    this.interpolationAmount = new int[2];
-                    this.thermalInterpolation = 0;
-                    this.targetInterpolationAmount[0] = fluidAdjusted(fluidAInitial).amount;
-                    this.targetInterpolationAmount[1] = fluidAdjusted(fluidAFinal).amount;
+                    this.interpolationCount = 0;
+                } else if (!this.slowedRecipe) this.recipeProgress++;
+                else {
+                    // extremely slow decay of stocked thermal energy
+                    this.thermalEnergy *= 0.999;
                 }
                 if (runInterpolationLogic(getInterpolation())) {
                     // try to process fluid B
@@ -518,14 +517,13 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                     }
                     if (this.validRecipe) {
                         // move recipe forward a step if we haven't stocked too much thermal energy.
-                        this.slowedRecipe = this.thermalEnergy > getMaxHeat() * 0.9;
-                        if (!slowedRecipe) this.recipeProgress++;
-                        else this.invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.amount2";
+                        this.slowedRecipe = this.thermalEnergy +
+                                this.fluidAThermalEnergy * this.operationMultiplier() > getMaxHeat();
                     }
                 }
             } else {
                 this.setActive(false);
-                // decay stocked thermal energy
+                // slow decay of stocked thermal energy
                 this.thermalEnergy *= 0.99;
             }
 
@@ -550,13 +548,18 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             }
         }
 
+        protected int operationMultiplier() {
+            return this.pipeVolModifier * this.getMetaTileEntity().hEUCount;
+        }
+
         protected double getInterpolation() {
             return (double) this.recipeProgress / this.recipeTime;
         }
 
         protected long getMaxHeat() {
             if (!this.validMaxHeatCache) {
-                long newMax = Math.max(this.fluidAThermalEnergy, this.fluidBThermalEnergy) * 10;
+                long newMax =
+                        Math.min(this.fluidAThermalEnergy * this.operationMultiplier(), this.fluidBThermalEnergy * 2);
                 // prevent shrinking the bar smaller than our current thermal energy
                 if (newMax >= this.thermalEnergy) {
                     this.cachedMaxEnergy = newMax;
@@ -567,33 +570,24 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
         }
 
         private boolean runInterpolationLogic(double interpolation) {
-            // TODO prevent fluid loss on recipe interruption
             if (this.recipeTime != 0 && this.recipeProgress != 0) {
-                int targetAmountI = (int) Math.ceil(interpolation * this.targetInterpolationAmount[0]);
-                // casting to int acts as a Math.floor() call
-                int targetAmountF = (int) (interpolation * this.targetInterpolationAmount[1]);
-                long targetAmountT = (long) (interpolation * this.fluidAThermalEnergy * this.pipeVolModifier *
-                        this.getMetaTileEntity().hEUCount);
-
-                int missingAmountI = targetAmountI - this.interpolationAmount[0];
-                int missingAmountF = targetAmountF - this.interpolationAmount[1];
-                long missingAmountT = targetAmountT - this.thermalInterpolation;
-
-                // kill the recipe if we run out of input
-                int actualDrain = tankIOHelper(new FluidStack(this.fluidAInitial, missingAmountI), true, true);
-                if (actualDrain != missingAmountI) {
-                    this.needsNotification = true;
-                    this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
-                    return false;
+                int targetInterpolationCount = (int) Math.ceil(interpolation * this.operationMultiplier());
+                if (targetInterpolationCount > this.interpolationCount) {
+                    int missingCount = targetInterpolationCount - this.interpolationCount;
+                    FluidStack toDrain = fluidAdjusted(this.fluidAInitial, missingCount);
+                    FluidStack toFill = fluidAdjusted(this.fluidAFinal, missingCount);
+                    int drain = this.tankIOHelper(toDrain, true, true);
+                    int fill = this.tankIOHelper(toFill, false, true);
+                    if (drain != toDrain.amount || fill != toFill.amount) {
+                        this.needsNotification = true;
+                        this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
+                        return false;
+                    }
+                    this.tankIOHelper(toDrain, true, false);
+                    this.tankIOHelper(toFill, false, false);
+                    this.thermalEnergy += this.fluidAThermalEnergy * missingCount;
+                    this.interpolationCount = targetInterpolationCount;
                 }
-
-                tankIOHelper(new FluidStack(this.fluidAInitial, missingAmountI), true, false);
-                tankIOHelper(new FluidStack(this.fluidAFinal, missingAmountF), false, false);
-                this.thermalEnergy += missingAmountT;
-
-                this.interpolationAmount[0] = targetAmountI;
-                this.interpolationAmount[1] = targetAmountF;
-                this.thermalInterpolation = targetAmountT;
             }
             return true;
         }
@@ -648,8 +642,11 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             }
             var tankFluids = getTankFluids();
             if (this.validRecipe) {
-                if (this.recipeProgress <= 1 && !(hasFluid(this.fluidAInitial) && hasFluid(this.fluidBInitial) &&
-                        canInsert(this.fluidAFinal) && canInsert(this.fluidBFinal))) {
+                if (this.recipeProgress <= 1 &&
+                        !(hasFluid(fluidAdjusted(this.fluidAInitial, this.operationMultiplier()))
+                                && hasFluid(this.fluidBInitial)
+                                && canInsert(fluidAdjusted(this.fluidAFinal, this.operationMultiplier()))
+                                && canInsert(this.fluidBFinal))) {
                     this.invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.amount");
                     // there is no need to perform the expensive recipe search if nothing changes in the inputs.
                     this.needsNotification = true;
@@ -690,13 +687,14 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
                         exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable, heatable);
                         if (exchangeData != null) {
-                            // we found a recipe!
-                            fluidAInitial = exchangeData.initialA;
-                            fluidBInitial = exchangeData.initialB;
-                            fluidAFinal = exchangeData.finalA;
-                            fluidBFinal = exchangeData.finalB;
-                            fluidAThermalEnergy = Math.abs(exchangeData.thermalEnergyA);
-                            fluidBThermalEnergy = Math.abs(exchangeData.thermalEnergyB);
+                            // fluid A for the recipe logic should always be the fluid being cooled
+                            boolean heatA = exchangeData.thermalEnergyA > 0;
+                            fluidAInitial = heatA ? exchangeData.initialB : exchangeData.initialA;
+                            fluidBInitial = heatA ? exchangeData.initialA : exchangeData.initialB;
+                            fluidAFinal = heatA ? exchangeData.finalB : exchangeData.finalA;
+                            fluidBFinal = heatA ? exchangeData.finalA : exchangeData.finalB;
+                            fluidAThermalEnergy = heatA ? -exchangeData.thermalEnergyB : -exchangeData.thermalEnergyA;
+                            fluidBThermalEnergy = heatA ? exchangeData.thermalEnergyA : exchangeData.thermalEnergyB;
                             this.requiredPipeLength = (int) Math.sqrt(GTCEFuCUtil.geometricMean(
                                     getTemp(fluidAInitial) - getTemp(fluidAFinal),
                                     getTemp(fluidBFinal) - getTemp(fluidBInitial)));
@@ -714,10 +712,6 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 if (exchangeData == null) this.needsNotification = true;
             }
             return this.validRecipe;
-        }
-
-        private FluidStack fluidAdjusted(FluidStack stack) {
-            return new FluidStack(stack, stack.amount * this.pipeVolModifier * this.getMetaTileEntity().hEUCount);
         }
 
         private FluidStack fluidAdjusted(FluidStack stack, int mult) {
@@ -778,10 +772,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
         private void recalculateRecipeDuration() {
             this.recipeProgress = 0;
-            // correction so that the analogous operation would process the same amount of thermal energy per second
-            double floatingRecipeTime = (double) this.fluidAThermalEnergy / this.fluidBThermalEnergy;
-            floatingRecipeTime = (1 + floatingRecipeTime) / 2;
-            this.recipeTime = (int) (3 * floatingRecipeTime * durationModifier *
+            // over the course of recipe time, 1 unit of 'fluid a thermal energy' will be produced.
+            // thus, in order to achieve a constant thermal energy / time no matter the exchange,
+            // multiply recipe time by fluid a thermal energy.
+            this.recipeTime = (int) (0.001 * this.fluidAThermalEnergy * this.durationModifier *
                     this.getMetaTileEntity().getMaintenanceDurationMultiplier());
         }
 
@@ -840,7 +834,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 this.getMetaTileEntity().markDirty();
                 World world = this.getMetaTileEntity().getWorld();
                 if (world != null && !world.isRemote) {
-                    writeCustomData(GregtechDataCodes.IS_WORKING, buf -> buf.writeBoolean(isActive));
+                    writeCustomData(GregtechDataCodes.WORKABLE_ACTIVE, buf -> buf.writeBoolean(isActive));
                 }
             }
         }
@@ -921,8 +915,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
                 if (invalidReason.equals(""))
                     invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.recipe";
                 textList.add(new TextComponentTranslation(invalidReason));
-            }
-            if (slowedRecipe) textList.add(new TextComponentTranslation(invalidReason));
+            } else if (slowedRecipe) textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error.amount2"));
         }
 
         public void addErrors(List<ITextComponent> textList) {
