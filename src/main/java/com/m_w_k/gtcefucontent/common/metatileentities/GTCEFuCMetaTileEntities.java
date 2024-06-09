@@ -27,8 +27,8 @@ public final class GTCEFuCMetaTileEntities {
     public static final MetaTileEntityHeatExchanger[] HEAT_EXCHANGER = new MetaTileEntityHeatExchanger[3];
     public static final MetaTileEntityHeatReclaimer[] HEAT_RECLAIMER = new MetaTileEntityHeatReclaimer[2];
 
-    public static final Map<IHEUComponent.HEUComponentType, MetaTileEntityHEUComponent> HEU_COMPONENTS = new HashMap<>(
-            5);
+    public static final Map<IHEUComponent.HEUComponentType, MetaTileEntityHEUComponent> HEU_COMPONENTS =
+            new EnumMap<>(IHEUComponent.HEUComponentType.class);
     public static MetaTileEntityHEUComponent[] HEU_ENDPOINTS = new MetaTileEntityHEUComponent[2];
     public static MetaTileEntityHEUComponent[] HEU_HOLDERS = new MetaTileEntityHEUComponent[3];
 

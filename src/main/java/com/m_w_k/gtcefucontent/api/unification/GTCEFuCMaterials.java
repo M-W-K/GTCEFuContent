@@ -163,7 +163,7 @@ public final class GTCEFuCMaterials {
         NaquadricAlloy = new Material.Builder(id++, gtcefucId("naquadric_alloy"))
                 .ingot().fluid()
                 .colorAverage().iconSet(SHINY)
-                .flags(GENERATE_PLATE)
+                .flags(GENERATE_PLATE, GENERATE_FOIL)
                 .fluidPipeProperties(9530, 230, false, false, false, true)
                 .components(Naquadria, 3, Thorium, 5, Cadmium, 1, Lead, 1)
                 .blast(b -> b.temp(7340, BlastProperty.GasTier.HIGHER)
