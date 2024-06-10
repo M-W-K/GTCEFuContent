@@ -315,12 +315,12 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gtcefucontent.machine.heat_disperser.display.info", TextFormattingUtil.formatLongToCompactString(this.thermalMass)));
+            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.info", TextFormattingUtil.formatLongToCompactString(this.thermalMass)));
             if (this.isPaused) {
-                textList.add(new TextComponentTranslation("gtcefucontent.machine.heat_disperser.display.error.temperature"));
+                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.error.temperature"));
             } else if (this.isSwitching) {
                 String type = this.chassisTemperature > this.targetTemperature ? "hot" : "cold";
-                textList.add(new TextComponentTranslation("gtcefucontent.machine.heat_disperser.display.error." + type));
+                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.error." + type));
             }
         }
     }

@@ -36,8 +36,8 @@ gtcefucontent.machine.mega_steam_engine.tooltip.1=Dynamo hatch tier limited by V
 gtcefucontent.machine.mega_steam_engine.tooltip.2=Generates §f%s EU/t§7 per RPM.
 gtcefucontent.machine.mega_steam_engine.tooltip.3=Loses §f%s§7 kinetic energy per tick.
 gtcefucontent.machine.mega_steam_engine.error.vcu=Dynamo hatch tier exceeds Voltage Control Unit tier!
-gtcefucontent.machine.mega_steam_engine.display.shaft_speed=Engine Speed: %s
-gtcefucontent.machine.mega_steam_engine.display.lubricant_amount=Vaporous Seed: %s
+gtcefucontent.multiblock.mega_steam_engine.display.shaft_speed=Engine Speed: %s
+gtcefucontent.multiblock.mega_steam_engine.display.lubricant_amount=Vaporous Seed: %s
 
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
 gtcefucontent.machine.fusion_stack.coolant=DOES NOT REQUIRE COOLANT
@@ -85,10 +85,10 @@ gregtech.multiblock.heat_disperser.description=When provided with a fluid with a
 gtcefucontent.machine.heat_disperser.info=Target Temperature: §f%sK
 gtcefucontent.machine.heat_disperser.heat1=%sK
 gtcefucontent.machine.heat_disperser.heat2=Current Temperature: %s
-gtcefucontent.machine.heat_disperser.display.info=Current thermal mass: %sJ/K
-gtcefucontent.machine.heat_disperser.display.error.temperature=Chassis temperature is outside of operative range, pausing operations.
-gtcefucontent.machine.heat_disperser.display.error.hot=Chassis temperature is too hot to accept a cold fluid, pausing operations.
-gtcefucontent.machine.heat_disperser.display.error.cold=Chassis temperature is too cold to accept a hot fluid, pausing operations.
+gtcefucontent.multiblock.heat_disperser.display.info=Current thermal mass: %sJ/K
+gtcefucontent.multiblock.heat_disperser.display.error.temperature=Chassis temperature is outside of operative range, pausing operations.
+gtcefucontent.multiblock.heat_disperser.display.error.hot=Chassis temperature is too hot to accept a cold fluid, pausing operations.
+gtcefucontent.multiblock.heat_disperser.display.error.cold=Chassis temperature is too cold to accept a hot fluid, pausing operations.
 
 gtcefucontent.machine.heat_exchanger.small.name=Small Heat Exchanger
 gtcefucontent.machine.heat_exchanger.medium.name=Medium Heat Exchanger

@@ -244,7 +244,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
                     rpmTranslated);
             hoverList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
-                    "gtcefucontent.machine.mega_steam_engine.display.shaft_speed",
+                    "gtcefucontent.multiblock.mega_steam_engine.display.shaft_speed",
                     rotorInfo));
         } else {
             // Lubricant
@@ -264,7 +264,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
                             TextFormattingUtil.formatNumbers(lubricantCapacity) + " L");
             hoverList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
-                    "gtcefucontent.machine.mega_steam_engine.display.lubricant_amount",
+                    "gtcefucontent.multiblock.mega_steam_engine.display.lubricant_amount",
                     lubricantInfo));
         }
     }
