@@ -65,7 +65,7 @@ import java.util.List;
 public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
                                          implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
 
-    private final static int THERMAL_CAPACITY_CONSTANT = 2000000;
+    private final static int THERMAL_CAPACITY_CONSTANT = 500000;
 
     protected IMultipleTankHandler inputFluidInventory;
     protected IMultipleTankHandler outputFluidInventory;
@@ -290,7 +290,8 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
 
     @Override
     public double getFillPercentage(int index) {
-        return 0.5d + (this.chassisTemperature - this.targetTemperature) / (this.maxTemperatureDifference * 3);
+        return Math.min(1d,
+                0.5d + (this.chassisTemperature - this.targetTemperature) / (this.maxTemperatureDifference * 3));
     }
 
     @Override
@@ -314,7 +315,7 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gtcefucontent.machine.heat_disperser.display.info", this.thermalMass / 1000000));
+            textList.add(new TextComponentTranslation("gtcefucontent.machine.heat_disperser.display.info", TextFormattingUtil.formatLongToCompactString(this.thermalMass)));
             if (this.isPaused) {
                 textList.add(new TextComponentTranslation("gtcefucontent.machine.heat_disperser.display.error.temperature"));
             } else if (this.isSwitching) {

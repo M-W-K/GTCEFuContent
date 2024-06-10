@@ -76,7 +76,7 @@ public final class GTCEFuCMetaTileEntities {
                 new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.advanced"), true));
         HEAT_DISPERSER = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
                 new MetaTileEntityHeatDisperser(gtcefucId("heat_disperser"),
-                        FluidConstants.ROOM_TEMPERATURE, 0.99, 100));
+                        FluidConstants.ROOM_TEMPERATURE, 0.995, 100));
 
         HEU_COMPONENTS.put(E_STANDARD, registerMetaTileEntity(TILE_ID.getAndIncrement(),
                 new MetaTileEntityHEUComponent(gtcefucId("heu_endpoint.standard"), E_STANDARD)));
