@@ -53,6 +53,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
 
     private boolean validRecipe;
     private FluidStack[] prevRecipeStacks;
+    private long[] prevRecipeThermals;
     private boolean slowedRecipe;
     private int cachedLength;
     private int recipeTime;
@@ -385,7 +386,9 @@ public class HEUGridHandler extends MTETrait implements IControllable {
                 fluidAFinal = prevRecipeStacks[1];
                 fluidBInitial = prevRecipeStacks[2];
                 fluidBFinal = prevRecipeStacks[3];
-                recalculateRecipeDuration();
+                fluidAThermalEnergy = prevRecipeThermals[0];
+                fluidBThermalEnergy = prevRecipeThermals[1];
+                recalculateRecipeConstants();
                 this.validRecipe = true;
                 this.validRecipe = checkRecipeValidity();
                 this.validMaxHeatCache = false;
@@ -414,10 +417,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
                         fluidBFinal = heatA ? exchangeData.finalA : exchangeData.finalB;
                         fluidAThermalEnergy = heatA ? -exchangeData.thermalEnergyB : -exchangeData.thermalEnergyA;
                         fluidBThermalEnergy = heatA ? exchangeData.thermalEnergyA : exchangeData.thermalEnergyB;
-                        this.requiredPipeLength = (int) Math.sqrt(GTCEFuCUtil.geometricMean(
-                                getTemp(fluidAInitial) - getTemp(fluidAFinal),
-                                getTemp(fluidBFinal) - getTemp(fluidBInitial)));
-                        recalculateRecipeDuration();
+                        recalculateRecipeConstants();
                         this.validRecipe = true;
                         cacheValues();
                         finalRecipeCheck();
@@ -431,6 +431,19 @@ public class HEUGridHandler extends MTETrait implements IControllable {
             if (exchangeData == null) this.needsNotification = true;
         }
         return sanityCheck();
+    }
+
+    protected void recalculateRecipeConstants() {
+        this.requiredPipeLength = (int) Math.sqrt(GTCEFuCUtil.geometricMean(
+                getTemp(fluidAInitial) - getTemp(fluidAFinal),
+                getTemp(fluidBFinal) - getTemp(fluidBInitial)));
+        this.recipeProgress = 0;
+        // over the course of recipe time, 1 unit of 'fluid a thermal energy' will be produced.
+        // thus, in order to achieve a constant thermal energy / time no matter the exchange,
+        // multiply recipe time by fluid a thermal energy.
+        this.recipeTime = (int) (this.fluidAThermalEnergy * this.durationModifier *
+                this.getHeatExchanger().getMaintenanceDurationMultiplier() /
+                GTCEFuCHeatExchangerLoader.WATER_TO_STEAM_ENERGY);
     }
 
     private boolean sanityCheck() {
@@ -495,16 +508,6 @@ public class HEUGridHandler extends MTETrait implements IControllable {
 
     private boolean canInsert(FluidStack fluid) {
         return this.getHeatExchanger().getOutputFluidInventory().fill(fluid, false) == fluid.amount;
-    }
-
-    private void recalculateRecipeDuration() {
-        this.recipeProgress = 0;
-        // over the course of recipe time, 1 unit of 'fluid a thermal energy' will be produced.
-        // thus, in order to achieve a constant thermal energy / time no matter the exchange,
-        // multiply recipe time by fluid a thermal energy.
-        this.recipeTime = (int) (this.fluidAThermalEnergy * this.durationModifier *
-                this.getHeatExchanger().getMaintenanceDurationMultiplier() /
-                GTCEFuCHeatExchangerLoader.WATER_TO_STEAM_ENERGY);
     }
 
     // returns a map of fluidStacks mapped to themselves. Yep.
@@ -631,6 +634,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
         this.cachedLength = this.requiredPipeLength;
         this.prevRecipeStacks = new FluidStack[]{this.fluidAInitial, this.fluidAFinal, this.fluidBInitial,
                 this.fluidBFinal};
+        this.prevRecipeThermals = new long[]{this.fluidAThermalEnergy, this.fluidBThermalEnergy};
     }
 
     private void clearCache() {
