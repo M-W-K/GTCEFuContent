@@ -11,7 +11,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
-import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -41,8 +40,8 @@ public final class HeatExchangerRecipeHandler {
      *                        Note that if this is negative when fluid B is hotter than fluid A,
      *                        it would release thermal energy to heat fluid A into fluid B, and vice versa.
      */
-    public static void registerHeatExchange(FluidStack fluidA, FluidStack fluidB, int thermalCapacity) {
-        registerHeatExchange(fluidA, fluidB, thermalCapacity, true);
+    public static void registerHeatExchangeC(FluidStack fluidA, FluidStack fluidB, long thermalCapacity) {
+        registerHeatExchangeC(fluidA, fluidB, thermalCapacity, true);
     }
 
     /**
@@ -60,10 +59,8 @@ public final class HeatExchangerRecipeHandler {
      *                        it would release thermal energy to heat fluid A into fluid B, and vice versa.
      * @param isTwoWay        Whether the heat exchange should be reversible.
      */
-    public static void registerHeatExchange(FluidStack fluidA, FluidStack fluidB, int thermalCapacity,
-                                            boolean isTwoWay) {
-        int tempDifference = getTemp(fluidB) - getTemp(fluidA);
-        // If tempDifference is positive, then we are heating fluid, and vice versa.
+    public static void registerHeatExchangeC(FluidStack fluidA, FluidStack fluidB, long thermalCapacity,
+                                             boolean isTwoWay) {
         // No zero-energy conversions, they would cause divide by 0 errors.
         if (thermalCapacity == 0)
             GTCEFuContent.log("Someone tried to register a zero-energy Heat Exchanger recipe. THIS IS INVALID!",
@@ -88,8 +85,8 @@ public final class HeatExchangerRecipeHandler {
      *                      as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
      *                      A negative thermal energy means that the conversion releases heat.
      */
-    public static void registerHeatExchange(FluidStack fluidA, FluidStack fluidB, long thermalEnergy) {
-        registerHeatExchange(fluidA, fluidB, thermalEnergy, true);
+    public static void registerHeatExchangeE(FluidStack fluidA, FluidStack fluidB, long thermalEnergy) {
+        registerHeatExchangeE(fluidA, fluidB, thermalEnergy, true);
     }
 
     /**
@@ -103,10 +100,10 @@ public final class HeatExchangerRecipeHandler {
      *                      A negative thermal energy means that the conversion releases heat.
      * @param isTwoWay      Whether the heat exchange should be reversible.
      */
-    public static void registerHeatExchange(FluidStack fluidA, FluidStack fluidB, long thermalEnergy,
-                                            boolean isTwoWay) {
+    public static void registerHeatExchangeE(FluidStack fluidA, FluidStack fluidB, long thermalEnergy,
+                                             boolean isTwoWay) {
         int tempDifference = getTemp(fluidB) - getTemp(fluidA);
-        registerHeatExchange(fluidA, fluidB, (int) (thermalEnergy / tempDifference), isTwoWay);
+        registerHeatExchangeC(fluidA, fluidB, thermalEnergy / tempDifference, isTwoWay);
     }
 
     /**
@@ -155,7 +152,7 @@ public final class HeatExchangerRecipeHandler {
                     FluidStack newOut = eutectic.getWithTemperature(data.out, temperatureLimit);
                     if (getTemp(newOut) <= temperatureLimit) return HalfExchangeData.withNewOut(data, newOut);
                 }
-            }
+            } else return data;
         } else if (type == ExchangeType.COOLING) {
             if (getTemp(fluid) <= temperatureLimit) return null;
             HalfExchangeData data = getCooling(fluid);
@@ -167,7 +164,7 @@ public final class HeatExchangerRecipeHandler {
                     FluidStack newOut = eutectic.getWithTemperature(data.out, temperatureLimit);
                     if (getTemp(newOut) >= temperatureLimit) return HalfExchangeData.withNewOut(data, newOut);
                 }
-            }
+            } else return data;
         }
         return null;
     }

@@ -14,12 +14,12 @@ public class HalfExchangeData {
 
     public FluidStack in;
     public FluidStack out;
-    public int thermalCapacity;
+    public long thermalCapacity;
     public long thermalEnergy;
 
     protected HalfExchangeData() {}
 
-    public HalfExchangeData(FluidStack in, FluidStack out, int thermalCapacity) {
+    public HalfExchangeData(FluidStack in, FluidStack out, long thermalCapacity) {
         this.in = in;
         this.out = out;
         this.thermalCapacity = thermalCapacity;
@@ -49,7 +49,7 @@ public class HalfExchangeData {
     }
 
     public HalfExchangeData recalculateThermalEnergy() {
-        this.thermalEnergy = (long) (getTemp(out) - getTemp(in)) * thermalCapacity;
+        this.thermalEnergy = (getTemp(out) - getTemp(in)) * thermalCapacity;
         return this;
     }
 
