@@ -94,6 +94,13 @@ public class GTCEFuCControllerLoader {
                 'A', new UnificationEntry(OrePrefix.plateDense, Materials.Asbestos),
                 'F', MetaItems.FIELD_GENERATOR_EV);
 
+        ModHandler.addShapedRecipe(true, "heat_disperser",
+                GTCEFuCMetaTileEntities.HEAT_DISPERSER.getStackForm(),
+                "PPP", "DCD", "PPP",
+                'P', MetaItems.FLUID_REGULATOR_IV,
+                'D', new UnificationEntry(OrePrefix.gear, Materials.DamascusSteel),
+                'C', MetaTileEntities.HULL[GTValues.IV].getStackForm());
+
         // Assembler recipes
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
