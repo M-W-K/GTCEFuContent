@@ -20,7 +20,6 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCHEUComponentLoader.init();
         GTCEFuCMiscRecipes.init();
         GTCEFuCEutecticLoader.init();
-        GTCEFuCHeatExchangerLoader.init();
 
         GTCEFuCCraftingRecipeLoader.init();
 
@@ -31,6 +30,9 @@ public final class GTCEFuCRecipeLoader {
 
     public static void initLate() {
         // Adjust/create recipeMaps that depend on iterating through other recipeMaps.
+
+        // GCYM molten liquid registration is too slow
+        GTCEFuCHeatExchangerLoader.init();
 
         // We can't change the behavior of the cutter recipeMap setup itself without being overly invasive.
         GTCEFuCMiscRecipes.cutterUpdate();
