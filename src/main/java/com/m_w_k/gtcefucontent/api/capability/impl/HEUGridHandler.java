@@ -45,14 +45,14 @@ public class HEUGridHandler extends MTETrait implements IControllable {
     private int reflectionCount;
     private int pipeLength;
     private FluidPipeProperties pipeProperty;
-    private int pipeVolModifier;
+    private int basePipeVolModifier;
     private double durationModifier;
     private long thermalEnergy;
     private boolean validGrid;
     private String invalidReason;
 
     private boolean validRecipe;
-    private FluidStack[] prevRecipeInfo;
+    private FluidStack[] prevRecipeStacks;
     private boolean slowedRecipe;
     private int cachedLength;
     private int recipeTime;
@@ -109,7 +109,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
             if (properties != null) {
                 if (this.pipeProperty == null) {
                     this.pipeProperty = properties;
-                    this.pipeVolModifier = (int) Math.sqrt(properties.getThroughput());
+                    this.basePipeVolModifier = (int) Math.sqrt(properties.getThroughput());
                     return true;
                 } else if (properties != pipeProperty)
                     invalidateGrid("gtcefucontent.multiblock.heat_exchanger.display.error.conflict", true);
@@ -195,7 +195,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
         this.reflectingEndpoints.clear();
         this.pipeLength = 0;
         this.pipeProperty = null;
-        this.pipeVolModifier = 0;
+        this.basePipeVolModifier = 0;
         this.durationModifier = 0;
         this.thermalEnergy = 0;
         this.recipeTime = 0;
@@ -270,7 +270,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
     }
 
     protected int operationMultiplier() {
-        return this.pipeVolModifier * this.getHeatExchanger().getHEUCount();
+        return this.getCurrentPipeVolModifier() * this.getHeatExchanger().getHEUCount();
     }
 
     protected double getInterpolation() {
@@ -295,6 +295,9 @@ public class HEUGridHandler extends MTETrait implements IControllable {
             int targetInterpolationCount = (int) Math.ceil(interpolation * this.operationMultiplier() * BASE_SPEED);
             if (targetInterpolationCount > this.interpolationCount) {
                 int missingCount = targetInterpolationCount - this.interpolationCount;
+                if (this.thermalEnergy + this.fluidAThermalEnergy * missingCount > this.getMaxHeat())
+                    missingCount = (int) ((this.getMaxHeat() - this.thermalEnergy) / this.fluidAThermalEnergy);
+
                 FluidStack toDrain = fluidAdjusted(this.fluidAInitial, missingCount);
                 FluidStack toFill = fluidAdjusted(this.fluidAFinal, missingCount);
                 int drain = this.tankIOHelper(toDrain, true, true);
@@ -356,7 +359,6 @@ public class HEUGridHandler extends MTETrait implements IControllable {
             this.validRecipe = false;
             return false;
         }
-        var tankFluids = getTankFluids();
         if (this.validRecipe) {
             if (this.recipeProgress <= 1 &&
                     !(hasFluid(fluidAdjusted(this.fluidAInitial, this.predictedNextOperationCount())) &&
@@ -371,26 +373,26 @@ public class HEUGridHandler extends MTETrait implements IControllable {
         } else {
             if (this.needsNotification) {
                 if (!this.getHeatExchanger().getNotifiedFluidInputList().isEmpty() ||
-                        !this.getHeatExchanger().getNotifiedFluidInputList().isEmpty()) {
+                        !this.getHeatExchanger().getNotifiedFluidOutputList().isEmpty()) {
                     this.getHeatExchanger().getNotifiedFluidInputList().clear();
-                    this.getHeatExchanger().getNotifiedFluidInputList().clear();
+                    this.getHeatExchanger().getNotifiedFluidOutputList().clear();
                     this.needsNotification = false;
                 } else return false;
             }
 
-            if (prevRecipeCheck(tankFluids)) {
-                // previous valid recipe is now valid!
-                fluidAInitial = prevRecipeInfo[0];
-                fluidBInitial = prevRecipeInfo[2];
-                fluidAFinal = prevRecipeInfo[1];
-                fluidBFinal = prevRecipeInfo[3];
+            if (prevRecipeCheck()) {
+                fluidAInitial = prevRecipeStacks[0];
+                fluidAFinal = prevRecipeStacks[1];
+                fluidBInitial = prevRecipeStacks[2];
+                fluidBFinal = prevRecipeStacks[3];
+                recalculateRecipeDuration();
                 this.validRecipe = true;
                 this.validRecipe = checkRecipeValidity();
                 this.validMaxHeatCache = false;
                 return this.validRecipe;
             }
 
-            // figure out if there is an exchange we can do
+            var tankFluids = getTankFluids();
 
             FullExchangeData exchangeData = null;
             for (FluidStack coolable : tankFluids.keySet()) {
@@ -401,6 +403,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
                     // move on if this entry is not a heatable
                     if (!HeatExchangerRecipeHandler.isHeatable(heatable.getFluid())) continue;
 
+                    if (heatable == coolable) continue;
                     exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable, heatable);
                     if (exchangeData != null) {
                         // fluid A for the recipe logic should always be the fluid being cooled
@@ -464,12 +467,12 @@ public class HEUGridHandler extends MTETrait implements IControllable {
         this.validMaxHeatCache = false;
     }
 
-    private boolean prevRecipeCheck(Map<FluidStack, FluidStack> tankFluids) {
+    private boolean prevRecipeCheck() {
         // if we are no longer compatible with the previous recipe fluids,
         // we should enable searching for a new recipe.
-        if (prevRecipeInfo == null) return false;
-        if (badFlowCheck(prevRecipeInfo[0]) || badFlowCheck(prevRecipeInfo[1]) ||
-                badFlowCheck(prevRecipeInfo[2]) || badFlowCheck(prevRecipeInfo[3])) {
+        if (prevRecipeStacks == null) return false;
+        if (badFlowCheck(prevRecipeStacks[0]) || badFlowCheck(prevRecipeStacks[1]) ||
+                badFlowCheck(prevRecipeStacks[2]) || badFlowCheck(prevRecipeStacks[3])) {
             invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.fluid");
             return false;
         }
@@ -477,10 +480,8 @@ public class HEUGridHandler extends MTETrait implements IControllable {
             invalidateRecipe("gtcefucontent.multiblock.heat_exchanger.display.error.len");
             return false;
         }
-        return tankFluids.containsKey(prevRecipeInfo[0]) &&
-                tankFluids.containsKey(prevRecipeInfo[1]) &&
-                tankFluids.containsKey(prevRecipeInfo[2]) &&
-                tankFluids.containsKey(prevRecipeInfo[3]);
+        return this.hasFluid(prevRecipeStacks[0]) && this.canInsert(prevRecipeStacks[1]) &&
+                this.hasFluid(prevRecipeStacks[2]) && this.canInsert(prevRecipeStacks[3]);
     }
 
     private boolean badFlowCheck(FluidStack stack) {
@@ -593,6 +594,11 @@ public class HEUGridHandler extends MTETrait implements IControllable {
         return thermalEnergy;
     }
 
+    public int getCurrentPipeVolModifier() {
+        if (this.getHeatExchanger().getMaxPipeVolMultiplier() == -1) return basePipeVolModifier;
+        else return Math.min(basePipeVolModifier, this.getHeatExchanger().getMaxPipeVolMultiplier());
+    }
+
     @Override
     public final @NotNull String getName() {
         return GregtechDataCodes.ABSTRACT_WORKABLE_TRAIT;
@@ -623,7 +629,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
 
     private void cacheValues() {
         this.cachedLength = this.requiredPipeLength;
-        this.prevRecipeInfo = new FluidStack[]{this.fluidAInitial, this.fluidAFinal, this.fluidBInitial,
+        this.prevRecipeStacks = new FluidStack[]{this.fluidAInitial, this.fluidAFinal, this.fluidBInitial,
                 this.fluidBFinal};
     }
 
@@ -634,8 +640,11 @@ public class HEUGridHandler extends MTETrait implements IControllable {
     public void addInfo(List<ITextComponent> textList) {
         if (validGrid) {
             textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info",
-                    this.pipeLength * (this.reflectionCount + 1), this.pipeVolModifier,
+                    this.pipeLength * (this.reflectionCount + 1), this.getCurrentPipeVolModifier(),
                     Math.floor(this.durationModifier * 100) / 100));
+            if (this.getHeatExchanger().getMaxPipeVolMultiplier() != -1) {
+                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.limit", this.getHeatExchanger().getMaxPipeVolMultiplier()));
+            } else textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.no_limit"));
             if (cachedLength != 0) {
                 textList.add(new TextComponentTranslation(
                         "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));

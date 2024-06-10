@@ -112,6 +112,8 @@ gtcefucontent.machine.heu_pipe_holder.expanded.name=Expanded HEU Pipe Holder
 gtcefucontent.machine.heu_pipe_holder.expanded.tooltip=Provides §f3m§7 of HEU piping. Requires two stacks of tiny pipe.
 
 gtcefucontent.multiblock.heat_exchanger.display.info=Stats: Effectively %sm of piping, processing amount factor of %sx, recipe time factor of %sx.
+gtcefucontent.multiblock.heat_exchanger.display.info.limit=Pipe volume processing amount factor is limited to %sx.
+gtcefucontent.multiblock.heat_exchanger.display.info.no_limit=No maximum pipe volume processing amount factor.
 gtcefucontent.multiblock.heat_exchanger.display.info.energy=%sJ of thermal energy cached.
 gtcefucontent.multiblock.heat_exchanger.display.info.recipe=Current exchanger recipe information:
 gtcefucontent.multiblock.heat_exchanger.display.info.pipe=Requires %sm of piping.
@@ -128,9 +130,10 @@ gtcefucontent.multiblock.heat_exchanger.display.error.recipe=The current recipe 
 gtcefucontent.multiblock.heat_exchanger.display.error.fluid=The internal piping cannot handle one of the recipe fluids.
 gtcefucontent.multiblock.heat_exchanger.display.error.len=Recipe requires longer piping.
 gtcefucontent.multiblock.heat_exchanger.display.error.amount=Either supply more fluid, or remove fluid from the output buffer.
-gtcefucontent.multiblock.heat_exchanger.display.error.amount2=Recipe running at a reduced rate due to lack of an input fluid.
+gtcefucontent.multiblock.heat_exchanger.display.error.amount2=Recipe running at a reduced rate due to lack of an input fluid or not enough space in output buffer.
 gtcefucontent.multiblock.heat_exchanger.display.error.eutectic=All heat exchanges must involve at least one eutectic mixture.
-
+gtcefucontent.multiblock.heat_exchanger.max_pipe_vol_mod_increment=Increase the maximum pipe volume processing amount factor. Exchanger can limit the bonus it receives from pipe flow rate without losing efficiency.
+gtcefucontent.multiblock.heat_exchanger.max_pipe_vol_mod_decrement=Decrease the maximum pipe volume processing amount factor. Exchanger can limit the bonus it receives from pipe flow rate without losing efficiency.
 
 tile.hardened_casing.indestructible_casing.name=Indestructible Casing
 tile.hardened_casing.indestructible_pipe_casing.name=Indestructible Pipe Casing

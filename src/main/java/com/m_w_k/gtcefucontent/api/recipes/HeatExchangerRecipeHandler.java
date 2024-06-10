@@ -213,7 +213,7 @@ public final class HeatExchangerRecipeHandler {
             if (getTemp(B.out) < aIn) {
                 EutecticFluid eutectic = B.getEutectic();
                 if (eutectic != null) {
-                    FluidStack newOut = eutectic.getWithTemperature(B.out, bIn);
+                    FluidStack newOut = eutectic.getWithTemperature(B.out, aIn);
                     if (getTemp(newOut) < bIn) return null;
                     else B = HalfExchangeData.withNewOut(B, newOut);
                 } else return null;

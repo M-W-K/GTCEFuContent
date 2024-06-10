@@ -18,8 +18,13 @@ public interface IHeatExchanger {
     IMultipleTankHandler getOutputFluidInventory();
 
     List<IFluidHandler> getNotifiedFluidInputList();
+    List<IFluidHandler> getNotifiedFluidOutputList();
 
     int getHEUCount();
 
     double getSpeedBonus();
+
+    default int getMaxPipeVolMultiplier() {
+        return -1;
+    }
 }
