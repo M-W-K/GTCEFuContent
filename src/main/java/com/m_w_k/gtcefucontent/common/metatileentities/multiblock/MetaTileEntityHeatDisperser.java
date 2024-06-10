@@ -24,6 +24,7 @@ import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.pipenet.tile.IPipeTile;
+import gregtech.api.unification.material.Material;
 import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.api.util.TextFormattingUtil;
@@ -191,7 +192,10 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
         this.thermalMass = 1;
         this.structurePattern.cache.values().forEach(blockInfo -> {
             if (blockInfo.getBlockState().getBlock() instanceof BlockFrame frame) {
-                this.thermalMass += frame.getGtMaterial(blockInfo.getBlockState()).getMass();
+                // sometimes the JEI world dies because of an NPE inside the material class
+                try {
+                    this.thermalMass += frame.getGtMaterial(blockInfo.getBlockState()).getMass();
+                } catch (Exception ignored) {}
             }
         });
         this.thermalMass *= THERMAL_CAPACITY_CONSTANT;
