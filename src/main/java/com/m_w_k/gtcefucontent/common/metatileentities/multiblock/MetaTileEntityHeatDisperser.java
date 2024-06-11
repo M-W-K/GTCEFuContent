@@ -6,6 +6,7 @@ import codechicken.lib.vec.Matrix4;
 import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
 import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
@@ -38,6 +39,7 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -426,10 +428,13 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
 
     protected void overtickExplosion() {
         if (com.m_w_k.gtcefucontent.common.ConfigHolder.heatDisperserExplodesOnOvertick) {
+            float x = getPos().getX() + 0.5f;
+            float y = getPos().getY() + 0.5f;
+            float z = getPos().getZ() + 0.5f;
             setExploded();
             getWorld().setBlockToAir(getPos());
-            getWorld().createExplosion(null, getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5,
-                    10, true);
+            getWorld().createExplosion(null, x, y, z, 10, true);
+            getWorld().spawnEntity(new EntityItem(getWorld(), x, y, z, GTCEFuCMetaItems.REGRET.getStackForm()));
         }
     }
 }

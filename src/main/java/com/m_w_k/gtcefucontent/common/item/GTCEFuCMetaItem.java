@@ -36,6 +36,8 @@ public class GTCEFuCMetaItem extends StandardMetaItem {
         STELLAR_BALL = addItem(id++, "ball.stellar_alloy").setRarity(EnumRarity.EPIC);
 
         INFINITY_REAGENT = addItem(id++, "infinity_reagent");
+
+        REGRET = addItem(id++, "regret").setInvisible().setMaxStackSize(1);
     }
 
     @Override

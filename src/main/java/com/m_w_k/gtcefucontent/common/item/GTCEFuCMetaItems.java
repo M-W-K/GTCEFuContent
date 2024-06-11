@@ -29,6 +29,8 @@ public final class GTCEFuCMetaItems {
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
 
+    public static MetaItem<?>.MetaValueItem REGRET;
+
     public static void init() {
         GTCEFuCMetaItem first = new GTCEFuCMetaItem();
         first.setRegistryName("meta_item_2");

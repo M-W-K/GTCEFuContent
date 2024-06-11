@@ -4,6 +4,7 @@ import static gregtech.api.GTValues.*;
 
 import java.util.Collection;
 
+import gregtech.api.unification.stack.UnificationEntry;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -186,6 +187,11 @@ public final class GTCEFuCMiscRecipes {
                 .input(GTCEFuCMetaItems.STELLAR_INGOT, 5)
                 .output(GTCEFuCMetaItems.STELLAR_BALL)
                 .duration(8000).EUt(VA[HV]).buildAndRegister();
+
+        RecipeMaps.ARC_FURNACE_RECIPES.recipeBuilder()
+                .input(GTCEFuCMetaItems.REGRET)
+                .output(OrePrefix.dust, Materials.DarkAsh)
+                .duration(1).EUt(69).buildAndRegister();
 
         // TODO compressed steam 10 tick HV 102400 -> 640
     }

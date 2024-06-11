@@ -176,6 +176,8 @@ metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
 metaitem.gas_mask.name=Gas Mask
 metaitem.gas_mask.tooltip=Survive in toxic environments
+metaitem.regret.name=Regret
+metaitem.regret.tooltip=Overticking was a mistake
 
 gtcefucontent.fluid.temperature.max=§7Maximum temperature: %sK
 gtcefucontent.fluid.temperature.min=§7Minimum temperature: %sK
