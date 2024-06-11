@@ -31,7 +31,8 @@ public class GTCEFuCBlockStandardCasing extends VariantBlock<GTCEFuCBlockStandar
     public enum CasingType implements IStringSerializable {
 
         THERMOSTABLE_CERAMIC("thermostable_ceramic"),
-        PRESSURE_CASING("high_pressure_casing");
+        PRESSURE_CASING("high_pressure_casing"),
+        UNSTABLE_HYPERSTATIC_CASING("unstable_hyperstatic_casing");
 
         private final String name;
 

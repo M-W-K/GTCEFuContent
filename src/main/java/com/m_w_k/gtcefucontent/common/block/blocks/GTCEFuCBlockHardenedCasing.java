@@ -34,7 +34,8 @@ public class GTCEFuCBlockHardenedCasing extends VariantBlock<GTCEFuCBlockHardene
 
         INDESTRUCTIBLE_CASING("indestructible_casing"),
         INDESTRUCTIBLE_PIPE_CASING("indestructible_pipe_casing"),
-        PLASMA_PIPE_CASING("plasma_pipe_casing");
+        PLASMA_PIPE_CASING("plasma_pipe_casing"),
+        HYPERSTATIC_CASING("hyperstatic_casing");
 
         private final String name;
 

@@ -14,6 +14,7 @@ import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.MarkerMaterials;
+import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
@@ -43,6 +44,12 @@ public final class GTCEFuCCasingLoader {
                 'P', new UnificationEntry(OrePrefix.plate, Materials.RhodiumPlatedPalladium),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.HSSE));
 
+        ModHandler.addShapedRecipe(true, "unstable_hyperstatic_casing", GTCEFuCMetaBlocks.STANDARD_CASING
+                        .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.UNSTABLE_HYPERSTATIC_CASING, ConfigHolder.recipes.casingsPerCraft),
+                "PhP", "PFP", "PwP",
+                'P', new UnificationEntry(OrePrefix.plate, GTCEFuCMaterials.UnstableNaquadahAlloy),
+                'F', new UnificationEntry(OrePrefix.frameGt, Materials.NaquadahAlloy));
+
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .input(OrePrefix.plateDouble, Materials.Neutronium, 6)
                 .input(OrePrefix.frameGt, Materials.Neutronium)
@@ -52,8 +59,8 @@ public final class GTCEFuCCasingLoader {
                 .duration(50).EUt(16).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .inputs(GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
-                        .getItemVariant(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING, 2),
+                .inputs(GTCEFuCMetaBlocks.STANDARD_CASING
+                        .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.UNSTABLE_HYPERSTATIC_CASING),
                         GTCEFuCMetaItems.INFINITY_REAGENT.getStackForm(32),
                         GTCEFuCMetaItems.POWDER_ENDLIGHT.getStackForm())
                 .input(MetaItems.FIELD_GENERATOR_UV, 6)
@@ -82,6 +89,22 @@ public final class GTCEFuCCasingLoader {
                 .outputs(GTCEFuCMetaBlocks.STANDARD_CASING
                         .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.PRESSURE_CASING, ConfigHolder.recipes.casingsPerCraft))
                 .duration(50).EUt(16).buildAndRegister();
+
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .input(OrePrefix.plate, GTCEFuCMaterials.UnstableNaquadahAlloy, 6)
+                .input(OrePrefix.frameGt, Materials.NaquadahAlloy)
+                .circuitMeta(6)
+                .outputs(GTCEFuCMetaBlocks.STANDARD_CASING
+                        .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.UNSTABLE_HYPERSTATIC_CASING, ConfigHolder.recipes.casingsPerCraft))
+                .duration(50).EUt(16).buildAndRegister();
+
+        RecipeMaps.CHEMICAL_BATH_RECIPES.recipeBuilder()
+                .inputs(GTCEFuCMetaBlocks.STANDARD_CASING
+                        .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.UNSTABLE_HYPERSTATIC_CASING))
+                .fluidInputs(GTCEFuCMaterials.StabilityEssence.getFluid(65))
+                .outputs(GTCEFuCMetaBlocks.HARDENED_CASING
+                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING))
+                .duration(80).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .input(OrePrefix.frameGt, Materials.Invar)

@@ -18,7 +18,7 @@ public final class GTCEFuCRecipeMaps {
 
     public static final RecipeMap<SimpleRecipeBuilder> INFINITY_EXTRACTOR_RECIPES = new RecipeMap<>(
             "infinity_extractor",
-            2, 4, 0, 0, new SimpleRecipeBuilder(), false)
+            2, 4, 0, 1, new SimpleRecipeBuilder(), false)
                     .setSlotOverlay(false, false, false, GuiTextures.FURNACE_OVERLAY_1)
                     .setSlotOverlay(false, false, true, GuiTextures.INT_CIRCUIT_OVERLAY)
                     .setSlotOverlay(true, false, GuiTextures.DUST_OVERLAY)

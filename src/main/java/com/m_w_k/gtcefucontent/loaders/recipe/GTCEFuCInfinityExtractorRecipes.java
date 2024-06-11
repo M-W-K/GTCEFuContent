@@ -2,6 +2,8 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
+import gregtech.api.unification.material.Materials;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -54,6 +56,13 @@ public final class GTCEFuCInfinityExtractorRecipes {
                 .outputs(dust, block1, block2, block3)
                 .duration(9600)
                 .EUt(GTValues.VA[GTValues.ZPM])
+                .buildAndRegister();
+
+        INFINITY_EXTRACTOR_RECIPES.recipeBuilder()
+                .circuitMeta(5)
+                .chancedFluidOutput(GTCEFuCMaterials.Infinitesimality.getFluid(1), 10000, -1000)
+                .duration(19200)
+                .EUt(GTValues.VA[GTValues.HV])
                 .buildAndRegister();
     }
 }

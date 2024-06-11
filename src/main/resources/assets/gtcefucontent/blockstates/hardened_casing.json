@@ -25,6 +25,12 @@
         "textures": {
           "all": "gregtech:blocks/casings/hardened_casing/plasma_pipe_casing"
         }
+      },
+      "hyperstatic_casing": {
+        "model": "minecraft:cube_all",
+        "textures": {
+          "all": "gregtech:blocks/casings/hardened_casing/hyperstatic_casing"
+        }
       }
     }
   }

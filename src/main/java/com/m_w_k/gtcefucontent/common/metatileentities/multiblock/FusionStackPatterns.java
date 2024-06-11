@@ -100,15 +100,15 @@ final class FusionStackPatterns {
         return states(switch (variant) {
             default -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.HSSE_STURDY);
             case 2 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.ALUMINIUM_FROSTPROOF);
-            case 3 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
-                    .getState(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING);
+            case 3 -> GTCEFuCMetaBlocks.HARDENED_CASING
+                    .getState(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING);
         });
     }
 
     private static TraceabilityPredicate stateIndex(int id) {
         return states(switch (id) {
-            default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
-                    .getState(BlockLargeMultiblockCasing.CasingType.ATOMIC_CASING);
+            default -> GTCEFuCMetaBlocks.HARDENED_CASING
+                    .getState(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING);
             case 1 -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.HSSE_STURDY);
             case 3 -> MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G);
             case 4 -> GCYMMetaBlocks.UNIQUE_CASING
