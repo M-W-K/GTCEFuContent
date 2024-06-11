@@ -58,7 +58,7 @@ public final class GTCEFuCCasingLoader {
                         GTCEFuCMetaItems.POWDER_ENDLIGHT.getStackForm())
                 .input(MetaItems.FIELD_GENERATOR_UV, 6)
                 .input(OrePrefix.circuit, MarkerMaterials.Tier.UHV)
-                .fluidInputs(GTCEFuCMaterials.TriniumReduced.getFluid(1500))
+                .fluidInputs(GTCEFuCMaterials.RealityEssence.getFluid(500))
                 .outputs(GTCEFuCMetaBlocks.ADVANCED_CASING
                         .getItemVariant(GTCEFuCBlockAdvancedCasing.AdvancedCasingType.NULL_FIELD_CASING))
                 .circuitMeta(6)

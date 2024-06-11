@@ -150,20 +150,28 @@ gtcefucontent.fluid.hps=High Pressure Steam
 gtcefucontent.material.caesium_chlorine_mix=Caesium-Chlorine Mixture
 gtcefucontent.material.charged_ender=Charged Ender
 gtcefucontent.material.reduced_trinium=Reduced Trinium
-gtcefucontent.material.void_essence=Essence of the Void
-gtcefucontent.material.light_essence=Essence of Light
-gtcefucontent.material.experience_essence=Essence of Experience
 gtcefucontent.material.raw_vapor_seed=Vaporous Seed
 gtcefucontent.material.vapor_seed=Primed Vaporous Seed
 gtcefucontent.material.fire_enhancer=Flame Enhancer
-gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
-gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Caesium-Potassium Mixture
 gtcefucontent.material.naquadric_alloy=Naquadric Alloy
 gtcefucontent.material.unstable_naquadah_alloy=Unstable Naquadah Alloy
 gtcefucontent.material.titanium_boride=Titanium Boride
 gtcefucontent.material.silicon_carbide=Silicon Carbide
 gtcefucontent.material.uncured_thermostable_ceramic=Uncured Thermostable Ceramic
 gtcefucontent.material.thermostable_ceramic=Thermostable Ceramic
+
+gtcefucontent.material.void_essence=Essence of the Void
+gtcefucontent.material.light_essence=Essence of Light
+gtcefucontent.material.experience_essence=Essence of Experience
+gtcefucontent.material.existence_essence=Essence of Existence
+gtcefucontent.material.disruption_essence=Essence of Disruption
+gtcefucontent.material.stability_essence=Essence of Stability
+gtcefucontent.material.chaos_essence=Essence of Chaos
+gtcefucontent.material.order_essence=Essence of Order
+gtcefucontent.material.reality_essence=Essence of Reality
+
+gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
+gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Caesium-Potassium Mixture
 
 metaitem.crystal.void.name=Void Crystal
 metaitem.powder.void.name=Void Powder

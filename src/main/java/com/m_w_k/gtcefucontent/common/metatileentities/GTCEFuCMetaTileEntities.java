@@ -36,57 +36,54 @@ public final class GTCEFuCMetaTileEntities {
 
     private GTCEFuCMetaTileEntities() {}
 
-    private static final AtomicInteger MULTI_ID = new AtomicInteger(22500);
-    private static final AtomicInteger TILE_ID = new AtomicInteger(22530);
-
     public static void init() {
-        INFINITY_EXTRACTOR = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        INFINITY_EXTRACTOR = registerMetaTileEntity(3000,
                 new MetaTileEntityInfinityExtractor(gtcefucId("infinity_extractor")));
-        PNEUMATIC_INFUSER = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        PNEUMATIC_INFUSER = registerMetaTileEntity(3001,
                 new MetaTileEntityPneumaticInfuser(gtcefucId("pneumatic_infuser")));
-        SYMPATHETIC_COMBUSTOR = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        SYMPATHETIC_COMBUSTOR = registerMetaTileEntity(3002,
                 new MetaTileEntitySympatheticCombustor(gtcefucId("sympathetic_combustor")));
-        FORGING_FURNACE = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        FORGING_FURNACE = registerMetaTileEntity(3003,
                 new MetaTileEntityForgingFurnace(gtcefucId("forging_furnace")));
-        ELECTRODE_SMELTER = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        ELECTRODE_SMELTER = registerMetaTileEntity(3004,
                 new MetaTileEntityElectrodeSmelter(gtcefucId("electrode_blast_smelter")));
-        MEGA_STEAM_ENGINE = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        MEGA_STEAM_ENGINE = registerMetaTileEntity(3005,
                 new MetaTileEntityMegaSteamEngine(gtcefucId("mega_steam_engine")));
-        FUSION_STACK[0] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        FUSION_STACK[0] = registerMetaTileEntity(3006,
                 new MetaTileEntityFusionStack(gtcefucId("fusion_stack.stack"), GTValues.UHV));
-        FUSION_STACK[1] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        FUSION_STACK[1] = registerMetaTileEntity(3007,
                 new MetaTileEntityFusionStack(gtcefucId("fusion_stack.array"), GTValues.UEV));
-        FUSION_STACK[2] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        FUSION_STACK[2] = registerMetaTileEntity(3008,
                 new MetaTileEntityFusionStack(gtcefucId("fusion_stack.complex"), GTValues.UIV));
-        STAR_SIPHON = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        STAR_SIPHON = registerMetaTileEntity(3009,
                 new MetaTileEntityStarSiphon(gtcefucId("star_siphon")));
-        ANTIMATTER_COMPRESSOR = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        ANTIMATTER_COMPRESSOR = registerMetaTileEntity(3010,
                 new MetaTileEntityAntimatterCompressor(gtcefucId("antimatter_compressor")));
 
-        HEAT_EXCHANGER[0] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        HEAT_EXCHANGER[0] = registerMetaTileEntity(3100,
                 new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.small"), GTValues.LuV, 3));
-        HEAT_EXCHANGER[1] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        HEAT_EXCHANGER[1] = registerMetaTileEntity(3101,
                 new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.medium"), GTValues.ZPM, 4));
-        HEAT_EXCHANGER[2] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        HEAT_EXCHANGER[2] = registerMetaTileEntity(3102,
                 new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.large"), GTValues.UV, 5));
 
-        HEAT_RECLAIMER[0] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        HEAT_RECLAIMER[0] = registerMetaTileEntity(3110,
                 new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.basic"), false));
-        HEAT_RECLAIMER[1] = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        HEAT_RECLAIMER[1] = registerMetaTileEntity(3111,
                 new MetaTileEntityHeatReclaimer(gtcefucId("heat_reclaimer.advanced"), true));
-        HEAT_DISPERSER = registerMetaTileEntity(MULTI_ID.getAndIncrement(),
+        HEAT_DISPERSER = registerMetaTileEntity(3120,
                 new MetaTileEntityHeatDisperser(gtcefucId("heat_disperser"),
                         FluidConstants.ROOM_TEMPERATURE, 0.995, 100));
 
-        HEU_COMPONENTS.put(E_STANDARD, registerMetaTileEntity(TILE_ID.getAndIncrement(),
+        HEU_COMPONENTS.put(E_STANDARD, registerMetaTileEntity(3200,
                 new MetaTileEntityHEUComponent(gtcefucId("heu_endpoint.standard"), E_STANDARD)));
-        HEU_COMPONENTS.put(E_RETURNING, registerMetaTileEntity(TILE_ID.getAndIncrement(),
+        HEU_COMPONENTS.put(E_RETURNING, registerMetaTileEntity(3201,
                 new MetaTileEntityHEUComponent(gtcefucId("heu_endpoint.returning"), E_RETURNING)));
-        HEU_COMPONENTS.put(H_STANDARD, registerMetaTileEntity(TILE_ID.getAndIncrement(),
+        HEU_COMPONENTS.put(H_STANDARD, registerMetaTileEntity(3210,
                 new MetaTileEntityHEUComponent(gtcefucId("heu_pipe_holder.standard"), H_STANDARD)));
-        HEU_COMPONENTS.put(H_CONDUCTIVE, registerMetaTileEntity(TILE_ID.getAndIncrement(),
+        HEU_COMPONENTS.put(H_CONDUCTIVE, registerMetaTileEntity(3211,
                 new MetaTileEntityHEUComponent(gtcefucId("heu_pipe_holder.conductive"), H_CONDUCTIVE)));
-        HEU_COMPONENTS.put(H_EXPANDED, registerMetaTileEntity(TILE_ID.getAndIncrement(),
+        HEU_COMPONENTS.put(H_EXPANDED, registerMetaTileEntity(3212,
                 new MetaTileEntityHEUComponent(gtcefucId("heu_pipe_holder.expanded"), H_EXPANDED)));
 
         List<MetaTileEntityHEUComponent> endpoints = new ArrayList<>(2);

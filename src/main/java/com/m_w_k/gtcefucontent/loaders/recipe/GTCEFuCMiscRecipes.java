@@ -6,6 +6,9 @@ import static gregtech.api.unification.material.Materials.*;
 
 import java.util.Collection;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
+import gregtech.api.recipes.chance.output.ChancedOutputLogic;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -114,17 +117,16 @@ public final class GTCEFuCMiscRecipes {
                 .fluidOutputs(ChargedEnder.getFluid(500))
                 .duration(300).EUt(VA[LuV]).buildAndRegister();
 
-        // Yep. That's exactly how much neutronium I'm expecting them to make.
         RecipeMaps.ELECTROLYZER_RECIPES.recipeBuilder()
                 .input(MetaItems.NAN_CERTIFICATE)
-                .fluidInputs(McGuffium239.getFluid(216))
+                .fluidInputs(ExistenceEssence.getFluid(1200))
                 .output(OrePrefix.dust, Neutronium, 64)
                 .output(OrePrefix.dust, Neutronium, 64)
                 .output(OrePrefix.dust, Neutronium, 64)
                 .output(OrePrefix.dust, Neutronium, 64)
                 .output(OrePrefix.dust, Neutronium, 64)
                 .output(OrePrefix.dust, Neutronium, 64)
-                .fluidOutputs(ExperienceEssence.getFluid(200))
+                .fluidOutputs(ConcentratedEffort.getFluid(150))
                 .duration(8400).EUt(VA[UV]).buildAndRegister();
 
         RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()
@@ -195,6 +197,36 @@ public final class GTCEFuCMiscRecipes {
                 .input(OrePrefix.plate, UncuredThermostableCeramic)
                 .output(OrePrefix.plate, ThermostableCeramic)
                 .duration(2000).EUt(VA[HV]).buildAndRegister();
+
+        RecipeMaps.CHEMICAL_BATH_RECIPES.recipeBuilder()
+                .input(MetaItems.COVER_SOLAR_PANEL, 64)
+                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 64, 9000, 0)
+                .fluidInputs(Ice.getFluid(13500))
+                .fluidOutputs(FrozenStarlight.getFluid(12000))
+                // TODO enforce overworld-only recipe
+                .duration(150).EUt(VA[IV]).buildAndRegister();
+
+        RecipeMaps.LARGE_CHEMICAL_RECIPES.recipeBuilder()
+                .input(OrePrefix.plate, UnstableNaquadahAlloy, 4)
+                .fluidInputs(Infinitesimality.getFluid(99),
+                        ExistenceEssence.getFluid(3000))
+                .chancedOutput(OrePrefix.plate, NaquadahAlloy, 4, 8000, -1000)
+                .chancedFluidOutput(DisruptionEssence.getFluid(1500), 1000, 1000)
+                .chancedFluidOutput(StabilityEssence.getFluid(1500), 1000, 1000)
+                .duration(330).EUt(VA[IV]).buildAndRegister();
+
+        RecipeMaps.BREWING_RECIPES.recipeBuilder()
+                .input(Items.CHORUS_FRUIT_POPPED)
+                .fluidInputs(DisruptionEssence.getFluid(10))
+                .fluidOutputs(ChaosEssence.getFluid(1))
+                .duration(40).EUt(VA[LuV]).buildAndRegister();
+
+        RecipeMaps.DISTILLERY_RECIPES.recipeBuilder()
+                .input(OrePrefix.gemExquisite, TriniumReduced)
+                .fluidInputs(StabilityEssence.getFluid(10))
+                .fluidOutputs(OrderEssence.getFluid(1))
+                .chancedOutput(OrePrefix.gemExquisite, TriniumReduced, 5000, 0)
+                .duration(40).EUt(VA[LuV]).buildAndRegister();
     }
 
     public static void initPost() {
