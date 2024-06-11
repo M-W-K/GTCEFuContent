@@ -178,7 +178,12 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
     @Override
     protected IItemHandlerModifiable createImportItemHandler() {
         if (this.type == null) return super.createImportItemHandler();
-        return new ItemStackHandler(this.getInventorySize());
+        return new ItemStackHandler(this.getInventorySize()) {
+            @Override
+            public int getSlotLimit(int slot) {
+                return MetaTileEntityHEUComponent.this.getSlotLimit(slot);
+            }
+        };
     }
 
     @Override
@@ -217,7 +222,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
 
     @Override
     public int getSlotLimit(int slot) {
-        return this.importItems.getSlotLimit(slot);
+        return this.type.pipesPerSlot();
     }
 
     @Override
@@ -239,7 +244,8 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
             ItemStack stack;
             for (int i = 0; i < this.getInventorySize(); i++) {
                 stack = this.getStackInSlot(i);
-                if (!(isValidPipe(stack) && stack.getCount() == 64)) return validPipingUpdateCheck(false);
+                if (!(isValidPipe(stack) && stack.getCount() >= this.getSlotLimit(i)))
+                    return validPipingUpdateCheck(false);
             }
             return validPipingUpdateCheck(true);
         } else return this.validPiping;
@@ -292,7 +298,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
     }
 
     private int getInventorySize() {
-        return this.type.isLargeInventory() ? 2 : 1;
+        return this.type.slotsPerComponent();
     }
 
     private void setStackDirty() {

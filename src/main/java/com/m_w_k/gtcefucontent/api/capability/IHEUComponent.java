@@ -35,8 +35,19 @@ public interface IHEUComponent extends IItemHandlerModifiable {
             return this == E_STANDARD || this == E_RETURNING;
         }
 
-        public boolean isLargeInventory() {
-            return this == H_CONDUCTIVE || this == H_EXPANDED;
+        public int pipesPerSlot() {
+            return switch (this) {
+                case E_STANDARD -> 32;
+                case E_RETURNING -> 40;
+                default -> 16;
+            };
+        }
+
+        public int slotsPerComponent() {
+            return switch (this) {
+                case H_EXPANDED, H_CONDUCTIVE -> 2;
+                default -> 1;
+            };
         }
     }
 
