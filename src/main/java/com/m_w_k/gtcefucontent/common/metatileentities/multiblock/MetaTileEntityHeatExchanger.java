@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 
 import com.m_w_k.gtcefucontent.api.capability.impl.HEUGridHandler;
 import com.m_w_k.gtcefucontent.api.metatileentity.IHeatExchanger;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import gregtech.api.gui.GuiTextures;
 import gregtech.api.gui.Widget;
 import gregtech.api.gui.widgets.ClickButtonWidget;
@@ -217,7 +219,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     protected static TraceabilityPredicate stateIndex(int id) {
         return states(switch (id) {
             default -> MetaBlocks.METAL_CASING.getState(BlockMetalCasing.MetalCasingType.INVAR_HEATPROOF);
-            case 1 -> MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE);
+            case 1 -> GTCEFuCMetaBlocks.STANDARD_CASING
+                    .getState(GTCEFuCBlockStandardCasing.CasingType.THERMOSTABLE_CERAMIC);
             case 2 -> MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.TEMPERED_GLASS);
         });
     }

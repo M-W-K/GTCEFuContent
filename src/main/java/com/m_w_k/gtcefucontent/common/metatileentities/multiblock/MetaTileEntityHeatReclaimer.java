@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -227,18 +230,16 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
     protected static TraceabilityPredicate stateIndex(int id, boolean advanced) {
         return states(id == 0 ?
                 (advanced ?
-                        (MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE)) :
+                        (GTCEFuCMetaBlocks.STANDARD_CASING
+                                .getState(GTCEFuCBlockStandardCasing.CasingType.THERMOSTABLE_CERAMIC)) :
                         (GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
                                 .getState(BlockLargeMultiblockCasing.CasingType.STEAM_CASING))) :
-                (advanced ?
-                        (GCYMMetaBlocks.UNIQUE_CASING.getState(BlockUniqueCasing.UniqueCasingType.HEAT_VENT)) :
-                        (MetaBlocks.MULTIBLOCK_CASING
-                                .getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING))));
+                (MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING)));
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return isAdvanced ? Textures.PLASCRETE : GCYMTextures.STEAM_CASING;
+        return isAdvanced ? GTCEFuCTextures.THERMOSTABLE_CERAMIC : GCYMTextures.STEAM_CASING;
     }
 
     @Override

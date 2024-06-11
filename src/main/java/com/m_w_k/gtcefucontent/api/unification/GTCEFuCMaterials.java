@@ -47,6 +47,11 @@ public final class GTCEFuCMaterials {
     public static Material NaquadricAlloy;
     public static Material UnstableNaquadahAlloy;
 
+    public static Material TitaniumBoride;
+    public static Material SiliconCarbide;
+    public static Material UncuredThermostableCeramic;
+    public static Material ThermostableCeramic;
+
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization
      * <br>
@@ -187,6 +192,35 @@ public final class GTCEFuCMaterials {
                         .blastStats(VA[LuV], 900)
                         .vacuumStats(VA[IV], 250))
                 .build();
+
+        TitaniumBoride = new Material.Builder(id++, gtcefucId("titanium_boride"))
+                .colorAverage().dust()
+                .flags(DECOMPOSITION_BY_CENTRIFUGING)
+                .components(Titanium, 1, Boron, 2)
+                .build();
+
+        SiliconCarbide = new Material.Builder(id++, gtcefucId("silicon_carbide"))
+                .colorAverage().ingot()
+                .flags(STD_METAL)
+                .components(Silicon, 1, Carbon, 1)
+                .blast(b -> b.temp(3440, BlastProperty.GasTier.MID)
+                        .blastStats(GTValues.VA[GTValues.EV], 700))
+                .build();
+
+        UncuredThermostableCeramic = new Material.Builder(id++, gtcefucId("uncured_thermostable_ceramic"))
+                .color(0xFAF1C6).dust()
+                .flags(DECOMPOSITION_BY_CENTRIFUGING, GENERATE_PLATE)
+                .components(TitaniumBoride, 4, SiliconCarbide, 1)
+                .build();
+
+        ThermostableCeramic = new Material.Builder(id++, gtcefucId("thermostable_ceramic"))
+                .color(0xFFF8E6).dust()
+                .flags(DECOMPOSITION_BY_ELECTROLYZING, GENERATE_PLATE, EXCLUDE_PLATE_COMPRESSOR_RECIPE,
+                        EXCLUDE_BLOCK_CRAFTING_RECIPES, NO_SMASHING, NO_SMELTING, NO_WORKING)
+                .components(TitaniumBoride, 4, SiliconCarbide, 1)
+                .build();
+
+
 
         // sea snake
         EutecticCaesiumSodiumPotassium = eutectic(

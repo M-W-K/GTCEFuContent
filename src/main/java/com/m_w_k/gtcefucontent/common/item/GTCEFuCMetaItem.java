@@ -37,7 +37,7 @@ public class GTCEFuCMetaItem extends StandardMetaItem {
 
         INFINITY_REAGENT = addItem(id++, "infinity_reagent");
 
-        REGRET = addItem(id++, "regret").setInvisible().setMaxStackSize(1);
+        REGRET = addItem(999, "regret").setInvisible().setMaxStackSize(1);
     }
 
     @Override

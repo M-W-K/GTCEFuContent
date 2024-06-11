@@ -1,0 +1,43 @@
+package com.m_w_k.gtcefucontent.loaders.recipe;
+
+import gregtech.api.fluids.store.FluidStorageKeys;
+import gregtech.api.recipes.RecipeMaps;
+
+import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.ChargedEnder;
+import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.PreheatedWater;
+import static gregtech.api.GTValues.*;
+import static gregtech.api.unification.material.Materials.*;
+
+public class GTCEFuCFuelRecipes {
+
+    private GTCEFuCFuelRecipes() {}
+
+    public static void init() {
+        RecipeMaps.STEAM_TURBINE_FUELS.recipeBuilder()
+                .fluidInputs(PreheatedWater.getFluid(FluidStorageKeys.GAS, 4))
+                .fluidOutputs(DistilledWater.getFluid(4))
+                .duration(16)
+                .EUt((int) V[LV])
+                .buildAndRegister();
+
+        RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
+                .fluidInputs(Thorium.getPlasma(1))
+                .fluidOutputs(Thorium.getFluid(1))
+                .duration(532)
+                .EUt((int) V[EV])
+                .buildAndRegister();
+
+        RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
+                .fluidInputs(ChargedEnder.getFluid(1))
+                .fluidOutputs(Beryllium.getFluid(1))
+                .duration(750)
+                .EUt((int) V[EV])
+                .buildAndRegister();
+
+        RecipeMaps.GAS_TURBINE_FUELS.recipeBuilder()
+                .fluidInputs(ChargedEnder.getFluid(1))
+                .duration(700)
+                .EUt((int) V[EV])
+                .buildAndRegister();
+    }
+}

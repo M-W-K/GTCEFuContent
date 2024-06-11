@@ -19,6 +19,7 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCCasingLoader.init();
         GTCEFuCHEUComponentLoader.init();
         GTCEFuCMiscRecipes.init();
+        GTCEFuCFuelRecipes.init();
         GTCEFuCEutecticLoader.init();
 
         GTCEFuCCraftingRecipeLoader.init();

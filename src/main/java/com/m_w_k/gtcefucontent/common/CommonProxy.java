@@ -30,6 +30,7 @@ public class CommonProxy {
         IForgeRegistry<Block> registry = event.getRegistry();
         registry.register(GTCEFuCMetaBlocks.ADVANCED_CASING);
         registry.register(GTCEFuCMetaBlocks.HARDENED_CASING);
+        registry.register(GTCEFuCMetaBlocks.STANDARD_CASING);
         registry.register(GTCEFuCMetaBlocks.STORAGE_BLOCK);
     }
 
@@ -40,6 +41,7 @@ public class CommonProxy {
 
         registry.register(createItemBlock(GTCEFuCMetaBlocks.ADVANCED_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(GTCEFuCMetaBlocks.HARDENED_CASING, VariantItemBlock::new));
+        registry.register(createItemBlock(GTCEFuCMetaBlocks.STANDARD_CASING, VariantItemBlock::new));
         registry.register(createItemBlock(GTCEFuCMetaBlocks.STORAGE_BLOCK, VariantItemBlock::new));
     }
 

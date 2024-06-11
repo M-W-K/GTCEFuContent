@@ -6,6 +6,9 @@ import codechicken.lib.vec.Matrix4;
 import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
 import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
@@ -257,13 +260,13 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     @Nonnull
     protected static TraceabilityPredicate stateIndex(int id) {
         return states(id == 0 ?
-                (MetaBlocks.CLEANROOM_CASING.getState(BlockCleanroomCasing.CasingType.PLASCRETE)) :
-                (MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING)));
+                (GTCEFuCMetaBlocks.STANDARD_CASING.getState(GTCEFuCBlockStandardCasing.CasingType.THERMOSTABLE_CERAMIC))
+                : (MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING)));
     }
 
     @Override
     public ICubeRenderer getBaseTexture(IMultiblockPart iMultiblockPart) {
-        return Textures.PLASCRETE;
+        return GTCEFuCTextures.THERMOSTABLE_CERAMIC;
     }
 
     @Override

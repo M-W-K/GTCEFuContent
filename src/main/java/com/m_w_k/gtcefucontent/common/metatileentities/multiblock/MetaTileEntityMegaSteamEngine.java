@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.List;
 
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -148,7 +149,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
                     .getState(BlockLargeMultiblockCasing.CasingType.STEAM_CASING);
             case 1 -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
                     .getState(BlockLargeMultiblockCasing.CasingType.VIBRATION_SAFE_CASING);
-            case 2 -> GTCEFuCMetaBlocks.HARDENED_CASING.getState(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING);
+            case 2 -> GTCEFuCMetaBlocks.STANDARD_CASING.getState(GTCEFuCBlockStandardCasing.CasingType.PRESSURE_CASING);
             case 3 -> MetaBlocks.COMPUTER_CASING.getState(BlockComputerCasing.CasingType.HIGH_POWER_CASING);
             case 4 -> GCYMMetaBlocks.UNIQUE_CASING
                     .getState(BlockUniqueCasing.UniqueCasingType.MOLYBDENUM_DISILICIDE_COIL);

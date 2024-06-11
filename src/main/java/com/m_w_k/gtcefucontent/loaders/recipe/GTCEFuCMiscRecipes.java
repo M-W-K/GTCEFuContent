@@ -26,33 +26,6 @@ public final class GTCEFuCMiscRecipes {
     private GTCEFuCMiscRecipes() {}
 
     public static void init() {
-        RecipeMaps.STEAM_TURBINE_FUELS.recipeBuilder()
-                .fluidInputs(PreheatedWater.getFluid(FluidStorageKeys.GAS, 4))
-                .fluidOutputs(DistilledWater.getFluid(4))
-                .duration(16)
-                .EUt((int) V[LV])
-                .buildAndRegister();
-
-        RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
-                .fluidInputs(Thorium.getPlasma(1))
-                .fluidOutputs(Thorium.getFluid(1))
-                .duration(532)
-                .EUt((int) V[EV])
-                .buildAndRegister();
-
-        RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()
-                .fluidInputs(ChargedEnder.getFluid(1))
-                .fluidOutputs(Beryllium.getFluid(1))
-                .duration(750)
-                .EUt((int) V[EV])
-                .buildAndRegister();
-
-        RecipeMaps.GAS_TURBINE_FUELS.recipeBuilder()
-                .fluidInputs(ChargedEnder.getFluid(1))
-                .duration(700)
-                .EUt((int) V[EV])
-                .buildAndRegister();
-
         RecipeMaps.LARGE_CHEMICAL_RECIPES.recipeBuilder()
                 .fluidInputs(LiquidAir.getFluid(60000), Water.getFluid(60000))
                 .input(OrePrefix.dust, Ash)
@@ -192,15 +165,36 @@ public final class GTCEFuCMiscRecipes {
                 .output(OrePrefix.dust, DarkAsh)
                 .duration(1).EUt(69).buildAndRegister();
 
-        RecipeMaps.MIXER_RECIPES.recipeBuilder().duration(400).EUt(VA[IV])
+        RecipeMaps.MIXER_RECIPES.recipeBuilder()
                 .input(OrePrefix.dust, NaquadahEnriched, 2)
                 .input(OrePrefix.dust, Osmiridium)
                 .input(OrePrefix.dust, TriniumReduced)
                 .circuitMeta(2)
                 .output(OrePrefix.dust, UnstableNaquadahAlloy, 4)
-                .buildAndRegister();
+                .duration(400).EUt(VA[IV]).buildAndRegister();
 
-        // TODO compressed steam 10 tick HV 102400 -> 640
+        RecipeMaps.MIXER_RECIPES.recipeBuilder()
+                .input(OrePrefix.dust, Titanium, 1)
+                .input(OrePrefix.dust, Boron, 2)
+                .output(OrePrefix.dust, TitaniumBoride, 3)
+                .duration(300).EUt(VA[EV]).buildAndRegister();
+
+        RecipeMaps.MIXER_RECIPES.recipeBuilder()
+                .input(OrePrefix.dust, Silicon, 1)
+                .input(OrePrefix.dust, Carbon, 1)
+                .output(OrePrefix.dust, SiliconCarbide, 2)
+                .duration(200).EUt(VA[EV]).buildAndRegister();
+
+        RecipeMaps.FORMING_PRESS_RECIPES.recipeBuilder()
+                .input(OrePrefix.dust, TitaniumBoride, 4)
+                .input(OrePrefix.plate, SiliconCarbide)
+                .output(OrePrefix.plate, UncuredThermostableCeramic, 5)
+                .duration(600).EUt(VA[EV]).buildAndRegister();
+
+        RecipeMaps.FURNACE_RECIPES.recipeBuilder()
+                .input(OrePrefix.plate, UncuredThermostableCeramic)
+                .output(OrePrefix.plate, ThermostableCeramic)
+                .duration(2000).EUt(VA[HV]).buildAndRegister();
     }
 
     public static void initPost() {

@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import javax.annotation.Nonnull;
 
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class MetaTileEntityPneumaticInfuser extends RecipeMapMultiblockControlle
         return states(switch (id) {
             default -> GCYMMetaBlocks.LARGE_MULTIBLOCK_CASING
                     .getState(BlockLargeMultiblockCasing.CasingType.STRESS_PROOF_CASING);
-            case 1 -> GTCEFuCMetaBlocks.HARDENED_CASING.getState(GTCEFuCBlockHardenedCasing.CasingType.PRESSURE_CASING);
+            case 1 -> GTCEFuCMetaBlocks.STANDARD_CASING.getState(GTCEFuCBlockStandardCasing.CasingType.PRESSURE_CASING);
             case 2 -> MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.TUNGSTENSTEEL_PIPE);
             case 3 -> MetaBlocks.TRANSPARENT_CASING.getState(BlockGlassCasing.CasingType.LAMINATED_GLASS);
         });
