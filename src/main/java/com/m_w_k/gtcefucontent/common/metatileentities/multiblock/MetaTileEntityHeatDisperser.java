@@ -52,6 +52,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
@@ -71,6 +72,7 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     protected IMultipleTankHandler outputFluidInventory;
 
     protected HalfExchangeData lastExchange = null;
+    private long lastOperationTick = -1;
 
     protected final int targetTemperature;
     protected final double dispersalRate;
@@ -103,6 +105,15 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     @Override
     protected void updateFormedValid() {
         if (isWorkingEnabled) {
+            // overticking? think again
+            if (this.getWorld() != null && !this.getWorld().isRemote) {
+                long tick = FMLCommonHandler.instance().getMinecraftServerInstance().getTickCounter();
+                if (this.lastOperationTick == tick && Math.abs(this.chassisTemperature - this.targetTemperature) > 10) {
+                    this.overtickExplosion();
+                    return;
+                } else this.lastOperationTick = tick;
+            }
+
             setActive(tryHeatCollection());
             this.chassisTemperature = (this.chassisTemperature - this.targetTemperature) *
                     this.dispersalRate + this.targetTemperature;
@@ -410,6 +421,15 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
         if (dataId == GregtechDataCodes.WORKABLE_ACTIVE) {
             this.isActive = buf.readBoolean();
             this.scheduleRenderUpdate();
+        }
+    }
+
+    protected void overtickExplosion() {
+        if (com.m_w_k.gtcefucontent.common.ConfigHolder.heatDisperserExplodesOnOvertick) {
+            setExploded();
+            getWorld().setBlockToAir(getPos());
+            getWorld().createExplosion(null, getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5,
+                    10, true);
         }
     }
 }
