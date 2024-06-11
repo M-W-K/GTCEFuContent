@@ -158,6 +158,7 @@ gtcefucontent.material.fire_enhancer=Flame Enhancer
 gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
 gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Caesium-Potassium Mixture
 gtcefucontent.material.naquadric_alloy=Naquadric Alloy
+gtcefucontent.material.unstable_naquadah_alloy=Unstable Naquadah Alloy
 
 metaitem.crystal.void.name=Void Crystal
 metaitem.powder.void.name=Void Powder

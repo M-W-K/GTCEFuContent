@@ -1,8 +1,7 @@
 package com.m_w_k.gtcefucontent.api.unification;
 
 import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.*;
-import static gregtech.api.GTValues.LuV;
-import static gregtech.api.GTValues.VA;
+import static gregtech.api.GTValues.*;
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
 import static gregtech.api.unification.material.info.MaterialIconSet.*;
@@ -11,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import gregtech.api.unification.material.properties.ToolProperty;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +45,7 @@ public final class GTCEFuCMaterials {
     public static Material VaporSeed;
 
     public static Material NaquadricAlloy;
+    public static Material UnstableNaquadahAlloy;
 
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization
@@ -168,6 +169,23 @@ public final class GTCEFuCMaterials {
                 .components(Naquadria, 3, Thorium, 5, Cadmium, 1, Lead, 1)
                 .blast(b -> b.temp(7340, BlastProperty.GasTier.HIGHER)
                         .blastStats(GTValues.VA[GTValues.ZPM], 900))
+                .build();
+
+        UnstableNaquadahAlloy = new Material.Builder(id++, gtcefucId("unstable_naquadah_alloy"))
+                .ingot().fluid()
+                .color(0x182832).iconSet(DULL)
+                .flags(EXT2_METAL, GENERATE_SPRING, GENERATE_RING, GENERATE_ROTOR, GENERATE_SMALL_GEAR,
+                        GENERATE_FRAME, GENERATE_DENSE, GENERATE_FOIL, GENERATE_GEAR, GENERATE_DOUBLE_PLATE)
+                .components(NaquadahEnriched, 2, Osmiridium, 1, TriniumReduced, 1)
+                .toolStats(ToolProperty.Builder.of(35.0F, 10.0F, 2764, 5)
+                        .attackSpeed(0.25F).enchantability(100).magnetic().build())
+                .rotorStats(7.5f, 4.5f, 4096)
+                .cableProperties(V[UV], 2, 12)
+                .fluidPipeProperties(8320, 130, true, true, false, true)
+                .blast(b -> b
+                        .temp(6900, BlastProperty.GasTier.HIGH)
+                        .blastStats(VA[LuV], 900)
+                        .vacuumStats(VA[IV], 250))
                 .build();
 
         // sea snake
