@@ -28,7 +28,8 @@ public final class GTCEFuCMetaTileEntities {
     public static MetaTileEntityAntimatterCompressor ANTIMATTER_COMPRESSOR;
     public static final MetaTileEntityFusionStack[] FUSION_STACK = new MetaTileEntityFusionStack[3];
     public static MetaTileEntityNaqFuelCellPacker NAQ_FUEL_CELL_PACKER;
-    public static final MetaTileEntityNaqReactor NAQ_REACTOR[] = new MetaTileEntityNaqReactor[3];
+    public static final MetaTileEntityNaqReactor[] NAQ_REACTOR = new MetaTileEntityNaqReactor[3];
+    public static MetaTileEntityLargeNaqReactor LARGE_NAQ_REACTOR;
 
     public static final MetaTileEntityHeatExchanger[] HEAT_EXCHANGER = new MetaTileEntityHeatExchanger[3];
     public static final MetaTileEntityHeatReclaimer[] HEAT_RECLAIMER = new MetaTileEntityHeatReclaimer[2];
@@ -72,6 +73,7 @@ public final class GTCEFuCMetaTileEntities {
                 GTCEFuCTextures.NAQ_REACTOR_OVERLAY, GTValues.UV));
         NAQ_REACTOR[2] = registerMetaTileEntity(3014, new MetaTileEntityNaqReactor(gtcefucId("naq_reactor_3"),
                 GTCEFuCTextures.NAQ_REACTOR_OVERLAY, GTValues.UHV));
+        LARGE_NAQ_REACTOR = registerMetaTileEntity(3015, new MetaTileEntityLargeNaqReactor(gtcefucId("large_naq_reactor")));
 
 
         HEAT_EXCHANGER[0] = registerMetaTileEntity(3100,

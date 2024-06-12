@@ -26,6 +26,8 @@ gtcefucontent.machine.naq_fuel_cell_packer.tooltip=Precision Assembly isn't enou
 gtcefucontent.machine.naq_fuel_cell_packer.warn=§cCauses massive, terrain-damaging explosions on recipe failure. Does not harm itself.
 recipemap.naq_fuel_cell_packer.name=Naquadah Fuel Cell Packing
 
+gtcefucontent.machine.large_naq_reactor.name=Large Naquadah Reactor
+gtcefucontent.machine.large_naq_reactor.tooltip=The Ultimate in Primary Power
 gtcefucontent.machine.naq_reactor_1.name=Naquadah Reactor Mark 1
 gtcefucontent.machine.naq_reactor_1.tooltip=This thing runs forever
 gtcefucontent.machine.naq_reactor_2.name=Naquadah Reactor Mark 2

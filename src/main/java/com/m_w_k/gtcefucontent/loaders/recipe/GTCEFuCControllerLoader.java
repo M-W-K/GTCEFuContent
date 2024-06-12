@@ -112,6 +112,15 @@ public class GTCEFuCControllerLoader {
                 'C', GTCEFuCMetaBlocks.HARDENED_CASING
                         .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING));
 
+        ModHandler.addShapedRecipe(true, "large_naq_reactor",
+                GTCEFuCMetaTileEntities.LARGE_NAQ_REACTOR.getStackForm(),
+                "FSF", "ACA", "FSF",
+                'S', MetaItems.SENSOR_UV,
+                'A', MetaItems.ROBOT_ARM_UV,
+                'F', MetaItems.FIELD_GENERATOR_UV,
+                'C', GTCEFuCMetaBlocks.HARDENED_CASING
+                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING));
+
         // Assembler recipes
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
