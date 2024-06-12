@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
+import codechicken.lib.vec.Vector3;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
@@ -13,24 +14,20 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.TraceabilityPredicate;
 import gregtech.api.recipes.Recipe;
-import gregtech.api.recipes.RecipeMap;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
+import gregtech.client.particle.GTLaserBeamParticle;
+import gregtech.client.particle.GTParticleManager;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
-import gregtech.common.ConfigHolder;
 import gregtech.common.blocks.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +35,13 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockController {
+
+    private static final ResourceLocation LASER_LOCATION = GTUtility.gregtechId("textures/fx/laser/laser.png");
+    private static final ResourceLocation LASER_HEAD_LOCATION = GTUtility
+            .gregtechId("textures/fx/laser/laser_start.png");
+
+    @SideOnly(Side.CLIENT)
+    protected final GTLaserBeamParticle[] beam = new GTLaserBeamParticle[2];
 
     public MetaTileEntityNaqFuelCellPacker(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.NAQ_FUEL_CELL_PACKER_RECIPES);
@@ -54,7 +58,7 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
                 .aisle("#######", "#C###C#", "#######", "#######", "#######", "#C###C#", "#######")
                 .aisle("#######", "#C###C#", "#######", "#######", "#######", "#C###C#", "#######")
                 .aisle("#######", "#C###C#", "#######", "#######", "#######", "#C###C#", "#######")
-                .aisle("#######", "#CCCCC#", "###C###", "#######", "###C###", "#CCCCC#", "#######")
+                .aisle("#######", "#CCCCC#", "###C###", "### ###", "###C###", "#CCCCC#", "#######")
                 .aisle("#######", "#C###C#", "#######", "#######", "#######", "#C###C#", "#######")
                 .aisle("#######", "#C###C#", "#######", "#######", "#######", "#C###C#", "#######")
                 .aisle("#######", "#C###C#", "#######", "#######", "#######", "#C###C#", "#######")
@@ -98,19 +102,64 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
         return new MetaTileEntityNaqFuelCellPacker(this.metaTileEntityId);
     }
 
+    @Override
+    public void update() {
+        super.update();
+        if (this.getWorld().isRemote) handleLaser();
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected void handleLaser() {
+        if (this.isActive() && this.beam[0] == null) {
+            createLaser();
+        } else if (!this.isActive() && this.beam[0] != null) {
+            beam[0].setExpired();
+            beam[1].setExpired();
+            beam[0] = null;
+            beam[1] = null;
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected void createLaser() {
+        Vector3 laserPos = getOffsetToCenter().add(getPos());
+        beam[0] = createLaserParticle(laserPos.copy().subtract(0, 0.6, 0), laserPos.copy().add(0, 0.05, 0), false);
+        beam[1] = createLaserParticle(laserPos.copy().subtract(0, 0.05, 0), laserPos.copy().add(0, 0.6, 0), true);
+        GTParticleManager.INSTANCE.addEffect(beam[0]);
+        GTParticleManager.INSTANCE.addEffect(beam[1]);
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected GTLaserBeamParticle createLaserParticle(Vector3 bottom, Vector3 top, boolean reverse) {
+        return new GTLaserBeamParticle(this, bottom, top)
+                .setBody(LASER_LOCATION)
+                .setBeamHeight(0.25f)
+                .setDoubleVertical(true)
+                .setHead(LASER_HEAD_LOCATION)
+                .setHeadWidth(0.2f)
+                .setEmit(reverse ? -0.2f : 0.2f);
+    }
+
+
     protected void doFailureExplosion() {
-        EnumFacing offsetDirection = RelativeDirection.BACK.getRelativeFacing(this.getFrontFacing(),
-                this.getUpwardsFacing(), this.isFlipped());
+        Vector3 offset = getOffsetToCenter();
         getWorld().createExplosion(null,
-                getPos().getX() + 0.5 + offsetDirection.getXOffset() * this.getOffsetToCenter(),
-                getPos().getY() + 0.5 + offsetDirection.getYOffset() * this.getOffsetToCenter(),
-                getPos().getZ() + 0.5 + offsetDirection.getZOffset() * this.getOffsetToCenter(),
+                getPos().getX() + offset.x,
+                getPos().getY() + offset.y,
+                getPos().getZ() + offset.z,
                 60, true);
     }
 
-    protected int getOffsetToCenter() {
-        return 6;
+    protected Vector3 getOffsetToCenter() {
+        EnumFacing offsetDirection = RelativeDirection.BACK.getRelativeFacing(this.getFrontFacing(),
+                this.getUpwardsFacing(), this.isFlipped());
+        Vector3 vec =
+                new Vector3(offsetDirection.getXOffset(), offsetDirection.getYOffset(), offsetDirection.getZOffset());
+        vec.multiply(6);
+        vec.add(0.5, 0.5, 0.5);
+        return vec;
     }
+
 
     protected class NaqFuelCellPackerRecipeLogic extends MultiblockRecipeLogic {
 
