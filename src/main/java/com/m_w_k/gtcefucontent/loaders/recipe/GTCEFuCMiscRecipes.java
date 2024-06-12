@@ -202,7 +202,12 @@ public final class GTCEFuCMiscRecipes {
 
         RecipeMaps.CHEMICAL_BATH_RECIPES.recipeBuilder()
                 .input(MetaItems.COVER_SOLAR_PANEL, 64)
-                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 64, 9000, 0)
+                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 10, 9000, 0)
+                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 10, 9000, 0)
+                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 10, 9000, 0)
+                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 10, 9000, 0)
+                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 10, 9000, 0)
+                .chancedOutput(MetaItems.COVER_SOLAR_PANEL, 10, 9000, 0)
                 .fluidInputs(Ice.getFluid(13500))
                 .fluidOutputs(FrozenStarlight.getFluid(12000))
                 // TODO enforce overworld-only recipe

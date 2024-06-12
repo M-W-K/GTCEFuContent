@@ -23,7 +23,7 @@ recipemap.pneumatic_infuser.name=Pneumatic Infuser
 
 gtcefucontent.machine.naq_fuel_cell_packer.name=Naquadah Fuel Cell Packer
 gtcefucontent.machine.naq_fuel_cell_packer.tooltip=Precision Assembly isn't enough
-gtcefucontent.machine.naq_fuel_cell_packer.warn=Causes massive, terrain-damaging explosions on recipe failure. Does not harm itself.
+gtcefucontent.machine.naq_fuel_cell_packer.warn=§cCauses massive, terrain-damaging explosions on recipe failure. Does not harm itself.
 recipemap.naq_fuel_cell_packer.name=Naquadah Fuel Cell Packing
 
 gtcefucontent.machine.naq_reactor_1.name=Naquadah Reactor Mark 1
@@ -175,6 +175,8 @@ gtcefucontent.material.silicon_carbide=Silicon Carbide
 gtcefucontent.material.uncured_thermostable_ceramic=Uncured Thermostable Ceramic
 gtcefucontent.material.thermostable_ceramic=Thermostable Ceramic
 gtcefucontent.material.infinitesimality=Infinitesimality
+gtcefucontent.material.concentrated_effort=Concentrated Effort
+gtcefucontent.material.frozen_starlight=Frozen Starlight
 
 gtcefucontent.material.void_essence=Essence of the Void
 gtcefucontent.material.light_essence=Essence of Light
