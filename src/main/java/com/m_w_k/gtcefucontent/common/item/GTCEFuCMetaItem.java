@@ -37,6 +37,9 @@ public class GTCEFuCMetaItem extends StandardMetaItem {
 
         INFINITY_REAGENT = addItem(id++, "infinity_reagent");
 
+        NAQ_FUEL_CELL_EMPTY = addItem(id++, "naq_fuel_cell_empty");
+        NAQ_FUEL_CELL = addItem(id++, "naq_fuel_cell").setRarity(EnumRarity.UNCOMMON);
+
         REGRET = addItem(999, "regret").setInvisible().setMaxStackSize(1);
     }
 

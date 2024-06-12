@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.api.render;
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -20,10 +21,16 @@ public final class GTCEFuCTextures {
     public static SimpleOverlayRenderer PLASMA_PIPE_CASING;
     public static SimpleOverlayRenderer THERMOSTABLE_CERAMIC;
     public static SimpleOverlayRenderer PRESSURE_CASING;
+    public static SimpleOverlayRenderer UNSTABLE_HYPERSTATIC_CASING;
+    public static SimpleOverlayRenderer HYPERSTATIC_CASING;
 
     public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_EMPTY_OVERLAYS = new ArrayList<>(5);
     public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_FULL_OVERLAYS = new ArrayList<>(5);
     public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_ACTIVE_OVERLAYS = new ArrayList<>(5);
+
+    public static final OrientedOverlayRenderer NAQ_REACTOR_OVERLAY =
+            new OrientedOverlayRenderer("generators/naquadah");
+
 
     private GTCEFuCTextures() {}
 
@@ -31,8 +38,11 @@ public final class GTCEFuCTextures {
         INDESTRUCTIBLE_CASING = new SimpleOverlayRenderer("casings/hardened_casing/indestructible_casing");
         INDESTRUCTIBLE_PIPE_CASING = new SimpleOverlayRenderer("casings/hardened_casing/indestructible_pipe_casing");
         PLASMA_PIPE_CASING = new SimpleOverlayRenderer("casings/hardened_casing/plasma_pipe_casing");
+        HYPERSTATIC_CASING = new SimpleOverlayRenderer("casings/hardened_casing/hyperstatic_casing");
+
         THERMOSTABLE_CERAMIC = new SimpleOverlayRenderer("casings/standard_casing/thermostable_ceramic");
         PRESSURE_CASING = new SimpleOverlayRenderer("casings/standard_casing/high_pressure_casing");
+        UNSTABLE_HYPERSTATIC_CASING = new SimpleOverlayRenderer("casings/standard_casing/unstable_hyperstatic_casing");
 
         String[] heuComponentNames = new String[] { "endpoint_standard", "endpoint_returning",
                 "pipe_holder_standard", "pipe_holder_conductive", "pipe_holder_expanded" };

@@ -1,5 +1,7 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.recipes.RecipeMaps;
 
@@ -39,5 +41,10 @@ public class GTCEFuCFuelRecipes {
                 .duration(700)
                 .EUt((int) V[EV])
                 .buildAndRegister();
+
+        GTCEFuCRecipeMaps.NAQ_FUEL_CELL_RECIPES.recipeBuilder()
+                .input(GTCEFuCMetaItems.NAQ_FUEL_CELL)
+                .output(GTCEFuCMetaItems.NAQ_FUEL_CELL_EMPTY)
+                .duration(20000).EUt((int) V[ZPM]).buildAndRegister();
     }
 }

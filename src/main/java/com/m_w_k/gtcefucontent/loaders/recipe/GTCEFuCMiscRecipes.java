@@ -6,8 +6,10 @@ import static gregtech.api.unification.material.Materials.*;
 
 import java.util.Collection;
 
+import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import gregtech.api.recipes.chance.output.ChancedOutputLogic;
+import gregtech.api.unification.material.Materials;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -227,6 +229,21 @@ public final class GTCEFuCMiscRecipes {
                 .fluidOutputs(OrderEssence.getFluid(1))
                 .chancedOutput(OrePrefix.gemExquisite, TriniumReduced, 5000, 0)
                 .duration(40).EUt(VA[LuV]).buildAndRegister();
+
+        RecipeMaps.BENDER_RECIPES.recipeBuilder()
+                .input(OrePrefix.plate, Europium, 5)
+                .circuitMeta(7)
+                .output(GTCEFuCMetaItems.NAQ_FUEL_CELL_EMPTY)
+                .duration(210).EUt(VA[IV]).buildAndRegister();
+
+        GTCEFuCRecipeMaps.NAQ_FUEL_CELL_PACKER_RECIPES.recipeBuilder()
+                .input(GTCEFuCMetaItems.NAQ_FUEL_CELL_EMPTY)
+                .input(MetaItems.ROBOT_ARM_IV, 4)
+                .fluidInputs(UnstableNaquadahAlloy.getFluid(45), DisruptionEssence.getFluid(45))
+                .chancedOutput(GTCEFuCMetaItems.NAQ_FUEL_CELL.getStackForm(), 9000, 0)
+                .chancedOutput(MetaItems.ROBOT_ARM_IV.getStackForm(4), 9000, 0)
+                .chancedOutputLogic(ChancedOutputLogic.AND)
+                .duration(350).EUt(VA[LuV]).buildAndRegister();
     }
 
     public static void initPost() {

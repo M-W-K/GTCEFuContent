@@ -243,7 +243,6 @@ public final class GTCEFuCMaterials {
         ExistenceEssence = essence(22503, gtcefucId("existence_essence")).color(0xAA00AA).build();
 
         DisruptionEssence = essence(22504, gtcefucId("disruption_essence")).color(0xAA0000).build();
-        // TODO instability reactor using disruption essence and unstable naq alloy
 
         StabilityEssence = essence(22505, gtcefucId("stability_essence")).color(0x0000AA).build();
 

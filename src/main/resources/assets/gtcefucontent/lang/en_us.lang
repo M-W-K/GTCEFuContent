@@ -21,6 +21,19 @@ gtcefucontent.machine.pneumatic_infuser.name=Pneumatic Infuser
 gtcefucontent.machine.pneumatic_infuser.tooltip=Stuffing Things into other Things
 recipemap.pneumatic_infuser.name=Pneumatic Infuser
 
+gtcefucontent.machine.naq_fuel_cell_packer.name=Naquadah Fuel Cell Packer
+gtcefucontent.machine.naq_fuel_cell_packer.tooltip=Precision Assembly isn't enough
+gtcefucontent.machine.naq_fuel_cell_packer.warn=Causes massive, terrain-damaging explosions on recipe failure. Does not harm itself.
+recipemap.naq_fuel_cell_packer.name=Naquadah Fuel Cell Packing
+
+gtcefucontent.machine.naq_reactor_1.name=Naquadah Reactor Mark 1
+gtcefucontent.machine.naq_reactor_1.tooltip=This thing runs forever
+gtcefucontent.machine.naq_reactor_2.name=Naquadah Reactor Mark 2
+gtcefucontent.machine.naq_reactor_2.tooltip=All this from such a little box?
+gtcefucontent.machine.naq_reactor_3.name=Naquadah Reactor Mark 3
+gtcefucontent.machine.naq_reactor_3.tooltip=The Ultimate in Backup Power
+recipemap.naq_fuel_cell.name=Naquadah Reactor
+
 gtcefucontent.machine.forging_furnace.name=Linear Forging Furnace
 gtcefucontent.machine.forging_furnace.tooltip=Striking while the Iron is Hot
 recipemap.forging_furnace.name=Blast Forging
@@ -193,6 +206,8 @@ metaitem.simple_gas_mask.name=Primitive Gas Mask
 metaitem.simple_gas_mask.tooltip=Survive in oxygenless environments
 metaitem.gas_mask.name=Gas Mask
 metaitem.gas_mask.tooltip=Survive in toxic environments
+metaitem.naq_fuel_cell_empty.name=Empty Naquadah Fuel Cell
+metaitem.naq_fuel_cell.name=Naquadah Fuel Cell
 metaitem.regret.name=Regret
 metaitem.regret.tooltip=Overticking was a mistake
 

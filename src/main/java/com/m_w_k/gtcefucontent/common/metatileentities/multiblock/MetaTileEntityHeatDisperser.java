@@ -436,7 +436,8 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
             float z = getPos().getZ() + 0.5f;
             setExploded();
             getWorld().setBlockToAir(getPos());
-            getWorld().createExplosion(null, x, y, z, 10, true);
+            getWorld().newExplosion(null, x, y, z, 10,
+                    this.chassisTemperature > this.targetTemperature, true);
             getWorld().spawnEntity(new EntityItem(getWorld(), x, y, z, GTCEFuCMetaItems.REGRET.getStackForm()));
         }
     }

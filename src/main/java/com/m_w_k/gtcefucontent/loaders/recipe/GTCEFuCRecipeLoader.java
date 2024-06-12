@@ -25,6 +25,7 @@ public final class GTCEFuCRecipeLoader {
         GTCEFuCCraftingRecipeLoader.init();
 
         GTCEFuCControllerLoader.init();
+        GTCEFuCMTELoader.init();
 
         GTCEFuContent.log("Recipe construction complete.");
     }

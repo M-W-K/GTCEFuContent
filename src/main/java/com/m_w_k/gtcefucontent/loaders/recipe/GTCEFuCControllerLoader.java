@@ -1,5 +1,6 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -100,6 +101,16 @@ public class GTCEFuCControllerLoader {
                 'P', MetaItems.FLUID_REGULATOR_IV,
                 'D', new UnificationEntry(OrePrefix.gear, Materials.DamascusSteel),
                 'C', MetaTileEntities.HULL[GTValues.IV].getStackForm());
+
+        ModHandler.addShapedRecipe(true, "naq_fuel_cell_packer",
+                GTCEFuCMetaTileEntities.NAQ_FUEL_CELL_PACKER.getStackForm(),
+                "SSS", "APA", "FCF",
+                'S', MetaItems.SENSOR_ZPM,
+                'A', MetaItems.ROBOT_ARM_ZPM,
+                'P', MetaTileEntities.PACKER[GTValues.ZPM].getStackForm(),
+                'F', MetaItems.FIELD_GENERATOR_ZPM,
+                'C', GTCEFuCMetaBlocks.HARDENED_CASING
+                        .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING));
 
         // Assembler recipes
 

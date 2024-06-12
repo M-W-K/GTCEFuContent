@@ -8,11 +8,13 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.*;
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart.MetaTileEntityHEUComponent;
 
 import gregtech.api.GTValues;
 import gregtech.api.fluids.FluidConstants;
+import gregtech.client.renderer.texture.Textures;
 
 public final class GTCEFuCMetaTileEntities {
 
@@ -25,6 +27,9 @@ public final class GTCEFuCMetaTileEntities {
     public static MetaTileEntityStarSiphon STAR_SIPHON;
     public static MetaTileEntityAntimatterCompressor ANTIMATTER_COMPRESSOR;
     public static final MetaTileEntityFusionStack[] FUSION_STACK = new MetaTileEntityFusionStack[3];
+    public static MetaTileEntityNaqFuelCellPacker NAQ_FUEL_CELL_PACKER;
+    public static final MetaTileEntityNaqReactor NAQ_REACTOR[] = new MetaTileEntityNaqReactor[3];
+
     public static final MetaTileEntityHeatExchanger[] HEAT_EXCHANGER = new MetaTileEntityHeatExchanger[3];
     public static final MetaTileEntityHeatReclaimer[] HEAT_RECLAIMER = new MetaTileEntityHeatReclaimer[2];
     public static MetaTileEntityHeatDisperser HEAT_DISPERSER;
@@ -59,6 +64,15 @@ public final class GTCEFuCMetaTileEntities {
                 new MetaTileEntityStarSiphon(gtcefucId("star_siphon")));
         ANTIMATTER_COMPRESSOR = registerMetaTileEntity(3010,
                 new MetaTileEntityAntimatterCompressor(gtcefucId("antimatter_compressor")));
+        NAQ_FUEL_CELL_PACKER = registerMetaTileEntity(3011,
+                new MetaTileEntityNaqFuelCellPacker(gtcefucId("naq_fuel_cell_packer")));
+        NAQ_REACTOR[0] = registerMetaTileEntity(3012, new MetaTileEntityNaqReactor(gtcefucId("naq_reactor_1"),
+                GTCEFuCTextures.NAQ_REACTOR_OVERLAY, GTValues.ZPM));
+        NAQ_REACTOR[1] = registerMetaTileEntity(3013, new MetaTileEntityNaqReactor(gtcefucId("naq_reactor_2"),
+                GTCEFuCTextures.NAQ_REACTOR_OVERLAY, GTValues.UV));
+        NAQ_REACTOR[2] = registerMetaTileEntity(3014, new MetaTileEntityNaqReactor(gtcefucId("naq_reactor_3"),
+                GTCEFuCTextures.NAQ_REACTOR_OVERLAY, GTValues.UHV));
+
 
         HEAT_EXCHANGER[0] = registerMetaTileEntity(3100,
                 new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.small"), GTValues.LuV, 3));

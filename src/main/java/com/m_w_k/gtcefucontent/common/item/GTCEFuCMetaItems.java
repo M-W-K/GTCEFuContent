@@ -26,10 +26,14 @@ public final class GTCEFuCMetaItems {
 
     public static MetaItem<?>.MetaValueItem INFINITY_REAGENT;
 
+    public static MetaItem<?>.MetaValueItem NAQ_FUEL_CELL_EMPTY;
+    public static MetaItem<?>.MetaValueItem NAQ_FUEL_CELL;
+
     public static ArmorMetaItem<?>.ArmorMetaValueItem SIMPLE_GAS_MASK;
     public static ArmorMetaItem<?>.ArmorMetaValueItem GAS_MASK;
 
     public static MetaItem<?>.MetaValueItem REGRET;
+
 
     public static void init() {
         GTCEFuCMetaItem first = new GTCEFuCMetaItem();

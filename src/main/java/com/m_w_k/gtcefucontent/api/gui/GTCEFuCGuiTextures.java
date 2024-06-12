@@ -13,4 +13,7 @@ public final class GTCEFuCGuiTextures {
 
     public static final TextureArea PROGRESS_BAR_HEU_HEAT = TextureArea
             .fullImage("textures/gui/progress_bar/progress_bar_heu_heat.png");
+
+    public static final TextureArea ROBOT_ARM_OVERLAY = TextureArea
+            .fullImage("textures/gui/overlay/robot_arm_overlay.png");
 }
