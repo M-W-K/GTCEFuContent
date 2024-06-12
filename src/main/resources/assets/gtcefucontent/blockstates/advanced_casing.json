@@ -4,14 +4,14 @@
     "active=false,variant=null_field_casing": {
       "model": "minecraft:cube_all",
       "textures": {
-        "all": "gregtech:blocks/casings/advanced_casing/null_field_casing"
+        "all": "gtcefucontent:blocks/casings/advanced_casing/null_field_casing"
       }
     },
     "active=true,variant=null_field_casing": {
       "model": "gregtech:cube_2_layer_all",
       "textures": {
-        "bot_all": "gregtech:blocks/casings/advanced_casing/null_field_casing",
-        "top_all": "gregtech:blocks/casings/advanced_casing/null_field_casing_bloom"
+        "bot_all": "gtcefucontent:blocks/casings/advanced_casing/null_field_casing",
+        "top_all": "gtcefucontent:blocks/casings/advanced_casing/null_field_casing_bloom"
       }
     }
   }

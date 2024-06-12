@@ -11,19 +11,19 @@
       "high_pressure_casing": {
         "model": "minecraft:cube_all",
         "textures": {
-          "all": "gregtech:blocks/casings/standard_casing/high_pressure_casing"
+          "all": "gtcefucontent:blocks/casings/standard_casing/high_pressure_casing"
         }
       },
       "thermostable_ceramic": {
         "model": "minecraft:cube_all",
         "textures": {
-          "all": "gregtech:blocks/casings/standard_casing/thermostable_ceramic"
+          "all": "gtcefucontent:blocks/casings/standard_casing/thermostable_ceramic"
         }
       },
       "unstable_hyperstatic_casing": {
         "model": "minecraft:cube_all",
         "textures": {
-          "all": "gregtech:blocks/casings/standard_casing/unstable_hyperstatic_casing"
+          "all": "gtcefucontent:blocks/casings/standard_casing/unstable_hyperstatic_casing"
         }
       }
     }
