@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -469,7 +470,7 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
 
     @Override
     protected @NotNull OrientedOverlayRenderer getFrontOverlay() {
-        return Textures.COMPRESSOR_OVERLAY;
+        return GTCEFuCTextures.ANTIMATTER_COMPRESSOR_OVERLAY;
     }
 
     @Override

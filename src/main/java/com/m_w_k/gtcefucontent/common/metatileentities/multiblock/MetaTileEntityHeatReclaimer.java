@@ -244,7 +244,7 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
 
     @Override
     protected @NotNull ICubeRenderer getFrontOverlay() {
-        return Textures.BENDER_OVERLAY;
+        return GTCEFuCTextures.HEAT_RECLAIMER_OVERLAY;
     }
 
     @Override

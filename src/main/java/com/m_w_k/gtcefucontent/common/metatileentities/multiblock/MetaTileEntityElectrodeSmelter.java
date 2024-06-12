@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -138,7 +139,7 @@ public class MetaTileEntityElectrodeSmelter extends GCYMRecipeMapMultiblockContr
 
     @Override
     protected @NotNull OrientedOverlayRenderer getFrontOverlay() {
-        return Textures.POLARIZER_OVERLAY;
+        return GTCEFuCTextures.ELECTRODE_SMELTER_OVERLAY;
     }
 
     @Override

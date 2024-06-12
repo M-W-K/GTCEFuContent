@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -395,7 +396,7 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
 
     @Override
     protected @NotNull OrientedOverlayRenderer getFrontOverlay() {
-        return Textures.FUSION_REACTOR_OVERLAY;
+        return GTCEFuCTextures.STAR_SIPHON_OVERLAY;
     }
 
     @Override

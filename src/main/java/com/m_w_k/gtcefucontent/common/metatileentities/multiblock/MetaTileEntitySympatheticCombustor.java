@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -487,7 +488,7 @@ public class MetaTileEntitySympatheticCombustor extends MultiblockWithDisplayBas
     @SideOnly(Side.CLIENT)
     @Override
     protected @NotNull OrientedOverlayRenderer getFrontOverlay() {
-        return Textures.LARGE_GAS_TURBINE_OVERLAY;
+        return GTCEFuCTextures.SYMPATHETIC_COMBUSTOR_OVERLAY;
     }
 
     @Override

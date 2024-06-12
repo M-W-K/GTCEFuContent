@@ -271,7 +271,7 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
 
     @Override
     protected @NotNull ICubeRenderer getFrontOverlay() {
-        return Textures.DISTILLERY_OVERLAY;
+        return GTCEFuCTextures.HEAT_DISPERSER_OVERLAY;
     }
 
     @Override

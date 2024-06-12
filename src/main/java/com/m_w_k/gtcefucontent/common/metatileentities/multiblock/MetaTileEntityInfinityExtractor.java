@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import javax.annotation.Nonnull;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 
@@ -77,7 +78,7 @@ public class MetaTileEntityInfinityExtractor extends RecipeMapMultiblockControll
 
     @Override
     protected @NotNull OrientedOverlayRenderer getFrontOverlay() {
-        return Textures.ELECTROMAGNETIC_SEPARATOR_OVERLAY;
+        return GTCEFuCTextures.INFINITY_EXTRACTOR_OVERLAY;
     }
 
     @Override

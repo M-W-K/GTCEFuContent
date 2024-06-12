@@ -58,6 +58,11 @@ public class MetaTileEntityLargeNaqReactor extends FuelMultiblockController {
     }
 
     @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return GTCEFuCTextures.LARGE_NAQ_REACTOR_OVERLAY;
+    }
+
+    @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);

@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.List;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -299,7 +300,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
 
     @Override
     protected @NotNull ICubeRenderer getFrontOverlay() {
-        return GCYMTextures.STEAM_ENGINE_OVERLAY;
+        return GTCEFuCTextures.MEGA_STEAM_ENGINE_OVERLAY;
     }
 
     @Override

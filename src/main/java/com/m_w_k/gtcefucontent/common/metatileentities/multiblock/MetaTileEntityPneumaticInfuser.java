@@ -2,6 +2,7 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import javax.annotation.Nonnull;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import net.minecraft.util.ResourceLocation;
 
@@ -76,7 +77,7 @@ public class MetaTileEntityPneumaticInfuser extends RecipeMapMultiblockControlle
 
     @Override
     protected @NotNull OrientedOverlayRenderer getFrontOverlay() {
-        return Textures.COMPRESSOR_OVERLAY;
+        return GTCEFuCTextures.PNEUMATIC_INFUSER_OVERLAY;
     }
 
     @Override

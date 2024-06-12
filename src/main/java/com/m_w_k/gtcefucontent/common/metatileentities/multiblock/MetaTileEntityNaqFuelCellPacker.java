@@ -98,6 +98,11 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
     }
 
     @Override
+    protected @NotNull ICubeRenderer getFrontOverlay() {
+        return GTCEFuCTextures.NAQ_FUEL_CELL_PACKER_OVERLAY;
+    }
+
+    @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity tileEntity) {
         return new MetaTileEntityNaqFuelCellPacker(this.metaTileEntityId);
     }

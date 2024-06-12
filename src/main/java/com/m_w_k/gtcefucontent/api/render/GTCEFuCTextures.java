@@ -28,10 +28,22 @@ public final class GTCEFuCTextures {
     public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_FULL_OVERLAYS = new ArrayList<>(5);
     public static final List<AxisAlignedCubeRenderer> HEU_COMPONENT_ACTIVE_OVERLAYS = new ArrayList<>(5);
 
-    public static final OrientedOverlayRenderer NAQ_REACTOR_OVERLAY = oriented("generators/naquadah");
+    public static final OrientedOverlayRenderer NAQ_REACTOR_OVERLAY = oriented("machines/generators/naquadah");
 
-    public static final OrientedOverlayRenderer ANTIMATTER_COMPRESSOR_OVERLAY =
-            oriented("machines/antimatter_compressor");
+    public static final OrientedOverlayRenderer ANTIMATTER_COMPRESSOR_OVERLAY = oriented("multiblock/antimatter_compressor");
+    public static final OrientedOverlayRenderer ELECTRODE_SMELTER_OVERLAY = oriented("multiblock/electrode_smelter");
+    public static final OrientedOverlayRenderer FORGING_FURNACE_OVERLAY = oriented("multiblock/forging_furnace");
+    public static final OrientedOverlayRenderer FUSION_STACK_OVERLAY = oriented("multiblock/fusion_stack");
+    public static final OrientedOverlayRenderer HEAT_DISPERSER_OVERLAY = oriented("multiblock/heat_disperser");
+    public static final OrientedOverlayRenderer HEAT_EXCHANGER_OVERLAY = oriented("multiblock/heat_exchanger");
+    public static final OrientedOverlayRenderer HEAT_RECLAIMER_OVERLAY = oriented("multiblock/heat_reclaimer");
+    public static final OrientedOverlayRenderer INFINITY_EXTRACTOR_OVERLAY = oriented("multiblock/infinity_extractor");
+    public static final OrientedOverlayRenderer LARGE_NAQ_REACTOR_OVERLAY = oriented("multiblock/generators/large_naquadah");
+    public static final OrientedOverlayRenderer MEGA_STEAM_ENGINE_OVERLAY = oriented("multiblock/generators/mega_steam_engine");
+    public static final OrientedOverlayRenderer NAQ_FUEL_CELL_PACKER_OVERLAY = oriented("multiblock/naq_fuel_cell_packer");
+    public static final OrientedOverlayRenderer PNEUMATIC_INFUSER_OVERLAY = oriented("multiblock/pneumatic_infuser");
+    public static final OrientedOverlayRenderer STAR_SIPHON_OVERLAY = oriented("multiblock/star_siphon");
+    public static final OrientedOverlayRenderer SYMPATHETIC_COMBUSTOR_OVERLAY = oriented("multiblock/generators/sympathetic_combustor");
 
 
 

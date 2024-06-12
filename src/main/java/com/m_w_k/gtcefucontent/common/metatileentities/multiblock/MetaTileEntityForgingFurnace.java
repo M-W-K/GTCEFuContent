@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -152,7 +153,7 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
 
     @Override
     protected @NotNull OrientedOverlayRenderer getFrontOverlay() {
-        return Textures.ALLOY_SMELTER_OVERLAY;
+        return GTCEFuCTextures.FORGING_FURNACE_OVERLAY;
     }
 
     @Override

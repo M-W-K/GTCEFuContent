@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.m_w_k.gtcefucontent.api.capability.impl.HEUGridHandler;
 import com.m_w_k.gtcefucontent.api.metatileentity.IHeatExchanger;
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import gregtech.api.gui.GuiTextures;
@@ -233,7 +234,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     @SideOnly(Side.CLIENT)
     @Override
     protected @NotNull ICubeRenderer getFrontOverlay() {
-        return GCYMTextures.LARGE_AUTOCLAVE_OVERLAY;
+        return GTCEFuCTextures.HEAT_EXCHANGER_OVERLAY;
     }
 
     @Override
