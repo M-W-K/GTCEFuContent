@@ -240,15 +240,6 @@ public final class GTCEFuCMiscRecipes {
                 .circuitMeta(7)
                 .output(GTCEFuCMetaItems.NAQ_FUEL_CELL_EMPTY)
                 .duration(210).EUt(VA[IV]).buildAndRegister();
-
-        GTCEFuCRecipeMaps.NAQ_FUEL_CELL_PACKER_RECIPES.recipeBuilder()
-                .input(GTCEFuCMetaItems.NAQ_FUEL_CELL_EMPTY)
-                .input(MetaItems.ROBOT_ARM_IV, 4)
-                .fluidInputs(UnstableNaquadahAlloy.getFluid(45), DisruptionEssence.getFluid(45))
-                .chancedOutput(GTCEFuCMetaItems.NAQ_FUEL_CELL.getStackForm(), 9000, 0)
-                .chancedOutput(MetaItems.ROBOT_ARM_IV.getStackForm(4), 9000, 0)
-                .chancedOutputLogic(ChancedOutputLogic.AND)
-                .duration(350).EUt(VA[LuV]).buildAndRegister();
     }
 
     public static void initPost() {
