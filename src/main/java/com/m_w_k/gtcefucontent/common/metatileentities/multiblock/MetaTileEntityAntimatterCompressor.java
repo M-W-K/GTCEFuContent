@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -494,10 +495,12 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip,
                                boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gtcefucontent.machine.antimatter_compressor.capacity",
-                calculateEnergyStorageFactor(16) / 1000000000L));
-        tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc"));
+        if (GTCEFuContent.isProjectEXLoaded) {
+            super.addInformation(stack, player, tooltip, advanced);
+            tooltip.add(I18n.format("gtcefucontent.machine.antimatter_compressor.capacity",
+                    calculateEnergyStorageFactor(16) / 1000000000L));
+            tooltip.add(TooltipHelper.RAINBOW_SLOW + I18n.format("gregtech.machine.perfect_oc"));
+        } else tooltip.add(I18n.format("gtcefucontent.core.projectex_not_loaded"));
     }
 
     @Override

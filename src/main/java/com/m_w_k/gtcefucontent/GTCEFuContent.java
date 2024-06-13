@@ -1,6 +1,8 @@
 package com.m_w_k.gtcefucontent;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -23,6 +25,8 @@ import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntity
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCCraftingRecipeLoader;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCMiscRecipes;
 
+import java.util.List;
+
 @Mod(modid = GTCEFuContent.MODID,
      name = GTCEFuContent.NAME,
      version = GTCEFuContent.VERSION,
@@ -35,8 +39,8 @@ public final class GTCEFuContent {
 
     public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.8.8-beta,);" +
             "required-after:gcym@[1.2.6,);" +
-            "required-after:projecte@[1.4.1,);" +
-            "required-after:projectex@[1.2.0,);";
+            "after:projecte@[1.4.1,);" +
+            "after:projectex@[1.2.0,);";
 
     @SidedProxy(modId = MODID,
                 clientSide = "com.m_w_k.gtcefucontent.client.ClientProxy",
@@ -45,10 +49,17 @@ public final class GTCEFuContent {
 
     private static Logger logger;
 
+    public static boolean isProjectEXLoaded;
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
         log("Beginning PreInit");
+
+        isProjectEXLoaded = Loader.isModLoaded("projectex") && Loader.isModLoaded("projecte");
+        if (isProjectEXLoaded) log("Project E & EX found. Integration and dependent endgame content enabled.");
+        else log("Project E & EX not found. Integration and dependent endgame content disabled.", LogType.WARN);
+
         GTCEFuContentSoundEvents.register();
 
         GTCEFuCRecipeMaps.init();

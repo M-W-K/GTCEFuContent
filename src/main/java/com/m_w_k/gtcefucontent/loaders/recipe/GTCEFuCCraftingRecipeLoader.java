@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.block.EnumTier;
 import com.latmod.mods.projectex.item.ProjectEXItems;
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.common.ConfigHolder;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
@@ -31,7 +32,7 @@ public class GTCEFuCCraftingRecipeLoader {
 
     public static void init() {
         breathabilityItems();
-        if (ConfigHolder.overrideProjectEXGeneration) emcGeneration();
+        if (GTCEFuContent.isProjectEXLoaded && ConfigHolder.overrideProjectEXGeneration) emcGeneration();
     }
 
     public static void initPost() {

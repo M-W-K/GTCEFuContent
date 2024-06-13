@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
@@ -225,6 +226,8 @@ public class GTCEFuCControllerLoader {
                         .CWUt(384)
                         .EUt(GTValues.VA[GTValues.UEV]))
                 .duration(1200).EUt(GTValues.VA[GTValues.UEV]).buildAndRegister();
+
+        if (!GTCEFuContent.isProjectEXLoaded) return;
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
                 .input(MetaTileEntities.STEAM_EXTRACTOR_STEEL)

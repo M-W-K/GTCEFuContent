@@ -225,3 +225,5 @@ gtcefucontent.fluid.temperature.min=§7Minimum temperature: %sK
 gtcefucontent.recipe.heattoconvert=Heat to convert: %sJ
 
 gtcefucontent.universal.tooltip.uses_per_hour_vapor_seed=Uses §f%,d L/hr §7of Vaporous Seed while working
+
+gtcefucontent.core.projectex_not_loaded=§eDisabled as ProjectEX is not installed

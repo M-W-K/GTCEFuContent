@@ -7,6 +7,7 @@ import java.util.Collections;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
@@ -24,11 +25,12 @@ public final class GTCEFuCPackingLoader {
         simplePackingRegister("infinity_reagent_block2", GTCEFuCUtil.setStackCount(block1, 9), block2, true);
         simplePackingRegister("infinity_reagent_block3", GTCEFuCUtil.setStackCount(block2, 9), block3, true);
 
-        // I know that this is incredibly annoying. That's the point.
-        stacksIn = new ItemStack[] { GTCEFuCMetaItems.STELLAR_NUGGET.getStackForm(9),
-                new ItemStack(ProjectEXItems.FINAL_STAR_SHARD, 1) };
-        ItemStack[] stacksOut = new ItemStack[] { GTCEFuCMetaItems.STELLAR_INGOT.getStackForm() };
-        packerPackingRegister(stacksIn, stacksOut, 1, GTValues.VA[GTValues.UV], true);
+        if (GTCEFuContent.isProjectEXLoaded) {
+            stacksIn = new ItemStack[] { GTCEFuCMetaItems.STELLAR_NUGGET.getStackForm(9),
+                    new ItemStack(ProjectEXItems.FINAL_STAR_SHARD, 1) };
+            ItemStack[] stacksOut = new ItemStack[] { GTCEFuCMetaItems.STELLAR_INGOT.getStackForm() };
+            packerPackingRegister(stacksIn, stacksOut, 1, GTValues.VA[GTValues.UV], true);
+        }
     }
 
     public static void simplePackingRegister(String name, ItemStack stackIn, ItemStack stackOut, boolean reversible) {

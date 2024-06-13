@@ -126,24 +126,26 @@ public final class GTCEFuCMiscRecipes {
                 .fluidOutputs(ConcentratedEffort.getFluid(150))
                 .duration(8400).EUt(VA[UV]).buildAndRegister();
 
-        RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()
-                .input(ProjectEXItems.FINAL_STAR)
-                .output(ProjectEXItems.FINAL_STAR_SHARD, 8)
-                .duration(100).EUt(VA[UHV]).buildAndRegister();
+        if (GTCEFuContent.isProjectEXLoaded) {
+            RecipeMaps.FORGE_HAMMER_RECIPES.recipeBuilder()
+                    .input(ProjectEXItems.FINAL_STAR)
+                    .output(ProjectEXItems.FINAL_STAR_SHARD, 8)
+                    .duration(100).EUt(VA[UHV]).buildAndRegister();
 
-        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .inputs(GTCEFuCMetaItems.CRYSTAL_STARLIGHT.getStackForm(6),
-                        new ItemStack(ProjectEXItems.COLLECTOR, 2, 9))
-                .fluidInputs(VoidStarlight.getFluid(144))
-                .outputs(new ItemStack(ProjectEXItems.COLLECTOR, 1, 15))
-                .duration(200).EUt(VA[UHV]).buildAndRegister();
+            RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                    .inputs(GTCEFuCMetaItems.CRYSTAL_STARLIGHT.getStackForm(6),
+                            new ItemStack(ProjectEXItems.COLLECTOR, 2, 9))
+                    .fluidInputs(VoidStarlight.getFluid(144))
+                    .outputs(new ItemStack(ProjectEXItems.COLLECTOR, 1, 15))
+                    .duration(200).EUt(VA[UHV]).buildAndRegister();
 
-        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .inputs(GTCEFuCMetaItems.CRYSTAL_ENDLIGHT.getStackForm(6),
-                        new ItemStack(ProjectEXItems.RELAY, 2, 9))
-                .fluidInputs(VoidStarlight.getFluid(216))
-                .outputs(new ItemStack(ProjectEXItems.RELAY, 1, 15))
-                .duration(200).EUt(VA[UHV]).buildAndRegister();
+            RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                    .inputs(GTCEFuCMetaItems.CRYSTAL_ENDLIGHT.getStackForm(6),
+                            new ItemStack(ProjectEXItems.RELAY, 2, 9))
+                    .fluidInputs(VoidStarlight.getFluid(216))
+                    .outputs(new ItemStack(ProjectEXItems.RELAY, 1, 15))
+                    .duration(200).EUt(VA[UHV]).buildAndRegister();
+        }
 
         RecipeMaps.FORMING_PRESS_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCMetaItems.CRYSTAL_VOID.getStackForm(),
@@ -238,6 +240,7 @@ public final class GTCEFuCMiscRecipes {
     }
 
     public static void initPost() {
+        if (!GTCEFuContent.isProjectEXLoaded) return;
         ModHandler.removeRecipeByName("projectex:final_star_shard");
         ModHandler.removeRecipeByName("projectex:relay/final");
         ModHandler.removeRecipeByName("projectex:collector/final");

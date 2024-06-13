@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.m_w_k.gtcefucontent.GTCEFuContent;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -532,10 +533,12 @@ public class MetaTileEntityStarSiphon extends RecipeMapMultiblockController
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, @Nonnull List<String> tooltip,
                                boolean advanced) {
-        super.addInformation(stack, player, tooltip, advanced);
-        tooltip.add(I18n.format("gtcefucontent.machine.antimatter_compressor.capacity",
-                calculateEnergyStorageFactor(16) / 1000000000L));
-        tooltip.add(I18n.format("gregtech.machine.fusion_reactor.overclocking"));
+        if (GTCEFuContent.isProjectEXLoaded) {
+            super.addInformation(stack, player, tooltip, advanced);
+            tooltip.add(I18n.format("gtcefucontent.machine.antimatter_compressor.capacity",
+                    calculateEnergyStorageFactor(16) / 1000000000L));
+            tooltip.add(I18n.format("gregtech.machine.fusion_reactor.overclocking"));
+        } else tooltip.add(I18n.format("gtcefucontent.core.projectex_not_loaded"));
     }
 
     @Override
