@@ -2,13 +2,21 @@ package com.m_w_k.gtcefucontent.client;
 
 import java.util.List;
 
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.TileEntityVoidStarlight;
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
+import com.m_w_k.gtcefucontent.asm.hooks.FluidTooltipUtilHooks;
+import com.m_w_k.gtcefucontent.client.renderer.VoidStarlightRenderer;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -29,6 +37,7 @@ public class ClientProxy extends CommonProxy {
     public void preLoad() {
         super.preLoad();
         GTCEFuCTextures.preInit();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityVoidStarlight.class, new VoidStarlightRenderer());
     }
 
     @SubscribeEvent
@@ -43,13 +52,8 @@ public class ClientProxy extends CommonProxy {
             // noinspection ConstantConditions
             if (itemStack.getTagCompound().hasKey("FluidName")) {
                 FluidStack stack = FluidStack.loadFluidStackFromNBT(itemStack.getTagCompound());
-                if (stack != null && stack.getFluid() instanceof EutecticFluid fluid) {
-                    List<String> tooltip = event.getToolTip();
-                    for (int i = 0; i < tooltip.size(); i++) {
-                        if (I18n.format("gregtech.fluid.temperature", fluid.getTemperature()).equals(tooltip.get(i))) {
-                            tooltip.set(i, I18n.format("gregtech.fluid.temperature", GTCEFuCUtil.getTemp(stack)));
-                        }
-                    }
+                if (stack != null) {
+                    FluidTooltipUtilHooks.checkAndOverride(stack, event.getToolTip());
                 }
             }
         }

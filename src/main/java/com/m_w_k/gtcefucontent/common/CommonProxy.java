@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.common;
 import java.util.Objects;
 import java.util.function.Function;
 
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -32,6 +33,10 @@ public class CommonProxy {
         registry.register(GTCEFuCMetaBlocks.HARDENED_CASING);
         registry.register(GTCEFuCMetaBlocks.STANDARD_CASING);
         registry.register(GTCEFuCMetaBlocks.STORAGE_BLOCK);
+        for (var fluid : VoidStarlightBlockFluid.TO_REGISTER) {
+            registry.register(fluid);
+        }
+        VoidStarlightBlockFluid.TO_REGISTER = null;
     }
 
     @SubscribeEvent

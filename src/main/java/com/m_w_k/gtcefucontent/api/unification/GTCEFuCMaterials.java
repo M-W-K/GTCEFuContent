@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import gregtech.api.fluids.FluidConstants;
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
 import gregtech.api.unification.material.properties.ToolProperty;
 import net.minecraft.util.ResourceLocation;
 
@@ -63,6 +63,7 @@ public final class GTCEFuCMaterials {
     public static Material ConcentratedEffort;
     public static Material FrozenStarlight;
     public static Material Infinitesimality;
+    public static Material VoidStarlight;
 
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization
@@ -228,6 +229,13 @@ public final class GTCEFuCMaterials {
         Infinitesimality = new Material.Builder(22535, gtcefucId("infinitesimality"))
                 .liquid(new FluidBuilder().customStill().density(1000d).disableBucket()
                         .attribute(FluidAttributes.ACID).temperature(4999))
+                .build();
+
+        VoidStarlight = new Material.Builder(22536, gtcefucId("void_starlight"))
+                .liquid(new VoidStarlightBlockFluid.VoidStarlightFluidBuilder()
+                        .temperature(Integer.MAX_VALUE)
+                        .luminosity(15)
+                        .customStill())
                 .build();
 
         eutectics();

@@ -110,7 +110,7 @@ public final class GTCEFuCMiscRecipes {
 
         RecipeMaps.EXTRACTOR_RECIPES.recipeBuilder()
                 .input(GTCEFuCMetaItems.CRYSTAL_VOIDLIGHT)
-                .fluidOutputs(UUMatter.getFluid(144))
+                .fluidOutputs(VoidStarlight.getFluid(144))
                 .output(GTCEFuCMetaItems.POWDER_ENDLIGHT)
                 .duration(300).EUt(VA[UHV]).buildAndRegister();
 
@@ -139,14 +139,14 @@ public final class GTCEFuCMiscRecipes {
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCMetaItems.CRYSTAL_STARLIGHT.getStackForm(6),
                         new ItemStack(ProjectEXItems.COLLECTOR, 2, 9))
-                .fluidInputs(UUMatter.getFluid(144))
+                .fluidInputs(VoidStarlight.getFluid(144))
                 .outputs(new ItemStack(ProjectEXItems.COLLECTOR, 1, 15))
                 .duration(200).EUt(VA[UHV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCMetaItems.CRYSTAL_ENDLIGHT.getStackForm(6),
                         new ItemStack(ProjectEXItems.RELAY, 2, 9))
-                .fluidInputs(UUMatter.getFluid(216))
+                .fluidInputs(VoidStarlight.getFluid(216))
                 .outputs(new ItemStack(ProjectEXItems.RELAY, 1, 15))
                 .duration(200).EUt(VA[UHV]).buildAndRegister();
 

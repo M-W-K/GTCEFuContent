@@ -190,6 +190,10 @@ gtcefucontent.material.chaos_essence=Essence of Chaos
 gtcefucontent.material.order_essence=Essence of Order
 gtcefucontent.material.reality_essence=Essence of Reality
 
+gtcefucontent.material.void_starlight=Light of the Void's Stars
+gtcefucontent.material.void_starlight.info=§7Placeable
+gtcefucontent.material.void_starlight.temperature=§cTemperature: §k393§r§cK
+
 gtcefucontent.material.eutectic_csnak_alloy=Eutectic Caesium-Sodium-Potassium Alloy
 gtcefucontent.material.eutectic_enriched_naquadah_gallium_csk_alloy=Eutectic Enriched Caesium-Potassium Mixture
 

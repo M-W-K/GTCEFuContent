@@ -1,5 +1,7 @@
 package com.m_w_k.gtcefucontent;
 
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.TileEntityVoidStarlight;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -7,6 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
@@ -36,7 +39,7 @@ public final class GTCEFuContent {
             "required-after:projectex@[1.2.0,);";
 
     @SidedProxy(modId = MODID,
-                clientSide = "com.m_w_k.gtcefucontent.common.ClientProxy",
+                clientSide = "com.m_w_k.gtcefucontent.client.ClientProxy",
                 serverSide = "com.m_w_k.gtcefucontent.common.CommonProxy")
     public static CommonProxy proxy;
 
@@ -57,6 +60,8 @@ public final class GTCEFuContent {
         MetaTileEntityFusionStack.init();
         MetaTileEntityAntimatterCompressor.init();
 
+        GameRegistry.registerTileEntity(TileEntityVoidStarlight.class,
+                new ResourceLocation(Tags.MODID, "void_starlight"));
         proxy.preLoad();
         log("PreInit complete");
     }
