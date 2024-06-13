@@ -2,8 +2,6 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.List;
 
-import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,9 +21,10 @@ import org.jetbrains.annotations.Nullable;
 import com.m_w_k.gtcefucontent.api.longhelp.ILongMultipleTankHandler;
 import com.m_w_k.gtcefucontent.api.longhelp.LongFluidStack;
 import com.m_w_k.gtcefucontent.api.longhelp.LongFluidTankList;
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 
 import gregicality.multiblocks.api.metatileentity.GCYMMultiblockAbility;
 import gregicality.multiblocks.api.render.GCYMTextures;

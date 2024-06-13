@@ -6,10 +6,6 @@ import static gregtech.api.unification.material.Materials.*;
 
 import java.util.Collection;
 
-import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import gregtech.api.recipes.chance.output.ChancedOutputLogic;
-import gregtech.api.unification.material.Materials;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
@@ -17,7 +13,6 @@ import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.GTCEFuContent;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
-import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeMaps;

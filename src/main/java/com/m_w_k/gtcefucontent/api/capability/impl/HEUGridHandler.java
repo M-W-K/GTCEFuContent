@@ -1,11 +1,28 @@
 package com.m_w_k.gtcefucontent.api.capability.impl;
 
+import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
+
+import java.util.*;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
 import com.m_w_k.gtcefucontent.api.metatileentity.IHeatExchanger;
 import com.m_w_k.gtcefucontent.api.recipes.FullExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCHeatExchangerLoader;
+
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
@@ -16,20 +33,6 @@ import gregtech.api.unification.material.properties.FluidPipeProperties;
 import gregtech.api.unification.material.properties.PropertyKey;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.*;
-
-import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 public class HEUGridHandler extends MTETrait implements IControllable {
 
@@ -152,7 +155,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
         Iterator<IHEUComponent> iterator = reflectingEndpoints.iterator();
         BlockPos pos = iterator.next().getPos();
         // reset valid axi
-        validAxi = new boolean[]{true, true, true};
+        validAxi = new boolean[] { true, true, true };
 
         // iterate through reflective endpoints. If we find one out of the axis then the exchanger is invalid.
         while (iterator.hasNext()) {
@@ -632,9 +635,9 @@ public class HEUGridHandler extends MTETrait implements IControllable {
 
     private void cacheValues() {
         this.cachedLength = this.requiredPipeLength;
-        this.prevRecipeStacks = new FluidStack[]{this.fluidAInitial, this.fluidAFinal, this.fluidBInitial,
-                this.fluidBFinal};
-        this.prevRecipeThermals = new long[]{this.fluidAThermalEnergy, this.fluidBThermalEnergy};
+        this.prevRecipeStacks = new FluidStack[] { this.fluidAInitial, this.fluidAFinal, this.fluidBInitial,
+                this.fluidBFinal };
+        this.prevRecipeThermals = new long[] { this.fluidAThermalEnergy, this.fluidBThermalEnergy };
     }
 
     private void clearCache() {
@@ -647,8 +650,10 @@ public class HEUGridHandler extends MTETrait implements IControllable {
                     this.pipeLength * (this.reflectionCount + 1), this.getCurrentPipeVolModifier(),
                     Math.floor(this.durationModifier * 100) / 100));
             if (this.getHeatExchanger().getMaxPipeVolMultiplier() != -1) {
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.limit", this.getHeatExchanger().getMaxPipeVolMultiplier()));
-            } else textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.no_limit"));
+                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.limit",
+                        this.getHeatExchanger().getMaxPipeVolMultiplier()));
+            } else textList
+                    .add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.no_limit"));
             if (cachedLength != 0) {
                 textList.add(new TextComponentTranslation(
                         "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));

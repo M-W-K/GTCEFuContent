@@ -4,8 +4,6 @@ import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 import java.util.*;
 
-import gregicality.multiblocks.api.fluids.GCYMFluidStorageKeys;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -15,6 +13,7 @@ import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 
+import gregicality.multiblocks.api.fluids.GCYMFluidStorageKeys;
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.store.FluidStorageKeys;
@@ -23,6 +22,7 @@ import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 public final class GTCEFuCHeatExchangerLoader {
 
@@ -165,7 +165,6 @@ public final class GTCEFuCHeatExchangerLoader {
                 air.getFluid(1),
                 lair.getFluid(1),
                 energy * SINGLE_EU_ENERGY);
-
     }
 
     public static void postInit() {

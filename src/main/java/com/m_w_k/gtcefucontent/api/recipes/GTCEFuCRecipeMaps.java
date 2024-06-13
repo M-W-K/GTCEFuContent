@@ -37,36 +37,36 @@ public final class GTCEFuCRecipeMaps {
 
     public static final RecipeMap<FusionRecipeBuilder> STAR_SIPHON_RECIPES = new RecipeMap<>("star_siphon",
             1, 1, 1, 1, new FusionRecipeBuilder(), false)
-            .setSlotOverlay(false, false, GuiTextures.EXTRACTOR_OVERLAY)
-            .setSlotOverlay(true, true, GuiTextures.LIGHTNING_OVERLAY_2)
+                    .setSlotOverlay(false, false, GuiTextures.EXTRACTOR_OVERLAY)
+                    .setSlotOverlay(true, true, GuiTextures.LIGHTNING_OVERLAY_2)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_FUSION, ProgressWidget.MoveType.HORIZONTAL)
                     .setSound(GTSoundEvents.ARC);
 
     public static final RecipeMap<FusionRecipeBuilder> ANTIMATTER_COMPRESSOR_RECIPES = new RecipeMap<>(
             "antimatter_compressor", 3, 3, 2, 0, new FusionRecipeBuilder(), false)
-            .setSlotOverlay(false, false, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSlotOverlay(false, false, true, GuiTextures.COMPRESSOR_OVERLAY)
-            .setSlotOverlay(false, true, GuiTextures.ATOMIC_OVERLAY_2)
-            .setSlotOverlay(true, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.COMPRESSOR);
+                    .setSlotOverlay(false, false, false, GuiTextures.ATOMIC_OVERLAY_1)
+                    .setSlotOverlay(false, false, true, GuiTextures.COMPRESSOR_OVERLAY)
+                    .setSlotOverlay(false, true, GuiTextures.ATOMIC_OVERLAY_2)
+                    .setSlotOverlay(true, false, GuiTextures.ATOMIC_OVERLAY_1)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_COMPRESS, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.COMPRESSOR);
 
     public static final RecipeMap<SimpleRecipeBuilder> NAQ_FUEL_CELL_PACKER_RECIPES = new RecipeMap<>(
             "naq_fuel_cell_packer", 2, 2, 2, 2, new SimpleRecipeBuilder(), false)
-            .setSlotOverlay(false, false, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSlotOverlay(false, false, true, GTCEFuCGuiTextures.ROBOT_ARM_OVERLAY)
-            .setSlotOverlay(true, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSlotOverlay(true, false, true, GTCEFuCGuiTextures.ROBOT_ARM_OVERLAY)
-            .setSlotOverlay(false, true, GuiTextures.ATOMIC_OVERLAY_2)
-            .setSlotOverlay(true, true, GuiTextures.ATOMIC_OVERLAY_2)
-            .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
-            .setSound(GTSoundEvents.COMPUTATION);
+                    .setSlotOverlay(false, false, false, GuiTextures.ATOMIC_OVERLAY_1)
+                    .setSlotOverlay(false, false, true, GTCEFuCGuiTextures.ROBOT_ARM_OVERLAY)
+                    .setSlotOverlay(true, false, GuiTextures.ATOMIC_OVERLAY_1)
+                    .setSlotOverlay(true, false, true, GTCEFuCGuiTextures.ROBOT_ARM_OVERLAY)
+                    .setSlotOverlay(false, true, GuiTextures.ATOMIC_OVERLAY_2)
+                    .setSlotOverlay(true, true, GuiTextures.ATOMIC_OVERLAY_2)
+                    .setProgressBar(GuiTextures.PROGRESS_BAR_ARROW_MULTIPLE, ProgressWidget.MoveType.HORIZONTAL)
+                    .setSound(GTSoundEvents.COMPUTATION);
 
     public static final RecipeMap<FuelRecipeBuilder> NAQ_FUEL_CELL_RECIPES = new RecipeMap<>(
             "naq_fuel_cell", 1, 1, 0, 0, new FuelRecipeBuilder(), false)
-            .setSlotOverlay(false, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSlotOverlay(true, false, GuiTextures.ATOMIC_OVERLAY_1)
-            .setSound(GTSoundEvents.FURNACE);
+                    .setSlotOverlay(false, false, GuiTextures.ATOMIC_OVERLAY_1)
+                    .setSlotOverlay(true, false, GuiTextures.ATOMIC_OVERLAY_1)
+                    .setSound(GTSoundEvents.FURNACE);
 
     public static final List<RecipeMap<FusionRecipeBuilder>> FUSION_STACK_RECIPE_MAPS = new ArrayList<>(3) {};
 

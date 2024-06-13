@@ -10,12 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
-import gregtech.api.unification.material.properties.ToolProperty;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
@@ -25,6 +24,7 @@ import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.BlastProperty;
+import gregtech.api.unification.material.properties.ToolProperty;
 import stanhebben.zenscript.annotations.ZenClass;
 
 @ZenClass("mods.gtcefucontent.material.Material")
@@ -266,23 +266,22 @@ public final class GTCEFuCMaterials {
         EutecticCaesiumSodiumPotassium = eutectic(
                 22590, gtcefucId("eutectic_csnak_alloy"),
                 EutecticAlloysString.get("eutectic_csnak_alloy"))
-                .colorAverage()
-                .flags(DECOMPOSITION_BY_CENTRIFUGING)
-                .components(Caesium, 4, Sodium, 1, Potassium, 5)
-                .build();
+                        .colorAverage()
+                        .flags(DECOMPOSITION_BY_CENTRIFUGING)
+                        .components(Caesium, 4, Sodium, 1, Potassium, 5)
+                        .build();
 
         EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(
                 22591, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
                 EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"))
-                .colorAverage()
-                .flags(DECOMPOSITION_BY_ELECTROLYZING)
-                .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
-                .build();
+                        .colorAverage()
+                        .flags(DECOMPOSITION_BY_ELECTROLYZING)
+                        .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
+                        .build();
 
         populateEutecticMap();
 
         generateEutecticProperties();
-
     }
 
     private static void populateEutecticMap() {

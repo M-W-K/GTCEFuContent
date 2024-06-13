@@ -1,14 +1,13 @@
 package com.m_w_k.gtcefucontent.common.item.armor;
 
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import gregtech.api.items.metaitem.MetaItem;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.ResourceLocation;
 
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
 import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.common.ConfigHolder;
-import net.minecraft.util.ResourceLocation;
 
 public class GTCEFuCMetaArmor extends ArmorMetaItem<ArmorMetaItem<?>.ArmorMetaValueItem> {
 

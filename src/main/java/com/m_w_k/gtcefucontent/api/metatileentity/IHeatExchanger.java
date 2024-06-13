@@ -1,11 +1,10 @@
 package com.m_w_k.gtcefucontent.api.metatileentity;
 
-import gregtech.api.capability.IMultipleTankHandler;
-import gregtech.api.capability.impl.FluidTankList;
-import net.minecraft.item.ItemStack;
+import java.util.List;
+
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import java.util.List;
+import gregtech.api.capability.IMultipleTankHandler;
 
 public interface IHeatExchanger {
 
@@ -14,10 +13,11 @@ public interface IHeatExchanger {
     }
 
     IMultipleTankHandler getInputFluidInventory();
-    
+
     IMultipleTankHandler getOutputFluidInventory();
 
     List<IFluidHandler> getNotifiedFluidInputList();
+
     List<IFluidHandler> getNotifiedFluidOutputList();
 
     int getHEUCount();

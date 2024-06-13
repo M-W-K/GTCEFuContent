@@ -179,6 +179,7 @@ public class MetaTileEntityHEUComponent extends MetaTileEntityMultiblockPart
     protected IItemHandlerModifiable createImportItemHandler() {
         if (this.type == null) return super.createImportItemHandler();
         return new ItemStackHandler(this.getInventorySize()) {
+
             @Override
             public int getSlotLimit(int slot) {
                 return MetaTileEntityHEUComponent.this.getSlotLimit(slot);

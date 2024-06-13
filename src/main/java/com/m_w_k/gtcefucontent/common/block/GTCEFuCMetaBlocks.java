@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent.common.block;
 
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStorageBlock;
 
 import gregtech.common.blocks.MetaBlocks;

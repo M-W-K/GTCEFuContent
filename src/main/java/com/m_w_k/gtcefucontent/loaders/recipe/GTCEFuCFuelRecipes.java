@@ -1,14 +1,15 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import gregtech.api.fluids.store.FluidStorageKeys;
-import gregtech.api.recipes.RecipeMaps;
-
 import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.ChargedEnder;
 import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.PreheatedWater;
 import static gregtech.api.GTValues.*;
 import static gregtech.api.unification.material.Materials.*;
+
+import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
+
+import gregtech.api.fluids.store.FluidStorageKeys;
+import gregtech.api.recipes.RecipeMaps;
 
 public class GTCEFuCFuelRecipes {
 

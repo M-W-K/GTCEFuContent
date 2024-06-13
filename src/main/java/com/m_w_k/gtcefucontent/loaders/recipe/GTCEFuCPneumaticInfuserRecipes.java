@@ -2,12 +2,10 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
 
 import gregtech.api.GTValues;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
-import gregtech.common.items.MetaItems;
 
 public final class GTCEFuCPneumaticInfuserRecipes {
 
@@ -39,7 +37,6 @@ public final class GTCEFuCPneumaticInfuserRecipes {
     }
 
     private static void essences() {
-
         GTCEFuCRecipeMaps.PNEUMATIC_INFUSER_RECIPES.recipeBuilder()
                 .inputs(GTCEFuCInfinityExtractorRecipes.dust)
                 .fluidInputs(GTCEFuCMaterials.VaporSeed.getFluid(100),

@@ -6,7 +6,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 

@@ -1,19 +1,7 @@
 package com.m_w_k.gtcefucontent.client;
 
-import java.util.List;
-
-import com.m_w_k.gtcefucontent.api.fluids.void_starlight.TileEntityVoidStarlight;
-import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
-import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
-import com.m_w_k.gtcefucontent.asm.hooks.FluidTooltipUtilHooks;
-import com.m_w_k.gtcefucontent.client.renderer.VoidStarlightRenderer;
-import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -25,9 +13,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.TileEntityVoidStarlight;
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
+import com.m_w_k.gtcefucontent.asm.hooks.FluidTooltipUtilHooks;
+import com.m_w_k.gtcefucontent.client.renderer.VoidStarlightRenderer;
 import com.m_w_k.gtcefucontent.common.CommonProxy;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(Side.CLIENT)

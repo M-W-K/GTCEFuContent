@@ -1,12 +1,12 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
 import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 
 import gregicality.multiblocks.api.unification.GCYMMaterials;

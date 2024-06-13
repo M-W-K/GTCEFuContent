@@ -1,8 +1,32 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.pipeline.IVertexOperation;
-import codechicken.lib.vec.Matrix4;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
 import com.m_w_k.gtcefucontent.api.recipes.HalfExchangeData;
 import com.m_w_k.gtcefucontent.api.recipes.HeatExchangerRecipeHandler;
@@ -10,9 +34,10 @@ import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import gregicality.multiblocks.common.block.GCYMMetaBlocks;
-import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
-import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
+
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.pipeline.IVertexOperation;
+import codechicken.lib.vec.Matrix4;
 import gregtech.api.capability.GregtechDataCodes;
 import gregtech.api.capability.GregtechTileCapabilities;
 import gregtech.api.capability.IControllable;
@@ -27,46 +52,15 @@ import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
 import gregtech.api.pattern.TraceabilityPredicate;
-import gregtech.api.pipenet.tile.IPipeTile;
-import gregtech.api.unification.material.Material;
 import gregtech.api.util.RelativeDirection;
 import gregtech.api.util.TextComponentUtil;
 import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
-import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
-import gregtech.common.blocks.BlockCleanroomCasing;
 import gregtech.common.blocks.BlockFrame;
 import gregtech.common.blocks.BlockMultiblockCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.core.sound.GTSoundEvents;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
                                          implements IDataInfoProvider, IControllable, IProgressBarMultiblock {
@@ -136,13 +130,11 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
             boolean active = tryFluidCooling();
             this.setSwitching(!active);
             return active;
-        }
-        else if (this.chassisTemperature < this.targetTemperature - 10) {
+        } else if (this.chassisTemperature < this.targetTemperature - 10) {
             boolean active = tryFluidHeating();
             this.setSwitching(!active);
             return active;
-        }
-        else {
+        } else {
             this.setSwitching(false);
             return tryFluidHeating() || tryFluidCooling();
         }
@@ -260,8 +252,9 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     @Nonnull
     protected static TraceabilityPredicate stateIndex(int id) {
         return states(id == 0 ?
-                (GTCEFuCMetaBlocks.STANDARD_CASING.getState(GTCEFuCBlockStandardCasing.CasingType.THERMOSTABLE_CERAMIC))
-                : (MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING)));
+                (GTCEFuCMetaBlocks.STANDARD_CASING
+                        .getState(GTCEFuCBlockStandardCasing.CasingType.THERMOSTABLE_CERAMIC)) :
+                (MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING)));
     }
 
     @Override
@@ -331,12 +324,15 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.info", TextFormattingUtil.formatLongToCompactString(this.thermalMass)));
+            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.info",
+                    TextFormattingUtil.formatLongToCompactString(this.thermalMass)));
             if (this.isPaused) {
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.error.temperature"));
+                textList.add(new TextComponentTranslation(
+                        "gtcefucontent.multiblock.heat_disperser.display.error.temperature"));
             } else if (this.isSwitching) {
                 String type = this.chassisTemperature > this.targetTemperature ? "hot" : "cold";
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.error." + type));
+                textList.add(
+                        new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.error." + type));
             }
         }
     }

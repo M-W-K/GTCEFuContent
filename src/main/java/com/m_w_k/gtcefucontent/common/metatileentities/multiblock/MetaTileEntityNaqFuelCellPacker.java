@@ -1,10 +1,27 @@
 package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
-import codechicken.lib.vec.Vector3;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
+
+import codechicken.lib.vec.Vector3;
 import gregtech.api.capability.impl.MultiblockRecipeLogic;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
@@ -20,19 +37,6 @@ import gregtech.client.particle.GTLaserBeamParticle;
 import gregtech.client.particle.GTParticleManager;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.common.blocks.*;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.Nonnull;
-import java.util.List;
 
 public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockController {
 
@@ -87,7 +91,8 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World world, @NotNull List<String> tooltip,
+                               boolean advanced) {
         super.addInformation(stack, world, tooltip, advanced);
         tooltip.add(I18n.format("gtcefucontent.machine.naq_fuel_cell_packer.warn"));
     }
@@ -145,7 +150,6 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
                 .setEmit(reverse ? -0.2f : 0.2f);
     }
 
-
     protected void doFailureExplosion() {
         Vector3 offset = getOffsetToCenter();
         getWorld().createExplosion(null,
@@ -158,13 +162,12 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
     protected Vector3 getOffsetToCenter() {
         EnumFacing offsetDirection = RelativeDirection.BACK.getRelativeFacing(this.getFrontFacing(),
                 this.getUpwardsFacing(), this.isFlipped());
-        Vector3 vec =
-                new Vector3(offsetDirection.getXOffset(), offsetDirection.getYOffset(), offsetDirection.getZOffset());
+        Vector3 vec = new Vector3(offsetDirection.getXOffset(), offsetDirection.getYOffset(),
+                offsetDirection.getZOffset());
         vec.multiply(6);
         vec.add(0.5, 0.5, 0.5);
         return vec;
     }
-
 
     protected class NaqFuelCellPackerRecipeLogic extends MultiblockRecipeLogic {
 

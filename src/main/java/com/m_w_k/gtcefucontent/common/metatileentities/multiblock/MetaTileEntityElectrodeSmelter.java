@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -18,6 +17,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
+
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 
 import gregicality.multiblocks.api.capability.impl.GCYMMultiblockRecipeLogic;
 import gregicality.multiblocks.api.metatileentity.GCYMRecipeMapMultiblockController;

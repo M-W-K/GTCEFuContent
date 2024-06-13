@@ -5,16 +5,6 @@ import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.m_w_k.gtcefucontent.api.capability.impl.HEUGridHandler;
-import com.m_w_k.gtcefucontent.api.metatileentity.IHeatExchanger;
-import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
-import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
-import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
-import gregtech.api.gui.GuiTextures;
-import gregtech.api.gui.Widget;
-import gregtech.api.gui.widgets.ClickButtonWidget;
-import gregtech.api.gui.widgets.WidgetGroup;
-import gregtech.api.metatileentity.multiblock.*;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,7 +15,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -35,22 +24,31 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
+import com.m_w_k.gtcefucontent.api.capability.impl.HEUGridHandler;
 import com.m_w_k.gtcefucontent.api.gui.GTCEFuCGuiTextures;
+import com.m_w_k.gtcefucontent.api.metatileentity.IHeatExchanger;
 import com.m_w_k.gtcefucontent.api.metatileentity.multiblock.GTCEFuCMultiBlockAbility;
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
+import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
+import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.pipeline.IVertexOperation;
 import codechicken.lib.vec.Matrix4;
-import gregicality.multiblocks.api.render.GCYMTextures;
 import gregtech.api.capability.*;
 import gregtech.api.capability.impl.FluidTankList;
 import gregtech.api.capability.impl.ItemHandlerList;
+import gregtech.api.gui.GuiTextures;
+import gregtech.api.gui.Widget;
 import gregtech.api.gui.resources.TextureArea;
+import gregtech.api.gui.widgets.ClickButtonWidget;
+import gregtech.api.gui.widgets.WidgetGroup;
 import gregtech.api.metatileentity.IDataInfoProvider;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.interfaces.IGregTechTileEntity;
+import gregtech.api.metatileentity.multiblock.*;
 import gregtech.api.pattern.BlockPattern;
 import gregtech.api.pattern.FactoryBlockPattern;
 import gregtech.api.pattern.PatternMatchContext;
@@ -62,7 +60,6 @@ import gregtech.api.util.TextFormattingUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.common.ConfigHolder;
-import gregtech.common.blocks.BlockCleanroomCasing;
 import gregtech.common.blocks.BlockGlassCasing;
 import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
@@ -397,7 +394,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     }
 
     protected enum AisleType {
-        START, ENDPOINT, HOLDER, END;
+        START,
+        ENDPOINT,
+        HOLDER,
+        END;
     }
-
 }

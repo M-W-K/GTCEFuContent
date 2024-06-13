@@ -2,11 +2,10 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import static com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps.INFINITY_EXTRACTOR_RECIPES;
 
-import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
-import gregtech.api.unification.material.Materials;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
+import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStorageBlock;
 import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;

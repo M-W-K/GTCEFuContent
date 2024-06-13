@@ -57,8 +57,8 @@ public class ConfigHolder {
     @Config.RangeInt(min = 0, max = 100)
     public static int sympatheticCombustorBonus = 15;
 
-
-    @Config.Comment({ "Whether the Heat Disperser should explode when overticked, or simply not make use of the extra ticks.",
+    @Config.Comment({
+            "Whether the Heat Disperser should explode when overticked, or simply not make use of the extra ticks.",
             "Default: true" })
     public static boolean heatDisperserExplodesOnOvertick = true;
 }

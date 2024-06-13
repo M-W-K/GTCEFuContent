@@ -3,7 +3,6 @@ package com.m_w_k.gtcefucontent.common;
 import java.util.Objects;
 import java.util.function.Function;
 
-import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -15,6 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
+import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCRecipeLoader;
 

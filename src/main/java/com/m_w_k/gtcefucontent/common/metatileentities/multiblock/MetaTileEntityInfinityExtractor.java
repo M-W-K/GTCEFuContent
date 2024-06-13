@@ -2,13 +2,13 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import javax.annotation.Nonnull;
 
-import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
 
 import gregtech.api.GTValues;
 import gregtech.api.metatileentity.MetaTileEntity;

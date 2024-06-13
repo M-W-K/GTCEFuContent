@@ -5,7 +5,6 @@ import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.gtcefucId;
 import static gregtech.common.metatileentities.MetaTileEntities.registerMetaTileEntity;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.m_w_k.gtcefucontent.api.capability.IHEUComponent;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
@@ -14,7 +13,6 @@ import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.multiblockpart
 
 import gregtech.api.GTValues;
 import gregtech.api.fluids.FluidConstants;
-import gregtech.client.renderer.texture.Textures;
 
 public final class GTCEFuCMetaTileEntities {
 
@@ -35,8 +33,8 @@ public final class GTCEFuCMetaTileEntities {
     public static final MetaTileEntityHeatReclaimer[] HEAT_RECLAIMER = new MetaTileEntityHeatReclaimer[2];
     public static MetaTileEntityHeatDisperser HEAT_DISPERSER;
 
-    public static final Map<IHEUComponent.HEUComponentType, MetaTileEntityHEUComponent> HEU_COMPONENTS =
-            new EnumMap<>(IHEUComponent.HEUComponentType.class);
+    public static final Map<IHEUComponent.HEUComponentType, MetaTileEntityHEUComponent> HEU_COMPONENTS = new EnumMap<>(
+            IHEUComponent.HEUComponentType.class);
     public static MetaTileEntityHEUComponent[] HEU_ENDPOINTS = new MetaTileEntityHEUComponent[2];
     public static MetaTileEntityHEUComponent[] HEU_HOLDERS = new MetaTileEntityHEUComponent[3];
 
@@ -73,8 +71,8 @@ public final class GTCEFuCMetaTileEntities {
                 GTCEFuCTextures.NAQ_REACTOR_OVERLAY, GTValues.UV));
         NAQ_REACTOR[2] = registerMetaTileEntity(3014, new MetaTileEntityNaqReactor(gtcefucId("naq_reactor_3"),
                 GTCEFuCTextures.NAQ_REACTOR_OVERLAY, GTValues.UHV));
-        LARGE_NAQ_REACTOR = registerMetaTileEntity(3015, new MetaTileEntityLargeNaqReactor(gtcefucId("large_naq_reactor")));
-
+        LARGE_NAQ_REACTOR = registerMetaTileEntity(3015,
+                new MetaTileEntityLargeNaqReactor(gtcefucId("large_naq_reactor")));
 
         HEAT_EXCHANGER[0] = registerMetaTileEntity(3100,
                 new MetaTileEntityHeatExchanger(gtcefucId("heat_exchanger.small"), GTValues.LuV, 3));

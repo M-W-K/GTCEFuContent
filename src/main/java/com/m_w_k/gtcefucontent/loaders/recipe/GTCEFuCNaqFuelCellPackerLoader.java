@@ -1,15 +1,15 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
-import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
-import gregtech.api.recipes.chance.output.ChancedOutputLogic;
-import gregtech.common.items.MetaItems;
+import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.*;
+import static gregtech.api.GTValues.*;
+
 import net.minecraft.item.ItemStack;
 
-import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.DisruptionEssence;
-import static com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials.UnstableNaquadahAlloy;
-import static gregtech.api.GTValues.LuV;
-import static gregtech.api.GTValues.VA;
+import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
+import com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems;
+
+import gregtech.api.recipes.chance.output.ChancedOutputLogic;
+import gregtech.common.items.MetaItems;
 
 public class GTCEFuCNaqFuelCellPackerLoader {
 
