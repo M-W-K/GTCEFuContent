@@ -192,6 +192,13 @@ public final class GTCEFuCMiscRecipes {
                 .output(OrePrefix.plate, UncuredThermostableCeramic, 5)
                 .duration(600).EUt(VA[EV]).buildAndRegister();
 
+        RecipeMaps.MIXER_RECIPES.recipeBuilder()
+                .input(OrePrefix.dust, Titanium, 1)
+                .input(OrePrefix.dust, Aluminium, 6)
+                .input(OrePrefix.dust, Vanadium, 4)
+                .output(OrePrefix.dust, TitaniumPressureAlloy, 11)
+                .duration(400).EUt(VA[EV]).buildAndRegister();
+
         RecipeMaps.FURNACE_RECIPES.recipeBuilder()
                 .input(OrePrefix.plate, UncuredThermostableCeramic)
                 .output(OrePrefix.plate, ThermostableCeramic)

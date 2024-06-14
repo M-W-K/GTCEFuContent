@@ -65,6 +65,8 @@ public final class GTCEFuCMaterials {
     public static Material Infinitesimality;
     public static Material VoidStarlight;
 
+    public static Material TitaniumPressureAlloy;
+
     /**
      * Contains a map of eutectic alloys and their temperatures before initialization
      * <br>
@@ -236,6 +238,15 @@ public final class GTCEFuCMaterials {
                         .temperature(Integer.MAX_VALUE)
                         .luminosity(15)
                         .customStill())
+                .build();
+
+        TitaniumPressureAlloy = new Material.Builder(22537, gtcefucId("titanium_pressure_alloy"))
+                .ingot().liquid()
+                .color(0xCBB4D9).iconSet(METALLIC)
+                .flags(STD_METAL)
+                .components(Titanium, 1, Aluminium, 6, Vanadium, 4)
+                .blast(b -> b.temp(3820, BlastProperty.GasTier.HIGH)
+                        .blastStats(GTValues.VA[GTValues.EV], 700))
                 .build();
 
         eutectics();

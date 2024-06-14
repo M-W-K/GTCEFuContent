@@ -40,7 +40,7 @@ public final class GTCEFuCCasingLoader {
                 .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.PRESSURE_CASING,
                         ConfigHolder.recipes.casingsPerCraft),
                 "PhP", "PFP", "PwP",
-                'P', new UnificationEntry(OrePrefix.plate, Materials.RhodiumPlatedPalladium),
+                'P', new UnificationEntry(OrePrefix.plate, GTCEFuCMaterials.TitaniumPressureAlloy),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.HSSE));
 
         ModHandler.addShapedRecipe(true, "unstable_hyperstatic_casing", GTCEFuCMetaBlocks.STANDARD_CASING
@@ -84,7 +84,7 @@ public final class GTCEFuCCasingLoader {
                 .duration(600).EUt(GTValues.VA[GTValues.IV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .input(OrePrefix.plate, Materials.RhodiumPlatedPalladium, 6)
+                .input(OrePrefix.plate, GTCEFuCMaterials.TitaniumPressureAlloy, 6)
                 .input(OrePrefix.frameGt, Materials.HSSE)
                 .circuitMeta(6)
                 .outputs(GTCEFuCMetaBlocks.STANDARD_CASING
