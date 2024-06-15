@@ -25,14 +25,14 @@ public final class GTCEFuCCasingLoader {
                 .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_CASING,
                         ConfigHolder.recipes.casingsPerCraft),
                 "PhP", "PFP", "PwP",
-                'P', new UnificationEntry(OrePrefix.plateDouble, Materials.Neutronium),
+                'P', new UnificationEntry(OrePrefix.plate, Materials.Neutronium),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.Neutronium));
 
         ModHandler.addShapedRecipe(true, "casing_pipe_indestructible", GTCEFuCMetaBlocks.HARDENED_CASING
                 .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_PIPE_CASING,
                         ConfigHolder.recipes.casingsPerCraft),
                 "PEP", "EFE", "PEP",
-                'P', new UnificationEntry(OrePrefix.plateDense, Materials.Neutronium),
+                'P', new UnificationEntry(OrePrefix.plateDouble, Materials.Neutronium),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.Neutronium),
                 'E', new UnificationEntry(OrePrefix.pipeNormalFluid, Materials.Neutronium));
 
@@ -51,7 +51,7 @@ public final class GTCEFuCCasingLoader {
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.NaquadahAlloy));
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
-                .input(OrePrefix.plateDouble, Materials.Neutronium, 6)
+                .input(OrePrefix.plate, Materials.Neutronium, 6)
                 .input(OrePrefix.frameGt, Materials.Neutronium)
                 .circuitMeta(6)
                 .outputs(GTCEFuCMetaBlocks.HARDENED_CASING
