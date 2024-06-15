@@ -1,6 +1,5 @@
 package com.m_w_k.gtcefucontent;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -24,8 +23,6 @@ import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntity
 import com.m_w_k.gtcefucontent.common.metatileentities.multiblock.MetaTileEntityFusionStack;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCCraftingRecipeLoader;
 import com.m_w_k.gtcefucontent.loaders.recipe.GTCEFuCMiscRecipes;
-
-import java.util.List;
 
 @Mod(modid = GTCEFuContent.MODID,
      name = GTCEFuContent.NAME,

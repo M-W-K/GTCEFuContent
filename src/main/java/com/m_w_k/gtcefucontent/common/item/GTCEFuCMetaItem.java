@@ -2,7 +2,6 @@ package com.m_w_k.gtcefucontent.common.item;
 
 import static com.m_w_k.gtcefucontent.common.item.GTCEFuCMetaItems.*;
 
-import com.m_w_k.gtcefucontent.GTCEFuContent;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.util.ResourceLocation;
 
