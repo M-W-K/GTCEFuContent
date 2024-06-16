@@ -10,7 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
@@ -75,10 +74,6 @@ public final class GTCEFuCUtil {
 
     public static FluidBuilder fluidAtTemp(int temp) {
         return new FluidBuilder().temperature(temp);
-    }
-
-    public static EutecticFluid.Builder eutecticWithStats(int minTemp, int defaultTemp, int maxTemp) {
-        return new EutecticFluid.Builder().minTemp(minTemp).defaultTemp(defaultTemp).maxTemp(maxTemp);
     }
 
     public static int getTemp(FluidStack stack) {

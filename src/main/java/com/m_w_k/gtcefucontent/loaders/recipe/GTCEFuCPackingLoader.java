@@ -37,13 +37,13 @@ public final class GTCEFuCPackingLoader {
         ModHandler.addShapelessRecipe(name + (reversible ? "_pack" : ""), stackOut,
                 Collections.nCopies(stackIn.getCount(), GTCEFuCUtil.setStackCount(stackIn, 1)).toArray());
         RecipeMaps.PACKER_RECIPES.recipeBuilder()
-                .inputs(stackIn)
+                .inputs(stackIn).circuitMeta(1)
                 .outputs(stackOut)
                 .buildAndRegister();
         if (reversible) {
             ModHandler.addShapelessRecipe(name + "_unpack", stackIn, stackOut);
             RecipeMaps.PACKER_RECIPES.recipeBuilder()
-                    .inputs(stackOut)
+                    .inputs(stackOut).circuitMeta(2)
                     .outputs(stackIn)
                     .buildAndRegister();
         }

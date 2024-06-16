@@ -6,16 +6,12 @@ import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
 import static gregtech.api.unification.material.info.MaterialIconSet.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.minecraft.util.ResourceLocation;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.fluids.void_starlight.VoidStarlightBlockFluid;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
+import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCEutecticMaterialProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
 import crafttweaker.annotations.ZenRegister;
@@ -67,55 +63,7 @@ public final class GTCEFuCMaterials {
 
     public static Material TitaniumPressureAlloy;
 
-    /**
-     * Contains a map of eutectic alloys and their temperatures before initialization
-     * <br>
-     * String - The name of this eutectic alloy
-     * <br>
-     * int[0] - The minimum temperature of the alloy
-     * <br>
-     * int[1] - The default temperature of the alloy
-     * <br>
-     * int[2] - The maximum temperature of the alloy
-     * <br>
-     * int[3] - The heat capacity, in units of J/L.
-     * This means that 418600 units would increase the temperature of 1L water by 1°K,
-     * as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
-     * A negative specific heat capacity violates the laws of thermodynamics.
-     */
-    public final static Map<String, int[]> EutecticAlloysString = new HashMap<>() {
-
-        {
-            this.put("eutectic_csnak_alloy", new int[] { 195, 293, 1237, 800000 });
-            this.put("eutectic_enriched_naquadah_gallium_csk_alloy", new int[] { 270, 293, 7419, 10000000 });
-        }
-    };
-
-    /**
-     * Contains a map of eutectic alloys and their temperatures after initialization
-     * <br>
-     * Material - The Material of this eutectic alloy
-     * <br>
-     * int[0] - The minimum temperature of the alloy
-     * <br>
-     * int[1] - The default temperature of the alloy
-     * <br>
-     * int[2] - The maximum temperature of the alloy
-     * <br>
-     * int[3] - The specific heat capacity, in units of J/L.
-     * This means that 418600 units would increase the temperature of 1L water by 1°K,
-     * as the thermal capacity of water is 418.6 kJ/kg, or kJ/L.
-     * A negative specific heat capacity violates the laws of thermodynamics.
-     */
-    public final static Map<Material, int[]> EutecticAlloys = new HashMap<>();
-
-    private static final AtomicBoolean INIT = new AtomicBoolean(false);
-
     public static void register() {
-        if (INIT.getAndSet(true)) {
-            return;
-        }
-
         GTCEFuCMaterialFlagAddition.init();
 
         essences();
@@ -274,47 +222,19 @@ public final class GTCEFuCMaterials {
 
     private static void eutectics() {
         // eutectics: 1501-2000
-        // sea snake
-        EutecticCaesiumSodiumPotassium = eutectic(
-                1501, gtcefucId("eutectic_csnak_alloy"),
-                EutecticAlloysString.get("eutectic_csnak_alloy"))
-                        .colorAverage()
+        EutecticCaesiumSodiumPotassium = eutectic(new Material.Builder(
+                1501, gtcefucId("eutectic_csnak_alloy")) // sea snake
+                        .colorAverage().iconSet(METALLIC)
                         .flags(DECOMPOSITION_BY_CENTRIFUGING)
-                        .components(Caesium, 4, Sodium, 1, Potassium, 5)
-                        .build();
+                        .components(Caesium, 4, Sodium, 1, Potassium, 5),
+                195, 1237, 800000);
 
-        EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(
-                1502, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
-                EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"))
-                        .colorAverage()
+        EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(new Material.Builder(
+                1502, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"))
+                        .colorAverage().iconSet(METALLIC)
                         .flags(DECOMPOSITION_BY_ELECTROLYZING)
-                        .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3)
-                        .build();
-
-        populateEutecticMap();
-
-        generateEutecticProperties();
-    }
-
-    private static void populateEutecticMap() {
-        // 194K to 1238K (boiling point is made up, but this is a real eutectic mixture)
-        EutecticAlloys.put(EutecticCaesiumSodiumPotassium, EutecticAlloysString.get("eutectic_csnak_alloy"));
-        // 269K to 7420K
-        EutecticAlloys.put(EutecticCaesiumPotassiumGalliumNaquadahEnriched,
-                EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"));
-    }
-
-    /**
-     * Call this function after adding more eutectic alloys to the eutectic maps to autogenerate their properties.
-     */
-    public static void generateEutecticProperties() {
-        for (Map.Entry<Material, int[]> eutectic : EutecticAlloys.entrySet()) {
-            // generate heat capacity properties for eutectic materials
-            if (!eutectic.getKey().hasProperty(GTCEFuCPropertyKey.HEAT_CAPACITY)) {
-                eutectic.getKey().setProperty(GTCEFuCPropertyKey.HEAT_CAPACITY,
-                        new GTCEFuCHeatCapacityProperty(eutectic.getValue()[3], false));
-            }
-        }
+                        .components(Potassium, 5, Caesium, 20, Gallium, 4, NaquadahEnriched, 3),
+                270, 7419, 10000000);
     }
 
     /**
@@ -333,16 +253,23 @@ public final class GTCEFuCMaterials {
     }
 
     /**
-     * Generate a eutectic material. Performs functions shared across all eutectic materials.
-     * 
-     * @param id               The MetaItemSubID for this Material. Must be unique.
-     * @param resourceLocation The ModId and Name of this Material. Will be formatted as "<modid>.material.<name>"
-     *                         for the Translation Key.
-     * @param eutecticStats    The parameters of the eutectic material.
-     * @return The eutectic material builder.
+     * Finalizes a eutectic material. Generates the eutectic property, which then generates the eutectic fluid.
      */
-    public static Material.Builder eutectic(int id, @NotNull ResourceLocation resourceLocation, int[] eutecticStats) {
-        return new Material.Builder(id, resourceLocation).iconSet(METALLIC)
-                .liquid(eutecticWithStats(eutecticStats[0], eutecticStats[1], eutecticStats[2]));
+    public static Material eutectic(@NotNull Material.Builder builder, int minTemp, int maxTemp, int heatCapacity) {
+        Material mat = builder.iconSet(METALLIC).build();
+        mat.setProperty(GTCEFuCPropertyKey.EUTECTIC,
+                new GTCEFuCEutecticMaterialProperty(minTemp, maxTemp, heatCapacity));
+        return mat;
+    }
+
+    /**
+     * Finalizes a eutectic material. Generates the eutectic property, which then generates the eutectic fluid.
+     */
+    public static Material eutectic(@NotNull Material.Builder builder, int minTemp, int defaultTemp, int maxTemp,
+                                    int heatCapacity) {
+        Material mat = builder.build();
+        mat.setProperty(GTCEFuCPropertyKey.EUTECTIC,
+                new GTCEFuCEutecticMaterialProperty(minTemp, defaultTemp, maxTemp, heatCapacity));
+        return mat;
     }
 }

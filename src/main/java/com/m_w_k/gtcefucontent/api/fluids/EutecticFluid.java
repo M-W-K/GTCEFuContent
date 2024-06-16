@@ -183,7 +183,7 @@ public class EutecticFluid extends GTFluid.GTMaterialFluid {
                         translationKey = key.getTranslationKeyFor(material);
                     }
                     fluid = new EutecticFluid(name, still, flowing, state, translationKey, material, minTemp, maxTemp,
-                            material.getProperty(GTCEFuCPropertyKey.HEAT_CAPACITY).getThermalCapacityFluid());
+                            material.getProperty(GTCEFuCPropertyKey.EUTECTIC).getThermalCapacity1mb());
                     HeatExchangerRecipeHandler.registerEutectic((EutecticFluid) fluid);
                 } else {
                     throw new IllegalArgumentException("Fluids with materials must have a FluidStorageKey");

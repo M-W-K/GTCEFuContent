@@ -4,7 +4,7 @@ import gregtech.api.unification.material.properties.PropertyKey;
 
 public final class GTCEFuCPropertyKey {
 
-    public static final PropertyKey<GTCEFuCHeatCapacityProperty> HEAT_CAPACITY = new PropertyKey<>(
-            "heat_capacity",
-            GTCEFuCHeatCapacityProperty.class);
+    public static final PropertyKey<GTCEFuCEutecticMaterialProperty> EUTECTIC = new PropertyKey<>(
+            "eutectic",
+            GTCEFuCEutecticMaterialProperty.class);
 }

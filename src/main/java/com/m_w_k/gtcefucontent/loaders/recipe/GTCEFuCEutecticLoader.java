@@ -6,10 +6,11 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import com.m_w_k.gtcefucontent.api.recipes.GTCEFuCRecipeMaps;
-import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCHeatCapacityProperty;
+import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCEutecticMaterialProperty;
 import com.m_w_k.gtcefucontent.api.unification.properties.GTCEFuCPropertyKey;
 
 import gregtech.api.GTValues;
+import gregtech.api.GregTechAPI;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
@@ -45,38 +46,39 @@ public final class GTCEFuCEutecticLoader {
                         Materials.Gallium.getFluid(576))
                 .output(OrePrefix.dust, Materials.Salt)
                 .fluidOutputs(EutecticCaesiumPotassiumGalliumNaquadahEnriched.getFluid(1000))
-                .duration(160).EUt(GTValues.VA[GTValues.ZPM]).buildAndRegister();
+                .duration(160).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
-        GTCEFuCHeatCapacityProperty property;
-        for (Material eutectic : EutecticAlloys.keySet()) {
-            property = eutectic.getProperty(GTCEFuCPropertyKey.HEAT_CAPACITY);
-            EutecticFluid fluid = (EutecticFluid) eutectic.getFluid();
+        for (Material material : GregTechAPI.materialManager.getRegisteredMaterials()) {
+            if (!material.hasProperty(GTCEFuCPropertyKey.EUTECTIC)) continue;
+
+            GTCEFuCEutecticMaterialProperty property = material.getProperty(GTCEFuCPropertyKey.EUTECTIC);
+            EutecticFluid fluid = (EutecticFluid) material.getFluid();
 
             int heatDiff = fluid.getTemperature() - fluid.getMinTemperature();
             RecipeMaps.FLUID_HEATER_RECIPES.recipeBuilder()
                     .fluidInputs(fluid.stackWithTemperature(10, 0))
-                    .fluidOutputs(eutectic.getFluid(10))
-                    .duration((int) (10L * property.getThermalCapacityFluid() * heatDiff /
+                    .fluidOutputs(material.getFluid(10))
+                    .duration((int) (10L * property.getThermalCapacity1mb() * heatDiff /
                             (30 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(30).buildAndRegister();
             RecipeMaps.VACUUM_RECIPES.recipeBuilder()
-                    .fluidInputs(eutectic.getFluid(100))
+                    .fluidInputs(material.getFluid(100))
                     .fluidOutputs(fluid.stackWithTemperature(100, 0))
-                    .duration((int) (100L * property.getThermalCapacityFluid() * heatDiff /
+                    .duration((int) (100L * property.getThermalCapacity1mb() * heatDiff /
                             (120 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(120).buildAndRegister();
 
             heatDiff = fluid.getMaxTemperature() - fluid.getTemperature();
             RecipeMaps.FLUID_HEATER_RECIPES.recipeBuilder()
-                    .fluidInputs(eutectic.getFluid(10))
+                    .fluidInputs(material.getFluid(10))
                     .fluidOutputs(fluid.stackWithTemperature(10, Integer.MAX_VALUE))
-                    .duration((int) (10L * property.getThermalCapacityFluid() * heatDiff /
+                    .duration((int) (10L * property.getThermalCapacity1mb() * heatDiff /
                             (30 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(30).buildAndRegister();
             RecipeMaps.VACUUM_RECIPES.recipeBuilder()
                     .fluidInputs(fluid.stackWithTemperature(100, Integer.MAX_VALUE))
-                    .fluidOutputs(eutectic.getFluid(100))
-                    .duration((int) (100L * property.getThermalCapacityFluid() * heatDiff /
+                    .fluidOutputs(material.getFluid(100))
+                    .duration((int) (100L * property.getThermalCapacity1mb() * heatDiff /
                             (120 * GTCEFuCHeatExchangerLoader.SINGLE_EU_ENERGY)))
                     .EUt(120).buildAndRegister();
         }
