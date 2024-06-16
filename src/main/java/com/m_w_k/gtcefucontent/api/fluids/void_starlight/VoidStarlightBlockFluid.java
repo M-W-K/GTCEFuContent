@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidFinite;
 import net.minecraftforge.fluids.Fluid;
@@ -32,6 +33,7 @@ public final class VoidStarlightBlockFluid extends BlockFluidFinite {
 
     private VoidStarlightBlockFluid(Fluid fluid) {
         super(fluid, Material.PORTAL);
+        this.setHardness(3600000);
     }
 
     @SuppressWarnings("deprecation") // fine for overriding
@@ -66,6 +68,53 @@ public final class VoidStarlightBlockFluid extends BlockFluidFinite {
         double d1 = (float) pos.getY() + this.getBlockLiquidHeight(worldIn, pos, stateIn, Material.PORTAL);
         double d2 = (float) pos.getZ() + rand.nextFloat();
         worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+    }
+
+    @Override
+    public boolean canDisplace(IBlockAccess world, BlockPos pos) {
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        try {
+            // noinspection DataFlowIssue
+            return block.getExplosionResistance((World) world, pos, null, null) <= 100;
+        } catch (Exception ignored) {
+            return super.canDisplace(world, pos);
+        }
+    }
+
+    @Override
+    public int tryToFlowVerticallyInto(World world, BlockPos pos, int amtToInput) {
+        IBlockState myState = world.getBlockState(pos);
+        BlockPos other = pos.add(0, densityDir, 0);
+        if (other.getY() < 0 || other.getY() >= world.getHeight()) {
+            world.setBlockToAir(pos);
+            return 0;
+        }
+
+        int amt = getQuantaValueBelow(world, other, quantaPerBlock);
+        if (amt >= 0) {
+            amt += amtToInput;
+            if (amt > quantaPerBlock) {
+                world.setBlockState(other, myState.withProperty(LEVEL, quantaPerBlock - 1));
+                world.scheduleUpdate(other, this, tickRate);
+                return amt - quantaPerBlock;
+            } else if (amt > 0) {
+                world.setBlockState(other, myState.withProperty(LEVEL, amt - 1));
+                world.scheduleUpdate(other, this, tickRate);
+                world.setBlockToAir(pos);
+                return 0;
+            }
+            return amtToInput;
+        } else {
+            if (displaceIfPossible(world, other)) {
+                world.setBlockState(other, myState.withProperty(LEVEL, amtToInput - 1));
+                world.scheduleUpdate(other, this, tickRate);
+                world.setBlockToAir(pos);
+                return 0;
+            } else {
+                return amtToInput;
+            }
+        }
     }
 
     public static final class VoidStarlightFluidBuilder extends FluidBuilder {

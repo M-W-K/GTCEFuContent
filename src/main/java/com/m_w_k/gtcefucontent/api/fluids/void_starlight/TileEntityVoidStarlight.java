@@ -9,7 +9,6 @@ public class TileEntityVoidStarlight extends TileEntity {
 
     @SideOnly(Side.CLIENT)
     public boolean shouldRenderFace(EnumFacing p_184313_1_) {
-        return true;
-        // return this.getBlockType().getDefaultState().shouldSideBeRendered(this.world, this.getPos(), p_184313_1_);
+        return this.getBlockType().getDefaultState().shouldSideBeRendered(this.world, this.getPos(), p_184313_1_);
     }
 }
