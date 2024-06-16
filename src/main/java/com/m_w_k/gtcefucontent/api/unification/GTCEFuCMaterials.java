@@ -111,10 +111,6 @@ public final class GTCEFuCMaterials {
 
     private static final AtomicBoolean INIT = new AtomicBoolean(false);
 
-    // IDs 22500 - 22519 reserved for essences
-    // IDs 22520 - 22589 reserved for normal materials
-    // IDs 22590 - 22599 reserved for eutectics
-
     public static void register() {
         if (INIT.getAndSet(true)) {
             return;
@@ -124,7 +120,15 @@ public final class GTCEFuCMaterials {
 
         essences();
 
-        PreheatedWater = new Material.Builder(22520, gtcefucId("preheated_water"))
+        // element materials: 1-200
+        TriniumReduced = new Material.Builder(1, gtcefucId("reduced_trinium"))
+                .gem(7).fluid()
+                .color(0x5E4C6E).iconSet(RUBY)
+                .element(GTCEFuCElements.Ke1)
+                .build();
+
+        // misc materials: 201-1000
+        PreheatedWater = new Material.Builder(201, gtcefucId("preheated_water"))
                 .liquid(new FluidBuilder().temperature(373))
                 .gas(new FluidBuilder().temperature(973).customStill().name("hps")
                         .translation("gtcefucontent.fluid.hps"))
@@ -133,40 +137,34 @@ public final class GTCEFuCMaterials {
                 .components(Hydrogen, 2, Oxygen, 1)
                 .build();
 
-        CaesiumChlorineMix = new Material.Builder(22521, gtcefucId("caesium_chlorine_mix"))
+        CaesiumChlorineMix = new Material.Builder(202, gtcefucId("caesium_chlorine_mix"))
                 .dust()
                 .colorAverage().iconSet(FINE)
                 .flags(DECOMPOSITION_BY_CENTRIFUGING)
                 .components(Caesium, 16, Chlorine, 1)
                 .build();
 
-        ChargedEnder = new Material.Builder(22522, gtcefucId("charged_ender"))
+        ChargedEnder = new Material.Builder(203, gtcefucId("charged_ender"))
                 .fluid()
                 .color(0xa0cefa).iconSet(FLUID)
                 .build();
 
-        TriniumReduced = new Material.Builder(22523, gtcefucId("reduced_trinium"))
-                .gem(7).fluid()
-                .color(0x5E4C6E).iconSet(RUBY)
-                .element(GTCEFuCElements.Ke1)
-                .build();
-
-        FireEnhancer = new Material.Builder(22524, gtcefucId("fire_enhancer"))
+        FireEnhancer = new Material.Builder(204, gtcefucId("fire_enhancer"))
                 .gas(fluidAtTemp(2000))
                 .color(0xD69A00).iconSet(FLUID)
                 .build();
 
-        VaporSeedRaw = new Material.Builder(22525, gtcefucId("raw_vapor_seed"))
+        VaporSeedRaw = new Material.Builder(205, gtcefucId("raw_vapor_seed"))
                 .gas(fluidAtTemp(300))
                 .color(0x20FFF0).iconSet(FLUID)
                 .build();
 
-        VaporSeed = new Material.Builder(22526, gtcefucId("vapor_seed"))
+        VaporSeed = new Material.Builder(206, gtcefucId("vapor_seed"))
                 .liquid(fluidAtTemp(100))
                 .color(0x003B78).iconSet(FLUID)
                 .build();
 
-        NaquadricAlloy = new Material.Builder(22527, gtcefucId("naquadric_alloy"))
+        NaquadricAlloy = new Material.Builder(207, gtcefucId("naquadric_alloy"))
                 .ingot().fluid()
                 .colorAverage().iconSet(SHINY)
                 .flags(GENERATE_PLATE, GENERATE_FOIL)
@@ -176,7 +174,7 @@ public final class GTCEFuCMaterials {
                         .blastStats(GTValues.VA[GTValues.ZPM], 900))
                 .build();
 
-        UnstableNaquadahAlloy = new Material.Builder(22528, gtcefucId("unstable_naquadah_alloy"))
+        UnstableNaquadahAlloy = new Material.Builder(208, gtcefucId("unstable_naquadah_alloy"))
                 .ingot().fluid()
                 .color(0x182832).iconSet(DULL)
                 .flags(EXT2_METAL, GENERATE_SPRING, GENERATE_RING, GENERATE_ROTOR, GENERATE_SMALL_GEAR,
@@ -193,13 +191,13 @@ public final class GTCEFuCMaterials {
                         .vacuumStats(VA[IV], 250))
                 .build();
 
-        TitaniumBoride = new Material.Builder(22529, gtcefucId("titanium_boride"))
+        TitaniumBoride = new Material.Builder(209, gtcefucId("titanium_boride"))
                 .colorAverage().dust()
                 .flags(DECOMPOSITION_BY_CENTRIFUGING)
                 .components(Titanium, 1, Boron, 2)
                 .build();
 
-        SiliconCarbide = new Material.Builder(22530, gtcefucId("silicon_carbide"))
+        SiliconCarbide = new Material.Builder(210, gtcefucId("silicon_carbide"))
                 .colorAverage().ingot()
                 .flags(STD_METAL)
                 .components(Silicon, 1, Carbon, 1)
@@ -207,33 +205,33 @@ public final class GTCEFuCMaterials {
                         .blastStats(GTValues.VA[GTValues.EV], 700))
                 .build();
 
-        UncuredThermostableCeramic = new Material.Builder(22531, gtcefucId("uncured_thermostable_ceramic"))
+        UncuredThermostableCeramic = new Material.Builder(211, gtcefucId("uncured_thermostable_ceramic"))
                 .color(0xFAF1C6).dust()
                 .flags(DECOMPOSITION_BY_CENTRIFUGING, GENERATE_PLATE)
                 .components(TitaniumBoride, 4, SiliconCarbide, 1)
                 .build();
 
-        ThermostableCeramic = new Material.Builder(22532, gtcefucId("thermostable_ceramic"))
+        ThermostableCeramic = new Material.Builder(212, gtcefucId("thermostable_ceramic"))
                 .color(0xFFF8E6).dust()
                 .flags(DECOMPOSITION_BY_ELECTROLYZING, GENERATE_PLATE, EXCLUDE_PLATE_COMPRESSOR_RECIPE,
                         EXCLUDE_BLOCK_CRAFTING_RECIPES, NO_SMASHING, NO_SMELTING, NO_WORKING)
                 .components(TitaniumBoride, 4, SiliconCarbide, 1)
                 .build();
 
-        ConcentratedEffort = new Material.Builder(22533, gtcefucId("concentrated_effort"))
+        ConcentratedEffort = new Material.Builder(213, gtcefucId("concentrated_effort"))
                 .color(0x10AA04).liquid()
                 .build();
 
-        FrozenStarlight = new Material.Builder(22534, gtcefucId("frozen_starlight"))
+        FrozenStarlight = new Material.Builder(214, gtcefucId("frozen_starlight"))
                 .color(0x6fffb).liquid(new FluidBuilder().luminosity(15).temperature(100))
                 .build();
 
-        Infinitesimality = new Material.Builder(22535, gtcefucId("infinitesimality"))
+        Infinitesimality = new Material.Builder(215, gtcefucId("infinitesimality"))
                 .liquid(new FluidBuilder().customStill().density(1000d).disableBucket()
                         .attribute(FluidAttributes.ACID).temperature(4999))
                 .build();
 
-        VoidStarlight = new Material.Builder(22536, gtcefucId("void_starlight"))
+        VoidStarlight = new Material.Builder(216, gtcefucId("void_starlight"))
                 .liquid(new VoidStarlightBlockFluid.VoidStarlightFluidBuilder()
                         .temperature(Integer.MAX_VALUE)
                         .attribute(FluidAttributes.ACID)
@@ -241,7 +239,7 @@ public final class GTCEFuCMaterials {
                         .customStill())
                 .build();
 
-        TitaniumPressureAlloy = new Material.Builder(22537, gtcefucId("titanium_pressure_alloy"))
+        TitaniumPressureAlloy = new Material.Builder(217, gtcefucId("titanium_pressure_alloy"))
                 .ingot().liquid()
                 .color(0xCBB4D9).iconSet(METALLIC)
                 .flags(STD_METAL)
@@ -254,29 +252,31 @@ public final class GTCEFuCMaterials {
     }
 
     private static void essences() {
-        VoidEssence = essence(22500, gtcefucId("void_essence")).color(0x33523F).build();
+        // essences: 1001-1500
+        VoidEssence = essence(1001, gtcefucId("void_essence")).color(0x33523F).build();
 
-        LightEssence = essence(22501, gtcefucId("light_essence")).color(0xFFF997).build();
+        LightEssence = essence(1002, gtcefucId("light_essence")).color(0xFFF997).build();
 
-        ExperienceEssence = essence(22502, gtcefucId("experience_essence")).color(0x04BB00).build();
+        ExperienceEssence = essence(1003, gtcefucId("experience_essence")).color(0x04BB00).build();
 
-        ExistenceEssence = essence(22503, gtcefucId("existence_essence")).color(0xAA00AA).build();
+        ExistenceEssence = essence(1004, gtcefucId("existence_essence")).color(0xAA00AA).build();
 
-        DisruptionEssence = essence(22504, gtcefucId("disruption_essence")).color(0xAA0000).build();
+        DisruptionEssence = essence(1005, gtcefucId("disruption_essence")).color(0xAA0000).build();
 
-        StabilityEssence = essence(22505, gtcefucId("stability_essence")).color(0x0000AA).build();
+        StabilityEssence = essence(1006, gtcefucId("stability_essence")).color(0x0000AA).build();
 
-        ChaosEssence = essence(22506, gtcefucId("chaos_essence")).color(0x440000).build();
+        ChaosEssence = essence(1007, gtcefucId("chaos_essence")).color(0x440000).build();
 
-        OrderEssence = essence(22507, gtcefucId("order_essence")).color(0x000044).build();
+        OrderEssence = essence(1008, gtcefucId("order_essence")).color(0x000044).build();
 
-        RealityEssence = essence(22508, gtcefucId("reality_essence")).color(0x440044).build();
+        RealityEssence = essence(1009, gtcefucId("reality_essence")).color(0x440044).build();
     }
 
     private static void eutectics() {
+        // eutectics: 1501-2000
         // sea snake
         EutecticCaesiumSodiumPotassium = eutectic(
-                22590, gtcefucId("eutectic_csnak_alloy"),
+                1501, gtcefucId("eutectic_csnak_alloy"),
                 EutecticAlloysString.get("eutectic_csnak_alloy"))
                         .colorAverage()
                         .flags(DECOMPOSITION_BY_CENTRIFUGING)
@@ -284,7 +284,7 @@ public final class GTCEFuCMaterials {
                         .build();
 
         EutecticCaesiumPotassiumGalliumNaquadahEnriched = eutectic(
-                22591, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
+                1502, gtcefucId("eutectic_enriched_naquadah_gallium_csk_alloy"),
                 EutecticAlloysString.get("eutectic_enriched_naquadah_gallium_csk_alloy"))
                         .colorAverage()
                         .flags(DECOMPOSITION_BY_ELECTROLYZING)

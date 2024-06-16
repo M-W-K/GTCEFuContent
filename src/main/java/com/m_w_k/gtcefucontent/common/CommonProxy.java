@@ -3,6 +3,8 @@ package com.m_w_k.gtcefucontent.common;
 import java.util.Objects;
 import java.util.function.Function;
 
+import gregtech.api.GregTechAPI;
+import gregtech.api.unification.material.event.MaterialRegistryEvent;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -24,6 +26,11 @@ import gregtech.api.block.VariantItemBlock;
 public class CommonProxy {
 
     public void preLoad() {}
+
+    @SubscribeEvent
+    public static void createMaterialRegistry(MaterialRegistryEvent event) {
+        GregTechAPI.materialManager.createRegistry(GTCEFuContent.MODID);
+    }
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
