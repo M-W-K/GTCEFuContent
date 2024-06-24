@@ -1,7 +1,8 @@
 package com.m_w_k.gtcefucontent.api.damagesources;
 
-import gregtech.api.damagesources.DamageSources;
 import net.minecraft.util.DamageSource;
+
+import gregtech.api.damagesources.DamageSources;
 
 public final class GTCEFuCDamageSources {
 

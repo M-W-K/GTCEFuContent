@@ -1,6 +1,8 @@
 package com.m_w_k.gtcefucontent.mixins.forge;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,22 +13,22 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 
 @Mixin(UniversalBucket.class)
 public class UniversalBucketMixin extends Item {
 
     // TODO fix not working and remove asm
     @Inject(method = "getSubItems", at = @At(value = "HEAD"))
-    private void getSubItemsExtended(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems, CallbackInfo info) {
+    private void getSubItemsExtended(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems,
+                                     CallbackInfo info) {
         UniversalBucket item = (UniversalBucket) (Item) this;
         if (!GTCEFuContent$isInCreativeTab(item, tab))
             return;

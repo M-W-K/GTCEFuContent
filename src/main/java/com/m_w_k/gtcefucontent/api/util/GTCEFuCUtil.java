@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.OptionalDouble;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -14,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;

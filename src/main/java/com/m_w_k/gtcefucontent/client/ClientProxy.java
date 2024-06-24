@@ -1,8 +1,5 @@
 package com.m_w_k.gtcefucontent.client;
 
-import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -18,12 +15,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.m_w_k.gtcefucontent.api.fluids.void_starlight.TileEntityVoidStarlight;
 import com.m_w_k.gtcefucontent.api.render.GTCEFuCTextures;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import com.m_w_k.gtcefucontent.client.renderer.VoidStarlightRenderer;
 import com.m_w_k.gtcefucontent.common.CommonProxy;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
-
-import java.util.List;
-import java.util.Objects;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(Side.CLIENT)

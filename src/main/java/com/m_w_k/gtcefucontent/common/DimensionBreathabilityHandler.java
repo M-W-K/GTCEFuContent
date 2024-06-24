@@ -2,13 +2,9 @@ package com.m_w_k.gtcefucontent.common;
 
 import static net.minecraft.inventory.EntityEquipmentSlot.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -22,6 +18,8 @@ import com.m_w_k.gtcefucontent.api.damagesources.GTCEFuCDamageSources;
 
 import gregtech.api.damagesources.DamageSources;
 import gregtech.api.unification.material.Materials;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 
 public final class DimensionBreathabilityHandler {
 
