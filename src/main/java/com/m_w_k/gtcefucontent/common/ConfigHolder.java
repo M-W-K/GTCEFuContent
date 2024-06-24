@@ -27,23 +27,23 @@ public class ConfigHolder {
             "Suffocation - s | Toxic - t | Radiation - r" })
     @Config.RequiresWorldRestart
     public static String[] itemHazardProtection = new String[] { "gtcefucontent:gtcefuc_armor:1|s0t10",
-            "gtcefucontent:gtcefuc_armor:2|s1t15", "gregtech:gt_armor:20|s1t15r5", "gregtech:gt_armor:21|r8",
-            "gregtech:gt_armor:22|r7", "gregtech:gt_armor:23|r4", "gregtech:gt_armor:30|r16",
+            "gtcefucontent:gtcefuc_armor:2|s1t15", "gregtech:gt_armor:20|s1t15r10", "gregtech:gt_armor:21|r16",
+            "gregtech:gt_armor:22|r14", "gregtech:gt_armor:23|r8", "gregtech:gt_armor:30|r22",
             "gregtech:gt_armor:40|s1t20r20", "gregtech:gt_armor:41|r26", "gregtech:gt_armor:42|r24",
-            "gregtech:gt_armor:43|r18", "gregtech:gt_armor:50|r52" };
+            "gregtech:gt_armor:43|r18", "gregtech:gt_armor:50|r48" };
     /*
      * In order: primitive mask w/ suffocation unsealed and toxic 10
      * normal mask w/ suffocation sealed and toxic 15
-     * nano suite helm w/ suffocation sealed, toxic 15, and radiation 5
-     * nano suite chest w/ radiation 8
-     * nano suite leggings w/ radiation 7
-     * nano suite boots w/ radiation 4
-     * nano suite adv. chest w/ radiation 16
+     * nano suite helm w/ suffocation sealed, toxic 15, and radiation 10
+     * nano suite chest w/ radiation 16
+     * nano suite leggings w/ radiation 14
+     * nano suite boots w/ radiation 8
+     * nano suite adv. chest w/ radiation 22
      * quark suite helm w/ suffocation sealed, toxic 20, and radiation 20
      * quark suite chest w/ radiation 26
      * quark suite leggings w/ radiation 24
      * quark suite boots w/ radiation 18
-     * quark suite adv. chest w/ radiation 52
+     * quark suite adv. chest w/ radiation 48
      */
 
     @Config.Comment({ "Whether to override ProjectEX collector & relay recipes with gregified ones.",

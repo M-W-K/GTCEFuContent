@@ -7,10 +7,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -23,9 +26,9 @@ import gregtech.api.unification.material.Materials;
 public final class DimensionBreathabilityHandler {
 
     private static FluidStack oxyStack;
-    private static final Map<Integer, BreathabilityInfo> dimensionBreathabilityMap = new HashMap<>();
+    private static final Int2ObjectOpenHashMap<BreathabilityInfo> dimensionBreathabilityMap = new Int2ObjectOpenHashMap<>();
     private static BreathabilityInfo defaultDimensionBreathability;
-    private static final Map<BreathabilityItemMapKey, BreathabilityInfo> itemBreathabilityMap = new HashMap<>();
+    private static final Object2ObjectOpenHashMap<BreathabilityItemMapKey, BreathabilityInfo> itemBreathabilityMap = new Object2ObjectOpenHashMap<>();
 
     private static boolean hasDrainedOxy = false;
     private static boolean hasSuffocated = false;
@@ -50,7 +53,8 @@ public final class DimensionBreathabilityHandler {
                 for (String breath : breaths) {
                     switch (breath.charAt(0)) {
                         case 's' -> s = true;
-                        case 't', 'r' -> t = Integer.parseInt(breath.substring(1).trim());
+                        case 't' -> t = Integer.parseInt(breath.substring(1).trim());
+                        case 'r' -> r = Integer.parseInt(breath.substring(1).trim());
                     }
                 }
                 BreathabilityInfo info = new BreathabilityInfo(s, false, t, r);
@@ -145,8 +149,8 @@ public final class DimensionBreathabilityHandler {
     }
 
     private static void radiationCheck(EntityPlayer player, int dimRating) {
-        // natural radiation protection of 20
-        int ratingSum = 20;
+        // natural radiation protection based on missing health
+        int ratingSum = MathHelper.ceil(Math.log1p(player.getMaxHealth() - player.getHealth()) * 6);
 
         BreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
         if (itemInfo != null && itemInfo.radiation) ratingSum += itemInfo.radiationRating;
@@ -161,7 +165,10 @@ public final class DimensionBreathabilityHandler {
     }
 
     private static void radiate(EntityPlayer player, int mult) {
-        player.attackEntityFrom(DamageSources.getRadioactiveDamage(), 0.01f * mult);
+        float damage = 0.01f * mult;
+        if (Math.random() < damage) {
+            player.attackEntityFrom(DamageSources.getRadioactiveDamage(), Math.max(1, damage));
+        }
     }
 
     private static BreathabilityItemMapKey getItemKey(EntityPlayer player, EntityEquipmentSlot slot) {
@@ -237,7 +244,7 @@ public final class DimensionBreathabilityHandler {
         public BreathabilityInfo(boolean suffocation, boolean isSealed, int toxic, int radiation) {
             this.suffocation = suffocation;
             this.toxic = toxic != -1;
-            this.radiation = toxic != -1;
+            this.radiation = radiation != -1;
             this.radiationRating = radiation;
             this.toxicityRating = toxic;
             this.isSealed = isSealed;

@@ -1,0 +1,12 @@
+{
+  "package": "com.m_w_k.gtcefucontent.mixins.forge",
+  "refmap": "mixins.gtcefucontent.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "UniversalBucketMixin"
+  ],
+  "client": [],
+  "server" : []
+}
