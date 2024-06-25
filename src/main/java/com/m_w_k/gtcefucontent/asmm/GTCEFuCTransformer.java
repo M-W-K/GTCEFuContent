@@ -1,14 +1,14 @@
-package com.m_w_k.gtcefucontent.asm;
+package com.m_w_k.gtcefucontent.asmm;
 
-import com.m_w_k.gtcefucontent.asm.visitors.QuarkTechSuiteVisitor;
+import com.m_w_k.gtcefucontent.asmm.visitors.QuarkTechSuiteVisitor;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
-import com.m_w_k.gtcefucontent.asm.visitors.FluidTooltipUtilVisitor;
-import com.m_w_k.gtcefucontent.asm.visitors.UniversalBucketVisitor;
+import com.m_w_k.gtcefucontent.asmm.visitors.FluidTooltipUtilVisitor;
+import com.m_w_k.gtcefucontent.asmm.visitors.UniversalBucketVisitor;
 
 import gregtech.asm.util.TargetClassVisitor;
 

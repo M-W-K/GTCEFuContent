@@ -1,4 +1,4 @@
-package com.m_w_k.gtcefucontent.asm.visitors;
+package com.m_w_k.gtcefucontent.asmm.visitors;
 
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -12,7 +12,7 @@ public class UniversalBucketVisitor extends MethodVisitor implements Opcodes {
     public static final ObfMapping TARGET_METHOD = new ObfMapping(TARGET_CLASS_NAME, "func_150895_a",
             targetSignature());
 
-    private static final String OWNER = "com/m_w_k/gtcefucontent/asm/hooks/UniversalBucketHooks";
+    private static final String OWNER = "com/m_w_k/gtcefucontent/asmm/hooks/UniversalBucketHooks";
     private static final String SIGNATURE = signature();
     private static final String METHOD_NAME = "generateEutecticBuckets";
 

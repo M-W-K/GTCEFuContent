@@ -1,4 +1,4 @@
-package com.m_w_k.gtcefucontent.asm.visitors;
+package com.m_w_k.gtcefucontent.asmm.visitors;
 
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -11,7 +11,7 @@ public class FluidTooltipUtilVisitor extends MethodVisitor implements Opcodes {
     public static final ObfMapping TARGET_METHOD = new ObfMapping(TARGET_CLASS_NAME, "getFluidTooltip",
             targetSignature());
 
-    private static final String OWNER = "com/m_w_k/gtcefucontent/asm/hooks/FluidTooltipUtilHooks";
+    private static final String OWNER = "com/m_w_k/gtcefucontent/asmm/hooks/FluidTooltipUtilHooks";
     private static final String SIGNATURE = signature();
     private static final String METHOD_NAME = "fluidTooltipOverride";
 

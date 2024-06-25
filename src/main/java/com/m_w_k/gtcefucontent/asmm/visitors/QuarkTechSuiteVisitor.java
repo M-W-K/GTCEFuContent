@@ -1,4 +1,4 @@
-package com.m_w_k.gtcefucontent.asm.visitors;
+package com.m_w_k.gtcefucontent.asmm.visitors;
 
 import gregtech.asm.util.ObfMapping;
 import org.objectweb.asm.Label;
