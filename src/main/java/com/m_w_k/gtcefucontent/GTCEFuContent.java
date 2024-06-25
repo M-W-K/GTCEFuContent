@@ -36,6 +36,7 @@ public final class GTCEFuContent {
 
     public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.8.8-beta,);" +
             "required-after:gcym@[1.2.6,);" +
+            "required-after:mixinbooter@[8.0,);" +
             "after:projecte@[1.4.1,);" +
             "after:projectex@[1.2.0,);";
 
