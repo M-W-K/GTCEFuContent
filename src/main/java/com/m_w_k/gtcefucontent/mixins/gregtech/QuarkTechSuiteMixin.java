@@ -18,9 +18,10 @@ import gregtech.common.items.armor.QuarkTechSuite;
 public class QuarkTechSuiteMixin {
 
     @Inject(method = "handleUnblockableDamage", at = @At(value = "RETURN"), cancellable = true, remap = false)
-    private void extendedHandleUnblockableDamageCheck(EntityLivingBase entity, ItemStack armor, DamageSource source,
-                                                      double damage, EntityEquipmentSlot equipmentSlot,
-                                                      CallbackInfoReturnable<Boolean> cir) {
+    private void GTCEFuContent$extendedHandleUnblockableDamageCheck(EntityLivingBase entity, ItemStack armor,
+                                                                    DamageSource source,
+                                                                    double damage, EntityEquipmentSlot equipmentSlot,
+                                                                    CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValueZ() && GTCEFuCDamageSources.isQTUnblockable(source)) cir.setReturnValue(false);
     }
 }

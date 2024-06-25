@@ -15,4 +15,9 @@ public class GTCEFuCLateMixinLoadingPlugin implements ILateMixinLoader {
 
         return configs;
     }
+
+    @Override
+    public void onMixinConfigQueued(String mixinConfig) {
+        ILateMixinLoader.super.onMixinConfigQueued(mixinConfig);
+    }
 }

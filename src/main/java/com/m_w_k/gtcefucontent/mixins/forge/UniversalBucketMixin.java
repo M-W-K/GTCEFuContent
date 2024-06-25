@@ -1,14 +1,12 @@
 package com.m_w_k.gtcefucontent.mixins.forge;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.Iterator;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -19,39 +17,30 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 
 @Mixin(UniversalBucket.class)
 public class UniversalBucketMixin extends Item {
 
-    // TODO fix not working and remove asm
-    @Inject(method = "getSubItems", at = @At(value = "HEAD"))
-    private void getSubItemsExtended(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems,
-                                     CallbackInfo info) {
-        UniversalBucket item = (UniversalBucket) (Item) this;
-        if (!GTCEFuContent$isInCreativeTab(item, tab))
-            return;
-        for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-            if (fluid instanceof EutecticFluid eutectic) {
-                FluidStack base = new FluidStack(fluid, ((UniversalBucket) item).getCapacity());
-                GTCEFuContent$register(item, eutectic.getWithTemperature(base, Integer.MAX_VALUE), subItems);
-                GTCEFuContent$register(item, eutectic.getWithTemperature(base, 0), subItems);
-            }
+    @Inject(method = "getSubItems",
+            at = @At(value = "JUMP", ordinal = 5, shift = At.Shift.BY, by = -5),
+            locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void GTCEFuContent$eutecticSubItemOverride(CreativeTabs tab, NonNullList<ItemStack> subItems,
+                                                       CallbackInfo ci, Iterator<?> var3, Fluid fluid, FluidStack fs,
+                                                       ItemStack stack, IFluidHandlerItem fluidHandler) {
+        if (fluid instanceof EutecticFluid eutectic) {
+            GTCEFuContent$registerSubItem(this, eutectic.getWithTemperature(fs, Integer.MAX_VALUE), subItems);
+            GTCEFuContent$registerSubItem(this, fs, subItems);
+            GTCEFuContent$registerSubItem(this, eutectic.getWithTemperature(fs, 0), subItems);
+            // this prevents the normal temperature bucket from generating twice
+            stack.setCount(2);
         }
     }
 
     @Unique
-    private static boolean GTCEFuContent$isInCreativeTab(Item item, CreativeTabs targetTab) {
-        for (CreativeTabs tab : item.getCreativeTabs())
-            if (tab == targetTab)
-                return true;
-        CreativeTabs creativetabs = item.getCreativeTab();
-        return creativetabs != null && (targetTab == CreativeTabs.SEARCH || targetTab == creativetabs);
-    }
-
-    @Unique
-    private static void GTCEFuContent$register(Item item, FluidStack fs, NonNullList<ItemStack> subItems) {
+    private static void GTCEFuContent$registerSubItem(Item item, FluidStack fs, NonNullList<ItemStack> subItems) {
         ItemStack stack = new ItemStack(item);
         IFluidHandlerItem fluidHandler = new FluidBucketWrapper(stack);
         if (fluidHandler.fill(fs, true) == fs.amount) {

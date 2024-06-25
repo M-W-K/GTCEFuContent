@@ -19,7 +19,8 @@ public class FluidTooltipUtilMixin {
     @Inject(method = "getFluidTooltip(Lnet/minecraftforge/fluids/FluidStack;)Ljava/util/List;",
             at = @At(value = "RETURN"),
             remap = false)
-    private static void getFluidTooltipExtended(FluidStack fluid, CallbackInfoReturnable<List<String>> cir) {
+    private static void GTCEFuContent$getFluidTooltipExtended(FluidStack fluid,
+                                                              CallbackInfoReturnable<List<String>> cir) {
         if (cir.getReturnValue() == null) return;
         GTCEFuCUtil.fluidStackTooltipOverride(fluid, cir.getReturnValue());
     }
