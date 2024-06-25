@@ -1,11 +1,5 @@
-<<<<<<<< HEAD:src/main/java/com/m_w_k/gtcefucontent/asmm/GTCEFuCLoadingPlugin.java
-package com.m_w_k.gtcefucontent.asmm;
-========
-package com.m_w_k.gtcefucontent.mixins;
->>>>>>>> main:src/main/java/com/m_w_k/gtcefucontent/mixins/GTCEFuCLoadingPlugin.java
+package com.m_w_k.gtcefucontent.asm;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import net.minecraftforge.common.ForgeVersion;
@@ -13,17 +7,15 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import org.jetbrains.annotations.Nullable;
 
-import zone.rong.mixinbooter.IEarlyMixinLoader;
-
 @IFMLLoadingPlugin.Name("GTCEFuCLoadingPlugin")
 @IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
 @IFMLLoadingPlugin.TransformerExclusions("gtcefucontent.asm.")
 @IFMLLoadingPlugin.SortingIndex(1002)
-public class GTCEFuCLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader {
+public class GTCEFuCLoadingPlugin implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[0];
+        return new String[] { "com.m_w_k.gtcefucontent.asm.GTCEFuCTransformer" };
     }
 
     @Override
@@ -43,14 +35,5 @@ public class GTCEFuCLoadingPlugin implements IFMLLoadingPlugin, IEarlyMixinLoade
     @Override
     public String getAccessTransformerClass() {
         return null;
-    }
-
-    @Override
-    public List<String> getMixinConfigs() {
-        List<String> configs = new ArrayList<>();
-
-        configs.add("mixins.gtcefucontent.forge.json");
-
-        return configs;
     }
 }

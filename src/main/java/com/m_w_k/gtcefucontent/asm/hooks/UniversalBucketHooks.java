@@ -1,4 +1,4 @@
-package com.m_w_k.gtcefucontent.asmm.hooks;
+package com.m_w_k.gtcefucontent.asm.hooks;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
