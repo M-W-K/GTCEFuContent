@@ -2,6 +2,8 @@ package com.m_w_k.gtcefucontent.api.damagesources;
 
 import net.minecraft.util.DamageSource;
 
+import gregtech.api.damagesources.DamageSources;
+
 public final class GTCEFuCDamageSources {
 
     private static final DamageSource SUFFOCATION = new DamageSource("suffocation").setDamageBypassesArmor();
@@ -13,5 +15,9 @@ public final class GTCEFuCDamageSources {
 
     public static DamageSource getToxicAtmoDamage() {
         return TOXIC_ATMO;
+    }
+
+    public static boolean isQTUnblockable(DamageSource source) {
+        return source == SUFFOCATION || source == TOXIC_ATMO || source == DamageSources.getRadioactiveDamage();
     }
 }

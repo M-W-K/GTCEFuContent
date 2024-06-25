@@ -1,8 +1,11 @@
 package com.m_w_k.gtcefucontent.api.util;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.OptionalDouble;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -10,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.GTCEFuContent;
+import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
 
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.metatileentity.multiblock.MultiblockControllerBase;
@@ -82,5 +86,26 @@ public final class GTCEFuCUtil {
 
     public static int truncateLong(long number) {
         return (int) Math.min(Integer.MAX_VALUE, number);
+    }
+
+    public static void fluidStackTooltipOverride(FluidStack fluid, List<String> tooltip) {
+        if (Objects.equals(fluid.getFluid().getUnlocalizedName(), "fluid.void_starlight")) {
+            for (int i = 0; i < tooltip.size(); i++) {
+                String string = tooltip.get(i);
+                if (Objects.equals(string,
+                        I18n.format("gregtech.fluid.temperature", Integer.MAX_VALUE))) {
+                    tooltip.set(i, I18n.format("gtcefucontent.material.void_starlight.temperature"));
+                    tooltip.add(i, I18n.format("gtcefucontent.material.void_starlight.info"));
+                }
+            }
+        }
+        if (fluid.getFluid() instanceof EutecticFluid eutecticFluid) {
+            for (int i = 0; i < tooltip.size(); i++) {
+                if (Objects.equals(tooltip.get(i),
+                        I18n.format("gregtech.fluid.temperature", eutecticFluid.getTemperature()))) {
+                    tooltip.set(i, I18n.format("gregtech.fluid.temperature", eutecticFluid.getTemperature(fluid)));
+                }
+            }
+        }
     }
 }

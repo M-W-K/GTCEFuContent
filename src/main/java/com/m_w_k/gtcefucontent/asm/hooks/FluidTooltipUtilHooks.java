@@ -3,6 +3,7 @@ package com.m_w_k.gtcefucontent.asm.hooks;
 import java.util.List;
 import java.util.Objects;
 
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -16,7 +17,7 @@ public class FluidTooltipUtilHooks {
     public static List<String> fluidTooltipOverride(FluidStack fluid) {
         if (fluid == null) return null;
         List<String> tooltip = FluidTooltipUtil.getFluidTooltip(fluid.getFluid());
-        checkAndOverride(fluid, tooltip);
+        GTCEFuCUtil.fluidStackTooltipOverride(fluid, tooltip);
         return tooltip;
     }
 
