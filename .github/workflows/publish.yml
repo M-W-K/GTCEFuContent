@@ -3,13 +3,11 @@ name: Publish Project
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+' # any SemVer tag, e.g. v1.2.3
+      - 'v[0-9]+.[0-9]+.[0-9]+*' # any SemVer tag, e.g. v1.2.3, including trailing characters
 
 env:
   # link to the changelog with a format code for the version
   CHANGELOG_LOCATION: "Changelog is available [here](https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }})"
-  # type of release
-  RELEASE_TYPE: 'beta'
 
 concurrency:
   group: publish-${{ github.head_ref || github.ref }}
