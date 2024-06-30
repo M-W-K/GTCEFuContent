@@ -3,11 +3,11 @@ package com.m_w_k.gtcefucontent.asm.hooks;
 import java.util.List;
 import java.util.Objects;
 
-import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.m_w_k.gtcefucontent.api.fluids.EutecticFluid;
+import com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil;
 
 import gregtech.api.util.FluidTooltipUtil;
 

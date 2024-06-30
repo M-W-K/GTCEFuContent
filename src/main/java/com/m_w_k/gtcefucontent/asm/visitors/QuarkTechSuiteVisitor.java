@@ -1,9 +1,10 @@
 package com.m_w_k.gtcefucontent.asm.visitors;
 
-import gregtech.asm.util.ObfMapping;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+
+import gregtech.asm.util.ObfMapping;
 
 public class QuarkTechSuiteVisitor extends MethodVisitor implements Opcodes {
 
@@ -21,7 +22,8 @@ public class QuarkTechSuiteVisitor extends MethodVisitor implements Opcodes {
         mv.visitLabel(label0);
         mv.visitLineNumber(13, label0);
         mv.visitVarInsn(ALOAD, 3);
-        mv.visitMethodInsn(INVOKESTATIC, "com/m_w_k/gtcefucontent/api/damagesources/GTCEFuCDamageSources", "isQTUnblockable", "(Lnet/minecraft/util/DamageSource;)Z", false);
+        mv.visitMethodInsn(INVOKESTATIC, "com/m_w_k/gtcefucontent/api/damagesources/GTCEFuCDamageSources",
+                "isQTUnblockable", "(Lnet/minecraft/util/DamageSource;)Z", false);
         Label label1 = new Label();
         mv.visitJumpInsn(IFEQ, label1);
         mv.visitInsn(ICONST_0);
@@ -33,7 +35,7 @@ public class QuarkTechSuiteVisitor extends MethodVisitor implements Opcodes {
     }
 
     // public boolean handleUnblockableDamage(EntityLivingBase entity, @NotNull ItemStack armor, DamageSource source,
-    //                                           double damage, EntityEquipmentSlot equipmentSlot)
+    // double damage, EntityEquipmentSlot equipmentSlot)
     private static String targetSignature() {
         return "(" +
                 "Lnet/minecraft/entity/EntityLivingBase;" +
