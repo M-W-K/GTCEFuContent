@@ -181,7 +181,7 @@ public final class GTCEFuCMaterials {
 
         VoidStarlight = new Material.Builder(216, gtcefucId("void_starlight"))
                 .liquid(new VoidStarlightBlockFluid.VoidStarlightFluidBuilder()
-                        .temperature(Integer.MAX_VALUE)
+                        .temperature(Short.MAX_VALUE)
                         .attribute(FluidAttributes.ACID)
                         .luminosity(15)
                         .customStill())
