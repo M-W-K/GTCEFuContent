@@ -8,6 +8,8 @@ on:
 env:
   # link to the changelog with a format code for the version
   CHANGELOG_LOCATION: "Changelog is available [here](https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }})"
+  # type of release
+  RELEASE_TYPE: 'beta'
 
 concurrency:
   group: publish-${{ github.head_ref || github.ref }}
