@@ -288,9 +288,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     public List<ITextComponent> getDataInfo() {
         List<ITextComponent> list = new ArrayList<>();
         if (ConfigHolder.machines.enableMaintenance && hasMaintenanceMechanics()) {
-            list.add(new TextComponentTranslation("behavior.tricorder.multiblock_maintenance",
-                    new TextComponentTranslation(TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))
-                            .setStyle(new Style().setColor(TextFormatting.RED))));
+            list.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "behavior.tricorder.multiblock_maintenance",
+                    TextComponentUtil.translationWithColor(TextFormatting.RED,
+                                    TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
         }
         return list;
     }

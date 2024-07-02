@@ -488,7 +488,7 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gtcefucontent.machine.antimatter_compressor.info"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,"gtcefucontent.machine.antimatter_compressor.info"));
         }
     }
 

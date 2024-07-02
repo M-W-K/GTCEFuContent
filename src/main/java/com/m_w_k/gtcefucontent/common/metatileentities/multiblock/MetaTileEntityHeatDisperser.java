@@ -290,9 +290,10 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     public @NotNull List<ITextComponent> getDataInfo() {
         List<ITextComponent> list = new ArrayList<>();
         if (ConfigHolder.machines.enableMaintenance && hasMaintenanceMechanics()) {
-            list.add(new TextComponentTranslation("behavior.tricorder.multiblock_maintenance",
-                    new TextComponentTranslation(TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))
-                            .setStyle(new Style().setColor(TextFormatting.RED))));
+            list.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "behavior.tricorder.multiblock_maintenance",
+                    TextComponentUtil.translationWithColor(TextFormatting.RED,
+                            TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
         }
         return list;
     }
@@ -324,15 +325,21 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.info",
-                    TextFormattingUtil.formatLongToCompactString(this.thermalMass)));
+            ITextComponent mass = TextComponentUtil.stringWithColor(
+                    TextFormatting.GREEN,
+                    TextFormattingUtil.formatLongToCompactString(this.thermalMass)
+                            + "J/K");
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.multiblock.heat_disperser.display.info",
+                    mass));
             if (this.isPaused) {
-                textList.add(new TextComponentTranslation(
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                         "gtcefucontent.multiblock.heat_disperser.display.error.temperature"));
             } else if (this.isSwitching) {
                 String type = this.chassisTemperature > this.targetTemperature ? "hot" : "cold";
                 textList.add(
-                        new TextComponentTranslation("gtcefucontent.multiblock.heat_disperser.display.error." + type));
+                        TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                                "gtcefucontent.multiblock.heat_disperser.display.error." + type));
             }
         }
     }

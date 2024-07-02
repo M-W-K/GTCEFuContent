@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import gregtech.api.util.TextComponentUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -174,9 +175,9 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gregtech.multiblock.blast_furnace.max_temperature",
-                    blastFurnaceTemperature)
-                            .setStyle(new Style().setColor(TextFormatting.RED)));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.RED,
+                            "gregtech.multiblock.blast_furnace.max_temperature",
+                            blastFurnaceTemperature));
         }
         super.addDisplayText(textList);
     }

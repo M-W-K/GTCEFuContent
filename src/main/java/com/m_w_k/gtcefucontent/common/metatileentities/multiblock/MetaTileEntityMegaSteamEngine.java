@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -279,9 +280,17 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        if (this.validVCU && this.vcuBonus > 1) textList.add(
-                new TextComponentTranslation("gtcefucontent.multiblock.mega_steam_engine.display.vcu_bonus",
-                        Math.floor((this.vcuBonus - 1) * 100)));
+        if (this.validVCU && this.vcuBonus > 1) {
+            ITextComponent bonus = TextComponentUtil.stringWithColor(
+                    TextFormatting.AQUA,
+                    '+' + TextFormattingUtil.formatNumbers(Math.floor((this.vcuBonus - 1) * 100))
+                            + '%');
+            textList.add(
+                    TextComponentUtil.translationWithColor(
+                            TextFormatting.GRAY,
+                            "gtcefucontent.multiblock.mega_steam_engine.display.vcu_bonus",
+                            bonus));
+        }
     }
 
     @Override
@@ -299,7 +308,8 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     @Override
     protected void addErrorText(List<ITextComponent> textList) {
         if (!validVCU)
-            textList.add(new TextComponentTranslation("gtcefucontent.machine.mega_steam_engine.error.vcu"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.machine.mega_steam_engine.error.vcu"));
     }
 
     @SideOnly(Side.CLIENT)
@@ -359,14 +369,15 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         if (fuelStack != null) {
             ITextComponent fuelName = TextComponentUtil.setColor(GTUtility.getFluidTranslation(fuelStack),
                     TextFormatting.GOLD);
-            ITextComponent fuelInfo = new TextComponentTranslation("%s / %s L (%s)",
+            ITextComponent fuelInfo = TextComponentUtil.translationWithColor(
+                    TextFormatting.GOLD,"%s / %s L (%s)",
                     TextFormattingUtil.formatNumbers(fuelStored),
                     TextFormattingUtil.formatNumbers(fuelCapacity),
                     fuelName);
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
                     "gregtech.multiblock.large_combustion_engine.fuel_amount",
-                    TextComponentUtil.setColor(fuelInfo, TextFormatting.GOLD)));
+                    fuelInfo));
         } else {
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,

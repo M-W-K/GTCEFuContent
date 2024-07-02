@@ -4,11 +4,14 @@ import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.getTemp;
 
 import java.util.*;
 
+import gregtech.api.util.TextComponentUtil;
+import gregtech.api.util.TextFormattingUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -645,37 +648,55 @@ public class HEUGridHandler extends MTETrait implements IControllable {
 
     public void addInfo(List<ITextComponent> textList) {
         if (validGrid) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info",
-                    this.pipeLength * (this.reflectionCount + 1), this.getCurrentPipeVolModifier(),
-                    Math.floor(this.durationModifier * 100) / 100));
+            ITextComponent length = TextComponentUtil.stringWithColor(
+                    TextFormatting.AQUA,
+                    this.pipeLength * (this.reflectionCount + 1) + "m");
+            ITextComponent volMod = TextComponentUtil.stringWithColor(
+                    TextFormatting.GREEN,
+                    this.getCurrentPipeVolModifier() + "x");
+            ITextComponent durMod = TextComponentUtil.stringWithColor(
+                    TextFormatting.RED,
+                    Math.floor(this.durationModifier * 100) / 100 + "x");
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.multiblock.heat_exchanger.display.info",
+                    length, volMod, durMod));
             if (this.getHeatExchanger().getTargetEutecticTemperature() != null) {
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.target",
-                        this.getHeatExchanger().getTargetEutecticTemperature()));
+                ITextComponent target = TextComponentUtil.stringWithColor(
+                        TextFormatting.WHITE,
+                        this.getHeatExchanger().getTargetEutecticTemperature() + "K");
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_exchanger.display.info.target",
+                        target));
             }
-            if (cachedLength != 0) {
-                textList.add(new TextComponentTranslation(
-                        "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));
-            } else if (requiredPipeLength != 0) {
-                textList.add(new TextComponentTranslation(
-                        "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", requiredPipeLength));
+            ITextComponent len = null;
+            if (this.cachedLength != 0) {
+                len = TextComponentUtil.stringWithColor(
+                        TextFormatting.YELLOW, this.cachedLength + "m");
+            } else if (this.requiredPipeLength != 0) {
+                len = TextComponentUtil.stringWithColor(
+                        TextFormatting.YELLOW, this.requiredPipeLength + "m");
+            }
+            if (len != null) {
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", len));
             }
         }
     }
 
     public void addWarnings(List<ITextComponent> textList) {
         if (!validRecipe) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,"gtcefucontent.multiblock.heat_exchanger.display.error"));
             if (invalidReason.equals(""))
                 invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.recipe";
-            textList.add(new TextComponentTranslation(invalidReason));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, invalidReason));
         } else if (slowedRecipe) textList
-                .add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error.amount2"));
+                .add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "gtcefucontent.multiblock.heat_exchanger.display.error.amount2"));
     }
 
     public void addErrors(List<ITextComponent> textList) {
         if (!validGrid) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error"));
-            textList.add(new TextComponentTranslation(invalidReason));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, "gtcefucontent.multiblock.heat_exchanger.display.error"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, invalidReason));
         }
     }
 }
