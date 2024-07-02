@@ -48,11 +48,13 @@ gregtech.multiblock.electrode_blast_smelter.description=Performs both Blast Furn
 
 gtcefucontent.machine.mega_steam_engine.name=Large-Scale Industrial Steam Engine
 gtcefucontent.machine.mega_steam_engine.tooltip.1=Dynamo hatch tier limited by Voltage Control Unit tier.
-gtcefucontent.machine.mega_steam_engine.tooltip.2=Generates §f%s EU/t§7 per RPM.
-gtcefucontent.machine.mega_steam_engine.tooltip.3=Loses §f%s§7 kinetic energy per tick.
+gtcefucontent.machine.mega_steam_engine.tooltip.2=Every additional Voltage Control Unit installed increases efficiency bonus, approaching +200%% efficiency.
+gtcefucontent.machine.mega_steam_engine.tooltip.3=Generates §f%s EU/t§7 per RPM.
+gtcefucontent.machine.mega_steam_engine.tooltip.4=Loses §f%s§7 kinetic energy per tick.
 gtcefucontent.machine.mega_steam_engine.error.vcu=Dynamo hatch tier exceeds Voltage Control Unit tier!
 gtcefucontent.multiblock.mega_steam_engine.display.shaft_speed=Engine Speed: %s
 gtcefucontent.multiblock.mega_steam_engine.display.lubricant_amount=Vaporous Seed: %s
+gtcefucontent.multiblock.mega_steam_engine.display.vcu_bonus=Efficiency bonus from installed VCUs: +%s%%
 
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
 gtcefucontent.machine.fusion_stack.coolant=DOES NOT REQUIRE COOLANT

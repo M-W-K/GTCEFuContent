@@ -52,7 +52,7 @@ public final class GTCEFuCMetaTileEntities {
         ELECTRODE_SMELTER = registerMetaTileEntity(3004,
                 new MetaTileEntityElectrodeSmelter(gtcefucId("electrode_blast_smelter")));
         MEGA_STEAM_ENGINE = registerMetaTileEntity(3005,
-                new MetaTileEntityMegaSteamEngine(gtcefucId("mega_steam_engine")));
+                new MetaTileEntityMegaSteamEngine(gtcefucId("mega_steam_engine"), 100000, (int) GTValues.V[GTValues.ZPM], (int) GTValues.V[GTValues.ZPM], GTValues.OpV));
         FUSION_STACK[0] = registerMetaTileEntity(3006,
                 new MetaTileEntityFusionStack(gtcefucId("fusion_stack.stack"), GTValues.UHV));
         FUSION_STACK[1] = registerMetaTileEntity(3007,
