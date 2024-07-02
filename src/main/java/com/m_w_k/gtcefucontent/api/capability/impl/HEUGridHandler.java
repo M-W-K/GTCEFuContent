@@ -655,6 +655,9 @@ public class HEUGridHandler extends MTETrait implements IControllable {
             if (cachedLength != 0) {
                 textList.add(new TextComponentTranslation(
                         "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));
+            } else if (requiredPipeLength != 0) {
+                textList.add(new TextComponentTranslation(
+                        "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", requiredPipeLength));
             }
         }
     }
