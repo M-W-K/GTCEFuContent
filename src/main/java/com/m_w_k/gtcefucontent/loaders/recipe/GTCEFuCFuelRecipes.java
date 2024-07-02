@@ -19,8 +19,8 @@ public class GTCEFuCFuelRecipes {
         RecipeMaps.STEAM_TURBINE_FUELS.recipeBuilder()
                 .fluidInputs(PreheatedWater.getFluid(FluidStorageKeys.GAS, 4))
                 .fluidOutputs(DistilledWater.getFluid(4))
-                .duration(16)
-                .EUt((int) V[LV])
+                .duration(10)
+                .EUt((int) V[MV])
                 .buildAndRegister();
 
         RecipeMaps.PLASMA_GENERATOR_FUELS.recipeBuilder()

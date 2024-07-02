@@ -86,7 +86,7 @@ public final class GTCEFuCHeatExchangerLoader {
         HeatExchangerRecipeHandler.registerHeatExchangeE(
                 GTCEFuCMaterials.PreheatedWater.getFluid(1),
                 GTCEFuCMaterials.PreheatedWater.getFluid(FluidStorageKeys.GAS, 1),
-                WATER_HEAT_OF_VAPORIZATION);
+                WATER_HEAT_OF_VAPORIZATION + 80000000L);
 
         // oxygen <-> l. oxygen
         HeatExchangerRecipeHandler.registerHeatExchangeE(
