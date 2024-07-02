@@ -14,8 +14,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -294,7 +292,7 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
             list.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                     "behavior.tricorder.multiblock_maintenance",
                     TextComponentUtil.translationWithColor(TextFormatting.RED,
-                                    TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
+                            TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
         }
         return list;
     }
@@ -306,8 +304,7 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
             if (this.muffler != null) {
                 ITextComponent efficiency = TextComponentUtil.stringWithColor(
                         TextFormatting.AQUA,
-                        TextFormattingUtil.formatNumbers(recoveryEfficiency(this.muffler) * 100)
-                                + '%');
+                        TextFormattingUtil.formatNumbers(recoveryEfficiency(this.muffler) * 100) + '%');
                 textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                         "gtcefucontent.multiblock.heat_reclaimer.display.info",
                         efficiency));
@@ -320,10 +317,13 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         super.addErrorText(textList);
         if (isStructureFormed()) {
             if (this.muffler == null) {
-                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,"gtcefucontent.multiblock.heat_reclaimer.display.error"));
-                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,"gtcefucontent.multiblock.heat_reclaimer.display.error.muffler"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_reclaimer.display.error"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_reclaimer.display.error.muffler"));
             } else if (this.watchedController == null) {
-                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,"gtcefucontent.multiblock.heat_reclaimer.display.error"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_reclaimer.display.error"));
                 textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                         "gtcefucontent.multiblock.heat_reclaimer.display.error.controller"));
             }

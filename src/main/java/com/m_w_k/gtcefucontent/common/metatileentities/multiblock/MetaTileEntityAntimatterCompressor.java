@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -488,7 +487,8 @@ public class MetaTileEntityAntimatterCompressor extends RecipeMapMultiblockContr
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,"gtcefucontent.machine.antimatter_compressor.info"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.machine.antimatter_compressor.info"));
         }
     }
 

@@ -11,8 +11,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -291,7 +289,7 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
             list.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                     "behavior.tricorder.multiblock_maintenance",
                     TextComponentUtil.translationWithColor(TextFormatting.RED,
-                                    TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
+                            TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
         }
         return list;
     }

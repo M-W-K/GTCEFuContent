@@ -15,8 +15,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -327,8 +325,7 @@ public class MetaTileEntityHeatDisperser extends MultiblockWithDisplayBase
         if (isStructureFormed()) {
             ITextComponent mass = TextComponentUtil.stringWithColor(
                     TextFormatting.GREEN,
-                    TextFormattingUtil.formatLongToCompactString(this.thermalMass)
-                            + "J/K");
+                    TextFormattingUtil.formatLongToCompactString(this.thermalMass) + "J/K");
             textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                     "gtcefucontent.multiblock.heat_disperser.display.info",
                     mass));

@@ -2,11 +2,11 @@ package com.m_w_k.gtcefucontent.api.metatileentity;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import gregtech.api.capability.IMultipleTankHandler;
-
-import javax.annotation.Nullable;
 
 public interface IHeatExchanger {
 

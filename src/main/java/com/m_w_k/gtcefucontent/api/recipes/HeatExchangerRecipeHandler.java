@@ -134,8 +134,8 @@ public final class HeatExchangerRecipeHandler {
      * Find out whether we can do a heat exchange with a given fluid, given a direction of exchange and a
      * temperature limit.
      *
-     * @param fluid The first fluid
-     * @param type  The direction of exchange. Should not be {@link ExchangeType#BOTH}
+     * @param fluid            The first fluid
+     * @param type             The direction of exchange. Should not be {@link ExchangeType#BOTH}
      * @param temperatureLimit The maximum temperature to heat to / minimum temperature to cool to.
      * @return the exchange data
      */
@@ -185,13 +185,14 @@ public final class HeatExchangerRecipeHandler {
     /**
      * Find out whether we can do a heat exchange with two fluids, and if so return the exchange.
      * 
-     * @param fluidA The first fluid
-     * @param fluidB The second fluid
+     * @param fluidA                    The first fluid
+     * @param fluidB                    The second fluid
      * @param targetEutecticTemperature the target final temperature for any involved eutectics.
      * @return the exchange data
      */
     @Nullable
-    public static FullExchangeData getHeatExchange(FluidStack fluidA, FluidStack fluidB, @Nullable Integer targetEutecticTemperature) {
+    public static FullExchangeData getHeatExchange(FluidStack fluidA, FluidStack fluidB,
+                                                   @Nullable Integer targetEutecticTemperature) {
         int tempDifference = getTemp(fluidB) - getTemp(fluidA);
         if (tempDifference == 0) return null;
 

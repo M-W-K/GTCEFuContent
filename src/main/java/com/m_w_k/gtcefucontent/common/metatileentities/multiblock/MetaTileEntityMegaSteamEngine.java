@@ -2,17 +2,12 @@ package com.m_w_k.gtcefucontent.common.metatileentities.multiblock;
 
 import java.util.List;
 
-import gregtech.api.capability.impl.EnergyContainerList;
-import gregtech.api.capability.impl.FluidTankList;
-import gregtech.api.capability.impl.ItemHandlerList;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -139,7 +134,8 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
                 .where('C', stateIndex(4))
                 .where('S', stateIndex(0).setMinGlobalLimited(90)
                         .or(autoAbilities(false, true, false, false, true, true, false))
-                        .or(abilities(GCYMMultiblockAbility.TIERED_HATCH).setMinGlobalLimited(1, 1).setMaxLayerLimited(1)))
+                        .or(abilities(GCYMMultiblockAbility.TIERED_HATCH).setMinGlobalLimited(1, 1)
+                                .setMaxLayerLimited(1)))
                 .where('P', stateIndex(2))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
                 .where('X', selfPredicate())
@@ -283,8 +279,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         if (this.validVCU && this.vcuBonus > 1) {
             ITextComponent bonus = TextComponentUtil.stringWithColor(
                     TextFormatting.AQUA,
-                    '+' + TextFormattingUtil.formatNumbers(Math.floor((this.vcuBonus - 1) * 100))
-                            + '%');
+                    '+' + TextFormattingUtil.formatNumbers(Math.floor((this.vcuBonus - 1) * 100)) + '%');
             textList.add(
                     TextComponentUtil.translationWithColor(
                             TextFormatting.GRAY,
@@ -370,7 +365,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
             ITextComponent fuelName = TextComponentUtil.setColor(GTUtility.getFluidTranslation(fuelStack),
                     TextFormatting.GOLD);
             ITextComponent fuelInfo = TextComponentUtil.translationWithColor(
-                    TextFormatting.GOLD,"%s / %s L (%s)",
+                    TextFormatting.GOLD, "%s / %s L (%s)",
                     TextFormattingUtil.formatNumbers(fuelStored),
                     TextFormattingUtil.formatNumbers(fuelCapacity),
                     fuelName);
