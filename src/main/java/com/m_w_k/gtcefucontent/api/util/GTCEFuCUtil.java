@@ -93,7 +93,7 @@ public final class GTCEFuCUtil {
             for (int i = 0; i < tooltip.size(); i++) {
                 String string = tooltip.get(i);
                 if (Objects.equals(string,
-                        I18n.format("gregtech.fluid.temperature", Integer.MAX_VALUE))) {
+                        I18n.format("gregtech.fluid.temperature", fluid.getFluid().getTemperature()))) {
                     tooltip.set(i, I18n.format("gtcefucontent.material.void_starlight.temperature"));
                     tooltip.add(i, I18n.format("gtcefucontent.material.void_starlight.info"));
                 }
