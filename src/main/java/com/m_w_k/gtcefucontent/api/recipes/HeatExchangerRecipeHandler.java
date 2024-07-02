@@ -136,6 +136,7 @@ public final class HeatExchangerRecipeHandler {
      *
      * @param fluid The first fluid
      * @param type  The direction of exchange. Should not be {@link ExchangeType#BOTH}
+     * @param temperatureLimit The maximum temperature to heat to / minimum temperature to cool to.
      * @return the exchange data
      */
     @Nullable
@@ -171,13 +172,26 @@ public final class HeatExchangerRecipeHandler {
 
     /**
      * Find out whether we can do a heat exchange with two fluids, and if so return the exchange.
-     * 
+     *
      * @param fluidA The first fluid
      * @param fluidB The second fluid
      * @return the exchange data
      */
     @Nullable
     public static FullExchangeData getHeatExchange(FluidStack fluidA, FluidStack fluidB) {
+        return getHeatExchange(fluidA, fluidB, null);
+    }
+
+    /**
+     * Find out whether we can do a heat exchange with two fluids, and if so return the exchange.
+     * 
+     * @param fluidA The first fluid
+     * @param fluidB The second fluid
+     * @param targetEutecticTemperature the target final temperature for any involved eutectics.
+     * @return the exchange data
+     */
+    @Nullable
+    public static FullExchangeData getHeatExchange(FluidStack fluidA, FluidStack fluidB, @Nullable Integer targetEutecticTemperature) {
         int tempDifference = getTemp(fluidB) - getTemp(fluidA);
         if (tempDifference == 0) return null;
 
@@ -198,43 +212,62 @@ public final class HeatExchangerRecipeHandler {
 
         if (A == null || B == null) return null;
 
+        EutecticFluid eutecticA = A.getEutectic();
+        EutecticFluid eutecticB = B.getEutectic();
+
         if (heatA) {
-            // We can't heat A to more than B's starting temp, and we can't cool B to less than A's starting temp
+            // We can't heat A to more than B's starting temp
             int bIn = getTemp(B.in);
+            if (targetEutecticTemperature != null && eutecticA != null) {
+                // if A is a eutectic, cap the target final temperature to the provided temp.
+                bIn = Math.min(bIn, targetEutecticTemperature);
+            }
             if (getTemp(A.out) > bIn) {
-                EutecticFluid eutectic = A.getEutectic();
-                if (eutectic != null) {
-                    FluidStack newOut = eutectic.getWithTemperature(A.out, bIn);
+                if (eutecticA != null) {
+                    FluidStack newOut = eutecticA.getWithTemperature(A.out, bIn);
                     if (getTemp(newOut) > bIn) return null;
                     else A = HalfExchangeData.withNewOut(A, newOut);
                 } else return null;
             }
+
+            // We can't cool B to less than A's starting temp
             int aIn = getTemp(A.in);
+            if (targetEutecticTemperature != null && eutecticB != null) {
+                // if B is a eutectic, cap the target final temperature to the provided temp.
+                aIn = Math.max(aIn, targetEutecticTemperature);
+            }
             if (getTemp(B.out) < aIn) {
-                EutecticFluid eutectic = B.getEutectic();
-                if (eutectic != null) {
-                    FluidStack newOut = eutectic.getWithTemperature(B.out, aIn);
-                    if (getTemp(newOut) < bIn) return null;
+                if (eutecticB != null) {
+                    FluidStack newOut = eutecticB.getWithTemperature(B.out, aIn);
+                    if (getTemp(newOut) < aIn) return null;
                     else B = HalfExchangeData.withNewOut(B, newOut);
                 } else return null;
             }
         } else {
-            // We can't cool A to less than B's starting temp, and we can't heat B to more than A's starting temp
+            // We can't cool A to less than B's starting temp
             int bIn = getTemp(B.in);
+            if (targetEutecticTemperature != null && eutecticA != null) {
+                // if A is a eutectic, cap the target final temperature to the provided temp.
+                bIn = Math.max(bIn, targetEutecticTemperature);
+            }
             if (getTemp(A.out) < bIn) {
-                EutecticFluid eutectic = A.getEutectic();
-                if (eutectic != null) {
-                    FluidStack newOut = eutectic.getWithTemperature(A.out, bIn);
+                if (eutecticA != null) {
+                    FluidStack newOut = eutecticA.getWithTemperature(A.out, bIn);
                     if (getTemp(newOut) < bIn) return null;
                     else A = HalfExchangeData.withNewOut(A, newOut);
                 } else return null;
             }
+
+            // We can't heat B to more than A's starting temp
             int aIn = getTemp(A.in);
+            if (targetEutecticTemperature != null && eutecticB != null) {
+                // if B is a eutectic, cap the target final temperature to the provided temp.
+                aIn = Math.min(aIn, targetEutecticTemperature);
+            }
             if (getTemp(B.out) > aIn) {
-                EutecticFluid eutectic = B.getEutectic();
-                if (eutectic != null) {
-                    FluidStack newOut = eutectic.getWithTemperature(B.out, bIn);
-                    if (getTemp(newOut) > bIn) return null;
+                if (eutecticB != null) {
+                    FluidStack newOut = eutecticB.getWithTemperature(B.out, aIn);
+                    if (getTemp(newOut) > aIn) return null;
                     else B = HalfExchangeData.withNewOut(B, newOut);
                 } else return null;
             }

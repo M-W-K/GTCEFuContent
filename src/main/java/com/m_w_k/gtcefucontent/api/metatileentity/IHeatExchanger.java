@@ -6,6 +6,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import gregtech.api.capability.IMultipleTankHandler;
 
+import javax.annotation.Nullable;
+
 public interface IHeatExchanger {
 
     default double getMaintenanceDurationMultiplier() {
@@ -24,7 +26,8 @@ public interface IHeatExchanger {
 
     double getSpeedBonus();
 
-    default int getMaxPipeVolMultiplier() {
-        return -1;
+    @Nullable
+    default Integer getTargetEutecticTemperature() {
+        return null;
     }
 }

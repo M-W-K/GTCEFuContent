@@ -410,7 +410,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
                     if (!HeatExchangerRecipeHandler.isHeatable(heatable.getFluid())) continue;
 
                     if (heatable == coolable) continue;
-                    exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable, heatable);
+                    exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable, heatable, this.getHeatExchanger().getTargetEutecticTemperature());
                     if (exchangeData != null) {
                         // fluid A for the recipe logic should always be the fluid being cooled
                         boolean heatA = exchangeData.thermalEnergyA > 0;
@@ -601,8 +601,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
     }
 
     public int getCurrentPipeVolModifier() {
-        if (this.getHeatExchanger().getMaxPipeVolMultiplier() == -1) return basePipeVolModifier;
-        else return Math.min(basePipeVolModifier, this.getHeatExchanger().getMaxPipeVolMultiplier());
+        return basePipeVolModifier;
     }
 
     @Override
@@ -649,11 +648,10 @@ public class HEUGridHandler extends MTETrait implements IControllable {
             textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info",
                     this.pipeLength * (this.reflectionCount + 1), this.getCurrentPipeVolModifier(),
                     Math.floor(this.durationModifier * 100) / 100));
-            if (this.getHeatExchanger().getMaxPipeVolMultiplier() != -1) {
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.limit",
-                        this.getHeatExchanger().getMaxPipeVolMultiplier()));
-            } else textList
-                    .add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.no_limit"));
+            if (this.getHeatExchanger().getTargetEutecticTemperature() != null) {
+                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.target",
+                        this.getHeatExchanger().getTargetEutecticTemperature()));
+            }
             if (cachedLength != 0) {
                 textList.add(new TextComponentTranslation(
                         "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));
