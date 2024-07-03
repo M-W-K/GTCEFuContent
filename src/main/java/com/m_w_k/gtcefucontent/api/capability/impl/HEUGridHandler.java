@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
@@ -31,6 +31,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.FluidPipeProperties;
 import gregtech.api.unification.material.properties.PropertyKey;
+import gregtech.api.util.TextComponentUtil;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
@@ -410,7 +411,8 @@ public class HEUGridHandler extends MTETrait implements IControllable {
                     if (!HeatExchangerRecipeHandler.isHeatable(heatable.getFluid())) continue;
 
                     if (heatable == coolable) continue;
-                    exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable, heatable);
+                    exchangeData = HeatExchangerRecipeHandler.getHeatExchange(coolable, heatable,
+                            this.getHeatExchanger().getTargetEutecticTemperature());
                     if (exchangeData != null) {
                         // fluid A for the recipe logic should always be the fluid being cooled
                         boolean heatA = exchangeData.thermalEnergyA > 0;
@@ -601,8 +603,7 @@ public class HEUGridHandler extends MTETrait implements IControllable {
     }
 
     public int getCurrentPipeVolModifier() {
-        if (this.getHeatExchanger().getMaxPipeVolMultiplier() == -1) return basePipeVolModifier;
-        else return Math.min(basePipeVolModifier, this.getHeatExchanger().getMaxPipeVolMultiplier());
+        return basePipeVolModifier;
     }
 
     @Override
@@ -646,35 +647,58 @@ public class HEUGridHandler extends MTETrait implements IControllable {
 
     public void addInfo(List<ITextComponent> textList) {
         if (validGrid) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info",
-                    this.pipeLength * (this.reflectionCount + 1), this.getCurrentPipeVolModifier(),
-                    Math.floor(this.durationModifier * 100) / 100));
-            if (this.getHeatExchanger().getMaxPipeVolMultiplier() != -1) {
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.limit",
-                        this.getHeatExchanger().getMaxPipeVolMultiplier()));
-            } else textList
-                    .add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.info.no_limit"));
-            if (cachedLength != 0) {
-                textList.add(new TextComponentTranslation(
-                        "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", cachedLength));
+            ITextComponent length = TextComponentUtil.stringWithColor(
+                    TextFormatting.AQUA,
+                    this.pipeLength * (this.reflectionCount + 1) + "m");
+            ITextComponent volMod = TextComponentUtil.stringWithColor(
+                    TextFormatting.GREEN,
+                    this.getCurrentPipeVolModifier() + "x");
+            ITextComponent durMod = TextComponentUtil.stringWithColor(
+                    TextFormatting.RED,
+                    Math.floor(this.durationModifier * 100) / 100 + "x");
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.multiblock.heat_exchanger.display.info",
+                    length, volMod, durMod));
+            if (this.getHeatExchanger().getTargetEutecticTemperature() != null) {
+                ITextComponent target = TextComponentUtil.stringWithColor(
+                        TextFormatting.WHITE,
+                        this.getHeatExchanger().getTargetEutecticTemperature() + "K");
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_exchanger.display.info.target",
+                        target));
+            }
+            ITextComponent len = null;
+            if (this.cachedLength != 0) {
+                len = TextComponentUtil.stringWithColor(
+                        TextFormatting.YELLOW, this.cachedLength + "m");
+            } else if (this.requiredPipeLength != 0) {
+                len = TextComponentUtil.stringWithColor(
+                        TextFormatting.YELLOW, this.requiredPipeLength + "m");
+            }
+            if (len != null) {
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_exchanger.display.info.pipe", len));
             }
         }
     }
 
     public void addWarnings(List<ITextComponent> textList) {
         if (!validRecipe) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.multiblock.heat_exchanger.display.error"));
             if (invalidReason.equals(""))
                 invalidReason = "gtcefucontent.multiblock.heat_exchanger.display.error.recipe";
-            textList.add(new TextComponentTranslation(invalidReason));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, invalidReason));
         } else if (slowedRecipe) textList
-                .add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error.amount2"));
+                .add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_exchanger.display.error.amount2"));
     }
 
     public void addErrors(List<ITextComponent> textList) {
         if (!validGrid) {
-            textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_exchanger.display.error"));
-            textList.add(new TextComponentTranslation(invalidReason));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.multiblock.heat_exchanger.display.error"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY, invalidReason));
         }
     }
 }

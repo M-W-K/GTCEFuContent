@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
@@ -62,6 +61,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMuffl
 public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController implements IProgressBarMultiblock {
 
     protected boolean validVCU;
+    protected float vcuBonus;
     protected long kineticEnergy;
     // the larger the shaft mass, the slower the engine will ramp up
     protected final int shaftMass;
@@ -69,20 +69,19 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     protected final int friction;
     // the amount of power to generate per RPM
     protected final int generatorStrength;
+    protected final int tier;
 
     public MetaTileEntityMegaSteamEngine(ResourceLocation metaTileEntityId, int shaftMass, int friction,
-                                         int generatorStrength) {
-        super(metaTileEntityId, RecipeMaps.STEAM_TURBINE_FUELS, GTValues.OpV);
+                                         int generatorStrength, int tier) {
+        super(metaTileEntityId, RecipeMaps.STEAM_TURBINE_FUELS, tier);
         this.recipeMapWorkable = new MSEMultiblockWorkableHandler(this);
-        this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[GTValues.OpV]);
+        this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
         this.validVCU = false;
         this.shaftMass = shaftMass;
         this.friction = friction;
         this.generatorStrength = generatorStrength;
-    }
-
-    public MetaTileEntityMegaSteamEngine(ResourceLocation metaTileEntityID) {
-        this(metaTileEntityID, 100000, (int) GTValues.V[GTValues.ZPM], (int) GTValues.V[GTValues.ZPM]);
+        this.tier = tier;
+        this.inputFluidInventory = new LongFluidTankList(true);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
 
     @Override
     public MetaTileEntity createMetaTileEntity(IGregTechTileEntity metaTileEntityHolder) {
-        return new MetaTileEntityMegaSteamEngine(metaTileEntityId);
+        return new MetaTileEntityMegaSteamEngine(metaTileEntityId, shaftMass, friction, generatorStrength, tier);
     }
 
     @Override
@@ -117,7 +116,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
                 .aisle("SS##VVVV##SS", "SPPPPTTPPPPS", "#PPPPTTPPPP#", "####VVVV####")
                 .aisle("SS##VVVV##SS", "SPPPPTTPPPPS", "#PPPPTTPPPP#", "####MVVM####")
                 .aisle("SS##VVVV##SS", "SPPPPTTPPPPS", "#PPPPTTPPPP#", "####VVVV####")
-                .aisle("SS###VV###SS", "XS##VTTV##SU", "####VTTV####", "#####VV#####")
+                .aisle("SS###VV###SS", "XS##VTTV##SS", "####VTTV####", "#####VV#####")
                 .aisle("SS##VVVV##SS", "SPPPPTTPPPPS", "#PPPPTTPPPP#", "####VVVV####")
                 .aisle("SS##VVVV##SS", "SPPPPTTPPPPS", "#PPPPTTPPPP#", "####MVVM####")
                 .aisle("SS##VVVV##SS", "SPPPPTTPPPPS", "#PPPPTTPPPP#", "####VVVV####")
@@ -133,11 +132,12 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
                 .where('Y', stateIndex(3).or(abilities(MultiblockAbility.OUTPUT_ENERGY).setPreviewCount(16)))
                 .where('A', stateIndex(5))
                 .where('C', stateIndex(4))
-                .where('S', stateIndex(0).setMinGlobalLimited(100)
-                        .or(autoAbilities(false, true, false, false, true, true, false)))
+                .where('S', stateIndex(0).setMinGlobalLimited(90)
+                        .or(autoAbilities(false, true, false, false, true, true, false))
+                        .or(abilities(GCYMMultiblockAbility.TIERED_HATCH).setMinGlobalLimited(1, 1)
+                                .setMaxLayerLimited(1)))
                 .where('P', stateIndex(2))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
-                .where('U', abilities(GCYMMultiblockAbility.TIERED_HATCH))
                 .where('X', selfPredicate())
                 .where('#', any())
                 .build();
@@ -168,8 +168,10 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
             return;
         }
         long dynamoVoltage = dynamoHatches.stream().map(IEnergyContainer::getOutputVoltage).reduce(Math::max).get();
-        ITieredMetaTileEntity vcu = vcus.get(0);
-        this.validVCU = GTValues.V[vcu.getTier()] >= dynamoVoltage;
+        int vcuTier = vcus.stream().map(ITieredMetaTileEntity::getTier).reduce(Math::min).orElse(1);
+        this.validVCU = GTValues.V[vcuTier] >= dynamoVoltage;
+        // efficiency bonus approaching +200% as more VCUs are installed
+        this.vcuBonus = 3 - 6f / (2 + vcus.size());
     }
 
     @Override
@@ -186,6 +188,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     @Override
     public void invalidateStructure() {
         super.invalidateStructure();
+        this.outputFluidInventory = new LongFluidTankList(true);
         this.validVCU = false;
     }
 
@@ -271,20 +274,37 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     }
 
     @Override
+    protected void addDisplayText(List<ITextComponent> textList) {
+        super.addDisplayText(textList);
+        if (this.validVCU && this.vcuBonus > 1) {
+            ITextComponent bonus = TextComponentUtil.stringWithColor(
+                    TextFormatting.AQUA,
+                    '+' + TextFormattingUtil.formatNumbers(Math.floor((this.vcuBonus - 1) * 100)) + '%');
+            textList.add(
+                    TextComponentUtil.translationWithColor(
+                            TextFormatting.GRAY,
+                            "gtcefucontent.multiblock.mega_steam_engine.display.vcu_bonus",
+                            bonus));
+        }
+    }
+
+    @Override
     public void addInformation(ItemStack stack, @Nullable World player, @NotNull List<String> tooltip,
                                boolean advanced) {
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gcym.machine.steam_engine.tooltip.1", GTValues.VNF[GTValues.OpV]));
         tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.1"));
-        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.2", this.generatorStrength));
-        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.3", this.friction));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.2"));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.3", this.generatorStrength));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.4", this.friction));
         tooltip.add(I18n.format("gtcefucontent.universal.tooltip.uses_per_hour_vapor_seed", 20000));
     }
 
     @Override
     protected void addErrorText(List<ITextComponent> textList) {
         if (!validVCU)
-            textList.add(new TextComponentTranslation("gtcefucontent.machine.mega_steam_engine.error.vcu"));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "gtcefucontent.machine.mega_steam_engine.error.vcu"));
     }
 
     @SideOnly(Side.CLIENT)
@@ -317,6 +337,11 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     }
 
     @Override
+    public boolean isActive() {
+        return super.isActive() && validVCU;
+    }
+
+    @Override
     public ILongMultipleTankHandler getInputFluidInventory() {
         return (ILongMultipleTankHandler) this.inputFluidInventory;
     }
@@ -339,14 +364,15 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         if (fuelStack != null) {
             ITextComponent fuelName = TextComponentUtil.setColor(GTUtility.getFluidTranslation(fuelStack),
                     TextFormatting.GOLD);
-            ITextComponent fuelInfo = new TextComponentTranslation("%s / %s L (%s)",
+            ITextComponent fuelInfo = TextComponentUtil.translationWithColor(
+                    TextFormatting.GOLD, "%s / %s L (%s)",
                     TextFormattingUtil.formatNumbers(fuelStored),
                     TextFormattingUtil.formatNumbers(fuelCapacity),
                     fuelName);
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
                     "gregtech.multiblock.large_combustion_engine.fuel_amount",
-                    TextComponentUtil.setColor(fuelInfo, TextFormatting.GOLD)));
+                    fuelInfo));
         } else {
             textList.add(TextComponentUtil.translationWithColor(
                     TextFormatting.GRAY,
@@ -476,6 +502,11 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         @Override
         protected boolean canProgressRecipe() {
             return this.engine.hasValidVCU() && checkLubricant() && super.canProgressRecipe();
+        }
+
+        @Override
+        protected long boostProduction(long production) {
+            return (long) (production * this.engine.vcuBonus);
         }
 
         @Override

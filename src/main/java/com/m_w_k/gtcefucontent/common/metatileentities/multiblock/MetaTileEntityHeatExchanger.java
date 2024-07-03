@@ -11,8 +11,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -82,7 +80,8 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     private @NotNull IItemHandlerModifiable componentsInv = new ItemStackHandler(0);
     protected final HEUGridHandler heuHandler;
 
-    protected int maxPipeVolModifier = -1;
+    @Nullable
+    protected Integer targetEutecticTemperature = null;
 
     public MetaTileEntityHeatExchanger(ResourceLocation metaTileEntityId, int tier, int sideLength) {
         this(metaTileEntityId, tier, sideLength, sideLength);
@@ -243,28 +242,30 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     @Override
     protected @NotNull Widget getFlexButton(int x, int y, int width, int height) {
+        // TODO on MUI2, use dynamic tooltip text to display based on ctrl and shift
         WidgetGroup group = new WidgetGroup(x, y, width, height);
-        group.addWidget(new ClickButtonWidget(0, 0, 9, 18, "", this::decrementMaxPipeVolMod)
+        group.addWidget(new ClickButtonWidget(0, 0, 9, 18, "", this::decrementTargetEutecticTemperature)
                 .setButtonTexture(GuiTextures.BUTTON_THROTTLE_MINUS)
-                .setTooltipText("gtcefucontent.multiblock.heat_exchanger.max_pipe_vol_mod_decrement"));
-        group.addWidget(new ClickButtonWidget(9, 0, 9, 18, "", this::incrementMaxPipeVolMod)
+                .setTooltipText("gtcefucontent.multiblock.heat_exchanger.target_decrement"));
+        group.addWidget(new ClickButtonWidget(9, 0, 9, 18, "", this::incrementTargetEutecticTemperature)
                 .setButtonTexture(GuiTextures.BUTTON_THROTTLE_PLUS)
-                .setTooltipText("gtcefucontent.multiblock.heat_exchanger.max_pipe_vol_mod_increment"));
+                .setTooltipText("gtcefucontent.multiblock.heat_exchanger.target_increment"));
         return group;
     }
 
-    private void incrementMaxPipeVolMod(Widget.ClickData clickData) {
-        if (this.maxPipeVolModifier == -1) return;
-        this.maxPipeVolModifier++;
-        if (this.heuHandler.getCurrentPipeVolModifier() < this.maxPipeVolModifier) {
-            this.maxPipeVolModifier = -1;
-        }
+    private void incrementTargetEutecticTemperature(Widget.ClickData data) {
+        int mult = (data.isCtrlClick ? 50 : 1) * (data.isShiftClick ? 10 : 1);
+        if (this.targetEutecticTemperature == null) {
+            this.targetEutecticTemperature = mult;
+        } else this.targetEutecticTemperature += mult;
     }
 
-    private void decrementMaxPipeVolMod(Widget.ClickData clickData) {
-        if (this.maxPipeVolModifier == -1) {
-            this.maxPipeVolModifier = this.heuHandler.getCurrentPipeVolModifier();
-        } else if (this.maxPipeVolModifier > 0) this.maxPipeVolModifier--;
+    private void decrementTargetEutecticTemperature(Widget.ClickData data) {
+        if (this.targetEutecticTemperature == null) return;
+        int mult = (data.isCtrlClick ? 50 : 1) * (data.isShiftClick ? 10 : 1);
+        if (this.targetEutecticTemperature <= mult) {
+            this.targetEutecticTemperature = null;
+        } else this.targetEutecticTemperature -= mult;
     }
 
     @SideOnly(Side.CLIENT)
@@ -285,9 +286,10 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     public List<ITextComponent> getDataInfo() {
         List<ITextComponent> list = new ArrayList<>();
         if (ConfigHolder.machines.enableMaintenance && hasMaintenanceMechanics()) {
-            list.add(new TextComponentTranslation("behavior.tricorder.multiblock_maintenance",
-                    new TextComponentTranslation(TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))
-                            .setStyle(new Style().setColor(TextFormatting.RED))));
+            list.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "behavior.tricorder.multiblock_maintenance",
+                    TextComponentUtil.translationWithColor(TextFormatting.RED,
+                            TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
         }
         return list;
     }
@@ -358,13 +360,14 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        data.setInteger("Limit", this.maxPipeVolModifier);
+        if (this.targetEutecticTemperature != null) data.setInteger("Target", this.targetEutecticTemperature);
         return super.writeToNBT(data);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
-        this.maxPipeVolModifier = data.getInteger("Limit");
+        if (data.hasKey("Target")) this.targetEutecticTemperature = data.getInteger("Target");
+        else this.targetEutecticTemperature = null;
         super.readFromNBT(data);
     }
 
@@ -389,8 +392,9 @@ public class MetaTileEntityHeatExchanger extends MultiblockWithDisplayBase
     }
 
     @Override
-    public int getMaxPipeVolMultiplier() {
-        return this.maxPipeVolModifier;
+    @Nullable
+    public Integer getTargetEutecticTemperature() {
+        return targetEutecticTemperature;
     }
 
     protected enum AisleType {

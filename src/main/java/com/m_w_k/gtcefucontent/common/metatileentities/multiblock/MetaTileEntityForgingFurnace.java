@@ -12,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
@@ -46,6 +44,7 @@ import gregtech.api.recipes.recipeproperties.IRecipePropertyStorage;
 import gregtech.api.recipes.recipeproperties.TemperatureProperty;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.RelativeDirection;
+import gregtech.api.util.TextComponentUtil;
 import gregtech.client.renderer.ICubeRenderer;
 import gregtech.client.renderer.texture.Textures;
 import gregtech.client.renderer.texture.cube.OrientedOverlayRenderer;
@@ -174,9 +173,9 @@ public class MetaTileEntityForgingFurnace extends GCYMRecipeMapMultiblockControl
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         if (isStructureFormed()) {
-            textList.add(new TextComponentTranslation("gregtech.multiblock.blast_furnace.max_temperature",
-                    blastFurnaceTemperature)
-                            .setStyle(new Style().setColor(TextFormatting.RED)));
+            textList.add(TextComponentUtil.translationWithColor(TextFormatting.RED,
+                    "gregtech.multiblock.blast_furnace.max_temperature",
+                    blastFurnaceTemperature));
         }
         super.addDisplayText(textList);
     }

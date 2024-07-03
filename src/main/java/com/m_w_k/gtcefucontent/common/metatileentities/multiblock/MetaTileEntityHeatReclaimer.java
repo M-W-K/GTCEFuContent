@@ -14,8 +14,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -291,9 +289,10 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
     public @NotNull List<ITextComponent> getDataInfo() {
         List<ITextComponent> list = new ArrayList<>();
         if (ConfigHolder.machines.enableMaintenance && hasMaintenanceMechanics()) {
-            list.add(new TextComponentTranslation("behavior.tricorder.multiblock_maintenance",
-                    new TextComponentTranslation(TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))
-                            .setStyle(new Style().setColor(TextFormatting.RED))));
+            list.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                    "behavior.tricorder.multiblock_maintenance",
+                    TextComponentUtil.translationWithColor(TextFormatting.RED,
+                            TextFormattingUtil.formatNumbers(getNumMaintenanceProblems()))));
         }
         return list;
     }
@@ -302,9 +301,14 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
         if (isStructureFormed()) {
-            if (this.muffler != null)
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.info",
-                        TextFormattingUtil.formatNumbers(recoveryEfficiency(this.muffler) * 100)));
+            if (this.muffler != null) {
+                ITextComponent efficiency = TextComponentUtil.stringWithColor(
+                        TextFormatting.AQUA,
+                        TextFormattingUtil.formatNumbers(recoveryEfficiency(this.muffler) * 100) + '%');
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_reclaimer.display.info",
+                        efficiency));
+            }
         }
     }
 
@@ -313,12 +317,14 @@ public class MetaTileEntityHeatReclaimer extends MultiblockWithDisplayBase
         super.addErrorText(textList);
         if (isStructureFormed()) {
             if (this.muffler == null) {
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error"));
-                textList.add(
-                        new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error.muffler"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_reclaimer.display.error"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_reclaimer.display.error.muffler"));
             } else if (this.watchedController == null) {
-                textList.add(new TextComponentTranslation("gtcefucontent.multiblock.heat_reclaimer.display.error"));
-                textList.add(new TextComponentTranslation(
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
+                        "gtcefucontent.multiblock.heat_reclaimer.display.error"));
+                textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
                         "gtcefucontent.multiblock.heat_reclaimer.display.error.controller"));
             }
         }
