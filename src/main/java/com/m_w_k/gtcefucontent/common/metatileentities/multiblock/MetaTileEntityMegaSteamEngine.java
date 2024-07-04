@@ -25,13 +25,12 @@ import com.m_w_k.gtcefucontent.api.unification.GTCEFuCMaterials;
 import com.m_w_k.gtcefucontent.common.block.GTCEFuCMetaBlocks;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockStandardCasing;
 
-import gregicality.multiblocks.api.metatileentity.GCYMMultiblockAbility;
 import gregicality.multiblocks.api.render.GCYMTextures;
 import gregicality.multiblocks.common.block.GCYMMetaBlocks;
 import gregicality.multiblocks.common.block.blocks.BlockLargeMultiblockCasing;
 import gregicality.multiblocks.common.block.blocks.BlockUniqueCasing;
 import gregtech.api.GTValues;
-import gregtech.api.capability.IEnergyContainer;
+import gregtech.api.capability.IMufflerHatch;
 import gregtech.api.capability.IMultipleTankHandler;
 import gregtech.api.capability.IRotorHolder;
 import gregtech.api.capability.impl.MultiblockFuelRecipeLogic;
@@ -60,8 +59,7 @@ import gregtech.common.metatileentities.multi.multiblockpart.MetaTileEntityMuffl
 
 public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController implements IProgressBarMultiblock {
 
-    protected boolean validVCU;
-    protected float vcuBonus;
+    protected float mufflerBonus;
     protected long kineticEnergy;
     // the larger the shaft mass, the slower the engine will ramp up
     protected final int shaftMass;
@@ -76,7 +74,6 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         super(metaTileEntityId, RecipeMaps.STEAM_TURBINE_FUELS, tier);
         this.recipeMapWorkable = new MSEMultiblockWorkableHandler(this);
         this.recipeMapWorkable.setMaximumOverclockVoltage(GTValues.V[tier]);
-        this.validVCU = false;
         this.shaftMass = shaftMass;
         this.friction = friction;
         this.generatorStrength = generatorStrength;
@@ -132,10 +129,8 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
                 .where('Y', stateIndex(3).or(abilities(MultiblockAbility.OUTPUT_ENERGY).setPreviewCount(16)))
                 .where('A', stateIndex(5))
                 .where('C', stateIndex(4))
-                .where('S', stateIndex(0).setMinGlobalLimited(90)
-                        .or(autoAbilities(false, true, false, false, true, true, false))
-                        .or(abilities(GCYMMultiblockAbility.TIERED_HATCH).setMinGlobalLimited(1, 1)
-                                .setMaxLayerLimited(1)))
+                .where('S', stateIndex(0).setMinGlobalLimited(100)
+                        .or(autoAbilities(false, true, false, false, true, true, false)))
                 .where('P', stateIndex(2))
                 .where('M', abilities(MultiblockAbility.MUFFLER_HATCH))
                 .where('X', selfPredicate())
@@ -161,26 +156,18 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     @Override
     protected void formStructure(PatternMatchContext context) {
         super.formStructure(context);
-        List<IEnergyContainer> dynamoHatches = getAbilities(MultiblockAbility.OUTPUT_ENERGY);
-        List<ITieredMetaTileEntity> vcus = getAbilities(GCYMMultiblockAbility.TIERED_HATCH);
-        if (dynamoHatches.isEmpty() || vcus.isEmpty()) {
-            this.validVCU = true;
-            return;
-        }
-        long dynamoVoltage = dynamoHatches.stream().map(IEnergyContainer::getOutputVoltage).reduce(Math::max).get();
-        int vcuTier = vcus.stream().map(ITieredMetaTileEntity::getTier).reduce(Math::min).orElse(1);
-        this.validVCU = GTValues.V[vcuTier] >= dynamoVoltage;
-        // efficiency bonus approaching +200% as more VCUs are installed
-        this.vcuBonus = 3 - 6f / (2 + vcus.size());
+        List<IMufflerHatch> mufflerHatches = getAbilities(MultiblockAbility.MUFFLER_HATCH);
+        this.mufflerBonus = mufflerHatches.stream().filter(hatch -> hatch instanceof ITieredMetaTileEntity)
+                .map(hatch -> ((ITieredMetaTileEntity) hatch).getTier() * 0.1d + 1).map(Math::log10)
+                .map(Double::floatValue).reduce(Float::sum).orElse(0f);
     }
 
     @Override
     protected void updateFormedValid() {
         if (!hasMufflerMechanics() || isMufflerFaceFree()) {
             this.recipeMapWorkable.updateWorkable();
-            // remove half of our friction value from the maximum output
-            long generated = this.energyContainer.addEnergy(getEnergyOut() - this.friction / 2);
-            this.kineticEnergy -= generated + friction;
+            long generated = this.energyContainer.addEnergy(this.getEnergyOut());
+            this.kineticEnergy -= generated + this.friction;
             if (this.kineticEnergy < 0) this.kineticEnergy = 0;
         }
     }
@@ -189,7 +176,7 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     public void invalidateStructure() {
         super.invalidateStructure();
         this.outputFluidInventory = new LongFluidTankList(true);
-        this.validVCU = false;
+        this.mufflerBonus = 0;
     }
 
     public int getNumProgressBars() {
@@ -276,14 +263,14 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
     @Override
     protected void addDisplayText(List<ITextComponent> textList) {
         super.addDisplayText(textList);
-        if (this.validVCU && this.vcuBonus > 1) {
+        if (this.mufflerBonus > 0) {
             ITextComponent bonus = TextComponentUtil.stringWithColor(
                     TextFormatting.AQUA,
-                    '+' + TextFormattingUtil.formatNumbers(Math.floor((this.vcuBonus - 1) * 100)) + '%');
+                    '+' + TextFormattingUtil.formatNumbers(Math.floor(this.mufflerBonus * 100)) + '%');
             textList.add(
                     TextComponentUtil.translationWithColor(
                             TextFormatting.GRAY,
-                            "gtcefucontent.multiblock.mega_steam_engine.display.vcu_bonus",
+                            "gtcefucontent.multiblock.mega_steam_engine.display.muffler_bonus",
                             bonus));
         }
     }
@@ -294,17 +281,9 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         super.addInformation(stack, player, tooltip, advanced);
         tooltip.add(I18n.format("gcym.machine.steam_engine.tooltip.1", GTValues.VNF[GTValues.OpV]));
         tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.1"));
-        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.2"));
-        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.3", this.generatorStrength));
-        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.4", this.friction));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.2", this.generatorStrength));
+        tooltip.add(I18n.format("gtcefucontent.machine.mega_steam_engine.tooltip.3", this.friction));
         tooltip.add(I18n.format("gtcefucontent.universal.tooltip.uses_per_hour_vapor_seed", 20000));
-    }
-
-    @Override
-    protected void addErrorText(List<ITextComponent> textList) {
-        if (!validVCU)
-            textList.add(TextComponentUtil.translationWithColor(TextFormatting.GRAY,
-                    "gtcefucontent.machine.mega_steam_engine.error.vcu"));
     }
 
     @SideOnly(Side.CLIENT)
@@ -332,13 +311,8 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
         return EnumParticleTypes.CLOUD;
     }
 
-    public boolean hasValidVCU() {
-        return validVCU;
-    }
-
-    @Override
-    public boolean isActive() {
-        return super.isActive() && validVCU;
+    public float getMufflerBonus() {
+        return this.mufflerBonus;
     }
 
     @Override
@@ -501,12 +475,12 @@ public class MetaTileEntityMegaSteamEngine extends FuelMultiblockController impl
 
         @Override
         protected boolean canProgressRecipe() {
-            return this.engine.hasValidVCU() && checkLubricant() && super.canProgressRecipe();
+            return checkLubricant() && super.canProgressRecipe();
         }
 
         @Override
         protected long boostProduction(long production) {
-            return (long) (production * this.engine.vcuBonus);
+            return (long) (production * (1 + this.engine.getMufflerBonus()));
         }
 
         @Override

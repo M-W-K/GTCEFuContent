@@ -47,14 +47,12 @@ gtcefucontent.machine.electrode_blast_smelter.tooltip=Thicc Rotary Hearth Furnac
 gregtech.multiblock.electrode_blast_smelter.description=Performs both Blast Furnace and Alloy Blast Smelting recipes.
 
 gtcefucontent.machine.mega_steam_engine.name=Large-Scale Industrial Steam Engine
-gtcefucontent.machine.mega_steam_engine.tooltip.1=Dynamo hatch tier limited by Voltage Control Unit tier.
-gtcefucontent.machine.mega_steam_engine.tooltip.2=Every additional Voltage Control Unit installed increases efficiency bonus, approaching +200%% efficiency.
-gtcefucontent.machine.mega_steam_engine.tooltip.3=Generates §f%s EU/t§7 per RPM.
-gtcefucontent.machine.mega_steam_engine.tooltip.4=Loses §f%s§7 kinetic energy per tick.
-gtcefucontent.machine.mega_steam_engine.error.vcu=Dynamo hatch tier exceeds Voltage Control Unit tier!
+gtcefucontent.machine.mega_steam_engine.tooltip.1=Installed Muffler Hatches cumulatively determine an efficiency bonus based on a logarithmic function of their recovery.
+gtcefucontent.machine.mega_steam_engine.tooltip.2=Generates §b%s EU/t§7 per RPM.
+gtcefucontent.machine.mega_steam_engine.tooltip.3=Loses §c%s§7 kinetic energy per tick.
 gtcefucontent.multiblock.mega_steam_engine.display.shaft_speed=Engine Speed: %s
 gtcefucontent.multiblock.mega_steam_engine.display.lubricant_amount=Vaporous Seed: %s
-gtcefucontent.multiblock.mega_steam_engine.display.vcu_bonus=Efficiency bonus from installed VCUs: %s
+gtcefucontent.multiblock.mega_steam_engine.display.muffler_bonus=Efficiency bonus from installed Muffler Hatches: %s
 
 gtcefucontent.machine.fusion_stack.perfect=Allows for %s perfect overclocks
 gtcefucontent.machine.fusion_stack.coolant=DOES NOT REQUIRE COOLANT
