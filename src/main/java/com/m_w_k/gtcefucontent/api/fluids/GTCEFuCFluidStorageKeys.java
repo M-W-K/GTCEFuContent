@@ -2,7 +2,7 @@ package com.m_w_k.gtcefucontent.api.fluids;
 
 import static gregtech.api.util.GTUtility.gregtechId;
 
-import java.util.function.UnaryOperator;
+import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.fluids.FluidState;
 import gregtech.api.fluids.store.FluidStorageKey;
@@ -10,7 +10,6 @@ import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.info.MaterialIconType;
 import gregtech.api.unification.material.properties.FluidProperty;
 import gregtech.api.unification.material.properties.PropertyKey;
-import org.jetbrains.annotations.NotNull;
 
 public final class GTCEFuCFluidStorageKeys {
 
