@@ -8,8 +8,6 @@ on:
 env:
   # link to the changelog with a format code for the version
   CHANGELOG_LOCATION: "Changelog is available [here](https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }})"
-  # type of release
-  RELEASE_TYPE: 'beta'
 
 concurrency:
   group: publish-${{ github.head_ref || github.ref }}
@@ -44,5 +42,4 @@ jobs:
         env:
           CURSEFORGE_API_KEY: "${{ secrets.CURSEFORGE_API_KEY }}"
           CHANGELOG_LOCATION: "${{ env.CHANGELOG_LOCATION }}"
-          RELEASE_TYPE: "${{ env.RELEASE_TYPE }}"
         run: ./gradlew curseforge --warning-mode all --build-cache
