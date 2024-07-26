@@ -34,7 +34,7 @@ public final class GTCEFuContent {
     public static final String NAME = Tags.MODNAME;
     public static final String VERSION = Tags.VERSION;
 
-public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.8.10-beta,);" +
+    public static final String DEP_VERSION_STRING = "required-after:gregtech@[2.8.10-beta,);" +
             "required-after:gcym@[1.2.10,);" +
             "required-after:mixinbooter@[8.0,);" +
             "after:projecte@[1.4.1,);" +
