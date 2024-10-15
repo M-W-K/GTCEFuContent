@@ -45,7 +45,7 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
             .gregtechId("textures/fx/laser/laser_start.png");
 
     @SideOnly(Side.CLIENT)
-    protected final GTLaserBeamParticle[] beam = new GTLaserBeamParticle[2];
+    protected GTLaserBeamParticle @Nullable [] beam;
 
     public MetaTileEntityNaqFuelCellPacker(ResourceLocation metaTileEntityId) {
         super(metaTileEntityId, GTCEFuCRecipeMaps.NAQ_FUEL_CELL_PACKER_RECIPES);
@@ -83,10 +83,6 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
         return states(switch (id) {
             default -> GTCEFuCMetaBlocks.HARDENED_CASING
                     .getState(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING);
-            case 1 -> MetaBlocks.MULTIBLOCK_CASING.getState(BlockMultiblockCasing.MultiblockCasingType.GRATE_CASING);
-            case 2 -> MetaBlocks.BOILER_CASING.getState(BlockBoilerCasing.BoilerCasingType.STEEL_PIPE);
-            case 5 -> MetaBlocks.TURBINE_CASING.getState(BlockTurbineCasing.TurbineCasingType.STEEL_GEARBOX);
-            case 6 -> MetaBlocks.BOILER_FIREBOX_CASING.getState(BlockFireboxCasing.FireboxCasingType.STEEL_FIREBOX);
         });
     }
 
@@ -120,6 +116,7 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
 
     @SideOnly(Side.CLIENT)
     protected void handleLaser() {
+        if (this.beam == null) this.beam = new GTLaserBeamParticle[2];
         if (this.isActive() && this.beam[0] == null) {
             createLaser();
         } else if (!this.isActive() && this.beam[0] != null) {
@@ -132,6 +129,7 @@ public class MetaTileEntityNaqFuelCellPacker extends RecipeMapMultiblockControll
 
     @SideOnly(Side.CLIENT)
     protected void createLaser() {
+        if (this.beam == null) this.beam = new GTLaserBeamParticle[2];
         Vector3 laserPos = getOffsetToCenter().add(getPos());
         beam[0] = createLaserParticle(laserPos.copy().subtract(0, 0.6, 0), laserPos.copy().add(0, 0.05, 0), false);
         beam[1] = createLaserParticle(laserPos.copy().subtract(0, 0.05, 0), laserPos.copy().add(0, 0.6, 0), true);

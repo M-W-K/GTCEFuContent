@@ -82,7 +82,7 @@ public class GTCEFuCCraftingRecipeLoader {
                 'F', new UnificationEntry(OrePrefix.rotor, Materials.Steel),
                 'T', Items.STRING,
                 'S', MetaItems.STICKY_RESIN,
-                'M', MetaItems.ELECTRIC_MOTOR_MV,
+                'M', MetaItems.ELECTRIC_MOTOR_LV,
                 'R', new UnificationEntry(OrePrefix.plate, Materials.Rubber));
 
         ModHandler.addShapedRecipe("gas_mask", GTCEFuCMetaItems.GAS_MASK.getStackForm(),
