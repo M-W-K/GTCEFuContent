@@ -22,7 +22,7 @@ public final class GTCEFuCMaterialFlagAddition {
         Materials.HSSE.addFlags(MaterialFlags.GENERATE_BOLT_SCREW);
 
         Materials.Thorium.addFlags(MaterialFlags.GENERATE_DENSE);
-        Thorium.getProperty(PropertyKey.FLUID).getStorage()
+        Thorium.getProperty(PropertyKey.FLUID)
                 .enqueueRegistration(FluidStorageKeys.PLASMA, new FluidBuilder().state(FluidState.PLASMA));
 
         Materials.MagnesiumDiboride.addFlags(MaterialFlags.GENERATE_DOUBLE_PLATE);
