@@ -2,8 +2,6 @@ package com.m_w_k.gtcefucontent.loaders.recipe;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,7 +24,6 @@ import com.m_w_k.gtcefucontent.api.unification.GTCEFuMaterialFlags;
 import com.m_w_k.gtcefucontent.common.ConfigHolder;
 
 import gregicality.multiblocks.api.recipes.GCYMRecipeMaps;
-import gregtech.api.GTValues;
 import gregtech.api.fluids.store.FluidStorageKeys;
 import gregtech.api.recipes.Recipe;
 import gregtech.api.recipes.RecipeBuilder;
@@ -45,9 +42,9 @@ import gregtech.api.unification.OreDictUnifier;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class LinearForgingFurnaceLoader {
 
@@ -58,6 +55,7 @@ public class LinearForgingFurnaceLoader {
     private static final List<RecipeBuilder<?>> EMPTY_BUILDER_LIST = new ObjectArrayList<>();
 
     private static int count = 0;
+    private static int fallback = 0;
 
     private static void populateReferences() {
         // TODO create unique metaitems to separate out the forging recipes
@@ -127,16 +125,17 @@ public class LinearForgingFurnaceLoader {
         populateReferences();
         long time = System.currentTimeMillis();
         registerCooled();
-        GTCEFuContent.debug(String.format("Registered %s cooled recipes in %s milliseconds.", count,
+        GTCEFuContent.log(String.format("Registered %s cooled recipes in %s milliseconds.", count,
                 System.currentTimeMillis() - time));
+        GTCEFuContent.log(String.format("Fallback input/output cancellation was triggered %s times.", fallback));
         count = 0;
         time = System.currentTimeMillis();
         registerForgingCooled();
-        GTCEFuContent.debug(String.format("Registered %s cooled forging recipes in %s milliseconds.", count,
+        GTCEFuContent.log(String.format("Registered %s cooled forging recipes in %s milliseconds.", count,
                 System.currentTimeMillis() - time));
         time = System.currentTimeMillis();
         assembleCompositeMaps();
-        GTCEFuContent.debug(String.format("Assembled composite maps in %s milliseconds.",
+        GTCEFuContent.log(String.format("Assembled composite maps in %s milliseconds.",
                 System.currentTimeMillis() - time));
         GTCEFuContent.log("Finished Linear Forging Furnace recipe construction.");
     }
@@ -283,8 +282,17 @@ public class LinearForgingFurnaceLoader {
             compositeFluidInputs = constructingFluidInputs;
         } else {
             // fallback procedural cancellation of freezer inputs with blast outputs
+            fallback++;
             AtomicBoolean noNegativeOutputs = new AtomicBoolean(true);
             AtomicBoolean noZeroedOutput = new AtomicBoolean(true);
+            IntArrayList inputCounts = new IntArrayList();
+            for (GTRecipeInput input : compositeInputs) {
+                inputCounts.add(input.getAmount());
+            }
+            IntArrayList fluidInputCounts = new IntArrayList();
+            for (GTRecipeInput input : compositeFluidInputs) {
+                fluidInputCounts.add(input.getAmount());
+            }
             while (noNegativeOutputs.get() && noZeroedOutput.get()) {
                 List<ItemStack> constructingOutputs = deepCopyIS(compositeOutputs);
                 List<FluidStack> constructingFluidOutputs = deepCopyFS(compositeFluidOutputs);
@@ -292,26 +300,34 @@ public class LinearForgingFurnaceLoader {
                 List<GTRecipeInput> constructingInputs = deepCopyRI(compositeInputs);
                 List<GTRecipeInput> constructingFluidInputs = deepCopyRI(compositeFluidInputs);
 
-                constructingInputs.forEach(a -> constructingOutputs.forEach(b -> {
-                    if (a.acceptsStack(b)) {
-                        int difference = b.getCount() - a.getAmount();
-                        if (difference == 0) noZeroedOutput.set(false);
-                        a.withAmount(0);
-                        if (difference < 0) noNegativeOutputs.set(false);
-                        b.setCount(difference);
+                constructingInputs.forEach(a -> {
+                    for (ItemStack b : constructingOutputs) {
+                        if (a.acceptsStack(b)) {
+                            int difference = b.getCount() - a.getAmount();
+                            if (difference == 0) noZeroedOutput.set(false);
+                            a.withAmount(0);
+                            if (difference < 0) noNegativeOutputs.set(false);
+                            else b.setCount(difference);
+                            break;
+                        }
                     }
-                }));
-                constructingFluidInputs.forEach(a -> constructingFluidOutputs.forEach(b -> {
-                    if (a.acceptsFluid(b)) {
-                        int difference = b.amount - a.getAmount();
-                        if (difference == 0) noZeroedOutput.set(false);
-                        a.withAmount(0);
-                        if (difference < 0) noNegativeOutputs.set(false);
-                        b.amount = difference;
+                });
+                constructingFluidInputs.forEach(a -> {
+                    for (FluidStack b : constructingFluidOutputs) {
+                        if (a.acceptsFluid(b)) {
+                            int difference = b.amount - a.getAmount();
+                            if (difference == 0) noZeroedOutput.set(false);
+                            a.withAmount(0);
+                            if (difference < 0) noNegativeOutputs.set(false);
+                            else b.amount = difference;
+                            break;
+                        }
                     }
-                }));
+                });
 
                 if (noNegativeOutputs.get()) {
+                    // we can safely increase freezer repetition count without going negative
+                    // we've already added the inputs to constructing
                     freezerRepetitions++;
                     compositeOutputs = constructingOutputs;
                     compositeFluidOutputs = constructingFluidOutputs;
@@ -320,30 +336,15 @@ public class LinearForgingFurnaceLoader {
                     compositeFluidInputs = constructingFluidInputs;
 
                     if (noZeroedOutput.get()) {
-                        freezerRecipe.getOutputs().forEach(a -> {
-                            for (var b : constructingOutputs) {
-                                if (ItemStack.areItemStacksEqual(a, b))
-                                    a.setCount(a.getCount() + b.getCount());
-                            }
-                        });
-                        freezerRecipe.getFluidOutputs().forEach(a -> {
-                            for (var b : constructingFluidOutputs) {
-                                if (a.isFluidEqual(b))
-                                    a.amount += b.amount;
-                            }
-                        });
-                        freezerRecipe.getInputs().forEach(a -> {
-                            for (var b : constructingInputs) {
-                                if (a.equals(b.copyWithAmount(a.getAmount())))
-                                    a.withAmount(a.getAmount() + b.getAmount());
-                            }
-                        });
-                        freezerRecipe.getFluidInputs().forEach(a -> {
-                            for (var b : constructingFluidInputs) {
-                                if (a.equals(b.copyWithAmount(a.getAmount())))
-                                    a.withAmount(a.getAmount() + b.getAmount());
-                            }
-                        });
+                        // another repetition might be possible, so increase counts and loop to check
+                        for (int i = 0; i < constructingInputs.size(); i++) {
+                            GTRecipeInput input = constructingInputs.get(i);
+                            input.withAmount(input.getAmount() + inputCounts.getInt(i));
+                        }
+                        for (int i = 0; i < constructingFluidInputs.size(); i++) {
+                            GTRecipeInput input = constructingFluidInputs.get(i);
+                            input.withAmount(input.getAmount() + fluidInputCounts.getInt(i));
+                        }
                     }
                 }
             }
@@ -462,7 +463,7 @@ public class LinearForgingFurnaceLoader {
                 ConfigHolder.linearForgingFurnaceSettings.forgingTemperaturePenalty);
         List<RecipeBuilder<?>> builders = new ObjectArrayList<>();
         for (var pair : PREFIX_MODIFIERS.entrySet()) {
-            var builder = attemptForgingCooledRecipe(pair.getKey(), baseBuilder.copy());
+            var builder = attemptForgingCooledRecipe(pair.getKey(), baseBuilder);
             if (builder != null) {
                 for (ItemStack stack : pair.getValue()) {
                     builder.notConsumable(stack);
@@ -475,23 +476,17 @@ public class LinearForgingFurnaceLoader {
     }
 
     private static @Nullable RecipeBuilder<?> attemptForgingCooledRecipe(OrePrefix prefix,
-                                                                         RecipeBuilder<?> baseBuilder) {
-        Set<Integer> multipliers = new ObjectOpenHashSet<>();
+                                                                         final RecipeBuilder<?> baseBuilder) {
+        int im = 1;
         for (var stack : baseBuilder.getOutputs()) {
             var mat = OreDictUnifier.getMaterial(stack);
-            var stackPrefix = OreDictUnifier.getPrefix(stack);
-            if (mat != null && stackPrefix != null) {
-                if (mat.material.hasFlag(GTCEFuMaterialFlags.NO_FORGING_OUT)) continue;
-
+            if (mat != null && mat.amount > 0 && !mat.material.hasFlag(GTCEFuMaterialFlags.NO_FORGING_OUT)) {
                 long cost = prefix.getMaterialAmount(mat.material);
-                long provided = stackPrefix.getMaterialAmount(mat.material) * stack.getCount();
-                multipliers.add(findMultiplier(cost, provided));
+                long mult = cost / gcd(cost, mat.amount * stack.getCount());
+                im = lcm(im, (int) (mult));
             }
         }
-        Optional<Integer> ia = multipliers.stream().reduce(LinearForgingFurnaceLoader::lcm);
-        // noinspection SimplifyOptionalCallChains
-        if (!ia.isPresent()) return null;
-        int inputMultiplier = Math.max(ia.get(), 1);
+        final int inputMultiplier = im;
 
         RecipeBuilder<?> internalBaseBuilder = baseBuilder.copy();
 
@@ -626,20 +621,6 @@ public class LinearForgingFurnaceLoader {
         a /= gcd;
         b /= gcd;
         return new ImmutablePair<>(a, b);
-    }
-
-    /**
-     * Finds the smallest whole multiplier that allows the provided quantity to satisfy the cost with a whole output.
-     */
-    private static int findMultiplier(long cost, long provided) {
-        long ratio = provided * GTValues.M / cost;
-        long frac = ratio % GTValues.M;
-        // case whole number
-        if (frac == 0) return 1;
-        long denominator = GTValues.M * GTValues.M / frac;
-        long numerator = ratio * denominator / GTValues.M;
-        long gcd = gcd(numerator, denominator);
-        return (int) (denominator / gcd);
     }
 
     private static int gcd(int a, int b) {

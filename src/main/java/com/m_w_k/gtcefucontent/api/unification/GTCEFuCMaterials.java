@@ -1,7 +1,6 @@
 package com.m_w_k.gtcefucontent.api.unification;
 
 import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.*;
-import static gregicality.multiblocks.api.utils.GCYMUtil.gcymId;
 import static gregtech.api.GTValues.*;
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;

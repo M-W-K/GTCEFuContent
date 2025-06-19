@@ -1,5 +1,8 @@
 package com.m_w_k.gtcefucontent.loaders.recipe;
 
+import static gregtech.api.unification.ore.OrePrefix.circuit;
+import static gregtech.api.unification.ore.OrePrefix.gear;
+
 import net.minecraft.item.ItemStack;
 
 import com.latmod.mods.projectex.item.ProjectEXItems;
@@ -10,7 +13,6 @@ import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockAdvancedCasing;
 import com.m_w_k.gtcefucontent.common.block.blocks.GTCEFuCBlockHardenedCasing;
 import com.m_w_k.gtcefucontent.common.metatileentities.GTCEFuCMetaTileEntities;
 
-import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregicality.multiblocks.common.metatileentities.GCYMMetaTileEntities;
 import gregtech.api.GTValues;
 import gregtech.api.items.metaitem.MetaItem;
@@ -26,9 +28,6 @@ import gregtech.common.blocks.BlockMetalCasing;
 import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.items.MetaItems;
 import gregtech.common.metatileentities.MetaTileEntities;
-
-import static gregtech.api.unification.ore.OrePrefix.circuit;
-import static gregtech.api.unification.ore.OrePrefix.gear;
 
 public class GTCEFuCControllerLoader {
 
