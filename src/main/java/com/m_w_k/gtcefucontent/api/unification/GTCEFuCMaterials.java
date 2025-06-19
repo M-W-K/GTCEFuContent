@@ -1,6 +1,7 @@
 package com.m_w_k.gtcefucontent.api.unification;
 
 import static com.m_w_k.gtcefucontent.api.util.GTCEFuCUtil.*;
+import static gregicality.multiblocks.api.utils.GCYMUtil.gcymId;
 import static gregtech.api.GTValues.*;
 import static gregtech.api.unification.material.Materials.*;
 import static gregtech.api.unification.material.info.MaterialFlags.*;
@@ -19,6 +20,7 @@ import gregtech.api.GTValues;
 import gregtech.api.fluids.FluidBuilder;
 import gregtech.api.fluids.attribute.FluidAttributes;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.info.MaterialIconSet;
 import gregtech.api.unification.material.properties.BlastProperty;
 import gregtech.api.unification.material.properties.ToolProperty;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -62,6 +64,7 @@ public final class GTCEFuCMaterials {
     public static Material VoidStarlight;
 
     public static Material TitaniumPressureAlloy;
+    public static Material CobaltAlloy;
 
     public static void register() {
         GTCEFuCMaterialFlagAddition.init();
@@ -194,6 +197,15 @@ public final class GTCEFuCMaterials {
                 .components(Titanium, 1, Aluminium, 6, Vanadium, 4)
                 .blast(b -> b.temp(3820, BlastProperty.GasTier.HIGH)
                         .blastStats(GTValues.VA[GTValues.EV], 700))
+                .build();
+
+        CobaltAlloy = new Material.Builder(3010, gcymId("cobalt_alloy"))
+                .ingot().fluid()
+                .color(0x6594B2).iconSet(MaterialIconSet.METALLIC)
+                .flags(GENERATE_PLATE, GENERATE_GEAR)
+                .components(Cobalt, 3, Iridium, 3, Aluminium, 1, Tungsten, 1)
+                .blast(b -> b.temp(5388, BlastProperty.GasTier.HIGH)
+                        .blastStats(GTValues.VA[GTValues.IV], 1000))
                 .build();
 
         eutectics();

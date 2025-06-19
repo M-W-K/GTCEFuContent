@@ -38,9 +38,16 @@ recipemap.naq_fuel_cell.name=Naquadah Reactor
 
 gtcefucontent.machine.forging_furnace.name=Linear Forging Furnace
 gtcefucontent.machine.forging_furnace.tooltip=Striking while the Iron is Hot
-recipemap.forging_furnace.name=Blast Forging
-gregtech.multiblock.forging_furnace.description=Can process normal Blast Furnace recipes or perform Blast Forging.\n\nBlast Forging includes inefficient inline cooling, and incurs a 1.05x duration penalty.
+gtcefucontent.machine.linear_forging_furnace.tooltip.1=Parallelization cannot exceed the square of the repeatable layer count.
+gtcefucontent.multiblock.linear_forging_furnace.description=A modular multiblock that can support Blasting, Alloy Blasting, Cooling, and Metalworking all in one.
 gtcefucontent.subtitle.tick.forging_furnace=Forge clangs
+recipemap.lff_dual.name=Universal Blast Smelting
+recipemap.lff_blast_cooled.name=Cooled Blast Furnace
+recipemap.lff_alloy_cooled.name=Cooled Alloy Blast Smelting
+recipemap.lff_dual_cooled.name=Cooled Universal Blast Smelting
+recipemap.lff_blast_forging_cooled.name=Cooled Blast Forging
+recipemap.lff_alloy_forging_cooled.name=Cooled Alloy Blast Forging
+recipemap.lff_dual_forging_cooled.name=Cooled Universal Blast Forging
 
 gtcefucontent.machine.electrode_blast_smelter.name=Electrode Blast Smelter
 gtcefucontent.machine.electrode_blast_smelter.tooltip=Thicc Rotary Hearth Furnace
@@ -150,6 +157,7 @@ tile.hardened_casing.plasma_pipe_casing.name=Integrated Fusion Piping
 tile.hardened_casing.hyperstatic_casing.name=Hyperstatic Casing
 tile.standard_casing.thermostable_ceramic.name=Thermostable Ceramic
 tile.standard_casing.high_pressure_casing.name=High Pressure Casing
+tile.standard_casing.forging_casing.name=Thermal Forging Casing
 tile.standard_casing.unstable_hyperstatic_casing.name=Unstable Hyperstatic Casing
 tile.advanced_casing.null_field_casing.name=Null-Field Casing
 tile.storage_block.infinity1.name=Block of Infinity Reagent

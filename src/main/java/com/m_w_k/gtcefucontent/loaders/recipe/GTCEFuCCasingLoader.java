@@ -11,6 +11,7 @@ import gregicality.multiblocks.api.unification.GCYMMaterials;
 import gregtech.api.GTValues;
 import gregtech.api.recipes.ModHandler;
 import gregtech.api.recipes.RecipeMaps;
+import gregtech.api.recipes.ingredients.IntCircuitIngredient;
 import gregtech.api.unification.material.MarkerMaterials;
 import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.ore.OrePrefix;
@@ -49,6 +50,12 @@ public final class GTCEFuCCasingLoader {
                 "PhP", "PFP", "PwP",
                 'P', new UnificationEntry(OrePrefix.plate, GTCEFuCMaterials.UnstableNaquadahAlloy),
                 'F', new UnificationEntry(OrePrefix.frameGt, Materials.NaquadahAlloy));
+        ModHandler.addShapedRecipe(true, "casing_forging",
+                GTCEFuCMetaBlocks.STANDARD_CASING
+                        .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.FORGING_CASING,
+                                ConfigHolder.recipes.casingsPerCraft),
+                "PhP", "PFP", "PwP", 'P', new UnificationEntry(OrePrefix.plate, GTCEFuCMaterials.CobaltAlloy), 'F',
+                new UnificationEntry(OrePrefix.frameGt, Materials.Aluminium));
 
         RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
                 .input(OrePrefix.plate, Materials.Neutronium, 6)
@@ -98,6 +105,15 @@ public final class GTCEFuCCasingLoader {
                 .circuitMeta(6)
                 .outputs(GTCEFuCMetaBlocks.STANDARD_CASING
                         .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.UNSTABLE_HYPERSTATIC_CASING,
+                                ConfigHolder.recipes.casingsPerCraft))
+                .duration(50).EUt(16).buildAndRegister();
+
+        RecipeMaps.ASSEMBLER_RECIPES.recipeBuilder()
+                .input(OrePrefix.plate, GTCEFuCMaterials.CobaltAlloy, 6)
+                .input(OrePrefix.frameGt, Materials.Aluminium)
+                .notConsumable(new IntCircuitIngredient(6))
+                .outputs(GTCEFuCMetaBlocks.STANDARD_CASING
+                        .getItemVariant(GTCEFuCBlockStandardCasing.CasingType.FORGING_CASING,
                                 ConfigHolder.recipes.casingsPerCraft))
                 .duration(50).EUt(16).buildAndRegister();
 

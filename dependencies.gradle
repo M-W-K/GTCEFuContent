@@ -28,7 +28,7 @@ dependencies {
     // manually deobf the jar to prevent extra configuration for handling obf/deobf separation
     implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5519022-dev-sources")
 
-    implementation rfg.deobf("curse.maven:gregicality-multiblocks-564858:5508050-dev-sources")
+    implementation rfg.deobf("curse.maven:gregicality-multiblocks-564858:5619513-dev-sources")
 
     implementation rfg.deobf("curse.maven:projecte-226410:2702991")
     implementation rfg.deobf("curse.maven:projectex-311378:3014173-sources")

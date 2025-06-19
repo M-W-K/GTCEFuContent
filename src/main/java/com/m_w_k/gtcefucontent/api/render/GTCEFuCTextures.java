@@ -22,6 +22,7 @@ public final class GTCEFuCTextures {
     public static SimpleOverlayRenderer PLASMA_PIPE_CASING = simple("casings/hardened_casing/plasma_pipe_casing");
     public static SimpleOverlayRenderer THERMOSTABLE_CERAMIC = simple("casings/standard_casing/thermostable_ceramic");
     public static SimpleOverlayRenderer PRESSURE_CASING = simple("casings/standard_casing/high_pressure_casing");
+    public static SimpleOverlayRenderer FORGING_CASING = simple("casings/standard_casing/forging_casing");
     public static SimpleOverlayRenderer UNSTABLE_HYPERSTATIC_CASING = simple(
             "casings/standard_casing/unstable_hyperstatic_casing");
     public static SimpleOverlayRenderer HYPERSTATIC_CASING = simple("casings/hardened_casing/hyperstatic_casing");
