@@ -22,7 +22,7 @@ public final class GTCEFuCAntimatterCompressorRecipes {
     public static void init() {
         // while this may look worse, it is actually significantly better due to perfect overclocking
         GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
-                .fluidInputs(Materials.Nickel.getPlasma(24000))
+                .fluidInputs(Materials.Thorium.getPlasma(12000))
                 .input(OrePrefix.block, Materials.Neutronium, 64)
                 .input(OrePrefix.block, Materials.Neutronium, 64)
                 .output(MetaItems.NAN_CERTIFICATE)
@@ -32,7 +32,7 @@ public final class GTCEFuCAntimatterCompressorRecipes {
 
         // I mean, the tooltip does say "creating the infinite"
         GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
-                .fluidInputs(Materials.Nickel.getPlasma(1000))
+                .fluidInputs(Materials.Thorium.getPlasma(500))
                 .inputs(GTCEFuCInfinityExtractorRecipes.block3)
                 .inputs(GTCEFuCMetaBlocks.HARDENED_CASING
                         .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.INDESTRUCTIBLE_CASING))
@@ -43,7 +43,7 @@ public final class GTCEFuCAntimatterCompressorRecipes {
                 .buildAndRegister();
 
         GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
-                .fluidInputs(Materials.Nickel.getPlasma(64000),
+                .fluidInputs(Materials.Thorium.getPlasma(32000),
                         GTCEFuCMaterials.LightEssence.getFluid(1024000))
                 .input(OrePrefix.dustSmall, Materials.Neutronium)
                 .input(GTCEFuCMetaItems.CRYSTAL_VOID)
@@ -56,7 +56,7 @@ public final class GTCEFuCAntimatterCompressorRecipes {
         // the fabled winning of minecraft
         GTCEFuCRecipeMaps.ANTIMATTER_COMPRESSOR_RECIPES.recipeBuilder()
                 // 4096000 = 1 UHV hatch
-                .fluidInputs(Materials.Nickel.getPlasma(4096000 * 4),
+                .fluidInputs(Materials.Thorium.getPlasma(4096000 * 2),
                         GTCEFuCMaterials.ExperienceEssence.getFluid(1000))
                 .inputNBT(MetaItems.ULTIMATE_BATTERY, NBTMatcher.ANY, NBTCondition.ANY)
                 .input(GTCEFuCMetaItems.STELLAR_BALL)
