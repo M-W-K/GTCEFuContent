@@ -98,6 +98,10 @@ public final class GTCEFuContent {
         }
     }
 
+    public static void debug(String message, Object... params) {
+        logger.debug(message, params);
+    }
+
     public enum LogType {
         INFO,
         WARN,

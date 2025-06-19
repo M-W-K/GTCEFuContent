@@ -42,8 +42,8 @@ public final class GTCEFuCRecipeLoader {
         // We can't change the behavior of the cutter recipeMap setup itself without being overly invasive.
         GTCEFuCMiscRecipes.cutterUpdate();
 
-        // The forging furnace recipeMap is completely new, but dependent on the blast furnace recipeMap.
-        GTCEFuCForgingFurnaceRecipes.init();
+        // Linear forging recipes are dependent on the EBF, ABS, and vacuum freezer
+        LinearForgingFurnaceLoader.registerLate();
 
         // The fusion stack recipeMaps are dependent on the normal fusion recipemap
         GTCEFuCFusionStackRecipes.init();

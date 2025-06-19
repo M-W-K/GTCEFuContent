@@ -8,6 +8,12 @@
   },
   "variants": {
     "variant": {
+      "forging_casing": {
+        "model": "minecraft:cube_all",
+        "textures": {
+          "all": "gtcefucontent:blocks/casings/standard_casing/forging_casing"
+        }
+      },
       "high_pressure_casing": {
         "model": "minecraft:cube_all",
         "textures": {

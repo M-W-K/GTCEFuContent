@@ -19,7 +19,7 @@ public final class GTCEFuCMetaTileEntities {
     public static MetaTileEntityInfinityExtractor INFINITY_EXTRACTOR;
     public static MetaTileEntityPneumaticInfuser PNEUMATIC_INFUSER;
     public static MetaTileEntitySympatheticCombustor SYMPATHETIC_COMBUSTOR;
-    public static MetaTileEntityForgingFurnace FORGING_FURNACE;
+    public static MetaTileEntityLinearForgingFurnace FORGING_FURNACE;
     public static MetaTileEntityElectrodeSmelter ELECTRODE_SMELTER;
     public static MetaTileEntityMegaSteamEngine MEGA_STEAM_ENGINE;
     public static MetaTileEntityStarSiphon STAR_SIPHON;
@@ -48,7 +48,7 @@ public final class GTCEFuCMetaTileEntities {
         SYMPATHETIC_COMBUSTOR = registerMetaTileEntity(3002,
                 new MetaTileEntitySympatheticCombustor(gtcefucId("sympathetic_combustor")));
         FORGING_FURNACE = registerMetaTileEntity(3003,
-                new MetaTileEntityForgingFurnace(gtcefucId("forging_furnace")));
+                new MetaTileEntityLinearForgingFurnace(gtcefucId("forging_furnace")));
         ELECTRODE_SMELTER = registerMetaTileEntity(3004,
                 new MetaTileEntityElectrodeSmelter(gtcefucId("electrode_blast_smelter")));
         MEGA_STEAM_ENGINE = registerMetaTileEntity(3005,

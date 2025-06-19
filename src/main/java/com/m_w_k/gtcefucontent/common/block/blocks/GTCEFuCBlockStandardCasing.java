@@ -34,7 +34,8 @@ public class GTCEFuCBlockStandardCasing extends VariantBlock<GTCEFuCBlockStandar
 
         THERMOSTABLE_CERAMIC("thermostable_ceramic"),
         PRESSURE_CASING("high_pressure_casing"),
-        UNSTABLE_HYPERSTATIC_CASING("unstable_hyperstatic_casing");
+        UNSTABLE_HYPERSTATIC_CASING("unstable_hyperstatic_casing"),
+        FORGING_CASING("forging_casing");
 
         private final String name;
 
