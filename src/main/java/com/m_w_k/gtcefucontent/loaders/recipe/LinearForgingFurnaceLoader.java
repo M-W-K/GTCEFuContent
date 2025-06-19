@@ -138,6 +138,7 @@ public class LinearForgingFurnaceLoader {
         assembleCompositeMaps();
         GTCEFuContent.debug(String.format("Assembled composite maps in %s milliseconds.",
                 System.currentTimeMillis() - time));
+        GTCEFuContent.log("Finished Linear Forging Furnace recipe construction.");
     }
 
     private static void registerCooled() {

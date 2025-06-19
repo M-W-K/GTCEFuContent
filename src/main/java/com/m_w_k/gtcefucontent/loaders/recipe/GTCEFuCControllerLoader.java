@@ -27,6 +27,9 @@ import gregtech.common.blocks.MetaBlocks;
 import gregtech.common.items.MetaItems;
 import gregtech.common.metatileentities.MetaTileEntities;
 
+import static gregtech.api.unification.ore.OrePrefix.circuit;
+import static gregtech.api.unification.ore.OrePrefix.gear;
+
 public class GTCEFuCControllerLoader {
 
     private GTCEFuCControllerLoader() {}
@@ -122,6 +125,16 @@ public class GTCEFuCControllerLoader {
                 'C', GTCEFuCMetaBlocks.HARDENED_CASING
                         .getItemVariant(GTCEFuCBlockHardenedCasing.CasingType.HYPERSTATIC_CASING));
 
+        ModHandler.addShapedRecipe(true, "linear_forging_furnace",
+                GTCEFuCMetaTileEntities.FORGING_FURNACE.getStackForm(),
+                "CFC", "EGA", "CMC",
+                'C', new UnificationEntry(circuit, MarkerMaterials.Tier.LuV),
+                'G', new UnificationEntry(gear, GTCEFuCMaterials.CobaltAlloy),
+                'F', MetaTileEntities.VACUUM_FREEZER.getStackForm(),
+                'E', MetaTileEntities.ELECTRIC_BLAST_FURNACE.getStackForm(),
+                'A', GCYMMetaTileEntities.ALLOY_BLAST_SMELTER.getStackForm(),
+                'M', GCYMMetaTileEntities.LARGE_BENDER.getStackForm());
+
         // Assembler recipes
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
@@ -144,24 +157,6 @@ public class GTCEFuCControllerLoader {
                         .CWUt(16)
                         .EUt(GTValues.VA[GTValues.IV]))
                 .duration(600).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
-
-        RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
-                .inputs(MetaTileEntities.FORGE_HAMMER[GTValues.IV].getStackForm(),
-                        MetaTileEntities.ELECTRIC_BLAST_FURNACE.getStackForm(),
-                        MetaTileEntities.VACUUM_FREEZER.getStackForm(),
-                        MetaItems.ROBOT_ARM_IV.getStackForm(8))
-                .input(OrePrefix.foil, Materials.Invar, 24)
-                .input(OrePrefix.dust, Materials.Graphene, 8)
-                .input(OrePrefix.circuit, MarkerMaterials.Tier.LuV, 2)
-                .input(OrePrefix.frameGt, GCYMMaterials.TantalumCarbide, 4)
-                .fluidInputs(Materials.SolderingAlloy.getFluid(GTValues.L * 4),
-                        Materials.Lubricant.getFluid(2000),
-                        GTCEFuCMaterials.EutecticCaesiumSodiumPotassium.getFluid(10000))
-                .output(GTCEFuCMetaTileEntities.FORGING_FURNACE)
-                .scannerResearch(b -> b
-                        .researchStack(GCYMMetaTileEntities.ALLOY_BLAST_SMELTER.getStackForm())
-                        .EUt(GTValues.VA[GTValues.EV]))
-                .duration(800).EUt(GTValues.VA[GTValues.LuV]).buildAndRegister();
 
         RecipeMaps.ASSEMBLY_LINE_RECIPES.recipeBuilder()
                 .inputs(MetaTileEntities.FUSION_REACTOR[2].getStackForm(2))

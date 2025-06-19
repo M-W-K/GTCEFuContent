@@ -199,7 +199,7 @@ public final class GTCEFuCMaterials {
                         .blastStats(GTValues.VA[GTValues.EV], 700))
                 .build();
 
-        CobaltAlloy = new Material.Builder(3010, gcymId("cobalt_alloy"))
+        CobaltAlloy = new Material.Builder(3010, gtcefucId("cobalt_alloy"))
                 .ingot().fluid()
                 .color(0x6594B2).iconSet(MaterialIconSet.METALLIC)
                 .flags(GENERATE_PLATE, GENERATE_GEAR)
