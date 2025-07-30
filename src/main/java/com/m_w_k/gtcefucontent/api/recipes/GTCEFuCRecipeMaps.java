@@ -103,7 +103,8 @@ public final class GTCEFuCRecipeMaps {
     /**
      * For internal usage only! Use HeatExchangerRecipeHandler instead!
      */
-    public static final RecipeMap<ExchangerRecipeBuilder> EXCHANGER_PLACEHOLDER_MAP = new RecipeMap<>("heat_exchanger",
+    public static final RecipeMap<ExchangerRecipeBuilder> EXCHANGER_PLACEHOLDER_MAP = new RecipeMap<>(
+            "fucontent.heat_exchanger",
             1, 0, 1, 1, new ExchangerRecipeBuilder(), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_CRACKING, ProgressWidget.MoveType.HORIZONTAL);
 
