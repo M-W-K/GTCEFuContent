@@ -9,14 +9,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
+import com.github.bsideup.jabel.Desugar;
 import com.m_w_k.gtcefucontent.api.damagesources.GTCEFuCDamageSources;
 
 import gregtech.api.damagesources.DamageSources;
+import gregtech.api.items.armor.ArmorMetaItem;
 import gregtech.api.unification.material.Materials;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -24,9 +27,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 public final class DimensionBreathabilityHandler {
 
     private static FluidStack oxyStack;
-    private static final Int2ObjectOpenHashMap<BreathabilityInfo> dimensionBreathabilityMap = new Int2ObjectOpenHashMap<>();
-    private static BreathabilityInfo defaultDimensionBreathability;
-    private static final Object2ObjectOpenHashMap<BreathabilityItemMapKey, BreathabilityInfo> itemBreathabilityMap = new Object2ObjectOpenHashMap<>();
+    private static final Int2ObjectOpenHashMap<DimBreathabilityInfo> dimensionBreathabilityMap = new Int2ObjectOpenHashMap<>();
+    private static DimBreathabilityInfo defaultDimensionBreathability;
+    private static final Object2ObjectOpenHashMap<BreathabilityItemMapKey, ItemBreathabilityInfo> itemBreathabilityMap = new Object2ObjectOpenHashMap<>();
 
     private static boolean hasDrainedOxy = false;
     private static boolean hasSuffocated = false;
@@ -37,8 +40,8 @@ public final class DimensionBreathabilityHandler {
         oxyStack = Materials.Oxygen.getFluid(1);
 
         dimensionBreathabilityMap.clear();
-        defaultDimensionBreathability = new BreathabilityInfo(false, false, -1, -1);
-        String[] configData = ConfigHolder.dimensionAirHazards;
+        defaultDimensionBreathability = new DimBreathabilityInfo(false, 0, 0);
+        String[] configData = ConfigHolder.dimensionHazards;
         for (String dim : configData) {
             try {
                 String[] d = dim.concat(" ").split("\\|");
@@ -46,8 +49,8 @@ public final class DimensionBreathabilityHandler {
                 // lookahead to split into 's' 't93' 'r3' units
                 String[] breaths = d[1].split("(?=[str])");
                 boolean s = false;
-                int t = -1;
-                int r = -1;
+                int t = 0;
+                int r = 0;
                 for (String breath : breaths) {
                     switch (breath.charAt(0)) {
                         case 's' -> s = true;
@@ -55,7 +58,7 @@ public final class DimensionBreathabilityHandler {
                         case 'r' -> r = Integer.parseInt(breath.substring(1).trim());
                     }
                 }
-                BreathabilityInfo info = new BreathabilityInfo(s, false, t, r);
+                DimBreathabilityInfo info = new DimBreathabilityInfo(s, t, r);
 
                 if (Objects.equals(d[0], "default")) defaultDimensionBreathability = info;
                 else dimensionBreathabilityMap.put(Integer.parseInt(d[0]), info);
@@ -67,32 +70,44 @@ public final class DimensionBreathabilityHandler {
         }
 
         itemBreathabilityMap.clear();
-        configData = ConfigHolder.itemHazardProtection;
+        configData = ConfigHolder.armorHazardProtection;
 
         for (String item : configData) {
             try {
-                String[] d = item.concat(" ").split("\\|");
-                if (d.length != 2) throw new Exception();
-                // lookahead to split into 's' 't93' 'r3' units
-                String[] breaths = d[1].split("(?=[str])");
+                String[] parse = item.concat(" ").split("\\|");
+                if (parse.length != 2) throw new Exception();
+                // lookahead to split into 's' 't93d2' 'r3' units
+                String[] breaths = parse[1].split("(?=[str])");
                 boolean s = false;
+                int ds = 0;
                 boolean sealed = false;
-                int t = -1;
-                int r = -1;
+                int t = 0;
+                int dt = 0;
+                int r = 0;
+                int dr = 0;
                 for (String breath : breaths) {
-                    final int i = Integer.parseInt(breath.substring(1).trim());
+                    String[] damageSplit = breath.split("d");
+                    final int i = Integer.parseInt(damageSplit[0].substring(1).trim());
+                    final int d = damageSplit.length > 1 ? Integer.parseInt(damageSplit[1].trim()) : 0;
                     switch (breath.charAt(0)) {
                         case 's' -> {
                             s = true;
                             sealed = i == 1;
+                            ds = d;
                         }
-                        case 't' -> t = i;
-                        case 'r' -> r = i;
+                        case 't' -> {
+                            t = i;
+                            dt = d;
+                        }
+                        case 'r' -> {
+                            r = i;
+                            dr = d;
+                        }
                     }
                 }
-                BreathabilityInfo info = new BreathabilityInfo(s, sealed, t, r);
+                ItemBreathabilityInfo info = new ItemBreathabilityInfo(s, ds, t, dt, r, dr, sealed);
 
-                String[] e = d[0].split(":");
+                String[] e = parse[0].split(":");
                 itemBreathabilityMap.put(new BreathabilityItemMapKey(
                         Item.getByNameOrId(e[0] + ":" + e[1]), e.length == 3 ? Integer.parseInt(e[2]) : 0), info);
 
@@ -104,60 +119,78 @@ public final class DimensionBreathabilityHandler {
     }
 
     public static void checkPlayer(EntityPlayer player) {
-        BreathabilityInfo dimInfo = dimensionBreathabilityMap.get(player.dimension);
-        if (dimInfo == null) {
-            dimInfo = defaultDimensionBreathability;
-        }
+        DimBreathabilityInfo dimInfo = dimensionBreathabilityMap.getOrDefault(player.dimension,
+                defaultDimensionBreathability);
         if (ConfigHolder.enableDimSuffocation && dimInfo.suffocation) suffocationCheck(player);
-        if (ConfigHolder.enableDimToxicity && dimInfo.toxic) toxicityCheck(player, dimInfo.toxicityRating);
-        if (ConfigHolder.enableDimRadiation && dimInfo.radiation) radiationCheck(player, dimInfo.radiationRating);
+        if (ConfigHolder.enableDimToxicity && dimInfo.toxicity()) toxicityCheck(player, dimInfo.toxicityRating);
+        if (ConfigHolder.enableDimRadiation && dimInfo.radiation()) radiationCheck(player, dimInfo.radiationRating);
         hasDrainedOxy = false;
         hasSuffocated = false;
     }
 
     private static void suffocationCheck(EntityPlayer player) {
-        BreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
-        if (itemInfo != null && itemInfo.suffocation && drainOxy(player)) return;
+        ItemBreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
+        if (itemInfo != null && itemInfo.suffocation && drainOxy(player)) {
+            itemInfo.damageArmor(player, HEAD, DamageType.SUFFOCATION);
+            return;
+        }
         suffocate(player);
     }
 
     private static void suffocate(EntityPlayer player) {
         if (hasSuffocated) return;
-        player.attackEntityFrom(GTCEFuCDamageSources.getSuffocationDamage(), 2);
+        player.attackEntityFrom(DamageType.SUFFOCATION.source(), 2);
         hasSuffocated = true;
     }
 
     private static void toxicityCheck(EntityPlayer player, int dimRating) {
-        BreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
-        if (itemInfo != null && itemInfo.toxic) {
-            // if sealed, no need for toxicity check
-            if (itemInfo.isSealed) {
-                if (drainOxy(player)) return;
-                else if (ConfigHolder.enableDimSuffocation) suffocate(player);
-            } else if (dimRating > itemInfo.toxicityRating) {
-                toxificate(player, dimRating - itemInfo.toxicityRating);
-                return;
+        ItemBreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
+        if (itemInfo != null && itemInfo.toxicity()) {
+            itemInfo.damageArmor(player, HEAD, DamageType.TOXICITY);
+            if (dimRating > itemInfo.toxicityRating) {
+                // if sealed, do not toxificate
+                if (itemInfo.isSealed) {
+                    if (!drainOxy(player) && ConfigHolder.enableDimSuffocation) suffocate(player);
+                } else {
+                    toxificate(player, dimRating - itemInfo.toxicityRating);
+                }
             }
+        } else {
+            toxificate(player, dimRating);
         }
-        toxificate(player, 100);
     }
 
     private static void toxificate(EntityPlayer player, int mult) {
-        player.attackEntityFrom(GTCEFuCDamageSources.getToxicAtmoDamage(), 0.03f * mult);
+        float damage = 0.03f * mult;
+        if (Math.random() < damage) {
+            player.attackEntityFrom(DamageType.TOXICITY.source(), Math.max(1, damage));
+        }
     }
 
     private static void radiationCheck(EntityPlayer player, int dimRating) {
         // natural radiation protection based on missing health
         int ratingSum = MathHelper.ceil(Math.log1p(player.getMaxHealth() - player.getHealth()) * 6);
 
-        BreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
-        if (itemInfo != null && itemInfo.radiation) ratingSum += itemInfo.radiationRating;
+        ItemBreathabilityInfo itemInfo = itemBreathabilityMap.get(getItemKey(player, HEAD));
+        if (itemInfo != null && itemInfo.radiation()) {
+            ratingSum += itemInfo.radiationRating;
+            itemInfo.damageArmor(player, HEAD, DamageType.RADIATION);
+        }
         itemInfo = itemBreathabilityMap.get(getItemKey(player, CHEST));
-        if (itemInfo != null && itemInfo.radiation) ratingSum += itemInfo.radiationRating;
+        if (itemInfo != null && itemInfo.radiation()) {
+            ratingSum += itemInfo.radiationRating;
+            itemInfo.damageArmor(player, CHEST, DamageType.RADIATION);
+        }
         itemInfo = itemBreathabilityMap.get(getItemKey(player, LEGS));
-        if (itemInfo != null && itemInfo.radiation) ratingSum += itemInfo.radiationRating;
+        if (itemInfo != null && itemInfo.radiation()) {
+            ratingSum += itemInfo.radiationRating;
+            itemInfo.damageArmor(player, LEGS, DamageType.RADIATION);
+        }
         itemInfo = itemBreathabilityMap.get(getItemKey(player, FEET));
-        if (itemInfo != null && itemInfo.radiation) ratingSum += itemInfo.radiationRating;
+        if (itemInfo != null && itemInfo.radiation()) {
+            ratingSum += itemInfo.radiationRating;
+            itemInfo.damageArmor(player, FEET, DamageType.RADIATION);
+        }
 
         if (dimRating > ratingSum) radiate(player, dimRating - ratingSum);
     }
@@ -165,7 +198,7 @@ public final class DimensionBreathabilityHandler {
     private static void radiate(EntityPlayer player, int mult) {
         float damage = 0.01f * mult;
         if (Math.random() < damage) {
-            player.attackEntityFrom(DamageSources.getRadioactiveDamage(), Math.max(1, damage));
+            player.attackEntityFrom(DamageType.RADIATION.source(), Math.max(1, damage));
         }
     }
 
@@ -191,7 +224,7 @@ public final class DimensionBreathabilityHandler {
         return tank.isPresent();
     }
 
-    public void addBreathabilityItem(ItemStack item, BreathabilityInfo info) {
+    public void addBreathabilityItem(ItemStack item, ItemBreathabilityInfo info) {
         itemBreathabilityMap.put(new BreathabilityItemMapKey(item), info);
     }
 
@@ -228,24 +261,65 @@ public final class DimensionBreathabilityHandler {
         }
     }
 
-    public static final class BreathabilityInfo {
+    @Desugar
+    public record DimBreathabilityInfo(boolean suffocation, int toxicityRating, int radiationRating) {
 
-        public final boolean suffocation;
-        public final boolean toxic;
-        public final boolean radiation;
+        public boolean toxicity() {
+            return toxicityRating > 0;
+        }
 
-        private final int toxicityRating;
-        private final int radiationRating;
+        public boolean radiation() {
+            return radiationRating > 0;
+        }
+    }
 
-        public final boolean isSealed;
+    @Desugar
+    public record ItemBreathabilityInfo(boolean suffocation, int suffocationDurabilityDamage, int toxicityRating,
+                                        int toxicityDurabilityDamage, int radiationRating,
+                                        int radiationDurabilityDamage, boolean isSealed) {
 
-        public BreathabilityInfo(boolean suffocation, boolean isSealed, int toxic, int radiation) {
-            this.suffocation = suffocation;
-            this.toxic = toxic != -1;
-            this.radiation = radiation != -1;
-            this.radiationRating = radiation;
-            this.toxicityRating = toxic;
-            this.isSealed = isSealed;
+        public boolean toxicity() {
+            return toxicityRating > 0;
+        }
+
+        public boolean radiation() {
+            return radiationRating > 0;
+        }
+
+        void damageArmor(EntityPlayer player, EntityEquipmentSlot slot, DamageType type) {
+            int damage = switch (type) {
+                case SUFFOCATION -> suffocationDurabilityDamage;
+                case TOXICITY -> toxicityDurabilityDamage;
+                case RADIATION -> radiationDurabilityDamage;
+            };
+            if (damage > 0) {
+                ItemStack stack = player.getItemStackFromSlot(slot);
+                if (stack.getItem() instanceof ArmorMetaItem<?>item) {
+                    item.damageArmor(player, stack, type.source(), damage, slot.getIndex());
+                } else {
+                    stack.damageItem(damage, player);
+                }
+            }
+        }
+    }
+
+    public enum DamageType {
+
+        SUFFOCATION,
+        TOXICITY,
+        RADIATION;
+
+        public DamageSource source() {
+            return switch (this) {
+                case SUFFOCATION -> GTCEFuCDamageSources.getSuffocationDamage();
+                case TOXICITY -> GTCEFuCDamageSources.getToxicAtmoDamage();
+                case RADIATION -> DamageSources.getRadioactiveDamage();
+            };
+        }
+
+        public static boolean is(DamageSource source) {
+            return source == DamageType.SUFFOCATION.source() || source == DamageType.TOXICITY.source() ||
+                    source == DamageType.RADIATION.source();
         }
     }
 }

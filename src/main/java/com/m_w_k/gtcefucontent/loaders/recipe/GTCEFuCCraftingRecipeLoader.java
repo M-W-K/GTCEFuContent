@@ -77,20 +77,20 @@ public class GTCEFuCCraftingRecipeLoader {
 
     private static void breathabilityItems() {
         ModHandler.addShapedRecipe("simple_gas_mask", GTCEFuCMetaItems.SIMPLE_GAS_MASK.getStackForm(),
-                " T ", "WFW", "SMR",
+                " T ", "WFW", "SCS",
                 'W', Blocks.WOOL,
                 'F', new UnificationEntry(OrePrefix.rotor, Materials.Steel),
                 'T', Items.STRING,
                 'S', MetaItems.STICKY_RESIN,
-                'M', MetaItems.ELECTRIC_MOTOR_LV,
-                'R', new UnificationEntry(OrePrefix.plate, Materials.Rubber));
+                'C', new ItemStack(Items.COAL, 1, 1));
 
         ModHandler.addShapedRecipe("gas_mask", GTCEFuCMetaItems.GAS_MASK.getStackForm(),
-                "CkC", "RNR", "xMd",
+                "CkC", "xNd", "MGR",
                 'N', MetaItems.NIGHTVISION_GOGGLES.getStackForm(),
                 'C', MetaItems.CARBON_FIBER_PLATE.getStackForm(),
-                'M', GTCEFuCMetaItems.SIMPLE_GAS_MASK.getStackForm(),
-                'R', new UnificationEntry(OrePrefix.foil, Materials.Rubber));
+                'G', GTCEFuCMetaItems.SIMPLE_GAS_MASK.getStackForm(),
+                'M', MetaItems.ELECTRIC_MOTOR_LV,
+                'R', new UnificationEntry(OrePrefix.plate, Materials.Rubber));
 
         ModHandler.removeRecipeByOutput(MetaItems.NANO_HELMET.getStackForm());
         ModHandler.addShapedRecipe("nano_helmet", MetaItems.NANO_HELMET.getStackForm(),
